@@ -3,7 +3,7 @@
 'use strict'
 
 process.title = 'bcoin'
-
+const nodeInfoLocation = process.argv[2]
 const assert = require('assert')
 const SPVNode = require('bcoin/lib/node/spvnode')
 const Outpoint = require('bcoin/lib/primitives/outpoint')
@@ -24,7 +24,7 @@ const node = new SPVNode({
   // 'wallet-watch-only': true,
   cors: true,
   'api-key': 'hunter2',
-  prefix: './nodeFiles'
+  prefix: nodeInfoLocation
 })
 
 // Temporary hack

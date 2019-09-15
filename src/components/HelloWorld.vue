@@ -16,8 +16,13 @@ export default {
   },
   methods: {
     startNode () {
+      const remote = require('electron').remote
+      const app = remote.app
+      console.log(app.getPath('userData'))
+      const location = app.getPath('userData')
+      const args = [location]
       // eslint-disable-next-line
-      const process = fork(path.join(__static, "test.js"))
+      const process = fork(path.join(__static, "spvNodeStart.js"), args)
     },
     async checkServer () {
       const result = await asyncCall()
