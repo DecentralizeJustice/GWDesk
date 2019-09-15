@@ -6,10 +6,18 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
+    "electron:build": "vue-cli-service electron:build",
+    "electron:serve": "vue-cli-service electron:serve",
+    "postinstall": "electron-builder install-app-deps",
+    "postuninstall": "electron-builder install-app-deps",
     "test:e2e": "vue-cli-service test:e2e",
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
+    "bclient": "^0.1.7",
+    "bcoin": "bcoin-org/bcoin#e166009fb39c33fc4be42ec9857a65a7c012168b",
+    "bweb": "DecentralizeJustice/bweb#0cd9bd50b7ebf39b0087db550983ed81a07a58fe",
+    "chai-as-promised": "^7.1.1",
     "core-js": "^2.6.5",
     "vue": "^2.6.10",
     "vue-router": "^3.0.3",
@@ -25,8 +33,11 @@
     "@vue/test-utils": "1.0.0-beta.29",
     "babel-eslint": "^10.0.1",
     "chai": "^4.1.2",
+    "electron": "^6.0.0",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
+    "vue-cli-plugin-electron-builder": "^1.4.0",
     "vue-template-compiler": "^2.6.10"
-  }
+  },
+  "main": "background.js"
 }
