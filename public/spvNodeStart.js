@@ -1,12 +1,9 @@
-#!/usr/bin/env node
 
 'use strict'
 
 process.title = 'bcoin'
 const nodeInfoLocation = process.argv[2]
-const assert = require('assert')
 const SPVNode = require('bcoin/lib/node/spvnode')
-const Outpoint = require('bcoin/lib/primitives/outpoint')
 const node = new SPVNode({
   network: 'testnet',
   file: true,
@@ -45,17 +42,6 @@ process.on('SIGINT', async () => {
   await node.ensure()
   await node.open()
   await node.connect()
-
-  if (node.config.bool('test')) {
-    node.pool.watchAddress('1VayNert3x1KzbpzMGt2qdqrAThiRovi8')
-    node.pool.watchOutpoint(new Outpoint())
-    node.on('block', (block) => {
-      assert(block.txs.length >= 1)
-      if (block.txs.length > 1) {
-        console.log(block.txs[1])
-      }
-    })
-  }
 
   node.startSync()
 })().catch((err) => {
