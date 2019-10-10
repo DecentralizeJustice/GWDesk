@@ -3,9 +3,9 @@
       <v-stepper-header>
         <v-stepper-step step="1" :complete='complete(0)' >Hardware</v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step step="2" :complete='complete(1)' >Confirm</v-stepper-step>
+        <v-stepper-step step="2" :complete='complete(1)' >Membership</v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step step="3" :complete='complete(2)'>Terms</v-stepper-step>
+        <v-stepper-step step="3" :complete='complete(2)'>Confirm</v-stepper-step>
         <v-divider></v-divider>
         <v-stepper-step step="4" :complete='complete(3)'>Pay</v-stepper-step>
         <v-divider></v-divider>

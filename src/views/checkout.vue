@@ -32,7 +32,7 @@ import stepper from '@/components/checkout/stepper.vue'
 import bottomNav from '@/components/checkout/bottomNav.vue'
 export default {
   data: () => ({
-    componentList: ['hardware', 'confirm', 'pay'],
+    componentList: ['hardware', 'membership', 'confirm', 'pay'],
     currentSection: 0,
     planOptions: {
     },
