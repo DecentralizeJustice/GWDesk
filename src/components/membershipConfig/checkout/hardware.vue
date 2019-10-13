@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import neededSigs from '@/components/checkout/neededSigs.vue'
+import neededSigs from '@/components/membershipConfig/checkout/neededSigs.vue'
 export default {
   components: {
     neededSigs

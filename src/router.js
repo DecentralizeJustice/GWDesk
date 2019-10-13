@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import store from './store.js'
-import Home from './views/checkout.vue'
+import Home from './views/HelloWorld.vue'
 
 Vue.use(Router)
 

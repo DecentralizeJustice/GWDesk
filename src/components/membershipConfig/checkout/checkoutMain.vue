@@ -28,8 +28,8 @@
 </template>
 
 <script>
-import stepper from '@/components/checkout/stepper.vue'
-import bottomNav from '@/components/checkout/bottomNav.vue'
+import stepper from '@/components/membershipConfig/checkout/stepper.vue'
+import bottomNav from '@/components/membershipConfig/checkout/bottomNav.vue'
 export default {
   data: () => ({
     componentList: ['hardware', 'membership', 'confirm', 'pay'],
@@ -61,7 +61,7 @@ export default {
     },
     currentMain () {
       const componentName = this.componentList[this.currentSection]
-      return () => import(`@/components/checkout/${componentName}.vue`)
+      return () => import(`@/components/membershipConfig/checkout/${componentName}.vue`)
     }
   },
   methods: {
