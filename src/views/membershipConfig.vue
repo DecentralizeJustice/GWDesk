@@ -1,25 +1,29 @@
 <template>
   <component
-  v-bind:is="currentMain">
+    v-bind:is="currentMain"
+    v-on:change="updateStep">
   </component>
 </template>
 
 <script>
 export default {
   data: () => ({
-    componentList: ['landingPage.vue', 'checkout/checkoutMain.vue']
+    componentList: ['landingPage.vue', 'checkout/checkoutMain.vue'],
+    currentComponent: 1
   }),
   methods: {
-    state () {
-      console.log(this.$store.state)
-    },
-    hit () {
-      this.$store.commit('increment')
+    updateStep (stepUpdate) {
+      if (stepUpdate === 'landingPage') {
+        this.currentComponent = 0
+      }
+      if (stepUpdate === 'checkoutMain') {
+        this.currentComponent = 1
+      }
     }
   },
   computed: {
     currentMain () {
-      const componentName = this.componentList[1]
+      const componentName = this.componentList[this.currentComponent]
       return () => import(`@/components/membershipConfig/${componentName}`)
     }
   }

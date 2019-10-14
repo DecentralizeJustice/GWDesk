@@ -4,7 +4,7 @@
     <v-alert type="error" v-if="!minDevicesAchieved && allChosen">
       {{minDevicesWarning}}
     </v-alert>
-    <p class="mb-5 headline">What Hardware do you plan to Use?</p>
+    <p class="mb-5 headline">What Hardware do you plan to use?</p>
 
     <v-select
     class="my-2"

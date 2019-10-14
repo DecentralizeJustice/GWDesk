@@ -8,9 +8,18 @@
             </v-card-text>
             <v-card-actions class="text-xs-center">
               <v-flex class="text-xs-center">
-                <v-btn text color="primary" v-on:click="hit()">Buy New Membership</v-btn>
-                <v-btn text color="primary" v-on:click="state()">Recover Old Membership</v-btn>
+                <v-btn text color="primary" v-on:click="goForward ('checkoutMain')">Buy New Membership</v-btn>
+                <v-btn text color="primary">Use Past Membership</v-btn>
               </v-flex>
+            </v-card-actions>
+            <v-divider></v-divider>
+            <v-card-actions>
+              <v-btn
+                color="orange"
+                text
+              >
+                <v-icon>mdi-help</v-icon>
+              </v-btn>
             </v-card-actions>
           </v-card>
     </v-flex>
@@ -29,6 +38,9 @@ export default {
     },
     hit () {
       this.$store.commit('increment')
+    },
+    goForward (path) {
+      this.$emit('change', path)
     }
   }
 }

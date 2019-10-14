@@ -12,8 +12,12 @@
           <component v-bind:hardwareOptions="planOptions"
           v-bind:is="currentMain"
           v-on:updatePlanOptions="updateHardware"
-          v-bind:hardwareAdvancedOption='hardwareAdvancedOption'>
+          v-on:updateMembershipOptions="updateMembershipOptions"
+          v-bind:hardwareAdvancedOption='hardwareAdvancedOption'
+          v-bind:membershipOptions='membershipOptions'>
           </component>
+
+          <v-divider></v-divider>
 
           <bottomNav v-on:change="updateStep"
           v-on:changeAdvancedOptions=
@@ -34,8 +38,8 @@ export default {
   data: () => ({
     componentList: ['hardware', 'membership', 'confirm', 'pay'],
     currentSection: 0,
-    planOptions: {
-    },
+    planOptions: {},
+    membershipOptions: {},
     hardwareAdvancedOption: false
   }),
   components: {
@@ -51,7 +55,10 @@ export default {
           }
           break
         case 1:
-          return false
+          if (Object.keys(this.membershipOptions).length !== 0) {
+            return false
+          }
+          break
         case 2:
           return false
         default:
@@ -70,13 +77,20 @@ export default {
         this.currentSection += 1
       }
       if (stepUpdate === 'back') {
-        this.currentSection -= 1
+        if (this.currentSection !== 0) {
+          this.currentSection -= 1
+        } else {
+          this.$emit('change', 'landingPage')
+        }
       }
     },
     updateHardwareAdvancedOption () {
       if (Object.keys(this.planOptions).length !== 0) {
         this.hardwareAdvancedOption = this.planOptions.hardwareAdvancedOption
       }
+    },
+    updateMembershipOptions (newMembershipOptions) {
+      this.membershipOptions = newMembershipOptions
     },
     updateHardware (newHardwareOptions) {
       this.planOptions = newHardwareOptions

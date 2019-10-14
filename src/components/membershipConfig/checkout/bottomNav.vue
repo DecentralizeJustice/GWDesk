@@ -19,7 +19,6 @@
             text
             color="red"
             v-on:click="goBack"
-            v-bind:disabled="backDisabled"
           >
             Back
           </v-btn>
@@ -53,13 +52,6 @@ export default {
     }
   },
   computed: {
-    backDisabled () {
-      if (this.currentSection === 0) {
-        return true
-      } else {
-        return false
-      }
-    },
     advancedAvailable () {
       if (this.currentSection === 0) {
         return true
