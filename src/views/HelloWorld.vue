@@ -3,12 +3,15 @@
       <v-flex xs8>
           <v-card >
             <v-card-text>
-              <h2>Demo</h2>
+              <h2>{{receiveAddress}}</h2>
             </v-card-text>
             <v-card-actions class="text-xs-center">
               <v-flex class="text-xs-center">
-                <v-btn text color="primary" v-on:click="goForward ('checkoutMain')">Get Recieve Address</v-btn>
-                <v-btn text color="primary">Use Membership</v-btn>
+                <v-btn text color="primary" v-on:click="getAddress()">Get Recieve Address</v-btn>
+                <v-btn text color="primary" v-on:click="downloadPSBT()">Download PSBT File</v-btn>
+                <v-btn text color="primary" v-on:click="getPBST()">Console PSBT Hex</v-btn>
+                <v-btn text color="primary" v-on:click="uploadPSBT()">Upload Hardware Signed PBST</v-btn>
+                <v-btn text color="primary">Upload and Broadcast Trans</v-btn>
               </v-flex>
             </v-card-actions>
             <v-divider></v-divider>
@@ -26,20 +29,32 @@
 </template>
 
 <script>
+import { genAddress } from '@/assets/coldCard/genAddress.js'
+import { getPSBT } from '@/assets/coldCard/genPSBT.js'
+import { downloadPSBT } from '@/assets/coldCard/downloadPSBT.js'
+import { uploadPSBT } from '@/assets/coldCard/uploadPSBT.js'
 export default {
   data: () => ({
-    receiveAdress: '',
-    index: 0
+    receiveAddress: '',
+    index: 0,
+    hardwareSignedHex: ''
   }),
   methods: {
-    state () {
-      console.log(this.$store.state)
+    async getPBST () {
+      const PSBT = await getPSBT(this.index)
+      console.log(PSBT)
     },
-    hit () {
-      this.$store.commit('increment')
+    async getAddress () {
+      const receiveAddress = await genAddress(this.index)
+      this.receiveAddress = receiveAddress
     },
-    goForward (path) {
-      this.$emit('change', path)
+    async downloadPSBT () {
+      const PSBT = await getPSBT(this.index)
+      await downloadPSBT(PSBT)
+    },
+    async uploadPSBT () {
+      const signedPSBT = await uploadPSBT()
+      this.hardwareSignedHex = signedPSBT
     }
   }
 }
