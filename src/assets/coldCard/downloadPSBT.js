@@ -1,6 +1,6 @@
 const fs = require('fs-extra')
-const remote = require('electron').remote
 const { dialog } = require('electron').remote
+const remote = require('electron').remote
 const app = remote.app
 
 async function downloadPSBT (psbtHex) {
