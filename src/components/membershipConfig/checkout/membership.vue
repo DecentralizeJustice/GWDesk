@@ -33,10 +33,10 @@
 <script>
 export default {
   data: () => ({
-    maxMonths: 1,
+    maxMonths: 12,
     months: 1,
     amount: 1,
-    perMonthPercentage: 0.01
+    perMonthPercentage: 0.005
   }),
   props: ['membershipOptions'],
   computed: {

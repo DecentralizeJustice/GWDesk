@@ -9,7 +9,7 @@
             <v-card-actions class="text-xs-center">
               <v-flex class="text-xs-center">
                 <v-btn text color="primary" v-on:click="goForward ('checkoutMain')">Buy New Membership</v-btn>
-                <v-btn text color="primary">Use Past Membership</v-btn>
+                <v-btn text color="primary">Use Membership</v-btn>
               </v-flex>
             </v-card-actions>
             <v-divider></v-divider>

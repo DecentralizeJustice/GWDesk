@@ -20,7 +20,7 @@ function getState (key, storage) {
 }
 export default new Vuex.Store({
   state: {
-    firstStepDone: false
+    firstStepDone: true
   },
   mutations: {
     increment (state) {
