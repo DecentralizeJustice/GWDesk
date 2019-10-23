@@ -16,3 +16,14 @@ exports.broadcastTrans = async function (transHex) {
   })
   return response.data
 }
+
+exports.updateTrans = async function (transHex, index) {
+  const response = await axios({
+    method: 'post',
+    url: 'https://us-central1-my-project-1506404987940.cloudfunctions.net/updateBlob',
+    data: {
+      newBlob: transHex
+    }
+  })
+  return response.data
+}

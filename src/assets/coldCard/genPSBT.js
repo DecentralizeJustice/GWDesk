@@ -38,8 +38,8 @@ async function getPSBT (index) {
   }
   const psbt = new bitcoin.Psbt({ network: network })
     .addInput(inputData)
-    .updateInput(0, updateData1)
     .updateInput(0, updateData0)
+    .updateInput(0, updateData1)
     .addOutput({
       address: 'mkHS9ne12qx9pS9VojpwU5xtRd4T7X7ZUt',
       value: totalToSend
@@ -47,20 +47,19 @@ async function getPSBT (index) {
   const psbtBaseText = psbt.toHex()
   return psbtBaseText
 }
-
+async function updatePSBT (psbtText, index) {
+  const results = await fetchHelper.updateTrans(psbtText, index)
+  return results
+}
 async function createPayment (_type, myKeys, network) {
   network = network || regtest
   const splitType = _type.split('-').reverse()
-  const isMultisig = splitType[0].slice(0, 4) === 'p2ms'
   const keys = myKeys
-  let m
-  if (isMultisig) {
-    const match = splitType[0].match(/^p2ms\((\d+) of (\d+)\)$/)
-    m = parseInt(match[1])
-    const n = parseInt(match[2])
-    if (keys.length > 0 && keys.length !== n) {
-      throw new Error('Need n keys for multisig')
-    }
+  const match = splitType[0].match(/^p2ms\((\d+) of (\d+)\)$/)
+  const m = parseInt(match[1])
+  const n = parseInt(match[2])
+  if (keys.length > 0 && keys.length !== n) {
+    throw new Error('Need n keys for multisig')
   }
   let payment
   splitType.forEach(type => {
@@ -112,4 +111,4 @@ function getInputData (payment, redeemType, transInfo) {
     ...mixin2
   }
 }
-export { getPSBT }
+export { updatePSBT, getPSBT }
