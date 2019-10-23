@@ -1,12 +1,12 @@
 'use strict'
 const axios = require('axios')
-exports.genAddressUnspent = async function (address) {
+async function genAddressUnspent (address) {
   const data =
   await axios(`https://testnet-api.smartbit.com.au/v1/blockchain/address/${address}/unspent`)
   const unspent = data.data.unspent
   return unspent['0']
 }
-exports.broadcastTrans = async function (transHex) {
+async function broadcastTrans (transHex) {
   const response = await axios({
     method: 'post',
     url: 'https://testnet-api.smartbit.com.au/v1/blockchain/pushtx',
@@ -17,7 +17,7 @@ exports.broadcastTrans = async function (transHex) {
   return response.data
 }
 
-exports.updateTrans = async function (transHex, index) {
+async function updateTrans (transHex, index) {
   const response = await axios({
     method: 'post',
     url: 'https://us-central1-my-project-1506404987940.cloudfunctions.net/updateBlob',
@@ -27,3 +27,5 @@ exports.updateTrans = async function (transHex, index) {
   })
   return response.data
 }
+
+export { updateTrans, broadcastTrans, genAddressUnspent }

@@ -2,9 +2,7 @@ const bip32 = require('bip32')
 const bip39 = require('bip39')
 // const bitcoin = require('bitcoinjs-lib')
 const bs58check = require('bs58check')
-const mnemonic = 'praise you muffin lion enable neck grocery crumble super myself license ghost'
-const divPath = "m/48'/1'/0'/2'"
-async function getToNode () {
+async function mnemonicToNode (mnemonic, divPath) {
   const seed = await bip39.mnemonicToSeed(mnemonic)
   const node = await bip32.fromSeed(seed)
   const child = await node.derivePath(divPath)

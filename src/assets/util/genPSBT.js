@@ -2,7 +2,6 @@ import { getPubkeyArray, genAddress } from '@/assets/coldCard/genAddress.js'
 const bitcoin = require('bitcoinjs-lib')
 const NETWORKS = require('./networks')
 const fetchHelper = require('./fetch')
-const regtest = NETWORKS.regtest
 const testnet = NETWORKS.testnet
 
 async function getPSBT (index) {
@@ -52,7 +51,6 @@ async function updatePSBT (psbtText, index) {
   return results
 }
 async function createPayment (_type, myKeys, network) {
-  network = network || regtest
   const splitType = _type.split('-').reverse()
   const keys = myKeys
   const match = splitType[0].match(/^p2ms\((\d+) of (\d+)\)$/)

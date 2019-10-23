@@ -24,6 +24,7 @@
     "core-js": "^2.6.5",
     "electron-store": "^5.0.0",
     "fs-extra": "^8.1.0",
+    "ramda": "^0.26.1",
     "vue": "^2.6.10",
     "vue-router": "^3.0.3",
     "vuetify": "^2.0.0",
