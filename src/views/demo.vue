@@ -10,9 +10,10 @@
                 <v-btn text color="primary" v-on:click="getAddress()">Get Receive Address</v-btn>
                 <v-btn text color="primary" v-on:click="downloadPSBTTo()">Download PSBT File</v-btn>
                 <v-btn text color="primary" v-on:click="updatePSBT()">Update PSBT Hex</v-btn>
-                <!-- <v-btn text color="primary" v-on:click="uploadPSBT()">Upload Hardware Signed PBST</v-btn>
-                <v-btn text color="primary" v-on:click="combine (hardwareSignedHex, softwareSignedHex)">
-                  Combine and Broadcast Trans</v-btn> -->
+                <v-btn text color="primary" v-on:click="getWebSigned()">Get Web Signed Trans</v-btn>
+                <v-btn text color="primary" v-on:click="uploadPSBT()">Upload Hardware Signed PBST</v-btn>
+                <v-btn text color="primary" v-on:click="combine (hardwareSignedHex, webSignedTrans)">
+                  Combine and Broadcast Trans</v-btn>
               </v-flex>
             </v-card-actions>
             <v-divider></v-divider>
@@ -32,19 +33,17 @@
 <script>
 import { genAddress } from '@/assets/util/addressUtil.js'
 import { vpubObject, xfp } from '@/assets/constants/userConstantFiles.js'
-import { createPSBT } from '@/assets/util/psbtUtil.js'
-import { downloadPSBT } from '@/assets/util/electronUtil.js'
-import { updateTrans } from '@/assets/util/networkUtil.js'
-// import { updatePSBT, getPSBT } from '@/assets/coldCard/genPSBT.js'
-// import { downloadPSBT } from '@/assets/coldCard/downloadPSBT.js'
-// import { uploadPSBT } from '@/assets/coldCard/uploadPSBT.js'
-// import { combineCompletedTrans } from '@/assets/coldCard/combineAndBroadcast.js'
+import { createPSBT, combineCompletedTrans } from '@/assets/util/psbtUtil.js'
+import { downloadPSBT, uploadPSBT } from '@/assets/util/electronUtil.js'
+import { updateTrans, getTrans, broadcastTrans } from '@/assets/util/networkUtil.js'
+
 const R = require('ramda')
 export default {
   data: () => ({
     receiveAddress: '',
     index: 2,
     hardwareSignedHex: '',
+    webSignedTrans: '',
     m: 2
   }),
   methods: {
@@ -62,15 +61,22 @@ export default {
       const PSBT = await createPSBT(this.index, this.m, vpubObject, xfp)
       console.log(PSBT)
       await downloadPSBT(PSBT)
+    },
+    async getWebSigned () {
+      const hi = await getTrans()
+      this.webSignedTrans = hi.blob
+      console.log(this.webSignedTrans)
+    },
+    async uploadPSBT () {
+      const signedPSBT = await uploadPSBT()
+      this.hardwareSignedHex = signedPSBT
+      console.log(this.hardwareSignedHex)
+    },
+    async combine (trans1, trans2) {
+      const trans = await combineCompletedTrans(trans1, trans2)
+      const finalBraodcast = await broadcastTrans(trans)
+      console.log(finalBraodcast)
     }
-    // async uploadPSBT () {
-    //   const signedPSBT = await uploadPSBT()
-    //   this.hardwareSignedHex = signedPSBT
-    // },
-    // async combine (trans1, trans2) {
-    //   const trans = await combineCompletedTrans(trans1, trans2)
-    //   console.log(trans)
-    // }
   }
 }
 </script>

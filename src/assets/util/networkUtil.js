@@ -28,4 +28,12 @@ async function updateTrans (transHex, index) {
   return response.data
 }
 
-export { updateTrans, broadcastTrans, genAddressUnspent }
+async function getTrans () {
+  const response = await axios({
+    method: 'get',
+    url: 'https://us-central1-my-project-1506404987940.cloudfunctions.net/getBlob'
+  })
+  return response.data
+}
+
+export { updateTrans, broadcastTrans, genAddressUnspent, getTrans }
