@@ -8,8 +8,8 @@
             <v-card-actions class="text-xs-center">
               <v-flex class="text-xs-center">
                 <v-btn text color="primary" v-on:click="getAddress()">Get Recieve Address</v-btn>
-                <!-- <v-btn text color="primary" v-on:click="downloadPSBT()">Download PSBT File</v-btn>
-                <v-btn text color="primary" v-on:click="updatePSBT()">Update PSBT Hex</v-btn>
+                <v-btn text color="primary" v-on:click="downloadPSBT()">Download PSBT File</v-btn>
+                <!-- <v-btn text color="primary" v-on:click="updatePSBT()">Update PSBT Hex</v-btn>
                 <v-btn text color="primary" v-on:click="uploadPSBT()">Upload Hardware Signed PBST</v-btn>
                 <v-btn text color="primary" v-on:click="combine (hardwareSignedHex, softwareSignedHex)">
                   Combine and Broadcast Trans</v-btn> -->
@@ -54,11 +54,12 @@ export default {
       const vpubArray = R.values(vpubObject)
       const receiveAddress = await genAddress(this.index, vpubArray, this.m)
       this.receiveAddress = receiveAddress
-    }
-    // async downloadPSBT () {
-    //   const PSBT = await getPSBT(this.index)
-    //   await downloadPSBT(PSBT)
-    // },
+    },
+    async downloadPSBT () {
+    const PSBT = await getPSBT(this.index)
+    console.log(PSBT)
+    //await downloadPSBT(PSBT)
+    },
     // async uploadPSBT () {
     //   const signedPSBT = await uploadPSBT()
     //   this.hardwareSignedHex = signedPSBT
