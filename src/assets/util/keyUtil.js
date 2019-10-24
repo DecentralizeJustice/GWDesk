@@ -15,6 +15,11 @@ function sort (pubkeyBuffers) {
   }
   return sortedBuffer
 }
+async function getPubkey (index, vpub) {
+  const node = bitcoin.bip32.fromBase58(pubToXpub(vpub), testnet)
+  const pubkey = node.derive(index).publicKey
+  return pubkey
+}
 
 async function getPubkeyArray (index, vpubArray) {
   const pubkeyArray = []
@@ -27,4 +32,4 @@ async function getPubkeyArray (index, vpubArray) {
   return sortedArray
 }
 
-export { getPubkeyArray }
+export { getPubkeyArray, getPubkey }

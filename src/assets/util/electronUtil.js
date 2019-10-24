@@ -15,10 +15,6 @@ async function uploadPSBT () {
   const hex = buffer.toString('hex')
   return hex
 }
-const fs = require('fs-extra')
-const { dialog } = require('electron').remote
-const remote = require('electron').remote
-const app = remote.app
 
 async function downloadPSBT (psbtHex) {
   const psbtBuffer = Buffer.from(psbtHex, 'hex')
@@ -35,6 +31,4 @@ async function downloadPSBT (psbtHex) {
   return true
 }
 
-export { downloadPSBT }
-
-export { uploadPSBT }
+export { downloadPSBT, uploadPSBT }

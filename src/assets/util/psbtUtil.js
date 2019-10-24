@@ -1,11 +1,13 @@
-import { getPubkeyArray } from '@/assets/util/keyUtil.js'
+import { getPubkeyArray, getPubkey } from '@/assets/util/keyUtil.js'
 import { genAddress } from '@/assets/util/addressUtil.js'
 import { testnet } from '@/assets/constants/networkConstants.js'
 import { genAddressUnspent } from '@/assets/util/fetchUtil.js'
 import { divPath } from '@/assets/constants/genConstants.js'
 const bitcoin = require('bitcoinjs-lib')
+const R = require('ramda')
 
-async function getPSBT (index, m, vpubArray) {
+async function createPSBT (index, m, vpubObject, xfp) {
+  const vpubArray = R.values(vpubObject)
   const path = divPath + '/' + index.toString()
   const pubkeyArray = await getPubkeyArray(index, vpubArray)
   const n = pubkeyArray.length
@@ -17,35 +19,28 @@ async function getPSBT (index, m, vpubArray) {
   const spendable = transInfo.value_int
   const fees = 10000
   const totalToSend = spendable - fees
-  const updateData0 = {
-    bip32Derivation: [
-      {
-        masterFingerprint: Buffer.from('DFFED015', 'hex'),
-        path: path,
-        pubkey: Buffer.from('0272d6aae282f3020622a07e9cc404247fde4357aac2458474c2968eef9083fa05', 'hex')
-      }
-    ]
-  }
-  const updateData1 = {
-    bip32Derivation: [
-      {
-        masterFingerprint: Buffer.from('6C6816CE', 'hex'),
-        path: path,
-        pubkey: Buffer.from('02cec729df6b2504c8a3e7840b4deb829203612f1a34b6ea9a377e016f9c001654', 'hex')
-      }
-    ]
-  }
-  const psbt = new bitcoin.Psbt({ network: network })
+  let psbt = new bitcoin.Psbt({ network: network })
     .addInput(inputData)
-    .updateInput(0, updateData0)
-    .updateInput(0, updateData1)
     .addOutput({
       address: 'mkHS9ne12qx9pS9VojpwU5xtRd4T7X7ZUt',
       value: totalToSend
     })
+  psbt = await addbip32DerivationInfo(psbt, path, vpubObject, xfp, index)
   const psbtBaseText = psbt.toHex()
   return psbtBaseText
 }
+
+async function addbip32DerivationInfo (psbt, path, vpubObject, xfp, index) {
+  for (var property1 in vpubObject) {
+    const updateData = { bip32Derivation: [{}] }
+    updateData.bip32Derivation[0].masterFingerprint = Buffer.from(xfp[property1], 'hex')
+    updateData.bip32Derivation[0].path = path
+    updateData.bip32Derivation[0].pubkey = await getPubkey(index, vpubObject[property1])
+    psbt.updateInput(0, updateData)
+  }
+  return psbt
+}
+
 async function createPayment (_type, myKeys, network) {
   const splitType = _type.split('-').reverse()
   const keys = myKeys
@@ -105,9 +100,6 @@ function getInputData (payment, redeemType, transInfo) {
     ...mixin2
   }
 }
-import { broadcastTrans } from '@/assets/coldCard/fetch.js'
-
-const bitcoin = require('bitcoinjs-lib')
 
 async function combineCompletedTrans (hex1, hex2) {
   const signer1 = bitcoin.Psbt.fromHex(hex1)
@@ -116,10 +108,7 @@ async function combineCompletedTrans (hex1, hex2) {
   console.log(signer1.validateSignaturesOfInput(0) === true)
   signer1.finalizeAllInputs()
   const finalHex = signer1.extractTransaction().toHex()
-  const broadcast = await broadcastTrans(finalHex)
-  return broadcast
+  return finalHex
 }
 
-export { combineCompletedTrans }
-
-export { getPSBT }
+export { createPSBT, combineCompletedTrans }
