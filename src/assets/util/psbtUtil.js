@@ -1,7 +1,7 @@
 import { getPubkeyArray, getPubkey } from '@/assets/util/keyUtil.js'
 import { genAddress } from '@/assets/util/addressUtil.js'
 import { testnet } from '@/assets/constants/networkConstants.js'
-import { genAddressUnspent } from '@/assets/util/fetchUtil.js'
+import { genAddressUnspent } from '@/assets/util/networkUtil.js'
 import { divPath } from '@/assets/constants/genConstants.js'
 const bitcoin = require('bitcoinjs-lib')
 const R = require('ramda')
