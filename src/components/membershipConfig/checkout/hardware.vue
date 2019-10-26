@@ -49,7 +49,7 @@ export default {
   },
   props: ['hardwareOptions', 'hardwareAdvancedOption'],
   data: () => ({
-    totalkeysAllowed: 8,
+    totalHadwareKeysAllowed: 3,
     minKeyDevices: 3,
     minDesktopComp: 1,
     minDevicesWarning: 'You Must Use Atleast 4 Devices',
@@ -81,14 +81,18 @@ export default {
       return this.desktopKeys + this.phonesOrTabletKeys + 1
     },
     reccommendedneededSigs: function () {
-      return this.hardwareWallets
+      if (this.desktops === 1 && this.phonesOrTabletKeys === 0) {
+        return this.hardwareWallets - 1
+      } else {
+        return this.hardwareWallets
+      }
     },
     desktopKeys: function () {
       return this.desktops - this.minDesktopComp
     },
     hardwareWalletdropdown: function () {
       const options = []
-      for (let i = 2; i < this.totalkeysAllowed + 1;
+      for (let i = 2; i < this.totalHadwareKeysAllowed + 1;
         i++) {
         options.push(i)
       }
