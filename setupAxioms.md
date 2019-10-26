@@ -3,4 +3,4 @@ These are rules that the users hardware config can never break.
   a. Number of needed sigs never greater than hardwareKeys
   b. Number of needed sigs below softwareKeys + 1
 2. Non key desktop required
-3. Never recommend depending on one device
+3. Never depend on one device

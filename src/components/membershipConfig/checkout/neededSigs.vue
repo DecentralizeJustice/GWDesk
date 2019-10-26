@@ -26,11 +26,19 @@ export default {
   computed: {
     neededSigssDropDown () {
       const options = []
-      for (let i = this.minNumberneededSigs; i <
-        this.hardwareOptions.hardwareWallets + 1; i++) {
-        options.push(i)
+      if (this.hardwareOptions.desktops === 1 && this.hardwareOptions.phonesOrTabletKeys === 0) {
+        for (let i = this.minNumberneededSigs + 1; i <
+          this.hardwareOptions.hardwareWallets; i++) {
+          options.push(i)
+        }
+        return options
+      } else {
+        for (let i = this.minNumberneededSigs + 1; i <
+          this.hardwareOptions.hardwareWallets + 1; i++) {
+          options.push(i)
+        }
+        return options
       }
-      return options
     }
   },
   methods: {
