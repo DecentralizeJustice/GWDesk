@@ -3,20 +3,8 @@
       <v-flex xs8>
           <v-card >
             <v-card-text>
-              <h2>{{receiveAddress}}</h2>
+              <h2>Balance</h2>
             </v-card-text>
-            <v-card-actions class="text-xs-center">
-              <v-flex class="text-xs-center">
-                <v-btn text color="primary" v-on:click="getNodeStatus()">Node Status</v-btn>
-                <v-btn text color="primary" v-on:click="getAddress()">Get Receive Address</v-btn>
-                <v-btn text color="primary" v-on:click="downloadPSBTTo()">Download PSBT File</v-btn>
-                <v-btn text color="primary" v-on:click="updatePSBT()">Update PSBT Hex</v-btn>
-                <v-btn text color="primary" v-on:click="getWebSigned()">Get Web Signed Trans</v-btn>
-                <v-btn text color="primary" v-on:click="uploadPSBT()">Upload Hardware Signed PSBT</v-btn>
-                <v-btn text color="primary" v-on:click="combine (hardwareSignedHex, webSignedTrans)">
-                  Combine and Broadcast Trans</v-btn>
-              </v-flex>
-            </v-card-actions>
             <v-divider></v-divider>
             <v-card-actions>
               <v-btn
