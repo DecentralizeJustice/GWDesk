@@ -1,6 +1,6 @@
 <template>
     <v-layout align-center justify-center row fill-height>
-      <v-flex xs8>
+      <v-flex xs11>
           <v-card >
             <v-card-text>
               <h2>Home</h2>

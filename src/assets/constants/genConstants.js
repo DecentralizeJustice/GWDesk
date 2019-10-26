@@ -1,3 +1,3 @@
 const divPath = "m/48'/1'/0'/2'"
-
-export { divPath }
+const gapLimit = 5
+export { divPath, gapLimit }

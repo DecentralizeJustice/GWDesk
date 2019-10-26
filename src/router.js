@@ -3,7 +3,7 @@ import Router from 'vue-router'
 // import store from './store.js'
 import Intro from './views/membershipConfig.vue'
 import Home from './views/home.vue'
-import Balance from './views/balance.vue'
+import Transactions from './views/trans.vue'
 import Recieve from './views/recMoney.vue'
 import Send from './views/sendMoney.vue'
 import Lessons from './views/lessons.vue'
@@ -28,9 +28,9 @@ const router = new Router({
       component: Intro
     },
     {
-      path: '/balance',
-      name: 'balance',
-      component: Balance
+      path: '/trans',
+      name: 'trans',
+      component: Transactions
     },
     {
       path: '/receive',

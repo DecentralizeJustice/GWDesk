@@ -39,14 +39,14 @@ export default {
   },
   data: () => ({
     titles: [
-      'Home', 'Balance', 'Receive Money', 'Send Money',
+      'Home', 'Transactions', 'Receive Money', 'Send Money',
       'Lessons', 'Support', 'Settings'
     ],
     icons: ['home', 'wallet', 'arrow-right-bold',
       'arrow-left-bold', 'book-open-outline', 'face-agent',
       'settings'
     ],
-    routerLinks: ['home', 'balance', 'receive', 'send', 'lessons',
+    routerLinks: ['home', 'trans', 'receive', 'send', 'lessons',
       'support', 'settings'
     ]
   }),
