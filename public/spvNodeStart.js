@@ -19,9 +19,13 @@ const node = new SPVNode({
   workers: true,
   listen: true,
   loader: require,
-  // 'wallet-watch-only': true,
+  'wallet-watch-only': true,
+  'watch-only': true,
   cors: true,
   'api-key': 'hunter2',
+  'wallet-api-key': 'hunter2',
+  'wallet-cors': true,
+  'wallet-auth': true,
   prefix: nodeInfoLocation
 })
 

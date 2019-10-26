@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 // import store from './store.js'
-import Home from './views/demo.vue'
-
+import Home from './views/spvNodeTest.vue'
+// import Home from './views/demo.vue'
 Vue.use(Router)
 
 const router = new Router({

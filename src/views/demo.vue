@@ -11,7 +11,7 @@
                 <v-btn text color="primary" v-on:click="downloadPSBTTo()">Download PSBT File</v-btn>
                 <v-btn text color="primary" v-on:click="updatePSBT()">Update PSBT Hex</v-btn>
                 <v-btn text color="primary" v-on:click="getWebSigned()">Get Web Signed Trans</v-btn>
-                <v-btn text color="primary" v-on:click="uploadPSBT()">Upload Hardware Signed PBST</v-btn>
+                <v-btn text color="primary" v-on:click="uploadPSBT()">Upload Hardware Signed PSBT</v-btn>
                 <v-btn text color="primary" v-on:click="combine (hardwareSignedHex, webSignedTrans)">
                   Combine and Broadcast Trans</v-btn>
               </v-flex>
@@ -41,7 +41,7 @@ const R = require('ramda')
 export default {
   data: () => ({
     receiveAddress: '',
-    index: 2,
+    index: 0,
     hardwareSignedHex: '',
     webSignedTrans: '',
     m: 2
@@ -63,8 +63,8 @@ export default {
       await downloadPSBT(PSBT)
     },
     async getWebSigned () {
-      const hi = await getTrans()
-      this.webSignedTrans = hi.blob
+      const signedBlob = await getTrans()
+      this.webSignedTrans = signedBlob.blob.trans
       console.log(this.webSignedTrans)
     },
     async uploadPSBT () {
