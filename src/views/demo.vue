@@ -7,6 +7,7 @@
             </v-card-text>
             <v-card-actions class="text-xs-center">
               <v-flex class="text-xs-center">
+                <v-btn text color="primary" v-on:click="getNodeStatus()">Node Status</v-btn>
                 <v-btn text color="primary" v-on:click="getAddress()">Get Receive Address</v-btn>
                 <v-btn text color="primary" v-on:click="downloadPSBTTo()">Download PSBT File</v-btn>
                 <v-btn text color="primary" v-on:click="updatePSBT()">Update PSBT Hex</v-btn>
@@ -41,7 +42,7 @@ const R = require('ramda')
 export default {
   data: () => ({
     receiveAddress: '',
-    index: 0,
+    index: 4,
     hardwareSignedHex: '',
     webSignedTrans: '',
     m: 2
