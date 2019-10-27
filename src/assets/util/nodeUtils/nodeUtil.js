@@ -5,12 +5,33 @@ const remote = require('electron').remote
 const app = remote.app
 
 async function startNode () {
-  const location = app.getPath('userData') + '/here'
-  const args = [location]
-  // eslint-disable-next-line
-  const process = fork(path.join(__static, "spvNodeStart.js"), args)
+  const nodeAlive = await checkNodeAlive()
+  if (nodeAlive) {
+    throw new Error('Node Already Running')
+  } else {
+    const location = app.getPath('userData') + '/here'
+    const args = [location]
+    // eslint-disable-next-line
+    const process = fork(path.join(__static, "spvNodeStart.js"), args)
+    return true
+  }
 }
-async function getNodeInfo () {
+async function checkNodeAlive () {
+  try {
+    await client.getInfo()
+    return true
+  } catch (error) {
+    return false
+  }
+}
+async function stopNode () {
+  // eslint-disable-next-line
+  const pathTo = path.join(__static, "killNode.js")
+  await fork(pathTo)
+  return true
+}
+
+async function getNodeSyncInfo () {
   const clientinfo = await client.getInfo()
   const percentage = clientinfo.chain.progress * 100
   return percentage
@@ -47,6 +68,6 @@ async function broadcastHex (txHex) {
 }
 
 export {
-  createWallet, getNodeInfo, getWalletTransactions, broadcastHex,
-  getTxByHash, importAddress, startNode
+  createWallet, getNodeSyncInfo, getWalletTransactions, broadcastHex,
+  getTxByHash, importAddress, startNode, checkNodeAlive, stopNode
 }

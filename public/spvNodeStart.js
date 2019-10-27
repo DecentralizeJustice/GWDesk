@@ -1,9 +1,8 @@
 
 'use strict'
 
-process.title = 'bcoin'
+process.title = 'Distributed-Keys-bcoinSPVNode-2012'
 const nodeInfoLocation = process.argv[2]
-console.log(nodeInfoLocation)
 const SPVNode = require('bcoin/lib/node/spvnode')
 const node = new SPVNode({
   network: 'testnet',

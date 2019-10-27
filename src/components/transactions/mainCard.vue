@@ -6,12 +6,19 @@
         no-gutters
       >
         <v-col>
+          <v-hover v-slot:default="{ hover }">
           <v-card
-            class="pa-2 primary"
-            tile
+            :class="{ 'on-hover': hover }"
+            class='primary'
+            link
+            :elevation="hover ? 12 : 2"
           >
-            + 2.3 BTC
+
+          <v-card-text class="ma-4 subtitle-1 black--text">
+            <v-icon>mdi-arrow-bottom-right-thick</v-icon> Recieved
+          </v-card-text>
           </v-card>
+        </v-hover>
         </v-col>
       </v-row>
     </v-container>
