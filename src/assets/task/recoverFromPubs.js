@@ -1,22 +1,33 @@
 import { importAddress, resetChainTo,
-  getNodeInfo, getWalletTransactions
+  getNodeInfo, getWalletTransactions, listWalletAddresses
 } from '@/assets/util/nodeUtils/nodeUtil.js'
-import { walletName, oldestBlock, account, m } from '@/assets/constants/genConstants.js'
-import { genAddress } from '@/assets/util/addressUtil.js'
+import { walletName, oldestBlock, account } from '@/assets/constants/genConstants.js'
+import { m } from '@/assets/constants/userConstantFiles.js'
+import { genAddress, checkArrayForAdress } from '@/assets/util/addressUtil.js'
 async function recoverFromPubs (vpubArray) {
-  // await resetChainTo(oldestBlock)
-  const getTrans = await getWalletTransactions(account, walletName)
   // const getStatus = await getNodeInfo()
-  // const address = await genAddress(0, vpubArray, m)
-  console.log(getTrans)
-  // const Address = await importAddress(account, address, walletName)
-  // const addressAdd = await addAddresses(vpubArray)
-
-  // return Address
+  // const results = await addAddress(vpubArray, 1)
+  const address = await genAddress(1, vpubArray, m)
+  const getTrans = await listWalletAddresses(account, walletName)
+  const hi = await addAddresses(address, getTrans)
+  // await pause(1)
+  console.log(hi)
+  return getTrans
 }
-async function addAddresses (vpubArray) {
-  const address = genAddress(2, vpubArray, 2)
-  return address
+async function addAddresses (address, addressArray) {
+  const results = checkArrayForAdress(address, addressArray)
+  return results
+}
+async function addAddress (vpubArray, index) {
+  const address = await genAddress(index, vpubArray, m)
+  console.log(address)
+  const result = await importAddress(account, address, walletName)
+  await resetChainTo(oldestBlock)
+  return result
+}
+async function pause (seconds) {
+  return new Promise(resolve =>
+    setTimeout(() => resolve(true), seconds * 1000))
 }
 export {
   recoverFromPubs

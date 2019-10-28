@@ -2,6 +2,7 @@
 import { testnet } from '@/assets/constants/networkConstants.js'
 import { getPubkeyArray } from '@/assets/util/keyUtil.js'
 const bitcoin = require('bitcoinjs-lib')
+const R = require('ramda')
 
 async function genAddress (index, vpubArray, m) {
   const network = testnet
@@ -12,5 +13,13 @@ async function genAddress (index, vpubArray, m) {
   })
   return info.address
 }
+async function checkArrayForAdress (address, addressArray) {
+  const inOrNot = R.findIndex(R.equals(address))(addressArray)
+  if (inOrNot === -1) {
+    return false
+  } else {
+    return true
+  }
+}
 
-export { genAddress }
+export { genAddress, checkArrayForAdress }

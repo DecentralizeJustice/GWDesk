@@ -62,7 +62,12 @@ async function getWalletTransactions (account, name) {
   const result = await walletClient.execute('listtransactions', [account,,, true])
   return result
 }
-
+async function listWalletAddresses (account, name) {
+  await walletClient.execute('selectwallet', [name])
+  // eslint-disable-next-line
+  const result = await walletClient.execute('getaddressesbyaccount', [account])
+  return result
+}
 async function getTxByHash (txHash) {
   const result = await client.getTX(txHash)
   return result
@@ -76,5 +81,5 @@ async function broadcastHex (txHex) {
 export {
   createWallet, getNodeSyncInfo, getWalletTransactions, broadcastHex,
   getTxByHash, importAddress, startNode, checkNodeAlive, stopNode, resetChainTo,
-  getNodeInfo
+  getNodeInfo, listWalletAddresses
 }

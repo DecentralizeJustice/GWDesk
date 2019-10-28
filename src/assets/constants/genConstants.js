@@ -1,5 +1,5 @@
 const divPath = "m/48'/1'/0'/2'"
-const gapLimit = 5
+const gapLimit = 3
 const walletName = 'musig'
 const oldestBlock = 1583007
 const account = 'default'
