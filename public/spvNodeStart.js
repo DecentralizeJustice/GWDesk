@@ -1,6 +1,6 @@
 
 'use strict'
-
+// process.title is tied to killnode by title
 process.title = 'Distributed-Keys-bcoinSPVNode-2012'
 const nodeInfoLocation = process.argv[2]
 const SPVNode = require('bcoin/lib/node/spvnode')
