@@ -5,16 +5,11 @@ const remote = require('electron').remote
 const app = remote.app
 
 async function startNode () {
-  const nodeAlive = await checkNodeAlive()
-  if (nodeAlive) {
-    throw new Error('Node Already Running')
-  } else {
-    const location = app.getPath('userData') + '/here'
-    const args = [location]
-    // eslint-disable-next-line
-    const process = fork(path.join(__static, "spvNodeStart.js"), args)
-    return true
-  }
+  const location = app.getPath('userData') + '/here'
+  const args = [location]
+  // eslint-disable-next-line
+  const process = fork(path.join(__static, "spvNodeStart.js"), args)
+  return true
 }
 async function checkNodeAlive () {
   try {
