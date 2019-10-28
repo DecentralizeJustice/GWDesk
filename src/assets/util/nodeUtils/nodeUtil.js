@@ -19,11 +19,19 @@ async function checkNodeAlive () {
     return false
   }
 }
+async function getNodeInfo () {
+  const results = await client.getInfo()
+  return results
+}
 async function stopNode () {
   // eslint-disable-next-line
   const pathTo = path.join(__static, "killNode.js")
   await fork(pathTo)
   return true
+}
+async function resetChainTo (height) {
+  const result = await client.reset(height)
+  return result
 }
 
 async function getNodeSyncInfo () {
@@ -42,13 +50,16 @@ async function createWallet (id) {
   return result
 }
 
-async function importAddress (account, address, wallet) {
+async function importAddress (account, address, id) {
+  const wallet = walletClient.wallet(id)
   const result = await wallet.importAddress(account, address)
   return result
 }
 
-async function getWalletTransactions (account, maxReturn, from) {
-  const result = await walletClient.execute('listtransactions', [account, maxReturn, from, true])
+async function getWalletTransactions (account, name) {
+  await walletClient.execute('selectwallet', [name])
+  // eslint-disable-next-line
+  const result = await walletClient.execute('listtransactions', [account,,, true])
   return result
 }
 
@@ -64,5 +75,6 @@ async function broadcastHex (txHex) {
 
 export {
   createWallet, getNodeSyncInfo, getWalletTransactions, broadcastHex,
-  getTxByHash, importAddress, startNode, checkNodeAlive, stopNode
+  getTxByHash, importAddress, startNode, checkNodeAlive, stopNode, resetChainTo,
+  getNodeInfo
 }

@@ -1,13 +1,12 @@
-import { startNode } from '@/assets/util/nodeUtils/nodeUtil.js'
 import { genAddress } from '@/assets/util/addressUtil.js'
+import { m } from '@/assets/constants/userConstantFiles.js'
 async function getHighestAddress (vpubArray) {
-  const results = await startNode()
   const addressAdd = await addAddresses(vpubArray)
   console.log(addressAdd)
-  return results
+  // return results
 }
 async function addAddresses (vpubArray) {
-  const address = genAddress(2, vpubArray, 2)
+  const address = genAddress(2, vpubArray, m)
   return address
 }
 export {
