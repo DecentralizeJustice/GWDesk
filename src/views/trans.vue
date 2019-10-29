@@ -48,7 +48,7 @@ export default {
     async recover () {
       const vpubArray = R.values(vpubObject)
       const results = await recoverFromPubs(vpubArray)
-      // console.log(results)
+      console.log(results)
     }
   },
   async mounted () {

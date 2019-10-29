@@ -56,10 +56,11 @@ async function importAddress (account, address, id) {
   return result
 }
 
-async function getWalletTransactions (account, name) {
+async function getWalletTransactions (account, name, blockHash, id) {
   await walletClient.execute('selectwallet', [name])
   // eslint-disable-next-line
-  const result = await walletClient.execute('listtransactions', [account,,, true])
+  const transInfo = await walletClient.execute('listsinceblock', [blockHash, 2, true])
+  const result = transInfo.transactions
   return result
 }
 async function listWalletAddresses (account, name) {
@@ -68,8 +69,9 @@ async function listWalletAddresses (account, name) {
   const result = await walletClient.execute('getaddressesbyaccount', [account])
   return result
 }
-async function getTxByHash (txHash) {
-  const result = await client.getTX(txHash)
+async function getTxByHash (txHash, id) {
+  const wallet = walletClient.wallet(id)
+  const result = await wallet.getTX(txHash)
   return result
 }
 
