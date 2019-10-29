@@ -34,7 +34,6 @@
 <script>
 import mainCard from '@/components/transactions/mainCard.vue'
 import { recoverFromPubs } from '@/assets/task/recoverFromPubs.js'
-import { nodeStartup } from '@/assets/task/nodeSetup.js'
 import { vpubObject } from '@/assets/constants/userConstantFiles.js'
 const R = require('ramda')
 export default {
@@ -52,7 +51,6 @@ export default {
     }
   },
   async mounted () {
-    // await nodeStartup()
   }
 }
 </script>
