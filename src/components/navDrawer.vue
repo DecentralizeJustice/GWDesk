@@ -52,7 +52,11 @@ export default {
   }),
   methods: {
     navigate (index) {
-      this.$router.push(this.routerLinks[index])
+      const currentRoute = this.$router.currentRoute.name
+      const desiredRoute = this.routerLinks[index]
+      if (currentRoute !== desiredRoute) {
+        this.$router.push(desiredRoute)
+      }
     }
   }
 }
