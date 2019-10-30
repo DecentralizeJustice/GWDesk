@@ -67,7 +67,7 @@ async function importAddress (account, address, id) {
   return result
 }
 
-async function getWalletTransactions (account, name, blockHash, id) {
+async function getWalletTransactions (account, name) {
   await walletClient.execute('selectwallet', [name])
   // eslint-disable-next-line
   const transInfo = await walletClient.execute('listtransactions',[account,,,true])

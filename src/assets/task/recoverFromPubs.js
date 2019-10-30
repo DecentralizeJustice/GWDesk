@@ -4,7 +4,7 @@ import {
 } from '@/assets/util/nodeUtils/nodeUtil.js'
 
 import {
-  walletName, oldestBlock, account, gapLimit, oldestBlockHash
+  walletName, oldestBlock, account, gapLimit
 } from '@/assets/constants/genConstants.js'
 
 import { m } from '@/assets/constants/userConstantFiles.js'
@@ -32,9 +32,7 @@ async function addAddresses (addressArray, limit, index, vpubArray) {
   for (let i = index; i < (limit + index); i++) {
     await addAddress(vpubArray, i)
   }
-  const transactionArray = await getWalletTransactions(
-    account, walletName, oldestBlockHash, walletName, oldestBlock
-  )
+  const transactionArray = await getWalletTransactions(account, walletName)
   let unusedArray = []
   const nodeSyncStatus = await getNodeSyncInfo()
   const nodeUpToDate = (nodeSyncStatus === 100)
@@ -43,21 +41,17 @@ async function addAddresses (addressArray, limit, index, vpubArray) {
     const addressUsed = await addressHasTransactions(transactionArray, address)
     unusedArray = R.append(addressUsed, unusedArray)
   }
-  const yes = await genAddress(index, vpubArray, m)
   const finished = R.all(R.equals(false))(unusedArray) && nodeUpToDate
   const allAddressesEmpty = R.all(R.equals(false))(unusedArray)
-  // const test = [true, true, true, false]
-  // console.log(allAddressesEmpty, nodeUpToDate, unusedArray, finished, index)
   if (finished) {
     return true
   } else if (!nodeUpToDate && allAddressesEmpty) {
     await pause(4)
     const updatedAddressArray = await listWalletAddresses(account, walletName)
-    const time = await getNodeSyncInfo()
-    console.log('just time', time)
+    console.log('just time')
     return addAddresses(updatedAddressArray, limit, index, vpubArray)
   } else {
-    console.log('adding address via recurse', unusedArray)
+    console.log('adding address via recursion')
     const updatedAddressArray = await listWalletAddresses(account, walletName)
     const newIndex = index + 1
     return addAddresses(updatedAddressArray, limit, newIndex, vpubArray)
