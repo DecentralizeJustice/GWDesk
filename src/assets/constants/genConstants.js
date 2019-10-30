@@ -2,6 +2,6 @@ const divPath = "m/48'/1'/0'/2'"
 const gapLimit = 2
 const walletName = 'musig'
 const oldestBlock = 1583007
-const oldestBlockHash = '0000000000234139a02f4f65bcdd06be3e216f22c59c2e6960dcba62422d9da3'
+const oldestBlockHash = '202726e81f98a178d4f8023ab336a4587f14b07ada4428b4f60ccad0a2d37dc7'
 const account = 'default'
 export { divPath, gapLimit, walletName, oldestBlock, account, oldestBlockHash }

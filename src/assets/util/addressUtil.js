@@ -15,7 +15,7 @@ async function genAddress (index, vpubArray, m) {
   })
   return info.address
 }
-async function checkArrayForAdress (address, addressArray) {
+async function checkArrayForAddress (address, addressArray) {
   const inOrNot = R.any(R.equals(address))(addressArray)
   return inOrNot
 }
@@ -54,4 +54,4 @@ async function checkSentTrans (address, transactions) {
   const results = R.any(R.equals(address))(involvedAdresses)
   return results
 }
-export { genAddress, checkArrayForAdress, addressHasTransactions }
+export { genAddress, checkArrayForAddress, addressHasTransactions }

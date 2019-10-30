@@ -1,5 +1,5 @@
 import {
-  importAddress, resetChainTo,
+  importAddress, resetChainTo, checkIfNodeMeaningfull,
   getNodeSyncInfo, listWalletAddresses, getWalletTransactions
 } from '@/assets/util/nodeUtils/nodeUtil.js'
 
@@ -9,53 +9,67 @@ import {
 
 import { m } from '@/assets/constants/userConstantFiles.js'
 
-import { genAddress, addressHasTransactions, checkArrayForAdress } from '@/assets/util/addressUtil.js'
+import {
+  genAddress, addressHasTransactions, checkArrayForAddress
+} from '@/assets/util/addressUtil.js'
 const R = require('ramda')
 
 async function recoverFromPubs (vpubArray) {
   const startingIndex = 0
+  const readyNode = await checkIfNodeMeaningfull(oldestBlock)
+  if (!readyNode) {
+    await pause(10)
+    const time = await getNodeSyncInfo()
+    console.log('node not ready', time)
+    return recoverFromPubs(vpubArray)
+  }
   const addressArray = await listWalletAddresses(account, walletName)
   const results = await addAddresses(addressArray, gapLimit, startingIndex, vpubArray)
   return results
 }
+
 async function addAddresses (addressArray, limit, index, vpubArray) {
   for (let i = index; i < (limit + index); i++) {
-    // console.log(i)
-    // await addAddress(vpubArray, i)
+    await addAddress(vpubArray, i)
   }
-  const transactionArray = await getWalletTransactions(account, walletName, oldestBlockHash, walletName)
-  let unusedAndCheckedArray = []
+  const transactionArray = await getWalletTransactions(
+    account, walletName, oldestBlockHash, walletName, oldestBlock
+  )
+  let unusedArray = []
+  const nodeSyncStatus = await getNodeSyncInfo()
+  const nodeUpToDate = (nodeSyncStatus === 100)
   for (let i = index; i < (limit + index); i++) {
     const address = await genAddress(i, vpubArray, m)
     const addressUsed = await addressHasTransactions(transactionArray, address)
-    const getStatus = await getNodeSyncInfo()
-    const unusedAndChecked = [!addressUsed, (getStatus === 100)]
-    unusedAndCheckedArray = R.append(unusedAndChecked, unusedAndCheckedArray)
+    unusedArray = R.append(addressUsed, unusedArray)
   }
-  const allTrue = R.pipe(R.flatten, R.all(R.equals(true)))(unusedAndCheckedArray)
-  const nodeUpToDate = R.pipe(n => n[1], R.all(R.equals(true)))(unusedAndCheckedArray)
-  const allAddressesEmpty = R.pipe(n => n[0], R.all(R.equals(false)))(unusedAndCheckedArray)
-  const test = [[true, true], [true, false]]
-  if (allTrue) {
+  const yes = await genAddress(index, vpubArray, m)
+  const finished = R.all(R.equals(false))(unusedArray) && nodeUpToDate
+  const allAddressesEmpty = R.all(R.equals(false))(unusedArray)
+  // const test = [true, true, true, false]
+  // console.log(allAddressesEmpty, nodeUpToDate, unusedArray, finished, index)
+  if (finished) {
     return true
   } else if (!nodeUpToDate && allAddressesEmpty) {
-    // await pause(2)
-    // const updatedAddressArray = await listWalletAddresses(account, walletName)
-    // return addAddresses(updatedAddressArray, limit, index, vpubArray)
-    console.log('just time')
+    await pause(4)
+    const updatedAddressArray = await listWalletAddresses(account, walletName)
+    const time = await getNodeSyncInfo()
+    console.log('just time', time)
+    return addAddresses(updatedAddressArray, limit, index, vpubArray)
   } else {
-    console.log('add address via recurse')
-    // const updatedAddressArray = await listWalletAddresses(account, walletName)
-    // const newIndex = index + 1
-    // return addAddresses(updatedAddressArray, limit, newIndex, vpubArray)
+    console.log('adding address via recurse', unusedArray)
+    const updatedAddressArray = await listWalletAddresses(account, walletName)
+    const newIndex = index + 1
+    return addAddresses(updatedAddressArray, limit, newIndex, vpubArray)
   }
-  return true
 }
+
 async function addAddress (vpubArray, index) {
   const address = await genAddress(index, vpubArray, m)
   const addressArray = await listWalletAddresses(account, walletName)
-  const addressInNode = await checkArrayForAdress(address, addressArray)
+  const addressInNode = await checkArrayForAddress(address, addressArray)
   if (!addressInNode) {
+    console.log('resetting chain')
     const result = await importAddress(account, address, walletName)
     await resetChainTo(oldestBlock)
     return result

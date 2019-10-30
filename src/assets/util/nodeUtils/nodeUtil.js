@@ -29,9 +29,20 @@ async function stopNode () {
   await fork(pathTo)
   return true
 }
-async function resetChainTo (height) {
-  const result = await client.reset(height)
-  return result
+async function resetChainTo (resetToHeight) {
+  const currentNodeHeight = await getNodeHeight()
+  if (currentNodeHeight > resetToHeight) {
+    const result = await client.reset(resetToHeight)
+    return result
+  } else {
+    return { success: true }
+  }
+}
+
+async function getNodeHeight () {
+  const clientinfo = await client.getInfo()
+  const height = clientinfo.chain.height
+  return height
 }
 
 async function getNodeSyncInfo () {
@@ -59,8 +70,8 @@ async function importAddress (account, address, id) {
 async function getWalletTransactions (account, name, blockHash, id) {
   await walletClient.execute('selectwallet', [name])
   // eslint-disable-next-line
-  const transInfo = await walletClient.execute('listsinceblock', [blockHash, 2, true])
-  const result = transInfo.transactions
+  const transInfo = await walletClient.execute('listtransactions',[account,,,true])
+  const result = transInfo
   return result
 }
 async function listWalletAddresses (account, name) {
@@ -74,6 +85,14 @@ async function getTxByHash (txHash, id) {
   const result = await wallet.getTX(txHash)
   return result
 }
+async function checkIfNodeMeaningfull (desiredBlockHeight) {
+  const currentNodeHeight = await getNodeHeight()
+  if (currentNodeHeight < desiredBlockHeight) {
+    return false
+  } else {
+    return true
+  }
+}
 
 async function broadcastHex (txHex) {
   const result = await client.broadcast(txHex)
@@ -83,5 +102,5 @@ async function broadcastHex (txHex) {
 export {
   createWallet, getNodeSyncInfo, getWalletTransactions, broadcastHex,
   getTxByHash, importAddress, startNode, checkNodeAlive, stopNode, resetChainTo,
-  getNodeInfo, listWalletAddresses
+  getNodeInfo, listWalletAddresses, checkIfNodeMeaningfull
 }

@@ -2,7 +2,7 @@ const coldCardVpub = 'Vpub5nNANYCRfVmfgiGuMVtZQjcjGEfQZobjAYXpyjL1qr6TUpdgmrKRjW
 const webVpub = 'Vpub5nQxS4k2YAr2CeTKz7Kv5cTDLr8yEnEf4hV2S8xzmaK3ajsAeHAafma9Mtn6in9jykT5KBmDjqvVcjReza2gYpqvv2BHQb2eDgdWtBqqpej'
 const vpubObject = { coldcard: coldCardVpub, web: webVpub }
 const xfp = { coldcard: '6C6816CE', web: 'DFFED015' }
-const token = '1739e9fc5e3ade65b1df5e2e58d0af90dc77d8cc8480ba5eaf41d9982447bef6'
+const token = 'd4cfdc41d53d96f5e7980a707671291762b45058ce8e51a50cbcb4855dbc5136'
 const apiKey = 'hunter2'
 const m = 2
 
