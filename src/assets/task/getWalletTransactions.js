@@ -1,7 +1,7 @@
 import {
   importAddress, resetChainTo, checkIfNodeMeaningfull,
   getNodeSyncInfo, listWalletAddresses, getWalletTransactions
-} from '@/assets/util/nodeUtils/nodeUtil.js'
+} from '@/assets/util/nodeUtil.js'
 
 import {
   walletName, oldestBlock, account, gapLimit

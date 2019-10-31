@@ -46,7 +46,7 @@
 <script>
 import { recoverFromPubs } from '@/assets/task/recoverFromPubs.js'
 import { vpubObject } from '@/assets/constants/userConstantFiles.js'
-import { startNode, createWallet } from '@/assets/util/nodeUtils/nodeUtil.js'
+import { startNode, createWallet } from '@/assets/util/nodeUtil.js'
 import { walletName } from '@/assets/constants/genConstants.js'
 const R = require('ramda')
 export default {

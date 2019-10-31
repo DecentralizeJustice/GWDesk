@@ -7,7 +7,8 @@
             </v-card-title>
             <v-divider></v-divider>
 
-            <mainCard class="" style=" height: 75vh;overflow: scroll;"/>
+            <mainCard v-bind:transactions="transactions"
+              style="height: 75vh;overflow: scroll;"/>
             <v-divider></v-divider>
             <v-card-actions>
               <v-btn
@@ -24,15 +25,20 @@
 
 <script>
 import mainCard from '@/components/transactions/mainCard.vue'
+import { getWalletTransactions } from '@/assets/util/nodeUtil.js'
+import { account, walletName } from '@/assets/constants/genConstants.js'
 export default {
   components: {
     mainCard
   },
   data: () => ({
+    transactions: []
   }),
   methods: {
   },
   async mounted () {
+    const results = await getWalletTransactions(account, walletName)
+    this.transactions = results
   }
 }
 </script>

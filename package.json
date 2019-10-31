@@ -17,6 +17,7 @@
     "axios": "^0.19.0",
     "bclient": "^0.1.7",
     "bcoin": "bcoin-org/bcoin#e166009fb39c33fc4be42ec9857a65a7c012168b",
+    "bignumber.js": "^9.0.0",
     "bitcoinjs-lib": "^5.1.6",
     "bs58check": "^2.1.2",
     "bweb": "DecentralizeJustice/bweb#0cd9bd50b7ebf39b0087db550983ed81a07a58fe",

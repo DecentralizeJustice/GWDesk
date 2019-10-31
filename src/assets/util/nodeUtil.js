@@ -1,8 +1,10 @@
 import { client, walletClient } from '@/assets/constants/nodeConstants.js'
+import { minConfirmations } from '@/assets/constants/genConstants.js'
 import path from 'path'
 import { fork } from 'child_process'
 const remote = require('electron').remote
 const app = remote.app
+const R = require('ramda')
 
 async function startNode () {
   const location = app.getPath('userData') + '/here'
@@ -68,10 +70,11 @@ async function importAddress (account, address, id) {
 }
 
 async function getWalletTransactions (account, name) {
+  const minConfirmationsMet = trans => (trans.confirmations >= minConfirmations)
   await walletClient.execute('selectwallet', [name])
   // eslint-disable-next-line
   const transInfo = await walletClient.execute('listtransactions',[account,,,true])
-  const result = transInfo
+  const result = R.filter(minConfirmationsMet, transInfo)
   return result
 }
 async function listWalletAddresses (account, name) {

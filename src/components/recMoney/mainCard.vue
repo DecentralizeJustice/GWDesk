@@ -1,5 +1,8 @@
 <template>
-  <v-container class="">
+  <v-container>
+      <div class=" title text-center">
+        Transactions:
+      </div>
       <v-row
         v-for="n in 1"
         :key="n"
@@ -15,9 +18,9 @@
           >
             <v-card-text class="mt-4 subtitle-1 white--text">
               <v-icon
-              large v-bind:color="getColor(item.category)">
-              {{getArrow (item.category)}}</v-icon>
-              {{getType(item.category)}}
+              large color="green">
+              mdi-arrow-bottom-right-thick</v-icon>
+              Received
               {{item.amount}} BTC
             </v-card-text>
           </v-card>
@@ -33,27 +36,6 @@ export default {
   data: () => ({
   }),
   methods: {
-    getType (type) {
-      if (type === 'send') {
-        return 'Send'
-      } else {
-        return 'Recieve'
-      }
-    },
-    getArrow (type) {
-      if (type === 'send') {
-        return 'mdi-arrow-top-left-thick'
-      } else {
-        return 'mdi-arrow-bottom-right-thick'
-      }
-    },
-    getColor (type) {
-      if (type === 'send') {
-        return 'red darken-2'
-      } else {
-        return 'green darken-2'
-      }
-    }
   },
   async mounted () {
   }
