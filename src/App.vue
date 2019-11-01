@@ -2,7 +2,9 @@
   <v-app>
     <navDrawer app />
     <v-content>
-      <router-view/>
+      <transition name="fade">
+        <router-view/>
+      </transition>
     </v-content>
   </v-app>
 </template>
