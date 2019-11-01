@@ -8,7 +8,7 @@
             <v-divider></v-divider>
 
             <mainCard v-bind:transactions="transactions"
-              style="height: 75vh;overflow: scroll;"/>
+              style="max-height: 75vh;overflow: scroll;"/>
             <v-divider></v-divider>
             <v-card-actions>
               <v-btn

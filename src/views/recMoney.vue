@@ -14,10 +14,17 @@
                 Current Balance:<br>
                 {{balance}}
               </div>
+              <div class="text--primary title mt-1"
+                v-if="transactions.length===0">
+                No Transactions
+              </div>
             </v-card-text>
 
-            <mainCard v-bind:transactions="transactions"
-              style=" height: 35vh;overflow: scroll;"/>
+            <mainCard
+              v-if="transactions.length!==0"
+              v-bind:transactions="transactions"
+              style=" max-height: 35vh;overflow: scroll;"
+              />
             <v-divider></v-divider>
             <v-card-actions>
               <v-btn

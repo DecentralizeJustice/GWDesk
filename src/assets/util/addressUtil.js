@@ -10,9 +10,10 @@ const R = require('ramda')
 async function genAddress (index, vpubArray, m) {
   const network = testnet
   const pubkeys = await getPubkeyArray(index, vpubArray)
+  const scriptInfo = { m: m, pubkeys: pubkeys, network: network }
   const info = bitcoin.payments.p2wsh({
     network: network,
-    redeem: bitcoin.payments.p2ms({ m: m, pubkeys: pubkeys, network: network })
+    redeem: bitcoin.payments.p2ms(scriptInfo)
   })
   return info.address
 }
@@ -42,6 +43,21 @@ async function getReceiveAddress (index, transactions, vpubArray, m) {
     return address
   }
 }
+async function getChangeAddress (index, transactions, vpubArray, m, wouldBeChnage) {
+  const address = await genAddress(index, vpubArray, m)
+  const sentPresent = await checkSentTrans(address, transactions)
+  const noSentAndIsChange = sentPresent && wouldBeChnage
+  if (sentPresent) {
+    const nextIndex = index + 1
+    return getReceiveAddress(nextIndex, transactions, vpubArray, m, wouldBeChnage)
+  } else if (noSentAndIsChange) {
+    return address
+  } else {
+    const flipToChange = true
+    const nextIndex = index + 1
+    return getReceiveAddress(nextIndex, transactions, vpubArray, m, flipToChange)
+  }
+}
 async function getReceivedCoins (address, transactions) {
   const isRecieve = trans => trans.category === 'receive'
   const involvesAddress = trans => trans.address === address
@@ -52,7 +68,8 @@ async function getReceivedCoins (address, transactions) {
   const involedTrans = R.filter(involvesAddress)(recTrans)
   const amountArray = R.map(getAmount, involedTrans)
   const bigNumBalances = R.map(toBigNum, amountArray)
-  const sum = R.reduce(sumBigNums, new BigNumber(0), bigNumBalances)
+  const zeroBigNum = new BigNumber(0)
+  const sum = R.reduce(sumBigNums, zeroBigNum, bigNumBalances)
   return sum
 }
 async function checkRecTrans (address, transactions) {
@@ -87,5 +104,5 @@ async function checkSentTrans (address, transactions) {
 }
 export {
   genAddress, checkArrayForAddress, addressHasTransactions, getReceivedCoins,
-  getReceiveAddress, getRecTrans
+  getReceiveAddress, getRecTrans, getChangeAddress
 }

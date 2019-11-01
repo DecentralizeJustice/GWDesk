@@ -1,22 +1,5 @@
 <template>
-    <v-layout align-center justify-center row fill-height>
-      <v-flex xs8>
-          <v-card >
-            <v-card-text>
-              <h2>Send</h2>
-            </v-card-text>
-            <v-divider></v-divider>
-            <v-card-actions>
-              <v-btn
-                color="orange"
-                text
-              >
-                <v-icon>mdi-help</v-icon>
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-    </v-flex>
-    </v-layout>
+  <mainPart/>
 </template>
 
 <script>
@@ -25,15 +8,18 @@ import { vpubObject, xfp } from '@/assets/constants/userConstantFiles.js'
 import { createPSBT, combineCompletedTrans } from '@/assets/util/psbtUtil.js'
 import { downloadPSBT, uploadPSBT } from '@/assets/util/electronUtil.js'
 import { updateTrans, getTrans, broadcastTrans } from '@/assets/util/networkUtil.js'
-
+import mainPart from '@/components/sendMoney/main.vue'
 const R = require('ramda')
 export default {
+  components: {
+    mainPart
+  },
   data: () => ({
     receiveAddress: '',
     index: 4,
     hardwareSignedHex: '',
     webSignedTrans: '',
-    m: 2
+    volume: 10
   }),
   methods: {
     async updatePSBT () {
