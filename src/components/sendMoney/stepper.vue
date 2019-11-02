@@ -1,15 +1,15 @@
 <template>
   <v-stepper :value='currentStep'>
       <v-stepper-header >
-        <v-stepper-step step="1" :complete='complete(0)' >Hardware</v-stepper-step>
+        <v-stepper-step step="1" :complete='complete(0)' >Address</v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step step="2" :complete='complete(1)' >Membership</v-stepper-step>
+        <v-stepper-step step="2" :complete='complete(1)' >Amount</v-stepper-step>
         <v-divider></v-divider>
         <v-stepper-step step="3" :complete='complete(2)'>Confirm</v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step step="4" :complete='complete(3)'>Pay</v-stepper-step>
+        <v-stepper-step step="4" :complete='complete(3)'>Get Signatures</v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step step="5" :complete='complete(4)'>Setup 1st Device</v-stepper-step>
+        <v-stepper-step step="5" :complete='complete(4)'>Broadcast</v-stepper-step>
     </v-stepper-header>
     </v-stepper>
 </template>

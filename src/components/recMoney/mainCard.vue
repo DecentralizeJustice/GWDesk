@@ -11,7 +11,6 @@
         <v-col>
           <v-hover v-slot:default="{ hover }" v-for="item in transactions" :key="item.txid">
           <v-card
-            :class="{ 'on-hover': hover }"
             class='light-blue darken-4'
             link
             :elevation="hover ? 12 : 2"

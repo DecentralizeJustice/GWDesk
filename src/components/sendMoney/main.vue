@@ -10,14 +10,14 @@
         </v-flex>
 
           <component
-          v-bind:is="currentMain"/>
-
-          <v-divider></v-divider>
+          v-bind:is="currentMain"
+          v-bind:transaction="transaction"
+          v-on:updateTransaction="updateTransaction"/>
+          <v-divider/>
 
           <bottomNav v-on:change="updateStep"
-          v-on:changeAdvancedOptions=
-          "hardwareAdvancedOption = !hardwareAdvancedOption"
-          v-bind:currentSection="currentSection"
+            v-bind:currentSection="currentSection"
+            v-bind:continueDisabled='continueDisabled'
           />
         </v-card>
     </v-flex>
@@ -30,8 +30,11 @@ import stepper from '@/components/sendMoney/stepper.vue'
 import bottomNav from '@/components/sendMoney/bottomNav.vue'
 export default {
   data: () => ({
-    componentList: ['sendToAddresses'],
-    currentSection: 0
+    componentList: ['sendToAddresses', 'amount'],
+    currentSection: 0,
+    transaction: {
+      addressArray: []
+    }
   }),
   components: {
     stepper,
@@ -41,7 +44,7 @@ export default {
     continueDisabled () {
       switch (this.currentSection) {
         case 0:
-          if (Object.keys(this.planOptions).length !== 0) {
+          if (this.transaction.addressArray.length !== 0) {
             return false
           }
           break
@@ -64,6 +67,13 @@ export default {
         } else {
           this.$emit('change', 'landingPage')
         }
+      }
+    },
+    updateTransaction (partToUpdate, updateValue) {
+      switch (partToUpdate) {
+        case 'addressArray':
+          this.transaction.addressArray = updateValue
+          break
       }
     }
   },

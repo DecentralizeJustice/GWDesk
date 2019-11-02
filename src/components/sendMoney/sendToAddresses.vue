@@ -5,7 +5,7 @@
       <v-col cols="10" class="mx-auto">
           <v-text-field
           v-model='proposedAddress'
-            label="1st Adress"
+            :label="addressIndex(addressArray.length)"
           ></v-text-field>
           <v-btn
             color="green"
@@ -16,24 +16,40 @@
       </v-col>
     </v-card-text>
     <v-row
-      v-for="n in 1"
-      :key="n"
       no-gutters
       class="mb-5"
+      v-for="(item,index) in addressArray" :key="item"
     >
-      <v-col cols="9" class="mx-auto">
-        <v-hover v-slot:default="{ hover }" v-for="item in addressArray" :key="item">
-        <v-card
-          :class="{ 'on-hover': hover }"
-          class='light-blue darken-4'
-          link
-          :elevation="hover ? 12 : 2"
-        >
-          <v-card-text class="mt-4 subtitle-1 white--text">
-            {{item}}
-          </v-card-text>
-        </v-card>
-      </v-hover>
+      <v-col cols="10" class="mx-auto">
+        <v-row align-content='center'>
+          <v-col
+            cols="8"
+            align-self='center'
+          >
+          <v-hover v-slot:default="{ hover }">
+          <v-card
+            class='light-blue darken-4'
+            :elevation="hover ? 12 : 2"
+          >
+            <v-card-text class="subtitle-1 white--text">
+              {{index+1}}. {{item}}
+            </v-card-text>
+          </v-card>
+          </v-hover>
+          </v-col>
+          <v-col
+            cols="3"
+            align-self='center'
+          >
+          <v-btn
+            color="red"
+            v-on:click="removeFromArray (index)"
+            class="">
+            <v-icon>mdi-minus-circle</v-icon>
+              &#8205; Remove
+          </v-btn>
+          </v-col>
+        </v-row>
       </v-col>
     </v-row>
 
@@ -41,15 +57,45 @@
 </template>
 <script>
 export default {
-  props: ['addressArraym'],
+  props: ['transaction'],
   data: () => ({
-    addressArray: [],
     proposedAddress: ''
   }),
   methods: {
     addToArray (address) {
-      this.addressArray.push(address)
+      const newAddressArray = this.addressArray
+      newAddressArray.push(address)
       this.proposedAddress = ''
+      this.$emit('updateTransaction', 'addressArray', newAddressArray)
+    },
+    removeFromArray (index) {
+      const newAddressArray = this.addressArray
+      newAddressArray.splice(index, 1)
+      this.$emit('updateTransaction', 'addressArray', newAddressArray)
+    },
+    addressIndex (index) {
+      const ordinal = this.ordinalSuffixOf(index + 1)
+      const label = ordinal + ' Address'
+      return label
+    },
+    ordinalSuffixOf (index) {
+      const j = index % 10
+      const k = index % 100
+      if (j === 1 && k !== 11) {
+        return index + 'st'
+      }
+      if (j === 2 && k !== 12) {
+        return index + 'nd'
+      }
+      if (j === 3 && k !== 13) {
+        return index + 'rd'
+      }
+      return index + 'th'
+    }
+  },
+  computed: {
+    addressArray: function () {
+      return this.transaction.addressArray
     }
   }
 }

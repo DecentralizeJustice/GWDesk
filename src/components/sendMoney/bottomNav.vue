@@ -10,7 +10,7 @@
           <v-btn
             color="orange"
             text
-            v-show='true'
+            v-show='false'
             v-on:click="toggleAdvanced"
           >
             <v-icon>mdi-wrench</v-icon>
@@ -19,6 +19,7 @@
             text
             color="red"
             v-on:click="goBack"
+            v-show='backAvailable'
           >
             Back
           </v-btn>
@@ -26,7 +27,7 @@
             text
             color="blue"
             v-on:click="continueForward"
-            v-bind:disabled="false"
+            v-bind:disabled="continueDisabled"
           >
             Continue
           </v-btn>
@@ -36,7 +37,7 @@
 
 <script>
 export default {
-  // props: ['currentSection', 'continueDisabled'],
+  props: ['currentSection', 'continueDisabled'],
   data: () => ({
 
   }),
@@ -58,6 +59,12 @@ export default {
     //   }
     //   return false
     // }
+    backAvailable () {
+      if (this.currentSection === 0) {
+        return false
+      }
+      return true
+    }
   }
 }
 </script>
