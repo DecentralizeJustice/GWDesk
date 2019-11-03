@@ -18,7 +18,7 @@
     <v-row
       no-gutters
       class="mb-5"
-      v-for="(item,index) in addressArray" :key="item"
+      v-for="(item,index) in addressArray" :key="index"
     >
       <v-col cols="10" class="mx-auto">
         <v-row align-content='center'>
@@ -66,12 +66,12 @@ export default {
       const newAddressArray = this.addressArray
       newAddressArray.push(address)
       this.proposedAddress = ''
-      this.$emit('updateTransaction', 'addressArray', newAddressArray)
+      this.$emit('updateTransaction', { addressArray: newAddressArray })
     },
     removeFromArray (index) {
       const newAddressArray = this.addressArray
       newAddressArray.splice(index, 1)
-      this.$emit('updateTransaction', 'addressArray', newAddressArray)
+      this.$emit('updateTransaction', { addressArray: newAddressArray })
     },
     addressIndex (index) {
       const ordinal = this.ordinalSuffixOf(index + 1)
@@ -95,7 +95,11 @@ export default {
   },
   computed: {
     addressArray: function () {
-      return this.transaction.addressArray
+      if (this.transaction.addressArray === undefined) {
+        return []
+      } else {
+        return this.transaction.addressArray
+      }
     }
   }
 }

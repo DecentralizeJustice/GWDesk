@@ -36,5 +36,11 @@ async function getTrans () {
   })
   return response.data
 }
-
-export { updateTrans, broadcastTrans, genAddressUnspent, getTrans }
+async function getFeeInfo () {
+  const response = await axios({
+    method: 'get',
+    url: 'https://api.blockcypher.com/v1/btc/test3'
+  })
+  return response.data
+}
+export { updateTrans, broadcastTrans, genAddressUnspent, getTrans, getFeeInfo }

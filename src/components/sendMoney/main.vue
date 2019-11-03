@@ -1,7 +1,7 @@
 <template>
   <v-container grid-list-md text-center fill-height text-xs-center>
     <v-layout align-center justify-center row fill-height>
-      <v-flex xs11 >
+      <v-flex xs12 >
         <v-card
           class="text-center"
         >
@@ -30,10 +30,9 @@ import stepper from '@/components/sendMoney/stepper.vue'
 import bottomNav from '@/components/sendMoney/bottomNav.vue'
 export default {
   data: () => ({
-    componentList: ['sendToAddresses', 'amount'],
+    componentList: ['sendToAddresses', 'amount', 'confirm'],
     currentSection: 0,
     transaction: {
-      addressArray: []
     }
   }),
   components: {
@@ -44,7 +43,12 @@ export default {
     continueDisabled () {
       switch (this.currentSection) {
         case 0:
-          if (this.transaction.addressArray.length !== 0) {
+          if (this.transaction.addressArray !== undefined) {
+            return false
+          }
+          break
+        case 1:
+          if (this.transaction.addressArrayAmount !== undefined) {
             return false
           }
           break
@@ -69,12 +73,8 @@ export default {
         }
       }
     },
-    updateTransaction (partToUpdate, updateValue) {
-      switch (partToUpdate) {
-        case 'addressArray':
-          this.transaction.addressArray = updateValue
-          break
-      }
+    updateTransaction (updateValue) {
+      this.transaction = updateValue
     }
   },
   created: function () {

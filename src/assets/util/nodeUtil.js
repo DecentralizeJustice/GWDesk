@@ -1,5 +1,6 @@
 import { client, walletClient } from '@/assets/constants/nodeConstants.js'
 import { minConfirmations } from '@/assets/constants/genConstants.js'
+import { getFeeInfo } from '@/assets/util/networkUtil.js'
 import path from 'path'
 import { fork } from 'child_process'
 const remote = require('electron').remote
@@ -83,6 +84,11 @@ async function listWalletAddresses (account, name) {
   const result = await walletClient.execute('getaddressesbyaccount', [account])
   return result
 }
+async function getFeeEstimate (blocks) {
+  // eslint-disable-next-line
+  const result = await getFeeInfo()
+  return result
+}
 async function getTxByHash (txHash, id) {
   const wallet = walletClient.wallet(id)
   const result = await wallet.getTX(txHash)
@@ -105,5 +111,5 @@ async function broadcastHex (txHex) {
 export {
   createWallet, getNodeSyncInfo, getWalletTransactions, broadcastHex,
   getTxByHash, importAddress, startNode, checkNodeAlive, stopNode, resetChainTo,
-  getNodeInfo, listWalletAddresses, checkIfNodeMeaningfull
+  getNodeInfo, listWalletAddresses, checkIfNodeMeaningfull, getFeeEstimate
 }
