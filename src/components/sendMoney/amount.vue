@@ -187,16 +187,17 @@ export default {
     emitNewTransaction: function (trans) {
       this.$emit('updateTransaction', trans)
     },
+    setAddressArray: function () {
+      for (var i = 0; i < this.addressArray.length; i++) {
+        this.amountArray.push('.00000001')
+      }
+    },
     setup: async function () {
       // transaction fee code
       const vpubArray = R.values(vpubObject)
       const transactions = await getWalletTransactions(account, walletName)
       const address = await getReceiveAddress(0, transactions, vpubArray, m)
       this.currentAddress = address
-      for (var i = 0; i < this.addressArray.length; i++) {
-        // eslint-disable-next-line
-        this.amountArray.push( '.00000001' )
-      }
       const allOutputs = R.insert(-1, address, this.addressArray)
       const vBytesInt = getTransactionSize(allOutputs, this.musigNeeded, this.musigTotal,
         this.inputNumber)
@@ -204,14 +205,15 @@ export default {
       const feeEstimates = await getFeeEstimate()
       this.midFee = new BigNumber(feeEstimates.medium_fee_per_kb)
       this.highFee = new BigNumber(feeEstimates.high_fee_per_kb)
-      console.log(feeEstimates.high_fee_per_kb)
       // change code
       const balance = await getReceivedCoins(address, transactions)
       this.totalAvailable = new BigNumber(balance)
     }
   },
   created: async function () {
+    this.$emit('updateTransaction', { addressArray: this.transaction.addressArray })
     await this.setup()
+    await this.setAddressArray()
   }
 }
 </script>

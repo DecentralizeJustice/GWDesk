@@ -30,7 +30,7 @@ import stepper from '@/components/sendMoney/stepper.vue'
 import bottomNav from '@/components/sendMoney/bottomNav.vue'
 export default {
   data: () => ({
-    componentList: ['sendToAddresses', 'amount', 'confirm'],
+    componentList: ['sendToAddresses', 'amount', 'confirm', 'getSigs'],
     currentSection: 0,
     transaction: {
     }
@@ -41,14 +41,21 @@ export default {
   },
   computed: {
     continueDisabled () {
-      switch (this.currentSection) {
+      const trans = this.transaction
+      const currentSection = this.currentSection
+      switch (currentSection) {
         case 0:
-          if (this.transaction.addressArray !== undefined) {
+          if (trans.addressArray !== undefined) {
             return false
           }
           break
         case 1:
-          if (this.transaction.addressArrayAmount !== undefined) {
+          if (trans.addressArrayAmount !== undefined) {
+            return false
+          }
+          break
+        case 2:
+          if (trans.addressArrayAmount !== undefined) {
             return false
           }
           break

@@ -2,7 +2,7 @@
 
       <v-flex xs12>
         <v-card-text>
-          <h1 class="display-1">Transaction Overview</h1>
+          <h1 class="display-1">Get Signatures</h1>
           <v-row
             no-gutters
             class="mb-5"
@@ -43,6 +43,13 @@
 </template>
 
 <script>
+// import { genAddress } from '@/assets/util/addressUtil.js'
+import { vpubObject, xfp } from '@/assets/constants/userConstantFiles.js'
+import { createPSBT } from '@/assets/util/psbtUtil.js'
+import { getWalletTransactions } from '@/assets/util/nodeUtil.js'
+import { account, walletName } from '@/assets/constants/genConstants.js'
+import { getReceiveIndex } from '@/assets/util/addressUtil.js'
+const R = require('ramda')
 export default {
   props: ['transaction'],
   data: () => ({
@@ -62,8 +69,13 @@ export default {
       return exp.toFormat(9)
     }
   },
-  created () {
-    // console.log(this.transaction)
+  async created () {
+    const vpubArray = R.values(vpubObject)
+    const transactions = await getWalletTransactions(account, walletName)
+    const recIndex = await getReceiveIndex(0, transactions, vpubArray, 2)
+
+    // const yes = await createPSBT(recIndex, 2, vpubObject, xfp, 1000)
+    // console.log(yes)
   }
 }
 </script>

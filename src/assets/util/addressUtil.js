@@ -43,6 +43,16 @@ async function getReceiveAddress (index, transactions, vpubArray, m) {
     return address
   }
 }
+async function getReceiveIndex (index, transactions, vpubArray, m) {
+  const address = await genAddress(index, vpubArray, m)
+  const sentPresent = await checkSentTrans(address, transactions)
+  if (sentPresent) {
+    const nextIndex = index + 1
+    return getReceiveIndex(nextIndex, transactions, vpubArray, m)
+  } else {
+    return index
+  }
+}
 async function getChangeAddress (index, transactions, vpubArray, m, wouldBeChnage) {
   const address = await genAddress(index, vpubArray, m)
   const sentPresent = await checkSentTrans(address, transactions)
@@ -104,5 +114,5 @@ async function checkSentTrans (address, transactions) {
 }
 export {
   genAddress, checkArrayForAddress, addressHasTransactions, getReceivedCoins,
-  getReceiveAddress, getRecTrans, getChangeAddress
+  getReceiveAddress, getRecTrans, getChangeAddress, getReceiveIndex
 }
