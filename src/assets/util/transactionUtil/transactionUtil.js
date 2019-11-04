@@ -1,5 +1,6 @@
 import { getByteCount } from '@/assets/util/transactionUtil/transSize.js'
 import validate from 'bitcoin-address-validation'
+import { getTxByHash, decodeRawTransaction } from '@/assets/util/nodeUtil.js'
 const R = require('ramda')
 function getTransactionSize (addressArray, musigNeeded, musigTotal, inputNumber) {
   const inputInfo = {}
@@ -17,7 +18,13 @@ function getAddressTypeArray (addressArray) {
   const addressTypeArray = R.map(getAddressType, addressArray)
   return addressTypeArray
 }
-
+async function getScriptPubkey (txId, vout, walletId) {
+  const trans = await getTxByHash(txId, walletId)
+  const transHex = trans.tx
+  const scriptSigHex = await decodeRawTransaction(transHex)
+  const sig = scriptSigHex.vout[vout].scriptPubKey.hex
+  return sig
+}
 function addToOutPutInfo (addressTypeArray) {
   const outputInfo = {}
   addressTypeArray.forEach(function (element) {
@@ -30,4 +37,4 @@ function addToOutPutInfo (addressTypeArray) {
   return outputInfo
 }
 
-export { getTransactionSize }
+export { getTransactionSize, getScriptPubkey }

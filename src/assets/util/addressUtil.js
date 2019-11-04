@@ -82,6 +82,13 @@ async function getReceivedCoins (address, transactions) {
   const sum = R.reduce(sumBigNums, zeroBigNum, bigNumBalances)
   return sum
 }
+async function getReceivedTransactions (address, transactions) {
+  const isRecieve = trans => trans.category === 'receive'
+  const involvesAddress = trans => trans.address === address
+  const recTrans = R.filter(isRecieve, transactions)
+  const involedTrans = R.filter(involvesAddress)(recTrans)
+  return involedTrans
+}
 async function checkRecTrans (address, transactions) {
   const isRecieve = trans => trans.category === 'receive'
   const hasAddress = trans => trans.address === address
@@ -114,5 +121,5 @@ async function checkSentTrans (address, transactions) {
 }
 export {
   genAddress, checkArrayForAddress, addressHasTransactions, getReceivedCoins,
-  getReceiveAddress, getRecTrans, getChangeAddress, getReceiveIndex
+  getReceiveAddress, getRecTrans, getChangeAddress, getReceiveIndex, getReceivedTransactions
 }

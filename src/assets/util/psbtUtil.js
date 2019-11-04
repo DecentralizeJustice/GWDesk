@@ -1,20 +1,18 @@
 import { getPubkeyArray, getPubkey } from '@/assets/util/keyUtil.js'
-import { genAddress } from '@/assets/util/addressUtil.js'
 import { testnet } from '@/assets/constants/networkConstants.js'
-import { genAddressUnspent } from '@/assets/util/networkUtil.js'
 import { divPath } from '@/assets/constants/genConstants.js'
 const bitcoin = require('bitcoinjs-lib')
 const R = require('ramda')
 
-async function createPSBT (index, m, vpubObject, xfp, fees) {
+async function createPSBT (index, m, vpubObject, xfp, fees, transInfo) {
   const vpubArray = R.values(vpubObject)
   const path = divPath + '/' + index.toString()
   const pubkeyArray = await getPubkeyArray(index, vpubArray)
   const n = pubkeyArray.length
   const network = testnet
-  const address = await genAddress(index, vpubArray, m)
+  // const address = await genAddress(index, vpubArray, m)
   const p2wsh = await createPayment(`p2wsh-p2ms(${m} of ${n})`, pubkeyArray, network)
-  const transInfo = await genAddressUnspent(address)
+  // const transInfo = await genAddressUnspent(address)
   const inputData = await getInputData(p2wsh.payment, 'p2wsh', transInfo)
   const spendable = transInfo.value_int
   const totalToSend = spendable - fees
@@ -79,7 +77,7 @@ function getInputData (payment, redeemType, transInfo) {
   const hash = transInfo.txid
   const index = transInfo.n
   const script = Buffer.from(
-    transInfo.script_pub_key.hex, 'hex'
+    transInfo.script_pub_key, 'hex'
   )
   const witnessUtxo = {
     script: script,

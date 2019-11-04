@@ -94,6 +94,10 @@ async function getTxByHash (txHash, id) {
   const result = await wallet.getTX(txHash)
   return result
 }
+async function decodeRawTransaction (transHex) {
+  const result = await client.execute('decoderawtransaction', [transHex])
+  return result
+}
 async function checkIfNodeMeaningfull (desiredBlockHeight) {
   const currentNodeHeight = await getNodeHeight()
   if (currentNodeHeight < desiredBlockHeight) {
@@ -111,5 +115,6 @@ async function broadcastHex (txHex) {
 export {
   createWallet, getNodeSyncInfo, getWalletTransactions, broadcastHex,
   getTxByHash, importAddress, startNode, checkNodeAlive, stopNode, resetChainTo,
-  getNodeInfo, listWalletAddresses, checkIfNodeMeaningfull, getFeeEstimate
+  getNodeInfo, listWalletAddresses, checkIfNodeMeaningfull, getFeeEstimate,
+  decodeRawTransaction
 }
