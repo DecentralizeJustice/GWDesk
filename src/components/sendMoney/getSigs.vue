@@ -54,6 +54,7 @@ const R = require('ramda')
 export default {
   props: ['transaction'],
   data: () => ({
+    psbt: ''
   }),
   computed: {
     addressArray: function () {
@@ -86,8 +87,11 @@ export default {
         n: addressTransactions[0].vout,
         script_pub_key: scriptHex
       }
-    const hi = await createPSBT(recIndex, 2, vpubObject, xfp, 1000, transInfo)
-    console.log(hi)
+    const send = this.transaction.addressArray[0]
+    const totalToSend = this.transaction.addressArrayAmount[0].toNumber()
+    const psbt = await createPSBT(recIndex, 2, vpubObject, xfp, transInfo, send, totalToSend)
+    this.psbt = psbt
+    console.log(psbt)
   }
 }
 </script>

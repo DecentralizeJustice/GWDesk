@@ -4,7 +4,7 @@ import { divPath } from '@/assets/constants/genConstants.js'
 const bitcoin = require('bitcoinjs-lib')
 const R = require('ramda')
 
-async function createPSBT (index, m, vpubObject, xfp, fees, transInfo) {
+async function createPSBT (index, m, vpubObject, xfp, transInfo, send, totalToSend) {
   const vpubArray = R.values(vpubObject)
   const path = divPath + '/' + index.toString()
   const pubkeyArray = await getPubkeyArray(index, vpubArray)
@@ -14,12 +14,10 @@ async function createPSBT (index, m, vpubObject, xfp, fees, transInfo) {
   const p2wsh = await createPayment(`p2wsh-p2ms(${m} of ${n})`, pubkeyArray, network)
   // const transInfo = await genAddressUnspent(address)
   const inputData = await getInputData(p2wsh.payment, 'p2wsh', transInfo)
-  const spendable = transInfo.value_int
-  const totalToSend = spendable - fees
   let psbt = new bitcoin.Psbt({ network: network })
     .addInput(inputData)
     .addOutput({
-      address: 'mkHS9ne12qx9pS9VojpwU5xtRd4T7X7ZUt',
+      address: send,
       value: totalToSend
     })
   psbt = await addbip32DerivationInfo(psbt, path, vpubObject, xfp, index)

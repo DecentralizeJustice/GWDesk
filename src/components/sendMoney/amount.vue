@@ -148,6 +148,7 @@ export default {
       if (!totalTooHigh) {
         return false
       }
+      return false
     },
     allAddressesUsed: function () {
       const notZero = x => !x.isEqualTo(new BigNumber(0))
@@ -158,6 +159,7 @@ export default {
       if (!allUsed) {
         return false
       }
+      return true
     },
     transactionAmountInfo: function () {
       const transGood = this.allAddressesUsed && !this.tooHigh
