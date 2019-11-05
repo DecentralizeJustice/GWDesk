@@ -13,6 +13,17 @@ async function updateTrans (transHex, index) {
   return response.data
 }
 
+async function broadcastTrans (transHex) {
+  const response = await axios({
+    method: 'post',
+    url: 'https://testnet-api.smartbit.com.au/v1/blockchain/pushtx',
+    data: {
+      hex: transHex
+    }
+  })
+  return response.data
+}
+
 async function getTrans () {
   const response = await axios({
     method: 'get',
@@ -27,4 +38,4 @@ async function getFeeInfo () {
   })
   return response.data
 }
-export { updateTrans, getTrans, getFeeInfo }
+export { updateTrans, getTrans, getFeeInfo, broadcastTrans }

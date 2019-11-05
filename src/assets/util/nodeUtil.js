@@ -75,6 +75,7 @@ async function getWalletTransactions (account, name) {
   await walletClient.execute('selectwallet', [name])
   // eslint-disable-next-line
   const transInfo = await walletClient.execute('listtransactions',[account,,,true])
+  console.log(transInfo)
   const result = R.filter(minConfirmationsMet, transInfo)
   return result
 }

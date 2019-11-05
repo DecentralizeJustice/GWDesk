@@ -50,7 +50,8 @@ import softwareSign from '@/components/sendMoney/sign/software.vue'
 import { vpubObject, xfp } from '@/assets/constants/userConstantFiles.js'
 import { account, walletName } from '@/assets/constants/genConstants.js'
 import { createPSBT, combineCompletedTrans } from '@/assets/util/psbtUtil.js'
-import { getWalletTransactions, broadcastHex } from '@/assets/util/nodeUtil.js'
+import { getWalletTransactions, broadcastTrans } from '@/assets/util/nodeUtil.js'
+import { broadcastTrans } from '@/assets/util/networkUtil.js'
 import { getReceiveIndex, getReceivedTransactions, genAddress } from '@/assets/util/addressUtil.js'
 import { getScriptPubkey } from '@/assets/util/transactionUtil/transactionUtil.js'
 const R = require('ramda')
@@ -99,7 +100,7 @@ export default {
       const trans1 = this.signedPSBTs.web
       const trans2 = this.signedPSBTs.hardware
       const trans = await combineCompletedTrans(trans1, trans2)
-      const finalBraodcast = await broadcastHex(trans)
+      const finalBraodcast = await broadcastTrans(trans)
       console.log(trans)
       console.log(finalBraodcast)
     }
