@@ -67,6 +67,7 @@ export default {
     async uploadPSBT () {
       const signedPSBT = await uploadPSBT()
       this.hardwareSignedHex = signedPSBT
+      this.$emit('addsigned', 'hardware', signedPSBT)
     }
   },
   async created () {

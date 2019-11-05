@@ -72,6 +72,7 @@ export default {
       if (trans !== this.plainPsbt) {
         this.signedPSBT = trans
         console.log('Signed')
+        this.$emit('addsigned', 'web', trans)
         return
       }
       console.log('Not Signed')

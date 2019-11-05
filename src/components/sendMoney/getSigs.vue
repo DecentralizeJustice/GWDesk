@@ -15,6 +15,7 @@
                     Sign With Hardware Wallet
                   </v-card-text>
                   <hardwareSign
+                  v-on:addsigned='addsigned'
                   v-bind:plainPsbt="plainPsbt"/>
                 </v-card>
             </v-col>
@@ -26,12 +27,14 @@
                     Sign With Web Wallet
                   </v-card-text>
                   <softwareSign
+                  v-on:addsigned='addsigned'
                   v-bind:plainPsbt="plainPsbt"
                   v-bind:index='index'/>
                 </v-card>
             </v-col>
             </v-row>
-            <v-btn class="ma-2" color="green" dark v-if='allsigned'>
+            <v-btn @click="combine()"
+            class="ma-2" color="green" dark v-if='allsigned'>
               Finish
               <v-icon dark right>mdi-checkbox-marked-circle</v-icon>
             </v-btn>
@@ -42,13 +45,12 @@
 </template>
 
 <script>
-// import { genAddress } from '@/assets/util/addressUtil.js'
 import hardwareSign from '@/components/sendMoney/sign/hardware.vue'
 import softwareSign from '@/components/sendMoney/sign/software.vue'
 import { vpubObject, xfp } from '@/assets/constants/userConstantFiles.js'
 import { account, walletName } from '@/assets/constants/genConstants.js'
-import { createPSBT } from '@/assets/util/psbtUtil.js'
-import { getWalletTransactions } from '@/assets/util/nodeUtil.js'
+import { createPSBT, combineCompletedTrans } from '@/assets/util/psbtUtil.js'
+import { getWalletTransactions, broadcastHex } from '@/assets/util/nodeUtil.js'
 import { getReceiveIndex, getReceivedTransactions, genAddress } from '@/assets/util/addressUtil.js'
 import { getScriptPubkey } from '@/assets/util/transactionUtil/transactionUtil.js'
 const R = require('ramda')
@@ -72,7 +74,8 @@ export default {
       return this.transaction.addressArrayAmount
     },
     allsigned: function () {
-      const signtaures = Object.keys(this.signedPSBTs).length
+      const signedPSBTs = this.signedPSBTs
+      const signtaures = Object.keys(signedPSBTs).length
       if (signtaures >= this.m) {
         return true
       } else {
@@ -82,12 +85,23 @@ export default {
   },
   methods: {
     addsigned: function (wallet, trans) {
-      this.signedPSBTs[wallet] = trans
+      const newSigned = R.clone(this.signedPSBTs)
+      newSigned[wallet] = trans
+      this.signedPSBTs = newSigned
+      console.log('trans added')
     },
     getAmount: function (index) {
       const amount = this.addressAmountArray[index]
       const exp = amount.shiftedBy(-8)
       return exp.toFormat(9)
+    },
+    async combine () {
+      const trans1 = this.signedPSBTs.web
+      const trans2 = this.signedPSBTs.hardware
+      const trans = await combineCompletedTrans(trans1, trans2)
+      const finalBraodcast = await broadcastHex(trans)
+      console.log(trans)
+      console.log(finalBraodcast)
     }
   },
   async created () {
