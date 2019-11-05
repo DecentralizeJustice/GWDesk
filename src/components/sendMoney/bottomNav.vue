@@ -28,6 +28,7 @@
             color="blue"
             v-on:click="continueForward"
             v-bind:disabled="continueDisabled"
+            v-show='fowardAvailable'
           >
             Continue
           </v-btn>
@@ -61,6 +62,12 @@ export default {
     // }
     backAvailable () {
       if (this.currentSection === 0) {
+        return false
+      }
+      return true
+    },
+    fowardAvailable () {
+      if (this.currentSection === 3) {
         return false
       }
       return true

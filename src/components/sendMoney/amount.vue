@@ -67,7 +67,11 @@
           <v-card-text class="subtitle-1 white--text">
             <h1 class="title">Change:</h1>
             {{changeBTC}}
+
           </v-card-text>
+          <v-btn color="red lighten-1" class="mb-2" @click="noChange">
+            No Change
+          </v-btn>
           </v-card>
           </v-col>
           <v-col cols="4" align-self='center'>
@@ -132,9 +136,10 @@ export default {
       return this.feeAmountSatoshi.shiftedBy(-8)
     },
     addressArraySumSat: function () {
+      const amountArray = this.amountArray
       const converToBigNum = x => new BigNumber(x)
       const converToSatoshi = x => x.shiftedBy(8)
-      const bigNumArray = R.map(converToBigNum, this.amountArray)
+      const bigNumArray = R.map(converToBigNum, amountArray)
       const bigNumSatoshiArray = R.map(converToSatoshi, bigNumArray)
       return bigNumSatoshiArray
     },
@@ -193,6 +198,10 @@ export default {
       for (var i = 0; i < this.addressArray.length; i++) {
         this.amountArray.push('.00000001')
       }
+    },
+    noChange: function () {
+      const newArray = R.update(0, this.changeBTC.toString(), this.amountArray)
+      this.amountArray = newArray
     },
     setup: async function () {
       // transaction fee code

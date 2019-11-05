@@ -24,7 +24,7 @@ import { genAddress } from '@/assets/util/addressUtil.js'
 import { vpubObject, xfp } from '@/assets/constants/userConstantFiles.js'
 import { createPSBT, combineCompletedTrans } from '@/assets/util/psbtUtil.js'
 import { downloadPSBT, uploadPSBT } from '@/assets/util/electronUtil.js'
-import { updateTrans, getTrans, broadcastTrans } from '@/assets/util/networkUtil.js'
+import { updateTrans, getTrans } from '@/assets/util/networkUtil.js'
 
 const R = require('ramda')
 export default {
@@ -62,9 +62,9 @@ export default {
       console.log(this.hardwareSignedHex)
     },
     async combine (trans1, trans2) {
-      const trans = await combineCompletedTrans(trans1, trans2)
-      const finalBraodcast = await broadcastTrans(trans)
-      console.log(finalBraodcast)
+      // const trans = await combineCompletedTrans(trans1, trans2)
+      // const finalBraodcast = await broadcastTrans(trans)
+      // console.log(finalBraodcast)
     }
   }
 }

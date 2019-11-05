@@ -1,49 +1,50 @@
 <template>
-
       <v-flex xs12>
         <v-card-text>
           <h1 class="display-1">Get Signatures</h1>
           <v-row
             no-gutters
-            class="mb-5"
-            v-for="(item,index) in addressArray" :key="index"
+            class="mb-5 mt-5"
+            v-if='!allsigned'
           >
-            <v-col cols="12" class="mx-auto">
-              <v-row align-content='center'>
-                <v-col
-                  cols="9"
-                  align-self='center'
-                >
-                <v-hover v-slot:default="{ hover }">
+            <v-col cols="4" class="mx-auto">
                 <v-card
                   class='light-blue darken-4'
-                  :elevation="hover ? 12 : 2"
                 >
                   <v-card-text class="subtitle-1 white--text">
-                    {{index+1}}. {{item}}
+                    Sign With Hardware Wallet
                   </v-card-text>
+                  <hardwareSign
+                  v-bind:plainPsbt="plainPsbt"/>
                 </v-card>
-                </v-hover>
-                </v-col>
-                <v-col cols="3" align-self='center'>
-                  <v-card
-                    class='indigo darken-1'
-                  >
-                  <v-card-text class="subtitle-1 white--text">
-                    Send Amount: <br> {{getAmount(index)}}
-                  </v-card-text>
-                  </v-card>
-                </v-col>
-              </v-row>
             </v-col>
-          </v-row>
+            <v-col cols="4" class="mx-auto">
+                <v-card
+                  class='light-blue darken-1'
+                >
+                  <v-card-text class="subtitle-1 white--text">
+                    Sign With Web Wallet
+                  </v-card-text>
+                  <softwareSign
+                  v-bind:plainPsbt="plainPsbt"
+                  v-bind:index='index'/>
+                </v-card>
+            </v-col>
+            </v-row>
+            <v-btn class="ma-2" color="green" dark v-if='allsigned'>
+              Finish
+              <v-icon dark right>mdi-checkbox-marked-circle</v-icon>
+            </v-btn>
+
         </v-card-text>
-        </v-flex>
+      </v-flex>
 
 </template>
 
 <script>
 // import { genAddress } from '@/assets/util/addressUtil.js'
+import hardwareSign from '@/components/sendMoney/sign/hardware.vue'
+import softwareSign from '@/components/sendMoney/sign/software.vue'
 import { vpubObject, xfp } from '@/assets/constants/userConstantFiles.js'
 import { account, walletName } from '@/assets/constants/genConstants.js'
 import { createPSBT } from '@/assets/util/psbtUtil.js'
@@ -53,8 +54,15 @@ import { getScriptPubkey } from '@/assets/util/transactionUtil/transactionUtil.j
 const R = require('ramda')
 export default {
   props: ['transaction'],
+  components: {
+    hardwareSign,
+    softwareSign
+  },
   data: () => ({
-    psbt: ''
+    plainPsbt: '',
+    signedPSBTs: {},
+    m: 34,
+    index: 0
   }),
   computed: {
     addressArray: function () {
@@ -62,9 +70,20 @@ export default {
     },
     addressAmountArray: function () {
       return this.transaction.addressArrayAmount
+    },
+    allsigned: function () {
+      const signtaures = Object.keys(this.signedPSBTs).length
+      if (signtaures >= this.m) {
+        return true
+      } else {
+        return false
+      }
     }
   },
   methods: {
+    addsigned: function (wallet, trans) {
+      this.signedPSBTs[wallet] = trans
+    },
     getAmount: function (index) {
       const amount = this.addressAmountArray[index]
       const exp = amount.shiftedBy(-8)
@@ -72,6 +91,7 @@ export default {
     }
   },
   async created () {
+    const m = 2
     const vpubArray = R.values(vpubObject)
     const transactions = await getWalletTransactions(account, walletName)
     const recIndex = await getReceiveIndex(0, transactions, vpubArray, 2)
@@ -87,11 +107,12 @@ export default {
         n: addressTransactions[0].vout,
         script_pub_key: scriptHex
       }
-    const send = this.transaction.addressArray[0]
-    const totalToSend = this.transaction.addressArrayAmount[0].toNumber()
-    const psbt = await createPSBT(recIndex, 2, vpubObject, xfp, transInfo, send, totalToSend)
-    this.psbt = psbt
-    console.log(psbt)
+    const sendAddress = this.transaction.addressArray[0]
+    const totalToSend = Math.round(this.transaction.addressArrayAmount[0].toNumber())
+    const psbt = await createPSBT(recIndex, m, vpubObject, xfp, transInfo, sendAddress, totalToSend)
+    this.plainPsbt = psbt
+    this.index = recIndex
+    this.m = m
   }
 }
 </script>

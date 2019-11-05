@@ -8,8 +8,6 @@
         <v-stepper-step step="3" :complete='complete(2)'>Confirm</v-stepper-step>
         <v-divider></v-divider>
         <v-stepper-step step="4" :complete='complete(3)'>Get Signatures</v-stepper-step>
-        <v-divider></v-divider>
-        <v-stepper-step step="5" :complete='complete(4)'>Broadcast</v-stepper-step>
     </v-stepper-header>
     </v-stepper>
 </template>
