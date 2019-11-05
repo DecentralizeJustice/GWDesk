@@ -33,9 +33,9 @@ export default {
   methods: {
     getType (type) {
       if (type === 'send') {
-        return 'Send'
+        return 'Sent'
       } else {
-        return 'Recieve'
+        return 'Recieved'
       }
     },
     getArrow (type) {
