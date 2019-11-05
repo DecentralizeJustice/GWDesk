@@ -114,7 +114,7 @@ export default {
     const txId = addressTransactions[0].txid
     const vout = addressTransactions[0].vout
     const scriptHex = await getScriptPubkey(txId, vout, walletName)
-    const transInfo =
+    const outputInfo =
       {
         value_int: addressTransactions[0].amount * 100000000,
         txid: addressTransactions[0].txid,
@@ -123,7 +123,7 @@ export default {
       }
     const sendAddress = this.transaction.addressArray[0]
     const totalToSend = Math.round(this.transaction.addressArrayAmount[0].toNumber())
-    const psbt = await createPSBT(recIndex, m, vpubObject, xfp, transInfo, sendAddress, totalToSend)
+    const psbt = await createPSBT(recIndex, m, vpubObject, xfp, outputInfo, sendAddress, totalToSend)
     this.plainPsbt = psbt
     this.index = recIndex
     this.m = m
