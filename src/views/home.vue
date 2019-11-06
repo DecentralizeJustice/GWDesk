@@ -17,6 +17,20 @@
               <v-btn
                 color="orange"
                 text
+                v-on:click="rescan()"
+              >
+                Rescan
+              </v-btn>
+              <v-btn
+                color="orange"
+                text
+                v-on:click="info()"
+              >
+                Get Info
+              </v-btn>
+              <v-btn
+                color="orange"
+                text
                 v-on:click="start()"
               >
                 Start Node
@@ -46,7 +60,7 @@
 <script>
 import { recoverFromPubs } from '@/assets/task/recoverFromPubs.js'
 import { vpubObject } from '@/assets/constants/userConstantFiles.js'
-import { startNode, createWallet } from '@/assets/util/nodeUtil.js'
+import { startNode, createWallet, resetChainTo, getNodeInfo } from '@/assets/util/nodeUtil.js'
 import { walletName } from '@/assets/constants/genConstants.js'
 const R = require('ramda')
 export default {
@@ -70,6 +84,15 @@ export default {
     },
     async createWallet () {
       const results = await createWallet(walletName)
+      console.log(results)
+    },
+    async rescan () {
+      console.log('ran')
+      const results = await resetChainTo(1583007)
+      console.log(results)
+    },
+    async info () {
+      const results = await getNodeInfo()
       console.log(results)
     }
   },

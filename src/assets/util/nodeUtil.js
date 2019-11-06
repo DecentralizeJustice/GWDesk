@@ -38,7 +38,7 @@ async function resetChainTo (resetToHeight) {
     const result = await client.reset(resetToHeight)
     return result
   } else {
-    return { success: true }
+    return { successt: true }
   }
 }
 
@@ -73,16 +73,30 @@ async function importAddress (account, address, id) {
 async function getWalletTransactions (account, name) {
   const minConfirmationsMet = trans => (trans.confirmations >= minConfirmations)
   await walletClient.execute('selectwallet', [name])
-  // eslint-disable-next-line
-  const transInfo = await walletClient.execute('listtransactions',[account,,,true])
-  console.log(transInfo)
-  const result = R.filter(minConfirmationsMet, transInfo)
+  const accountIndex = 0
+  const transAray = []
+  const returnAmount = 20
+  async function transLoop (transAray, accountIndex) {
+    let index = accountIndex
+    let array = transAray
+    const transInfo = await walletClient.execute('listtransactions', [account, returnAmount, index, true])
+    array = R.concat(array, transInfo)
+    if (transInfo.length < returnAmount) {
+      return array
+    } else {
+      index += returnAmount
+      return transLoop(array, index)
+    }
+  }
+  const finalArray = await transLoop(transAray, accountIndex)
+  const result = R.filter(minConfirmationsMet, finalArray)
   return result
 }
 async function listWalletAddresses (account, name) {
   await walletClient.execute('selectwallet', [name])
   // eslint-disable-next-line
   const result = await walletClient.execute('getaddressesbyaccount', [account])
+  // console.log(result)
   return result
 }
 async function getFeeEstimate (blocks) {

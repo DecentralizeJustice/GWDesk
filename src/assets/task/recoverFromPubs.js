@@ -17,6 +17,8 @@ const R = require('ramda')
 async function recoverFromPubs (vpubArray) {
   const startingIndex = 0
   const readyNode = await checkIfNodeMeaningfull(oldestBlock)
+  // const addressArrayh = await listWalletAddresses(account, walletName)
+  // console.log(addressArrayh)
   if (!readyNode) {
     await pause(10)
     const time = await getNodeSyncInfo()
@@ -52,6 +54,7 @@ async function addAddresses (addressArray, limit, index, vpubArray) {
     return addAddresses(updatedAddressArray, limit, index, vpubArray)
   } else {
     console.log('adding address via recursion')
+    console.log(index)
     const updatedAddressArray = await listWalletAddresses(account, walletName)
     const newIndex = index + 1
     return addAddresses(updatedAddressArray, limit, newIndex, vpubArray)
@@ -64,9 +67,15 @@ async function addAddress (vpubArray, index) {
   const addressInNode = await checkArrayForAddress(address, addressArray)
   if (!addressInNode) {
     console.log('resetting chain')
-    const result = await importAddress(account, address, walletName)
-    await resetChainTo(oldestBlock)
-    return result
+    console.log(address)
+    try {
+      const result = await importAddress(account, address, walletName)
+      await resetChainTo(oldestBlock)
+      return result
+    } catch (e) {
+      await resetChainTo(oldestBlock)
+      return { success: true }
+    }
   }
   return { success: true }
 }
