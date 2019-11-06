@@ -16,7 +16,8 @@
               large v-bind:color="getColor(item.category)">
               {{getArrow (item.category)}}</v-icon>
               {{getType(item.category)}}
-              {{item.amount}} BTC
+              {{item.amount}} BTC <v-divider/>
+              {{getDate (item.blocktime)}}
             </v-card-text>
           </v-card>
         </v-hover>
@@ -51,6 +52,27 @@ export default {
       } else {
         return 'green darken-2'
       }
+    },
+    getDate (epoch) {
+      const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+      const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+      ]
+
+      let time = ''
+      const utcSeconds = epoch
+      const d = new Date(0)
+      d.setUTCSeconds(utcSeconds)
+      const ampm = d.getHours() >= 12 ? 'pm' : 'am'
+      let hours = d.getHours() % 12
+      hours = hours ? hours : 12 // eslint-disable-line
+      let minutes = d.getMinutes()
+      minutes = minutes < 10 ? '0' + minutes : minutes
+      time += days[d.getDay()]
+      time += ' ' + d.getDate()
+      time += ' ' + monthNames[d.getMonth()]
+      time += ' ' + hours + ':' + minutes + ' ' + ampm
+      return time
     }
   },
   async mounted () {

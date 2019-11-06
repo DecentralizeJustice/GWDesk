@@ -27,6 +27,7 @@
 import mainCard from '@/components/transactions/mainCard.vue'
 import { getWalletTransactions } from '@/assets/util/nodeUtil.js'
 import { account, walletName } from '@/assets/constants/genConstants.js'
+const R = require('ramda')
 export default {
   components: {
     mainCard
@@ -38,7 +39,9 @@ export default {
   },
   async mounted () {
     const results = await getWalletTransactions(account, walletName)
-    this.transactions = results
+    const sortByTime = R.sortBy(R.prop('blocktime'))
+    const oldestLast = R.reverse(sortByTime(results))
+    this.transactions = oldestLast
   }
 }
 </script>
