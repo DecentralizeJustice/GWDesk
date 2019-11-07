@@ -118,8 +118,8 @@ export default {
     const outputInfo =
       {
         value_int: addressTransactions[0].amount * 100000000,
-        txid: addressTransactions[0].txid,
-        n: addressTransactions[0].vout,
+        txid: txId,
+        n: vout,
         script_pub_key: scriptHex
       }
     const sendAddress = this.transaction.addressArray[0]
