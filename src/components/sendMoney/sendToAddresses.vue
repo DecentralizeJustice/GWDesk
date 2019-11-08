@@ -15,6 +15,13 @@
           </v-btn>
       </v-col>
     </v-card-text>
+    <v-row class="mx-auto" v-if='addressArray.length!==0'>
+      <v-col align-content='center' cols='9'>
+        <v-card-text>
+          <h2 class="">Adresses:</h2>
+        </v-card-text>
+      </v-col>
+    </v-row>
     <v-row
       no-gutters
       class="mb-5"

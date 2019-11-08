@@ -133,8 +133,6 @@ export default {
   data: function () {
     return {
       speed: 2,
-      musigNeeded: m,
-      inputNumber: 1,
       amountArray: [],
       highFee: new BigNumber('0'),
       midFee: new BigNumber('0'),
@@ -260,10 +258,12 @@ export default {
       const transactions = await getWalletTransactions(account, walletName)
       const address = await getReceiveAddress(0, transactions, vpubArray, m)
       this.currentAddress = address
+      const inputNumber = 1
+      const musigTotal = vpubArray.length
       this.changeAddress = await getChangeAddress(0, transactions, vpubArray, m, false)
       const allOutputs = R.insert(-1, this.changeAddress, this.addressArray)
-      const vBytesInt = getTransactionSize(allOutputs, this.musigNeeded, this.musigTotal,
-        this.inputNumber)
+      const vBytesInt = getTransactionSize(allOutputs, m, musigTotal,
+        inputNumber)
       this.transSize = new BigNumber(vBytesInt)
       const feeEstimates = await getFeeEstimate()
       this.midFee = new BigNumber(feeEstimates.medium_fee_per_kb)
