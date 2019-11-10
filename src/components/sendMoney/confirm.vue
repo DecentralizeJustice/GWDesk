@@ -63,7 +63,7 @@ export default {
     }
   },
   created () {
-    // console.log(this.transaction)
+    console.log(this.transaction)
   }
 }
 </script>

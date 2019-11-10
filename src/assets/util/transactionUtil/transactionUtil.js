@@ -29,7 +29,7 @@ async function getScriptPubkey (txId, vout, walletId) {
   const sig = scriptSigHex.vout[vout].scriptPubKey.hex
   return sig
 }
-
+// only works with one address, need to distribute to addres array
 async function noChange (desiredFeeRate, addressArray, addressArrayAmounts, utxo) {
   const musigTotalNumber = Object.keys(vpubObject).length
   const feeAmountSatoshi = getFeeAmountSatoshi(addressArray, desiredFeeRate, utxo.length,
@@ -37,11 +37,11 @@ async function noChange (desiredFeeRate, addressArray, addressArrayAmounts, utxo
   const getValue = x => new BigNumber(x.value)
   const utxoArray = R.map(getValue, utxo)
   const utxoSum = BigNumber.sum.apply(null, utxoArray)
-  const addressArraySum = BigNumber.sum.apply(null, addressArrayAmounts)
-  if (utxoSum.isLessThan(addressArraySum.plus(feeAmountSatoshi))) {
+  const outputsTotal = feeAmountSatoshi
+  if (utxoSum.isLessThan(outputsTotal)) {
     throw new Error('Not Enough Funds')
   }
-  addressArrayAmounts[0] = utxoSum.minus(feeAmountSatoshi.plus(addressArraySum))
+  addressArrayAmounts[0] = utxoSum.minus(outputsTotal)
   const convertToBTC = x => x.shiftedBy(-8).toFormat(8)
   const newAmountArray = R.map(convertToBTC, addressArrayAmounts)
   return newAmountArray
@@ -71,7 +71,6 @@ function getTrasactionData (addressArray, addressArrayAmount, utxo, targetFeeRat
     getFeeAmountSatoshi(addressArray, targetFeeRatio,
       inputsArray.length, musigTotalNumber)
   const minFees = noChangeFeeAmountSatoshi
-
   const totalOutputsPossible0 = checkIfEnoughFunds(postOutputFifoUtxo, minFees)
   const changeExist = currentInputSum.isGreaterThan(minFees)
   if (!totalOutputsPossible0 && !changeExist) {

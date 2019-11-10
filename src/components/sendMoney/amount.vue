@@ -54,7 +54,7 @@
         <v-col cols="3" align-self='center'>
         <v-text-field
           v-model='amountArray[index]'
-          :rules="[rules.required, rules.counter]"
+          :rules="[rules.required, rules.counter, rules.hasToExist]"
           label="BTC"
           type='number'
         ></v-text-field>
@@ -139,7 +139,8 @@ export default {
       rules: {
         required: value => !new BigNumber(value).isEqualTo(new BigNumber(0)) ||
           "Can't Be Zero",
-        counter: value => new BigNumber(value).dp() < 9 || 'Invalid Amount'
+        counter: value => new BigNumber(value).dp() < 9 || 'Invalid Amount',
+        hasToExist: value => !!value || 'Required.'
       }
     }
   },
@@ -267,11 +268,6 @@ export default {
     emitNewTransaction: function (trans) {
       this.$emit('updateTransaction', trans)
     },
-    setAddressArray: function () {
-      for (var i = 0; i < this.addressArray.length; i++) {
-        this.amountArray.push('.00000001')
-      }
-    },
     noChange: async function () {
       const coins = await getUTXO(walletName)
       const newarray = await noChange(this.minFeeRatio, this.addressArray, this.addressArraySat, coins)
@@ -287,7 +283,6 @@ export default {
   created: async function () {
     this.$emit('updateTransaction', { addressArray: this.transaction.addressArray })
     await this.setupFeeInfo()
-    await this.setAddressArray()
     await this.getTransInfo
   }
 }
