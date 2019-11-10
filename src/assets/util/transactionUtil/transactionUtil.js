@@ -30,18 +30,38 @@ async function getScriptPubkey (txId, vout, walletId) {
   return sig
 }
 
+async function noChange (desiredFeeRate, addressArray, addressArrayAmounts, utxo) {
+  const musigTotalNumber = Object.keys(vpubObject).length
+  const feeAmountSatoshi = getFeeAmountSatoshi(addressArray, desiredFeeRate, utxo.length,
+    musigTotalNumber)
+  const getValue = x => new BigNumber(x.value)
+  const utxoArray = R.map(getValue, utxo)
+  const utxoSum = BigNumber.sum.apply(null, utxoArray)
+  const addressArraySum = BigNumber.sum.apply(null, addressArrayAmounts)
+  if (utxoSum.isLessThan(addressArraySum.plus(feeAmountSatoshi))) {
+    throw new Error('Not Enough Funds')
+  }
+  addressArrayAmounts[0] = utxoSum.minus(feeAmountSatoshi.plus(addressArraySum))
+  const convertToBTC = x => x.shiftedBy(-8).toFormat(8)
+  const newAmountArray = R.map(convertToBTC, addressArrayAmounts)
+  return newAmountArray
+}
+
 function getTrasactionData (addressArray, addressArrayAmount, utxo, targetFeeRatio) {
   const musigTotalNumber = Object.keys(vpubObject).length
-  const sortByFirstItem = R.sortBy(R.prop('height'))
-  const fifoCoins = sortByFirstItem(utxo)
+  const sortByFirstHeight = R.sortBy(R.prop('height'))
+  const fifoCoins = sortByFirstHeight(utxo)
   const totalOutputsAmountNeeded = BigNumber.sum.apply(null, addressArrayAmount)
+
   let inputsArray = []
   let currentInputSum = new BigNumber(0)
   let postOutputFifoUtxo = fifoCoins
+
   const totalOutputsPossible = checkIfEnoughFunds(fifoCoins, totalOutputsAmountNeeded)
   if (!totalOutputsPossible) {
     throw new Error('Not Enough Funds')
   }
+
   while (currentInputSum.isLessThan(totalOutputsAmountNeeded)) {
     inputsArray = R.append(postOutputFifoUtxo[0], inputsArray)
     currentInputSum = currentInputSum.plus(new BigNumber(postOutputFifoUtxo[0].value))
@@ -50,19 +70,22 @@ function getTrasactionData (addressArray, addressArrayAmount, utxo, targetFeeRat
   const noChangeFeeAmountSatoshi =
     getFeeAmountSatoshi(addressArray, targetFeeRatio,
       inputsArray.length, musigTotalNumber)
-  const spent = totalOutputsAmountNeeded.plus(noChangeFeeAmountSatoshi)
+  const minFees = noChangeFeeAmountSatoshi
 
-  const totalOutputsPossible0 = checkIfEnoughFunds(postOutputFifoUtxo, spent)
-  if (!totalOutputsPossible0) {
+  const totalOutputsPossible0 = checkIfEnoughFunds(postOutputFifoUtxo, minFees)
+  const changeExist = currentInputSum.isGreaterThan(minFees)
+  if (!totalOutputsPossible0 && !changeExist) {
     throw new Error('Not Enough Funds')
   }
-  while (currentInputSum.isLessThan(spent)) {
-    console.log(postOutputFifoUtxo)
+  while (currentInputSum.isLessThan(minFees.plus(totalOutputsAmountNeeded))) {
+    if (R.isEmpty(postOutputFifoUtxo)) {
+      throw new Error('Not Enough Funds')
+    }
     inputsArray = R.append(postOutputFifoUtxo[0], inputsArray)
     currentInputSum = currentInputSum.plus(new BigNumber(postOutputFifoUtxo[0].value))
     postOutputFifoUtxo = R.drop(1, postOutputFifoUtxo)
   }
-  const change = currentInputSum.minus(spent)
+  const change = currentInputSum.minus(minFees.plus(totalOutputsAmountNeeded))
   const changeAddressArray = R.append('tb1qfhswexghg04qj74dw6rl53ejtlvwfycsveqq0fegfvcz5ssk3jdsp32rme',
     addressArray)
   const changeFeeAmountSatoshi =
@@ -104,10 +127,10 @@ function checkIfEnoughFunds (funds, desiredAmount) {
   return true
 }
 
-function getFeeAmountSatoshi (addressArray, feePerKB, inputNumber,
+function getFeeAmountSatoshi (addressArray, feePerB, inputNumber,
   musigTotalNumber) {
   const transSizeVBtyes = getTransactionSize(addressArray, m, musigTotalNumber, inputNumber)
-  const correctValue = transSizeVBtyes.multipliedBy(feePerKB).dp(0)
+  const correctValue = transSizeVBtyes.multipliedBy(feePerB).dp(0)
   return correctValue
 }
 
@@ -123,4 +146,4 @@ function addToOutPutInfo (addressTypeArray) {
   return outputInfo
 }
 
-export { getTransactionSize, getScriptPubkey, getTrasactionData }
+export { getTransactionSize, getScriptPubkey, getTrasactionData, noChange }

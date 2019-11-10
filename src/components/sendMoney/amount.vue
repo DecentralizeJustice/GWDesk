@@ -120,7 +120,7 @@
 </template>
 
 <script>
-import { getTrasactionData } from '@/assets/util/transactionUtil/transactionUtil.js'
+import { getTrasactionData, noChange } from '@/assets/util/transactionUtil/transactionUtil.js'
 import { getFeeEstimate, getUTXO } from '@/assets/util/nodeUtil.js'
 import { walletName } from '@/assets/constants/genConstants.js'
 const BigNumber = require('bignumber.js')
@@ -153,6 +153,7 @@ export default {
         case 2:
           return '~10-20 minutes'
       }
+      return 'Testing'
     },
     addressArray: function () {
       return this.transaction.addressArray
@@ -160,13 +161,16 @@ export default {
     changeSatoshi: function () {
       if (this.transactionInfo !== 'undefined') {
         const utxoArray = this.transactionInfo.remainingUtxo
+        if (R.isEmpty(utxoArray)) {
+          return this.transactionInfo.changeAmount
+        }
         const getValue = x => new BigNumber(x.value)
         const mapValue = R.map(getValue, utxoArray)
         const utxoSum = BigNumber.sum.apply(null, mapValue)
         const change = utxoSum.plus(this.transactionInfo.changeAmount)
         return change
       }
-      return new BigNumber(230000)
+      return new BigNumber(0)
     },
     changeBTC: function () {
       return this.changeSatoshi.shiftedBy(-8)
@@ -220,11 +224,13 @@ export default {
       const transGood = allUsed && notTooHigh && allValidAmounts
       if (transGood) {
         return {
-          transSize: this.transSize,
-          transFee: this.feeAmountSatoshi,
+          transSize: this.transactionInfo.transactionSize,
+          transFee: this.transactionInfo.feeAmount,
+          transInputs: this.transactionInfo.inputs,
           addressArrayAmount: this.addressArraySat,
           addressArray: this.addressArray,
-          currentAddress: this.currentAddress
+          remainingUtxo: this.transactionInfo.remainingUtxo,
+          change: this.transactionInfo.changeAmount
         }
       } else {
         return {
@@ -250,7 +256,8 @@ export default {
     getTransInfo: async function functionName () {
       try {
         const coins = await getUTXO(walletName)
-        const transaction = await getTrasactionData(this.addressArray, this.addressArraySat, coins, this.minFeeRatio)
+        const transaction = await getTrasactionData(this.addressArray,
+          this.addressArraySat, coins, this.minFeeRatio)
         this.transactionInfo = transaction
         this.tooHigh = false
       } catch (error) {
@@ -265,10 +272,10 @@ export default {
         this.amountArray.push('.00000001')
       }
     },
-    noChange: function () {
-      const newAmount = this.changeBTC.plus(new BigNumber('.00000001'))
-      const newArray = R.update(0, newAmount.toString(), this.amountArray)
-      this.amountArray = newArray
+    noChange: async function () {
+      const coins = await getUTXO(walletName)
+      const newarray = await noChange(this.minFeeRatio, this.addressArray, this.addressArraySat, coins)
+      this.amountArray = newarray
     },
     setupFeeInfo: async function () {
       const feeEstimates = await getFeeEstimate()
