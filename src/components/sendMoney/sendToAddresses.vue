@@ -18,7 +18,7 @@
     <v-row class="mx-auto" v-if='addressArray.length!==0'>
       <v-col align-content='center' cols='9'>
         <v-card-text>
-          <h2 class="">Adresses:</h2>
+          <h2 class="">Addresses:</h2>
         </v-card-text>
       </v-col>
     </v-row>

@@ -69,6 +69,11 @@ async function importAddress (account, address, id) {
   const result = await wallet.importAddress(account, address)
   return result
 }
+async function getUTXO (id) {
+  const wallet = walletClient.wallet(id)
+  const result = await wallet.getCoins()
+  return result
+}
 
 async function getWalletTransactions (account, name) {
   const minConfirmationsMet = trans => (trans.confirmations >= minConfirmations)
@@ -131,5 +136,5 @@ export {
   createWallet, getNodeSyncInfo, getWalletTransactions, broadcastHex,
   getTxByHash, importAddress, startNode, checkNodeAlive, stopNode, resetChainTo,
   getNodeInfo, listWalletAddresses, checkIfNodeMeaningfull, getFeeEstimate,
-  decodeRawTransaction
+  decodeRawTransaction, getUTXO
 }

@@ -22,7 +22,7 @@
 <script>
 import { genAddress } from '@/assets/util/addressUtil.js'
 import { vpubObject, xfp } from '@/assets/constants/userConstantFiles.js'
-import { createPSBT, combineCompletedTrans } from '@/assets/util/psbtUtil.js'
+import { createPSBT } from '@/assets/util/psbtUtil.js'
 import { downloadPSBT, uploadPSBT } from '@/assets/util/electronUtil.js'
 import { updateTrans, getTrans } from '@/assets/util/networkUtil.js'
 

@@ -90,7 +90,7 @@
             >
             <v-card-text class="subtitle-1 white--text">
               <h1 class="title">Transaction Time:</h1>
-              10~20 Minutes
+              {{time}}
               <h1 class="title">Fee Amount:</h1>
               {{feeAmountBTC}} BTC
             </v-card-text>
@@ -120,27 +120,22 @@
 </template>
 
 <script>
-import { getTransactionSize } from '@/assets/util/transactionUtil/transactionUtil.js'
-import { m, vpubObject } from '@/assets/constants/userConstantFiles.js'
-import { getFeeEstimate, getWalletTransactions } from '@/assets/util/nodeUtil.js'
-import { account, walletName } from '@/assets/constants/genConstants.js'
-import { getReceiveAddress, getReceivedCoins, getChangeAddress } from '@/assets/util/addressUtil.js'
+import { getTrasactionData } from '@/assets/util/transactionUtil/transactionUtil.js'
+import { getFeeEstimate, getUTXO } from '@/assets/util/nodeUtil.js'
+import { walletName } from '@/assets/constants/genConstants.js'
 const BigNumber = require('bignumber.js')
-BigNumber.set({ DECIMAL_PLACES: 8 })
 const R = require('ramda')
 export default {
   props: ['transaction'],
   data: function () {
     return {
       speed: 2,
+      tooHigh: false,
       amountArray: [],
       highFee: new BigNumber('0'),
       midFee: new BigNumber('0'),
       lowFee: new BigNumber('0'),
-      transSize: new BigNumber('0'),
-      totalAvailable: new BigNumber('1e12'),
-      currentAddress: '',
-      changeAddress: '',
+      transactionInfo: 'undefined',
       rules: {
         required: value => !new BigNumber(value).isEqualTo(new BigNumber(0)) ||
           "Can't Be Zero",
@@ -149,33 +144,50 @@ export default {
     }
   },
   computed: {
+    time: function () {
+      switch (this.speed) {
+        case 0:
+          return '1 Hour +'
+        case 1:
+          return '~30-60 minutes'
+        case 2:
+          return '~10-20 minutes'
+      }
+    },
     addressArray: function () {
       return this.transaction.addressArray
     },
-    musigTotal: function () {
-      return Object.keys(vpubObject).length
-    },
     changeSatoshi: function () {
-      const outPutTotal = BigNumber.sum.apply(null, this.addressArraySumSat)
-      const available = this.totalAvailable.minus(this.feeAmountSatoshi)
-      const change = available.minus(outPutTotal.dp(0)).dp(0)
-      return change
+      if (this.transactionInfo !== 'undefined') {
+        const utxoArray = this.transactionInfo.remainingUtxo
+        const getValue = x => new BigNumber(x.value)
+        const mapValue = R.map(getValue, utxoArray)
+        const utxoSum = BigNumber.sum.apply(null, mapValue)
+        const change = utxoSum.plus(this.transactionInfo.changeAmount)
+        return change
+      }
+      return new BigNumber(230000)
     },
     changeBTC: function () {
       return this.changeSatoshi.shiftedBy(-8)
     },
     feeAmountSatoshi: function () {
+      if (this.transactionInfo !== 'undefined') {
+        const fee = this.transactionInfo.feeAmount
+        return fee
+      }
+      return new BigNumber(0)
+    },
+    minFeeRatio: function () {
       const choice = this.speed
       const speedArray = [this.lowFee, this.midFee, this.highFee]
-      const feeRatio = speedArray[choice]
-      const transSizeKVbytes = this.transSize.shiftedBy(-3)
-      const fee = feeRatio.times(transSizeKVbytes).dp(0)
-      return fee
+      const minFeeRatio = speedArray[choice]
+      return minFeeRatio
     },
     feeAmountBTC: function () {
       return this.feeAmountSatoshi.shiftedBy(-8)
     },
-    addressArraySumSat: function () {
+    addressArraySat: function () {
       const amountArray = this.amountArray
       const converToBigNum = x => new BigNumber(x)
       const converToSatoshi = x => x.shiftedBy(8).dp(0)
@@ -183,19 +195,9 @@ export default {
       const bigNumSatoshiArray = R.map(converToSatoshi, bigNumArray)
       return bigNumSatoshiArray
     },
-    tooHigh: function () {
-      const outPutTotal = BigNumber.sum.apply(null, this.addressArraySumSat)
-      const allTotal = outPutTotal.plus(new BigNumber(this.feeAmountSatoshi))
-      const totalTooHigh = allTotal.isGreaterThan(new BigNumber(this.totalAvailable).dp(0))
-      if (totalTooHigh) {
-        return true
-      } else {
-        return false
-      }
-    },
     allAddressesUsed: function () {
       const notZero = x => !x.isEqualTo(new BigNumber(0))
-      const allUsed = R.all(notZero)(this.addressArraySumSat)
+      const allUsed = R.all(notZero)(this.addressArraySat)
       if (allUsed) {
         return true
       } else {
@@ -220,7 +222,7 @@ export default {
         return {
           transSize: this.transSize,
           transFee: this.feeAmountSatoshi,
-          addressArrayAmount: this.addressArraySumSat,
+          addressArrayAmount: this.addressArraySat,
           addressArray: this.addressArray,
           currentAddress: this.currentAddress
         }
@@ -232,6 +234,12 @@ export default {
     }
   },
   watch: {
+    amountArray: function () {
+      this.getTransInfo()
+    },
+    minFeeRatio: function () {
+      this.getTransInfo()
+    },
     transactionAmountInfo: function (newval, old) {
       if (!R.equals(newval, old)) {
         this.emitNewTransaction(newval)
@@ -239,6 +247,16 @@ export default {
     }
   },
   methods: {
+    getTransInfo: async function functionName () {
+      try {
+        const coins = await getUTXO(walletName)
+        const transaction = await getTrasactionData(this.addressArray, this.addressArraySat, coins, this.minFeeRatio)
+        this.transactionInfo = transaction
+        this.tooHigh = false
+      } catch (error) {
+        this.tooHigh = true
+      }
+    },
     emitNewTransaction: function (trans) {
       this.$emit('updateTransaction', trans)
     },
@@ -252,32 +270,18 @@ export default {
       const newArray = R.update(0, newAmount.toString(), this.amountArray)
       this.amountArray = newArray
     },
-    setup: async function () {
-      // transaction fee code
-      const vpubArray = R.values(vpubObject)
-      const transactions = await getWalletTransactions(account, walletName)
-      const address = await getReceiveAddress(0, transactions, vpubArray, m)
-      this.currentAddress = address
-      const inputNumber = 1
-      const musigTotal = vpubArray.length
-      this.changeAddress = await getChangeAddress(0, transactions, vpubArray, m, false)
-      const allOutputs = R.insert(-1, this.changeAddress, this.addressArray)
-      const vBytesInt = getTransactionSize(allOutputs, m, musigTotal,
-        inputNumber)
-      this.transSize = new BigNumber(vBytesInt)
+    setupFeeInfo: async function () {
       const feeEstimates = await getFeeEstimate()
-      this.midFee = new BigNumber(feeEstimates.medium_fee_per_kb)
-      this.highFee = new BigNumber(feeEstimates.high_fee_per_kb)
-      this.lowFee = new BigNumber(feeEstimates.low_fee_per_kb)
-      // change code
-      const balance = await getReceivedCoins(address, transactions)
-      this.totalAvailable = new BigNumber(balance)
+      this.midFee = new BigNumber(feeEstimates.medium_fee_per_kb).shiftedBy(-3)
+      this.highFee = new BigNumber(feeEstimates.high_fee_per_kb).shiftedBy(-3)
+      this.lowFee = new BigNumber(feeEstimates.low_fee_per_kb).shiftedBy(-3)
     }
   },
   created: async function () {
     this.$emit('updateTransaction', { addressArray: this.transaction.addressArray })
-    await this.setup()
+    await this.setupFeeInfo()
     await this.setAddressArray()
+    await this.getTransInfo
   }
 }
 </script>
