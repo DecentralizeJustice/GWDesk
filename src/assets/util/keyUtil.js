@@ -21,7 +21,7 @@ async function getPubkey (index, vpub) {
   return pubkey
 }
 
-async function getPubkeyArray (index, vpubArray) {
+function getPubkeyArray (index, vpubArray) {
   const pubkeyArray = []
   for (var i = 0; i < vpubArray.length; i++) {
     const node = bitcoin.bip32.fromBase58(pubToXpub(vpubArray[i]), testnet)

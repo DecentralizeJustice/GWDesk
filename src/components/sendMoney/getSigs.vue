@@ -48,12 +48,9 @@
 import hardwareSign from '@/components/sendMoney/sign/hardware.vue'
 import softwareSign from '@/components/sendMoney/sign/software.vue'
 import { vpubObject, xfp } from '@/assets/constants/userConstantFiles.js'
-import { account, walletName } from '@/assets/constants/genConstants.js'
 import { createPSBT, combineCompletedTrans } from '@/assets/util/psbtUtil.js'
-import { getWalletTransactions } from '@/assets/util/nodeUtil.js'
 import { broadcastTrans } from '@/assets/util/networkUtil.js'
-import { getReceiveIndex, getReceivedTransactions, genAddress } from '@/assets/util/addressUtil.js'
-import { getScriptPubkey } from '@/assets/util/transactionUtil/transactionUtil.js'
+import { formTransactionData } from '@/assets/util/transactionUtil/transactionUtil.js'
 const R = require('ramda')
 export default {
   props: ['transaction'],
@@ -64,7 +61,6 @@ export default {
   data: () => ({
     plainPsbt: '',
     signedPSBTs: {},
-    m: 34,
     index: 0
   }),
   computed: {
@@ -106,28 +102,10 @@ export default {
     }
   },
   async created () {
-    const m = 2
-    const vpubArray = R.values(vpubObject)
-    const transactions = await getWalletTransactions(account, walletName)
-    const recIndex = await getReceiveIndex(0, transactions, vpubArray, 2)
-    const address = await genAddress(recIndex, vpubArray, 2)
-    const addressTransactions = await getReceivedTransactions(address, transactions)
-    const txId = addressTransactions[0].txid
-    const vout = addressTransactions[0].vout
-    const scriptHex = await getScriptPubkey(txId, vout, walletName)
-    const outputInfo =
-      {
-        value_int: addressTransactions[0].amount * 100000000,
-        txid: txId,
-        n: vout,
-        script_pub_key: scriptHex
-      }
-    const sendAddress = this.transaction.addressArray[0]
-    const totalToSend = Math.round(this.transaction.addressArrayAmount[0].toNumber())
-    const psbt = await createPSBT(recIndex, m, vpubObject, xfp, outputInfo, sendAddress, totalToSend)
+    const transctionData = await formTransactionData(this.transaction)
+    const psbt = await createPSBT(transctionData, vpubObject, xfp)
     this.plainPsbt = psbt
-    this.index = recIndex
-    this.m = m
+    console.log(psbt)
   }
 }
 </script>

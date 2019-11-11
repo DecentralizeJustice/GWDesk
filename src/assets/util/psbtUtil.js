@@ -1,91 +1,61 @@
-import { getPubkeyArray, getPubkey } from '@/assets/util/keyUtil.js'
+import { getPubkey } from '@/assets/util/keyUtil.js'
 import { testnet } from '@/assets/constants/networkConstants.js'
 import { divPath } from '@/assets/constants/genConstants.js'
 const bitcoin = require('bitcoinjs-lib')
-const R = require('ramda')
+// const R = require('ramda')
 
-async function createPSBT (index, m, vpubObject, xfp, transInfo, send, totalToSend) {
-  const vpubArray = R.values(vpubObject)
-  const path = divPath + '/' + index.toString()
-  const pubkeyArray = await getPubkeyArray(index, vpubArray)
-  const n = pubkeyArray.length
+async function createPSBT (transctionData, vpubObject, xfp) {
   const network = testnet
-  // const address = await genAddress(index, vpubArray, m)
-  const p2wsh = await createPayment(`p2wsh-p2ms(${m} of ${n})`, pubkeyArray, network)
-  // const transInfo = await genAddressUnspent(address)
-  const inputData = await getInputData(p2wsh.payment, 'p2wsh', transInfo)
-  let psbt = new bitcoin.Psbt({ network: network })
-    .addInput(inputData)
-    .addOutput({
-      address: send,
-      value: totalToSend
+  const psbt = new bitcoin.Psbt({ network: network })
+  const transInputs = transctionData.inputData.transInputs
+  const outPuts = transctionData.outputData
+  for (let i = 0; i < transInputs.length; i++) {
+    const transInfo = transInputs[i]
+    const inputData = getInputData(transInfo)
+    psbt.addInput(inputData)
+  }
+  for (let i = 0; i < outPuts.length; i++) {
+    psbt.addOutput({
+      address: outPuts[i].address,
+      value: Number(outPuts[i].value)
     })
-  psbt = await addbip32DerivationInfo(psbt, path, vpubObject, xfp, index)
+  }
+  // psbt = await addbip32DerivationInfo(psbt, vpubObject, xfp)
   const psbtBaseText = psbt.toHex()
   return psbtBaseText
 }
 
-async function addbip32DerivationInfo (psbt, path, vpubObject, xfp, index) {
-  for (var property1 in vpubObject) {
-    const updateData = { bip32Derivation: [{}] }
-    updateData.bip32Derivation[0].masterFingerprint = Buffer.from(xfp[property1], 'hex')
-    updateData.bip32Derivation[0].path = path
-    updateData.bip32Derivation[0].pubkey = await getPubkey(index, vpubObject[property1])
-    psbt.updateInput(0, updateData)
-  }
-  return psbt
-}
+// async function addbip32DerivationInfo (psbt, vpubObject, xfp) {
+//   for (var property1 in vpubObject) {
+//     const path = divPath + '/' + index.toString()
+//     const updateData = { bip32Derivation: [{}] }
+//     updateData.bip32Derivation[0].masterFingerprint = Buffer.from(xfp[property1], 'hex')
+//     updateData.bip32Derivation[0].path = path
+//     updateData.bip32Derivation[0].pubkey = await getPubkey(index, vpubObject[property1])
+//     psbt.updateInput(0, updateData)
+//   }
+//   return psbt
+// }
 
-async function createPayment (_type, myKeys, network) {
-  const splitType = _type.split('-').reverse()
-  const keys = myKeys
-  const match = splitType[0].match(/^p2ms\((\d+) of (\d+)\)$/)
-  const m = parseInt(match[1])
-  const n = parseInt(match[2])
-  if (keys.length > 0 && keys.length !== n) {
-    throw new Error('Need n keys for multisig')
-  }
-  let payment
-  splitType.forEach(type => {
-    if (type.slice(0, 4) === 'p2ms') {
-      payment = bitcoin.payments.p2ms({
-        m,
-        pubkeys: keys,
-        network
-      })
-    } else if (['p2sh', 'p2wsh'].indexOf(type) > -1) {
-      payment = bitcoin.payments[type]({
-        redeem: payment,
-        network
-      })
-    } else {
-      payment = bitcoin.payments[type]({
-        pubkey: keys[0],
-        network
-      })
-    }
-  })
-  return {
-    payment,
-    keys
-  }
-}
-function getInputData (payment, redeemType, transInfo) {
-  const amount = transInfo.value_int
-  const hash = transInfo.txid
-  const index = transInfo.n
+function getInputData (transInfo) {
+  const amount = transInfo.value
+  const hash = transInfo.hash
+  const index = transInfo.index
   const script = Buffer.from(
-    transInfo.script_pub_key, 'hex'
+    transInfo.script, 'hex'
   )
+  const witnessScript = transInfo.witnessScript
+
   const witnessUtxo = {
     script: script,
     value: amount
   }
   const mixin = { witnessUtxo }
   const mixin2 = {}
+  const redeemType = 'p2wsh'
   switch (redeemType) {
     case 'p2wsh':
-      mixin2.witnessScript = payment.redeem.output
+      mixin2.witnessScript = witnessScript
       break
   }
   return {

@@ -1,9 +1,13 @@
 import { getByteCount } from '@/assets/util/transactionUtil/transSize.js'
+import { getPubkeyArray } from '@/assets/util/keyUtil.js'
 import validate from 'bitcoin-address-validation'
 import { getTxByHash, decodeRawTransaction } from '@/assets/util/nodeUtil.js'
+import { genAddress } from '@/assets/util/addressUtil.js'
 import { m, vpubObject } from '@/assets/constants/userConstantFiles.js'
+import { testnet } from '@/assets/constants/networkConstants.js'
 const R = require('ramda')
 const BigNumber = require('bignumber.js')
+const bitcoin = require('bitcoinjs-lib')
 
 function getTransactionSize (addressArray, musigNeeded, musigTotal, inputNumber) {
   const inputInfo = {}
@@ -113,6 +117,99 @@ function getTrasactionData (addressArray, addressArrayAmount, utxo, targetFeeRat
   }
 }
 
+async function formTransactionData (rawTranactionData) {
+  const outputArray = getOutputArray(rawTranactionData)
+  let updatedTransactionData = await addInputAdressIndex(rawTranactionData)
+  updatedTransactionData = await addUnlockingScript(updatedTransactionData)
+  return { outputData: outputArray, inputData: updatedTransactionData }
+}
+
+async function addUnlockingScript (tranactionData) {
+  const updatedTransactionData = R.clone(tranactionData)
+  const inputs = tranactionData.transInputs
+  for (var i = 0; i < inputs.length; i++) {
+    const index = updatedTransactionData.transInputs[i].addressIndex
+    const witnessScript = await getUnlockingScript(index)
+    updatedTransactionData.transInputs[i].witnessScript = witnessScript
+  }
+  return updatedTransactionData
+}
+
+async function getUnlockingScript (index) {
+  const vpubArray = R.values(vpubObject)
+  const pubkeyArray = await getPubkeyArray(index, vpubArray)
+  const n = pubkeyArray.length
+  const network = testnet
+  const paymentInfo = await createPayment(`p2wsh-p2ms(${m} of ${n})`, pubkeyArray, network)
+  const witness = paymentInfo.payment.redeem.output
+  return witness
+}
+
+async function createPayment (_type, myKeys, network) {
+  const splitType = _type.split('-').reverse()
+  const keys = myKeys
+  const match = splitType[0].match(/^p2ms\((\d+) of (\d+)\)$/)
+  const m = parseInt(match[1])
+  let payment
+  splitType.forEach(type => {
+    if (type.slice(0, 4) === 'p2ms') {
+      payment = bitcoin.payments.p2ms({
+        m,
+        pubkeys: keys,
+        network
+      })
+    } else if (['p2sh', 'p2wsh'].indexOf(type) > -1) {
+      payment = bitcoin.payments[type]({
+        redeem: payment,
+        network
+      })
+    } else {
+      payment = bitcoin.payments[type]({
+        pubkey: keys[0],
+        network
+      })
+    }
+  })
+  return {
+    payment,
+    keys
+  }
+}
+
+async function addInputAdressIndex (rawTranactionData) {
+  const updatedTransactionData = R.clone(rawTranactionData)
+  const inputs = rawTranactionData.transInputs
+  for (var i = 0; i < inputs.length; i++) {
+    const addressIndex = await findAddressIndex(0, inputs[i].address)
+    updatedTransactionData.transInputs[i].addressIndex = addressIndex
+  }
+  return updatedTransactionData
+}
+
+async function findAddressIndex (index, address) {
+  const vpubArray = R.values(vpubObject)
+  const proposedAdress = await genAddress(index, vpubArray, m)
+  if (index > 30) {
+    return new Error('Max Index Reached, address not in wallet')
+  }
+  if (proposedAdress === address) {
+    return index
+  } else {
+    return findAddressIndex(index + 1, address)
+  }
+}
+
+function getOutputArray (transactioninfo) {
+  const addressArray = transactioninfo.addressArray
+  const amountArray = transactioninfo.addressArrayAmount
+  const outputArray = []
+  for (var i = 0; i < addressArray.length; i++) {
+    const infoObject = { address: addressArray[i], value: amountArray[i].toFixed() }
+    outputArray.push(infoObject)
+  }
+  return outputArray
+}
+
 function checkIfEnoughFunds (funds, desiredAmount) {
   if (R.isEmpty(funds)) {
     return false
@@ -145,4 +242,4 @@ function addToOutPutInfo (addressTypeArray) {
   return outputInfo
 }
 
-export { getTransactionSize, getScriptPubkey, getTrasactionData, noChange }
+export { getTransactionSize, getScriptPubkey, getTrasactionData, noChange, formTransactionData }
