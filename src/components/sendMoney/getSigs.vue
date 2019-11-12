@@ -29,7 +29,7 @@
                   <softwareSign
                   v-on:addsigned='addsigned'
                   v-bind:plainPsbt="plainPsbt"
-                  v-bind:index='index'/>
+                  v-bind:transctionData='transctionData'/>
                 </v-card>
             </v-col>
             </v-row>
@@ -47,7 +47,7 @@
 <script>
 import hardwareSign from '@/components/sendMoney/sign/hardware.vue'
 import softwareSign from '@/components/sendMoney/sign/software.vue'
-import { vpubObject, xfp } from '@/assets/constants/userConstantFiles.js'
+import { vpubObject, xfp, m } from '@/assets/constants/userConstantFiles.js'
 import { createPSBT, combineCompletedTrans } from '@/assets/util/psbtUtil.js'
 import { broadcastTrans } from '@/assets/util/networkUtil.js'
 import { formTransactionData } from '@/assets/util/transactionUtil/transactionUtil.js'
@@ -61,7 +61,7 @@ export default {
   data: () => ({
     plainPsbt: '',
     signedPSBTs: {},
-    index: 0
+    transctionData: {}
   }),
   computed: {
     addressArray: function () {
@@ -73,7 +73,8 @@ export default {
     allsigned: function () {
       const signedPSBTs = this.signedPSBTs
       const signtaures = Object.keys(signedPSBTs).length
-      if (signtaures >= this.m) {
+      console.log(signtaures)
+      if (signtaures >= m) {
         return true
       } else {
         return false
@@ -87,11 +88,11 @@ export default {
       this.signedPSBTs = newSigned
       console.log('trans added')
     },
-    getAmount: function (index) {
-      const amount = this.addressAmountArray[index]
-      const exp = amount.shiftedBy(-8)
-      return exp.toFormat(9)
-    },
+    // getAmount: function (index) {
+    //   const amount = this.addressAmountArray[index]
+    //   const exp = amount.shiftedBy(-8)
+    //   return exp.toFormat(9)
+    // },
     async combine () {
       const trans1 = this.signedPSBTs.web
       const trans2 = this.signedPSBTs.hardware
@@ -105,7 +106,8 @@ export default {
     const transctionData = await formTransactionData(this.transaction)
     const psbt = await createPSBT(transctionData, vpubObject, xfp)
     this.plainPsbt = psbt
-    console.log(psbt)
+    this.transctionData = transctionData
+    console.log('psbt created')
   }
 }
 </script>

@@ -54,7 +54,7 @@
 import { updateTrans, getTrans } from '@/assets/util/networkUtil.js'
 export default {
   name: 'softwareSign',
-  props: ['plainPsbt', 'index'],
+  props: ['plainPsbt', 'transctionData'],
   data: () => ({
     dialog: false,
     signedPSBT: ''
@@ -63,7 +63,7 @@ export default {
   },
   methods: {
     updatePSBT: async function () {
-      const result = await updateTrans(this.plainPsbt, this.index)
+      const result = await updateTrans(this.plainPsbt)
       console.log(result)
     },
     getPSBT: async function functionName () {

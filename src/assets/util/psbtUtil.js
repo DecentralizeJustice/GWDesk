@@ -2,11 +2,10 @@ import { getPubkey } from '@/assets/util/keyUtil.js'
 import { testnet } from '@/assets/constants/networkConstants.js'
 import { divPath } from '@/assets/constants/genConstants.js'
 const bitcoin = require('bitcoinjs-lib')
-// const R = require('ramda')
 
 async function createPSBT (transctionData, vpubObject, xfp) {
   const network = testnet
-  const psbt = new bitcoin.Psbt({ network: network })
+  let psbt = new bitcoin.Psbt({ network: network })
   const transInputs = transctionData.inputData.transInputs
   const outPuts = transctionData.outputData
   for (let i = 0; i < transInputs.length; i++) {
@@ -20,23 +19,30 @@ async function createPSBT (transctionData, vpubObject, xfp) {
       value: Number(outPuts[i].value)
     })
   }
-  // psbt = await addbip32DerivationInfo(psbt, vpubObject, xfp)
+  psbt = await addbip32DerivationInfo(psbt, vpubObject, xfp, transInputs)
   const psbtBaseText = psbt.toHex()
   return psbtBaseText
 }
 
-// async function addbip32DerivationInfo (psbt, vpubObject, xfp) {
-//   for (var property1 in vpubObject) {
-//     const path = divPath + '/' + index.toString()
-//     const updateData = { bip32Derivation: [{}] }
-//     updateData.bip32Derivation[0].masterFingerprint = Buffer.from(xfp[property1], 'hex')
-//     updateData.bip32Derivation[0].path = path
-//     updateData.bip32Derivation[0].pubkey = await getPubkey(index, vpubObject[property1])
-//     psbt.updateInput(0, updateData)
-//   }
-//   return psbt
-// }
+async function addbip32DerivationInfo (psbt, vpubObject, xfp, transInputs) {
+  for (var i = 0; i < transInputs.length; i++) {
+    const index = transInputs[i].addressIndex
+    psbt = await addKeyInfo(psbt, vpubObject, xfp, index, i)
+  }
+  return psbt
+}
 
+async function addKeyInfo (psbt, vpubObject, xfp, index, i) {
+  for (var property1 in vpubObject) {
+    const path = divPath + '/' + index.toString()
+    const updateData = { bip32Derivation: [{}] }
+    updateData.bip32Derivation[0].masterFingerprint = Buffer.from(xfp[property1], 'hex')
+    updateData.bip32Derivation[0].path = path
+    updateData.bip32Derivation[0].pubkey = await getPubkey(index, vpubObject[property1])
+    psbt.updateInput(i, updateData)
+  }
+  return psbt
+}
 function getInputData (transInfo) {
   const amount = transInfo.value
   const hash = transInfo.hash

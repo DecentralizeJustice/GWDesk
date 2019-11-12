@@ -1,8 +1,8 @@
 'use strict'
 const axios = require('axios')
 
-async function updateTrans (transHex, index) {
-  const newBlob = { trans: transHex, index: index }
+async function updateTrans (transHex) {
+  const newBlob = { trans: transHex }
   const response = await axios({
     method: 'post',
     url: 'https://us-central1-my-project-1506404987940.cloudfunctions.net/updateBlob',
