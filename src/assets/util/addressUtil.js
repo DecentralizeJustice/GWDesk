@@ -17,6 +17,10 @@ async function genAddress (index, vpubArray, m) {
   })
   return info.address
 }
+async function addressFromScriptPub (scriptBuffer) {
+  const address = bitcoin.address.fromOutputScript(scriptBuffer, testnet)
+  return address
+}
 async function checkArrayForAddress (address, addressArray) {
   const inOrNot = R.any(R.equals(address))(addressArray)
   return inOrNot
@@ -121,5 +125,6 @@ async function checkSentTrans (address, transactions) {
 }
 export {
   genAddress, checkArrayForAddress, addressHasTransactions, getReceivedCoins,
-  getReceiveAddress, getRecTrans, getChangeAddress, getReceiveIndex, getReceivedTransactions
+  getReceiveAddress, getRecTrans, getChangeAddress, getReceiveIndex,
+  getReceivedTransactions, addressFromScriptPub
 }

@@ -112,6 +112,7 @@ async function getFeeEstimate (blocks) {
 async function getTxByHash (txHash, id) {
   const wallet = walletClient.wallet(id)
   const result = await wallet.getTX(txHash)
+
   return result
 }
 async function decodeRawTransaction (transHex) {

@@ -9,6 +9,11 @@ const R = require('ramda')
 const BigNumber = require('bignumber.js')
 const bitcoin = require('bitcoinjs-lib')
 
+function decodeRawTransactionBitcoinJS (rawtx) {
+  const tx = bitcoin.Transaction.fromHex(rawtx)
+  return tx
+}
+
 function getTransactionSize (addressArray, musigNeeded, musigTotal, inputNumber) {
   const inputInfo = {}
   const inputString = 'MULTISIG-P2WSH'.concat(`:${musigNeeded}-${musigTotal}`)
@@ -242,4 +247,7 @@ function addToOutPutInfo (addressTypeArray) {
   return outputInfo
 }
 
-export { getTransactionSize, getScriptPubkey, getTrasactionData, noChange, formTransactionData }
+export {
+  getTransactionSize, getScriptPubkey, getTrasactionData,
+  noChange, formTransactionData, decodeRawTransactionBitcoinJS
+}

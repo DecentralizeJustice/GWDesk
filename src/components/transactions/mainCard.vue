@@ -1,18 +1,9 @@
 <template>
   <v-container class="">
-    <v-expansion-panels
-        v-model="panel"
-        multiple
-      >
-
-      <v-expansion-panel v-for="(item, index) in transactions" :key="item.txid"
-      class="mt-2 light-blue darken-4">
-
-      <v-expansion-panel-header>
-
           <v-card
             class='light-blue darken-4'
             :elevation="0"
+            v-for="(item, index) in transactions" :key="item.txid"
           >
 
             <v-card-text class="mt-4 subtitle-1 white--text">
@@ -24,8 +15,7 @@
               {{getDate (item.blocktime)}}
             </v-card-text>
 
-            <v-expansion-panel-content>
-              <v-simple-table v-if="getType(item.category)==='sent'">
+              <v-simple-table v-if="getType(item.category)==='Sent'">
                 <template v-slot:default>
                   <thead>
                     <tr>
@@ -34,15 +24,14 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="(stuff,index) in getInputInfo(item, index)" :key="index">
+                    <tr v-for="(stuff,index) in getInputInfo(item)" :key="index">
                       <td>{{ stuff.address }}</td>
                       <td>{{ stuff.value }}</td>
                     </tr>
                   </tbody>
                 </template>
               </v-simple-table>
-
-              <v-simple-table v-if="getType(item.category)!=='sent'">
+              <v-simple-table v-if="getType(item.category)!=='Sent'">
                 <template v-slot:default>
                   <thead>
                     <tr>
@@ -50,12 +39,13 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="(stuff,index) in getInputInfo(item, index)" :key="index">
-                      <td v-if="stuff.address!==null">{{ stuff.address }}</td>
+                    <tr v-for="(stuff,index) in getInputInfo(item)" :key="index">
+                      <td>{{ stuff.address }}</td>
                     </tr>
                   </tbody>
                 </template>
               </v-simple-table>
+
               <v-simple-table class="mt-3">
                 <template v-slot:default>
                   <thead>
@@ -65,20 +55,14 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="(stuff,index) in getOutputInfo(item, index)" :key="index">
+                    <tr v-for="(stuff,index) in getOutputInfo(item)" :key="index">
                       <td>{{ stuff.address }}</td>
                       <td>{{ stuff.value }}</td>
                     </tr>
                   </tbody>
                 </template>
               </v-simple-table>
-            </v-expansion-panel-content>
           </v-card>
-
-      </v-expansion-panel-header>
-        </v-expansion-panel>
-
-    </v-expansion-panels>
   </v-container>
 </template>
 
@@ -131,26 +115,12 @@ export default {
       time += ' ' + hours + ':' + minutes + ' ' + ampm
       return time
     },
-    getTotalValueInput (info, index) {
-      const type = info.category
-      if (type === 'send') {
-        const test = info.transactionInformation.inputs
-        return test
-      } else {
-        return info.transactionInformation.inputs
-      }
+    getInputInfo (info) {
+      const test = info.bitcoinjsInfo.ins
+      return test
     },
-    getInputInfo (info, index) {
-      const type = info.category
-      if (type === 'send') {
-        const test = info.transactionInformation.inputs
-        return test
-      } else {
-        return info.transactionInformation.inputs
-      }
-    },
-    getOutputInfo (info, index) {
-      const test = info.transactionInformation.outputs
+    getOutputInfo (info) {
+      const test = info.bitcoinjsInfo.outs
       return test
     }
   },
