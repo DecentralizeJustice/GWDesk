@@ -1,26 +1,26 @@
 <template>
-    <v-layout align-center justify-center row fill-height>
-      <v-flex xs10>
-          <v-card >
-            <v-card-title class="headline justify-center">
-              Transactions
-            </v-card-title>
-            <v-divider></v-divider>
+  <v-layout align-center justify-center row fill-height>
+    <v-flex xs11>
+      <v-card >
+        <v-card-title class="headline justify-center">
+          Transactions
+        </v-card-title>
+        <v-divider></v-divider>
 
-            <mainCard v-bind:transactions="transactions"
-              style="max-height: 75vh;overflow: scroll;"/>
-            <v-divider></v-divider>
-            <v-card-actions>
-              <v-btn
-                color="orange"
-                text
-              >
-                <v-icon>mdi-help</v-icon>
-              </v-btn>
-            </v-card-actions>
-          </v-card>
+        <mainCard v-bind:transactions="transactions"
+          style="max-height: 75vh;overflow: scroll;"/>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-btn
+            color="orange"
+            text
+          >
+            <v-icon>mdi-help</v-icon>
+          </v-btn>
+        </v-card-actions>
+      </v-card>
     </v-flex>
-    </v-layout>
+  </v-layout>
 </template>
 
 <script>
@@ -38,41 +38,44 @@ export default {
     transactions: []
   }),
   methods: {
+    async getInputandOutputInfo (transactions) {
+      for (let i = 0; i < transactions.length; i++) {
+        const txid = transactions[i].txid
+        const transInfo = await getTxByHash(txid, 'musig')
+        transactions[i].bitcoinjsInfo = decodeRawTransactionBitcoinJS(transInfo.tx)
+        if (transactions[i].category === 'send') {
+          const ins = transactions[i].bitcoinjsInfo.ins
+          for (let j = 0; j < ins.length; j++) {
+            const address = transInfo.inputs[j].address
+            const value = transInfo.inputs[j].value
+            transactions[i].bitcoinjsInfo.ins[j].address = address
+            transactions[i].bitcoinjsInfo.ins[j].value = value
+          }
+        } else {
+          const ins = transactions[i].bitcoinjsInfo.ins
+          for (let j = 0; j < ins.length; j++) {
+            let address = transInfo.inputs[j].address
+            if (address === null) {
+              address = 'Address Info Unavailable'
+            }
+            transactions[i].bitcoinjsInfo.ins[j].address = address
+          }
+        }
+        const outs = transactions[i].bitcoinjsInfo.outs
+        for (let k = 0; k < outs.length; k++) {
+          const address = await addressFromScriptPub(outs[k].script)
+          transactions[i].bitcoinjsInfo.outs[k].address = address
+        }
+      }
+      return transactions
+    }
   },
   async created () {
     const results = await getWalletTransactions(account, walletName)
     const sortByTime = R.sortBy(R.prop('blocktime'))
-    const oldestLast = R.reverse(sortByTime(results))
-
-    for (let i = 0; i < oldestLast.length; i++) {
-      const txid = oldestLast[i].txid
-      const transInfo = await getTxByHash(txid, 'musig')
-      oldestLast[i].bitcoinjsInfo = decodeRawTransactionBitcoinJS(transInfo.tx)
-      if (oldestLast[i].category === 'send') {
-        const ins = oldestLast[i].bitcoinjsInfo.ins
-        for (let j = 0; j < ins.length; j++) {
-          const address = transInfo.inputs[j].address
-          const value = transInfo.inputs[j].value
-          oldestLast[i].bitcoinjsInfo.ins[j].address = address
-          oldestLast[i].bitcoinjsInfo.ins[j].value = value
-        }
-      } else {
-        const ins = oldestLast[i].bitcoinjsInfo.ins
-        for (let j = 0; j < ins.length; j++) {
-          let address = transInfo.inputs[j].address
-          if (address === null) {
-            address = 'Address Info Unavailabe'
-          }
-          oldestLast[i].bitcoinjsInfo.ins[j].address = address
-        }
-      }
-      const outs = oldestLast[i].bitcoinjsInfo.outs
-      for (let j = 0; j < outs.length; j++) {
-        const address = await addressFromScriptPub(outs[j].script)
-        oldestLast[i].bitcoinjsInfo.outs[j].address = address
-      }
-    }
-    this.transactions = oldestLast
+    const sortedTransactions = R.reverse(sortByTime(results))
+    const updatedTransactions = await this.getInputandOutputInfo(sortedTransactions)
+    this.transactions = updatedTransactions
   }
 }
 </script>

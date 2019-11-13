@@ -1,68 +1,53 @@
 <template>
   <v-container class="">
-          <v-card
-            class='light-blue darken-4'
-            :elevation="0"
-            v-for="(item, index) in transactions" :key="item.txid"
-          >
+    <v-card
+      class='light-blue darken-4'
+      :elevation="0"
+      v-for="(item, index) in transactions" :key="index"
+    >
+      <v-card-text class="mt-4 subtitle-1 white--text">
+        <v-icon
+        large v-bind:color="getColor(item.category)">
+        {{getArrow (item.category)}}</v-icon>
+        {{getType(item.category)}}
+        {{item.amount}} BTC <v-divider/>
+        {{getDate (item.blocktime)}}
+      </v-card-text>
 
-            <v-card-text class="mt-4 subtitle-1 white--text">
-              <v-icon
-              large v-bind:color="getColor(item.category)">
-              {{getArrow (item.category)}}</v-icon>
-              {{getType(item.category)}}
-              {{item.amount}} BTC <v-divider/>
-              {{getDate (item.blocktime)}}
-            </v-card-text>
+        <v-simple-table >
+          <template v-slot:default>
+            <thead>
+              <tr>
+                <th class="text-left">Input Addresses</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(stuff,index) in getInputInfo(item)" :key="index">
+                <td>{{ stuff.address }}</td>
+                <td v-if="item.category==='send'">{{ stuff.value }}</td>
+              </tr>
+            </tbody>
+          </template>
+        </v-simple-table>
 
-              <v-simple-table v-if="getType(item.category)==='Sent'">
-                <template v-slot:default>
-                  <thead>
-                    <tr>
-                      <th class="text-left">Inputs</th>
-                      <th class="text-left">Value</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="(stuff,index) in getInputInfo(item)" :key="index">
-                      <td>{{ stuff.address }}</td>
-                      <td>{{ stuff.value }}</td>
-                    </tr>
-                  </tbody>
-                </template>
-              </v-simple-table>
-              <v-simple-table v-if="getType(item.category)!=='Sent'">
-                <template v-slot:default>
-                  <thead>
-                    <tr>
-                      <th class="text-left">Input Addresses</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="(stuff,index) in getInputInfo(item)" :key="index">
-                      <td>{{ stuff.address }}</td>
-                    </tr>
-                  </tbody>
-                </template>
-              </v-simple-table>
+        <v-simple-table class="mt-3">
+          <template v-slot:default>
+            <thead>
+              <tr>
+                <th class="text-left">Outputs</th>
+                <th class="text-left">Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(stuff,index) in getOutputInfo(item)" :key="index">
+                <td>{{ stuff.address }}</td>
+                <td>{{ stuff.value }}</td>
+              </tr>
+            </tbody>
+          </template>
+        </v-simple-table>
 
-              <v-simple-table class="mt-3">
-                <template v-slot:default>
-                  <thead>
-                    <tr>
-                      <th class="text-left">Outputs</th>
-                      <th class="text-left">Value</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="(stuff,index) in getOutputInfo(item)" :key="index">
-                      <td>{{ stuff.address }}</td>
-                      <td>{{ stuff.value }}</td>
-                    </tr>
-                  </tbody>
-                </template>
-              </v-simple-table>
-          </v-card>
+    </v-card>
   </v-container>
 </template>
 
@@ -95,16 +80,17 @@ export default {
       }
     },
     getDate (epoch) {
-      const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
-      const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
-        'July', 'August', 'September', 'October', 'November', 'December'
+      const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday',
+        'Friday', 'Saturday']
+      const monthNames = ['January', 'February', 'March', 'April', 'May',
+        'June', 'July', 'August', 'September', 'October', 'November', 'December'
       ]
 
       let time = ''
       const utcSeconds = epoch
       const d = new Date(0)
       d.setUTCSeconds(utcSeconds)
-      const ampm = d.getHours() >= 12 ? 'pm' : 'am'
+      const amPm = d.getHours() >= 12 ? 'pm' : 'am'
       let hours = d.getHours() % 12
       hours = hours ? hours : 12 // eslint-disable-line
       let minutes = d.getMinutes()
@@ -112,7 +98,7 @@ export default {
       time += days[d.getDay()]
       time += ' ' + d.getDate()
       time += ' ' + monthNames[d.getMonth()]
-      time += ' ' + hours + ':' + minutes + ' ' + ampm
+      time += ' ' + hours + ':' + minutes + ' ' + amPm
       return time
     },
     getInputInfo (info) {
@@ -123,8 +109,6 @@ export default {
       const test = info.bitcoinjsInfo.outs
       return test
     }
-  },
-  async mounted () {
   }
 }
 </script>
