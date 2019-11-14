@@ -1,8 +1,8 @@
 import { getByteCount } from '@/assets/util/transactionUtil/transSize.js'
 import { getPubkeyArray } from '@/assets/util/keyUtil.js'
 import validate from 'bitcoin-address-validation'
-import { getTxByHash, decodeRawTransaction } from '@/assets/util/nodeUtil.js'
-import { genAddress } from '@/assets/util/addressUtil.js'
+import { getTxByHash, decodeRawTransaction, getWalletTransactions } from '@/assets/util/nodeUtil.js'
+import { genAddress, getReceiveAddress, getChangeAddress } from '@/assets/util/addressUtil.js'
 import { m, vpubObject } from '@/assets/constants/userConstantFiles.js'
 import { testnet } from '@/assets/constants/networkConstants.js'
 const R = require('ramda')
@@ -58,7 +58,7 @@ noChange (desiredFeeRate, addressArray, addressArrayAmounts, utxo) {
   return newAmountArray
 }
 
-function getTrasactionData (addressArray, addressArrayAmount, utxo,
+async function getTrasactionData (addressArray, addressArrayAmount, utxo,
   targetFeeRatio) {
   const musigTotalNumber = Object.keys(vpubObject).length
   const fifoCoins = R.sortBy(R.prop('height'))(utxo)
@@ -69,7 +69,7 @@ function getTrasactionData (addressArray, addressArrayAmount, utxo,
 
   if (!totalOutputsPossible) { throw new Error('Not Enough Funds') }
 
-  const [currentInputSumPostOutputs, inputsArrayPostOutputs, utxoPostOutputs] =
+  const [inputSumPostOutputs, inputsArrayPostOutputs, utxoPostOutputs] =
     addNeededUtxo(new BigNumber(0), totalOutputsAmountNeeded, fifoCoins, [])
 
   const noChangeFeeAmountSatoshi =
@@ -79,7 +79,7 @@ function getTrasactionData (addressArray, addressArrayAmount, utxo,
   const minFees = noChangeFeeAmountSatoshi
   const totalOutputsPossibleWithFees =
     checkIfEnoughFunds(utxoPostOutputs, minFees)
-  const changeExist = currentInputSumPostOutputs.isGreaterThan(minFees)
+  const changeExist = inputSumPostOutputs.isGreaterThan(minFees)
 
   if (!totalOutputsPossibleWithFees && !changeExist) {
     throw new Error('Not Enough Funds')
@@ -87,7 +87,7 @@ function getTrasactionData (addressArray, addressArrayAmount, utxo,
   const feeAndUTXONeeded = minFees.plus(totalOutputsAmountNeeded)
 
   const [inputSumPostFee, inputsArrayPostFee, utxoPostFee] =
-  addNeededUtxo(currentInputSumPostOutputs, feeAndUTXONeeded, utxoPostOutputs,
+  addNeededUtxo(inputSumPostOutputs, feeAndUTXONeeded, utxoPostOutputs,
     inputsArrayPostOutputs)
 
   const change = inputSumPostFee.minus(feeAndUTXONeeded)
@@ -123,6 +123,20 @@ function getTrasactionData (addressArray, addressArrayAmount, utxo,
   }
 }
 
+async function getChangeCorrectAddress (inputsArray) {
+  const vpubArray = R.values(vpubObject)
+  const transactions = await getWalletTransactions('default', 'musig')
+  const currentRecieveAddress = await getReceiveAddress(0, transactions, vpubArray, m)
+  const proposedChangeAddress = await getChangeAddress(0, transactions, vpubArray, m, false)
+  const getAddress = n => n.address === currentRecieveAddress
+  const involvesRecieveAddress = R.filter(getAddress, inputsArray).length > 0
+  if (involvesRecieveAddress) {
+    return proposedChangeAddress
+  } else {
+    return currentRecieveAddress
+  }
+}
+
 function addNeededUtxo (currentInputSum, totalOutputsAmountNeeded, fifoUtxo,
   inputsArray) {
   while (currentInputSum.isLessThan(totalOutputsAmountNeeded)) {
@@ -146,6 +160,7 @@ function creatChangeArray (addressArray) {
 
 async function formTransactionData (rawTranactionData) {
   const outputArray = getOutputArray(rawTranactionData)
+  console.log(outputArray)
   let updatedTransactionData = await addInputAdressIndex(rawTranactionData)
   updatedTransactionData = await addUnlockingScript(updatedTransactionData)
   return { outputData: outputArray, inputData: updatedTransactionData }
@@ -154,10 +169,10 @@ async function formTransactionData (rawTranactionData) {
 async function addUnlockingScript (tranactionData) {
   const updatedTransactionData = R.clone(tranactionData)
   const inputs = tranactionData.transInputs
-  for (var i = 0; i < inputs.length; i++) {
-    const index = updatedTransactionData.transInputs[i].addressIndex
-    const witnessScript = await getUnlockingScript(index)
-    updatedTransactionData.transInputs[i].witnessScript = witnessScript
+  for (const index in inputs) {
+    const adressIndex = updatedTransactionData.transInputs[index].addressIndex
+    const witnessScript = await getUnlockingScript(adressIndex)
+    updatedTransactionData.transInputs[index].witnessScript = witnessScript
   }
   return updatedTransactionData
 }
@@ -207,7 +222,6 @@ async function createPayment (_type, myKeys, network) {
 async function addInputAdressIndex (rawTranactionData) {
   const updatedTransactionData = R.clone(rawTranactionData)
   const inputs = rawTranactionData.transInputs
-  console.log('ran new for')
   for (const index in inputs) {
     const addressIndex = await findAddressIndex(0, inputs[index].address)
     updatedTransactionData.transInputs[index].addressIndex = addressIndex
@@ -277,5 +291,6 @@ function addToOutPutInfo (addressTypeArray) {
 
 export {
   getTransactionSize, getScriptPubkey, getTrasactionData,
-  noChange, formTransactionData, decodeRawTransactionBitcoinJS
+  noChange, formTransactionData, decodeRawTransactionBitcoinJS,
+  getChangeCorrectAddress
 }

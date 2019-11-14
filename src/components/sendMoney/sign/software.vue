@@ -54,7 +54,7 @@
 import { updateTrans, getTrans } from '@/assets/util/networkUtil.js'
 export default {
   name: 'softwareSign',
-  props: ['plainPsbt', 'transctionData'],
+  props: ['plainPsbt'],
   data: () => ({
     dialog: false,
     signedPSBT: ''

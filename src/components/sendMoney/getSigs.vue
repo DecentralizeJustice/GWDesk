@@ -29,7 +29,7 @@
                   <softwareSign
                   v-on:addsigned='addsigned'
                   v-bind:plainPsbt="plainPsbt"
-                  v-bind:transctionData='transctionData'/>
+                  />
                 </v-card>
             </v-col>
             </v-row>
@@ -50,7 +50,7 @@ import softwareSign from '@/components/sendMoney/sign/software.vue'
 import { vpubObject, xfp, m } from '@/assets/constants/userConstantFiles.js'
 import { createPSBT, combineCompletedTrans } from '@/assets/util/psbtUtil.js'
 import { broadcastTrans } from '@/assets/util/networkUtil.js'
-import { formTransactionData } from '@/assets/util/transactionUtil/transactionUtil.js'
+import { formTransactionData, getChangeCorrectAddress } from '@/assets/util/transactionUtil/transactionUtil.js'
 const R = require('ramda')
 export default {
   props: ['transaction'],
@@ -64,16 +64,15 @@ export default {
     transctionData: {}
   }),
   computed: {
-    addressArray: function () {
-      return this.transaction.addressArray
-    },
-    addressAmountArray: function () {
-      return this.transaction.addressArrayAmount
-    },
+    // addressArray: function () {
+    //   return this.transaction.addressArray
+    // },
+    // addressAmountArray: function () {
+    //   return this.transaction.addressArrayAmount
+    // },
     allsigned: function () {
       const signedPSBTs = this.signedPSBTs
       const signtaures = Object.keys(signedPSBTs).length
-      console.log(signtaures)
       if (signtaures >= m) {
         return true
       } else {
@@ -103,7 +102,15 @@ export default {
     }
   },
   async created () {
-    const transctionData = await formTransactionData(this.transaction)
+    const changeAmountToAdd = this.transaction.change
+    const clone = R.clone(this.transaction)
+    if (!changeAmountToAdd.isZero()) {
+      const changeAddress = await
+      getChangeCorrectAddress(this.transaction.transInputs)
+      clone.addressArray.push(changeAddress)
+      clone.addressArrayAmount.push(changeAmountToAdd)
+    }
+    const transctionData = await formTransactionData(clone)
     const psbt = await createPSBT(transctionData, vpubObject, xfp)
     this.plainPsbt = psbt
     this.transctionData = transctionData

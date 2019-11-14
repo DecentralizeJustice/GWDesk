@@ -57,21 +57,23 @@ async function getReceiveIndex (index, transactions, vpubArray, m) {
     return index
   }
 }
-async function getChangeAddress (index, transactions, vpubArray, m, wouldBeChnage) {
+
+async function getChangeAddress (index, transactions, vpubArray, m, wouldBeChanage) {
   const address = await genAddress(index, vpubArray, m)
   const sentPresent = await checkSentTrans(address, transactions)
-  const noSentAndIsChange = sentPresent && wouldBeChnage
+  const noSentAndIsChange = !sentPresent && wouldBeChanage
   if (sentPresent) {
     const nextIndex = index + 1
-    return getReceiveAddress(nextIndex, transactions, vpubArray, m, wouldBeChnage)
+    return getChangeAddress(nextIndex, transactions, vpubArray, m, wouldBeChanage)
   } else if (noSentAndIsChange) {
     return address
   } else {
     const flipToChange = true
     const nextIndex = index + 1
-    return getReceiveAddress(nextIndex, transactions, vpubArray, m, flipToChange)
+    return getChangeAddress(nextIndex, transactions, vpubArray, m, flipToChange)
   }
 }
+
 async function getReceivedCoins (address, transactions) {
   const isRecieve = trans => trans.category === 'receive'
   const involvesAddress = trans => trans.address === address

@@ -121,7 +121,8 @@
 </template>
 
 <script>
-import { getTrasactionData, noChange } from '@/assets/util/transactionUtil/transactionUtil.js'
+import { getTrasactionData, noChange } from
+  '@/assets/util/transactionUtil/transactionUtil.js'
 import { getFeeEstimate, getUTXO } from '@/assets/util/nodeUtil.js'
 import { walletName } from '@/assets/constants/genConstants.js'
 const BigNumber = require('bignumber.js')
@@ -130,7 +131,7 @@ export default {
   props: ['transaction'],
   data: function () {
     return {
-      speed: 2,
+      speed: 0,
       tooHigh: false,
       amountArray: [],
       highFee: new BigNumber('0'),
@@ -221,6 +222,11 @@ export default {
       }
     },
     transactionAmountInfo: function () {
+      if (this.transactionInfo === 'undefined') {
+        return {
+          addressArray: this.addressArray
+        }
+      }
       const allUsed = this.allAddressesUsed
       const notTooHigh = !this.tooHigh
       const allValidAmounts = this.allValidAmounts
@@ -256,7 +262,7 @@ export default {
     }
   },
   methods: {
-    getTransInfo: async function functionName () {
+    getTransInfo: async function () {
       try {
         const coins = await getUTXO(walletName)
         const transaction = await getTrasactionData(this.addressArray,
@@ -264,8 +270,11 @@ export default {
         this.transactionInfo = transaction
         this.tooHigh = false
       } catch (error) {
-        console.log(error)
-        this.tooHigh = true
+        if (error.message === 'Not Enough Funds') {
+          this.tooHigh = true
+        } else {
+          throw error
+        }
       }
     },
     emitNewTransaction: function (trans) {
