@@ -264,6 +264,7 @@ export default {
         this.transactionInfo = transaction
         this.tooHigh = false
       } catch (error) {
+        console.log(error)
         this.tooHigh = true
       }
     },

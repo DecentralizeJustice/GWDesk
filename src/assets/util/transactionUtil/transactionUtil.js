@@ -61,94 +61,89 @@ noChange (desiredFeeRate, addressArray, addressArrayAmounts, utxo) {
 function getTrasactionData (addressArray, addressArrayAmount, utxo,
   targetFeeRatio) {
   const musigTotalNumber = Object.keys(vpubObject).length
-  const sortByFirstHeight = R.sortBy(R.prop('height'))
-  const fifoCoins = sortByFirstHeight(utxo)
+  const fifoCoins = R.sortBy(R.prop('height'))(utxo)
   const totalOutputsAmountNeeded = BigNumber.sum.apply(null, addressArrayAmount)
-
-  let inputsArray = []
-  let currentInputSum = new BigNumber(0)
-  let postOutputFifoUtxo = fifoCoins
 
   const totalOutputsPossible = checkIfEnoughFunds(fifoCoins,
     totalOutputsAmountNeeded)
-  if (!totalOutputsPossible) {
-    throw new Error('Not Enough Funds')
-  }
 
-  while (currentInputSum.isLessThan(totalOutputsAmountNeeded)) {
-    inputsArray = R.append(postOutputFifoUtxo[0], inputsArray)
-    currentInputSum =
-      currentInputSum.plus(new BigNumber(postOutputFifoUtxo[0].value))
-    postOutputFifoUtxo = R.drop(1, postOutputFifoUtxo)
-  }
+  if (!totalOutputsPossible) { throw new Error('Not Enough Funds') }
+
+  const [currentInputSumPostOutputs, inputsArrayPostOutputs, utxoPostOutputs] =
+    addNeededUtxo(new BigNumber(0), totalOutputsAmountNeeded, fifoCoins, [])
+
   const noChangeFeeAmountSatoshi =
     getFeeAmountSatoshi(addressArray, targetFeeRatio,
-      inputsArray.length, musigTotalNumber)
+      inputsArrayPostOutputs.length, musigTotalNumber)
+
   const minFees = noChangeFeeAmountSatoshi
   const totalOutputsPossibleWithFees =
-    checkIfEnoughFunds(postOutputFifoUtxo, minFees)
-  const changeExist = currentInputSum.isGreaterThan(minFees)
+    checkIfEnoughFunds(utxoPostOutputs, minFees)
+  const changeExist = currentInputSumPostOutputs.isGreaterThan(minFees)
+
   if (!totalOutputsPossibleWithFees && !changeExist) {
     throw new Error('Not Enough Funds')
   }
-  while (currentInputSum.isLessThan(minFees.plus(totalOutputsAmountNeeded))) {
-    if (R.isEmpty(postOutputFifoUtxo)) {
-      throw new Error('Not Enough Funds')
-    }
-    inputsArray = R.append(postOutputFifoUtxo[0], inputsArray)
-    currentInputSum =
-      currentInputSum.plus(new BigNumber(postOutputFifoUtxo[0].value))
-    postOutputFifoUtxo = R.drop(1, postOutputFifoUtxo)
-  }
-  const change = currentInputSum.minus(minFees.plus(totalOutputsAmountNeeded))
+  const feeAndUTXONeeded = minFees.plus(totalOutputsAmountNeeded)
+
+  const [inputSumPostFee, inputsArrayPostFee, utxoPostFee] =
+  addNeededUtxo(currentInputSumPostOutputs, feeAndUTXONeeded, utxoPostOutputs,
+    inputsArrayPostOutputs)
+
+  const change = inputSumPostFee.minus(feeAndUTXONeeded)
   const changeAddressArray = creatChangeArray(addressArray)
   const changeFeeAmountSatoshi =
     getFeeAmountSatoshi(changeAddressArray, targetFeeRatio,
-      inputsArray.length, musigTotalNumber)
+      inputsArrayPostFee.length, musigTotalNumber)
   const costToKeepChange =
     changeFeeAmountSatoshi.minus(noChangeFeeAmountSatoshi)
+
   if (costToKeepChange.isGreaterThan(change)) {
     const changeAmount = new BigNumber(0)
-    const inputs = inputsArray
+    const inputs = inputsArrayPostFee
     const feeAmount = change.plus(noChangeFeeAmountSatoshi)
     const transactionSize =
       getTransactionSize(addressArray, m, musigTotalNumber,
-        inputsArray.length)
-    const remainingUtxo = postOutputFifoUtxo
+        inputsArrayPostFee.length)
+    const remainingUtxo = utxoPostFee
     const proposedTransaction =
-      {
-        changeAmount: changeAmount,
-        inputs: inputs,
-        feeAmount: feeAmount,
-        transactionSize: transactionSize,
-        remainingUtxo: remainingUtxo
-      }
+      { changeAmount, inputs, feeAmount, transactionSize, remainingUtxo }
     return proposedTransaction
   } else {
     const changeAmount = change
-    const inputs = inputsArray
+    const inputs = inputsArrayPostFee
     const feeAmount = changeFeeAmountSatoshi
     const transactionSize =
       getTransactionSize(changeAddressArray, m, musigTotalNumber,
-        inputsArray.length)
-    const remainingUtxo = postOutputFifoUtxo
+        inputsArrayPostFee.length)
+    const remainingUtxo = utxoPostFee
     const proposedTransaction =
-      {
-        changeAmount: changeAmount,
-        inputs: inputs,
-        feeAmount: feeAmount,
-        transactionSize: transactionSize,
-        remainingUtxo: remainingUtxo
-      }
+      { changeAmount, inputs, feeAmount, transactionSize, remainingUtxo }
     return proposedTransaction
   }
 }
+
+function addNeededUtxo (currentInputSum, totalOutputsAmountNeeded, fifoUtxo,
+  inputsArray) {
+  while (currentInputSum.isLessThan(totalOutputsAmountNeeded)) {
+    if (R.isEmpty(fifoUtxo)) {
+      throw new Error('Not Enough Funds')
+    }
+    inputsArray = R.append(fifoUtxo[0], inputsArray)
+    currentInputSum =
+        currentInputSum.plus(new BigNumber(fifoUtxo[0].value))
+    fifoUtxo = R.drop(1, fifoUtxo)
+  }
+  return [currentInputSum, inputsArray, fifoUtxo]
+}
+
 function creatChangeArray (addressArray) {
   const changeArray =
   R.append('tb1qfhswexghg04qj74dw6rl53ejtlvwfycsveqq0fegfvcz5ssk3jdsp32rme',
     addressArray)
   return changeArray
 }
+
 async function formTransactionData (rawTranactionData) {
   const outputArray = getOutputArray(rawTranactionData)
   let updatedTransactionData = await addInputAdressIndex(rawTranactionData)
@@ -212,9 +207,10 @@ async function createPayment (_type, myKeys, network) {
 async function addInputAdressIndex (rawTranactionData) {
   const updatedTransactionData = R.clone(rawTranactionData)
   const inputs = rawTranactionData.transInputs
-  for (var i = 0; i < inputs.length; i++) {
-    const addressIndex = await findAddressIndex(0, inputs[i].address)
-    updatedTransactionData.transInputs[i].addressIndex = addressIndex
+  console.log('ran new for')
+  for (const index in inputs) {
+    const addressIndex = await findAddressIndex(0, inputs[index].address)
+    updatedTransactionData.transInputs[index].addressIndex = addressIndex
   }
   return updatedTransactionData
 }
