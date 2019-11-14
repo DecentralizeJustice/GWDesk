@@ -83,8 +83,6 @@ export default {
     updateTransaction (updateValue) {
       this.transaction = updateValue
     }
-  },
-  created: function () {
   }
 }
 </script>

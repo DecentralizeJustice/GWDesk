@@ -71,7 +71,7 @@ export default {
   methods: {
     addToArray (address) {
       const newAddressArray = this.addressArray
-      newAddressArray.push('mkHS9ne12qx9pS9VojpwU5xtRd4T7X7ZUt')
+      newAddressArray.push('2NGZrVvZG92qGYqzTLjCAewvPZ7JE8S8VxE')
       this.proposedAddress = ''
       this.$emit('updateTransaction', { addressArray: newAddressArray })
     },

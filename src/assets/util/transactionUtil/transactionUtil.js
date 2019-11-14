@@ -14,7 +14,8 @@ function decodeRawTransactionBitcoinJS (rawtx) {
   return tx
 }
 
-function getTransactionSize (addressArray, musigNeeded, musigTotal, inputNumber) {
+function
+getTransactionSize (addressArray, musigNeeded, musigTotal, inputNumber) {
   const inputInfo = {}
   const inputString = 'MULTISIG-P2WSH'.concat(`:${musigNeeded}-${musigTotal}`)
   inputInfo[inputString] = inputNumber
@@ -38,11 +39,12 @@ async function getScriptPubkey (txId, vout, walletId) {
   const sig = scriptSigHex.vout[vout].scriptPubKey.hex
   return sig
 }
-// only works with one address, need to distribute to addres array
-async function noChange (desiredFeeRate, addressArray, addressArrayAmounts, utxo) {
+
+async function
+noChange (desiredFeeRate, addressArray, addressArrayAmounts, utxo) {
   const musigTotalNumber = Object.keys(vpubObject).length
-  const feeAmountSatoshi = getFeeAmountSatoshi(addressArray, desiredFeeRate, utxo.length,
-    musigTotalNumber)
+  const feeAmountSatoshi = getFeeAmountSatoshi(addressArray,
+    desiredFeeRate, utxo.length, musigTotalNumber)
   const getValue = x => new BigNumber(x.value)
   const utxoArray = R.map(getValue, utxo)
   const utxoSum = BigNumber.sum.apply(null, utxoArray)
@@ -56,7 +58,8 @@ async function noChange (desiredFeeRate, addressArray, addressArrayAmounts, utxo
   return newAmountArray
 }
 
-function getTrasactionData (addressArray, addressArrayAmount, utxo, targetFeeRatio) {
+function getTrasactionData (addressArray, addressArrayAmount, utxo,
+  targetFeeRatio) {
   const musigTotalNumber = Object.keys(vpubObject).length
   const sortByFirstHeight = R.sortBy(R.prop('height'))
   const fifoCoins = sortByFirstHeight(utxo)
@@ -66,23 +69,26 @@ function getTrasactionData (addressArray, addressArrayAmount, utxo, targetFeeRat
   let currentInputSum = new BigNumber(0)
   let postOutputFifoUtxo = fifoCoins
 
-  const totalOutputsPossible = checkIfEnoughFunds(fifoCoins, totalOutputsAmountNeeded)
+  const totalOutputsPossible = checkIfEnoughFunds(fifoCoins,
+    totalOutputsAmountNeeded)
   if (!totalOutputsPossible) {
     throw new Error('Not Enough Funds')
   }
 
   while (currentInputSum.isLessThan(totalOutputsAmountNeeded)) {
     inputsArray = R.append(postOutputFifoUtxo[0], inputsArray)
-    currentInputSum = currentInputSum.plus(new BigNumber(postOutputFifoUtxo[0].value))
+    currentInputSum =
+      currentInputSum.plus(new BigNumber(postOutputFifoUtxo[0].value))
     postOutputFifoUtxo = R.drop(1, postOutputFifoUtxo)
   }
   const noChangeFeeAmountSatoshi =
     getFeeAmountSatoshi(addressArray, targetFeeRatio,
       inputsArray.length, musigTotalNumber)
   const minFees = noChangeFeeAmountSatoshi
-  const totalOutputsPossible0 = checkIfEnoughFunds(postOutputFifoUtxo, minFees)
+  const totalOutputsPossibleWithFees =
+    checkIfEnoughFunds(postOutputFifoUtxo, minFees)
   const changeExist = currentInputSum.isGreaterThan(minFees)
-  if (!totalOutputsPossible0 && !changeExist) {
+  if (!totalOutputsPossibleWithFees && !changeExist) {
     throw new Error('Not Enough Funds')
   }
   while (currentInputSum.isLessThan(minFees.plus(totalOutputsAmountNeeded))) {
@@ -90,38 +96,59 @@ function getTrasactionData (addressArray, addressArrayAmount, utxo, targetFeeRat
       throw new Error('Not Enough Funds')
     }
     inputsArray = R.append(postOutputFifoUtxo[0], inputsArray)
-    currentInputSum = currentInputSum.plus(new BigNumber(postOutputFifoUtxo[0].value))
+    currentInputSum =
+      currentInputSum.plus(new BigNumber(postOutputFifoUtxo[0].value))
     postOutputFifoUtxo = R.drop(1, postOutputFifoUtxo)
   }
   const change = currentInputSum.minus(minFees.plus(totalOutputsAmountNeeded))
-  const changeAddressArray = R.append('tb1qfhswexghg04qj74dw6rl53ejtlvwfycsveqq0fegfvcz5ssk3jdsp32rme',
-    addressArray)
+  const changeAddressArray = creatChangeArray(addressArray)
   const changeFeeAmountSatoshi =
     getFeeAmountSatoshi(changeAddressArray, targetFeeRatio,
       inputsArray.length, musigTotalNumber)
-  const costToKeepChange = changeFeeAmountSatoshi.minus(noChangeFeeAmountSatoshi)
+  const costToKeepChange =
+    changeFeeAmountSatoshi.minus(noChangeFeeAmountSatoshi)
   if (costToKeepChange.isGreaterThan(change)) {
-    const proposedTransaction = {}
-    proposedTransaction.inputs = inputsArray
-    proposedTransaction.feeAmount = change.plus(noChangeFeeAmountSatoshi)
-    proposedTransaction.transactionSize = getTransactionSize(addressArray, m, musigTotalNumber,
-      inputsArray.length)
-    proposedTransaction.changeAmount = new BigNumber(0)
-    proposedTransaction.remainingUtxo = postOutputFifoUtxo
+    const changeAmount = new BigNumber(0)
+    const inputs = inputsArray
+    const feeAmount = change.plus(noChangeFeeAmountSatoshi)
+    const transactionSize =
+      getTransactionSize(addressArray, m, musigTotalNumber,
+        inputsArray.length)
+    const remainingUtxo = postOutputFifoUtxo
+    const proposedTransaction =
+      {
+        changeAmount: changeAmount,
+        inputs: inputs,
+        feeAmount: feeAmount,
+        transactionSize: transactionSize,
+        remainingUtxo: remainingUtxo
+      }
     return proposedTransaction
   } else {
-    // change
-    const proposedTransaction = {}
-    proposedTransaction.inputs = inputsArray
-    proposedTransaction.feeAmount = changeFeeAmountSatoshi
-    proposedTransaction.transactionSize = getTransactionSize(changeAddressArray, m, musigTotalNumber,
-      inputsArray.length)
-    proposedTransaction.changeAmount = change
-    proposedTransaction.remainingUtxo = postOutputFifoUtxo
+    const changeAmount = change
+    const inputs = inputsArray
+    const feeAmount = changeFeeAmountSatoshi
+    const transactionSize =
+      getTransactionSize(changeAddressArray, m, musigTotalNumber,
+        inputsArray.length)
+    const remainingUtxo = postOutputFifoUtxo
+    const proposedTransaction =
+      {
+        changeAmount: changeAmount,
+        inputs: inputs,
+        feeAmount: feeAmount,
+        transactionSize: transactionSize,
+        remainingUtxo: remainingUtxo
+      }
     return proposedTransaction
   }
 }
-
+function creatChangeArray (addressArray) {
+  const changeArray =
+  R.append('tb1qfhswexghg04qj74dw6rl53ejtlvwfycsveqq0fegfvcz5ssk3jdsp32rme',
+    addressArray)
+  return changeArray
+}
 async function formTransactionData (rawTranactionData) {
   const outputArray = getOutputArray(rawTranactionData)
   let updatedTransactionData = await addInputAdressIndex(rawTranactionData)
@@ -145,7 +172,8 @@ async function getUnlockingScript (index) {
   const pubkeyArray = await getPubkeyArray(index, vpubArray)
   const n = pubkeyArray.length
   const network = testnet
-  const paymentInfo = await createPayment(`p2wsh-p2ms(${m} of ${n})`, pubkeyArray, network)
+  const paymentInfo = await createPayment(`p2wsh-p2ms(${m} of ${n})`,
+    pubkeyArray, network)
   const witness = paymentInfo.payment.redeem.output
   return witness
 }
@@ -209,7 +237,10 @@ function getOutputArray (transactioninfo) {
   const amountArray = transactioninfo.addressArrayAmount
   const outputArray = []
   for (var i = 0; i < addressArray.length; i++) {
-    const infoObject = { address: addressArray[i], value: amountArray[i].toFixed() }
+    const infoObject =
+      {
+        address: addressArray[i], value: amountArray[i].toFixed()
+      }
     outputArray.push(infoObject)
   }
   return outputArray
@@ -230,7 +261,8 @@ function checkIfEnoughFunds (funds, desiredAmount) {
 
 function getFeeAmountSatoshi (addressArray, feePerB, inputNumber,
   musigTotalNumber) {
-  const transSizeVBtyes = getTransactionSize(addressArray, m, musigTotalNumber, inputNumber)
+  const transSizeVBtyes = getTransactionSize(addressArray, m,
+    musigTotalNumber, inputNumber)
   const correctValue = transSizeVBtyes.multipliedBy(feePerB).dp(0)
   return correctValue
 }

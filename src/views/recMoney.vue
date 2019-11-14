@@ -1,42 +1,43 @@
 <template>
-    <v-layout align-center justify-center row fill-height>
-      <v-flex xs8>
-          <v-card >
-            <v-card-title primary-title class="justify-center">
-              <div>
-                <h3>Receive Bitcoin</h3>
-              </div>
-            </v-card-title>
-            <v-card-text class="text-center">
-              <div class="text--primary subtitle-1">
-                Address: <br>
-                {{receiveAddress}}<br><br>
-                Current Balance:<br>
-                {{balance}}
-              </div>
-              <div class="text--primary title mt-1"
-                v-if="transactions.length===0">
-                No Transactions
-              </div>
-            </v-card-text>
+  <v-layout align-center justify-center row fill-height>
+    <v-flex xs8>
+      <v-card >
+        <v-card-title primary-title class="justify-center">
+          <div>
+            <h3>Receive Bitcoin</h3>
+          </div>
+        </v-card-title>
+        <v-card-text class="text-center">
+          <div class="text--primary subtitle-1">
+            Address: <br>
+            {{receiveAddress}}<br><br>
+            Current Balance:<br>
+            {{balance}}
+          </div>
+          <div class="text--primary title mt-1"
+            v-if="transactions.length===0">
+            No Transactions
+          </div>
+        </v-card-text>
 
-            <mainCard
-              v-if="transactions.length!==0"
-              v-bind:transactions="transactions"
-              style=" max-height: 35vh;overflow: scroll;"
-              />
-            <v-divider></v-divider>
-            <v-card-actions>
-              <v-btn
-                color="orange"
-                text
-              >
-                <v-icon>mdi-help</v-icon>
-              </v-btn>
-            </v-card-actions>
-          </v-card>
+        <mainCard
+          v-if="transactions.length!==0"
+          v-bind:transactions="transactions"
+          style=" max-height: 35vh;overflow: scroll;"
+          />
+
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-btn
+            color="orange"
+            text
+          >
+            <v-icon>mdi-help</v-icon>
+          </v-btn>
+        </v-card-actions>
+      </v-card>
     </v-flex>
-    </v-layout>
+  </v-layout>
 </template>
 
 <script>

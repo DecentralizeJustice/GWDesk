@@ -79,7 +79,7 @@
             {{changeBTC}} BTC
 
           </v-card-text>
-          <v-btn color="red lighten-1" class="mb-2" @click="noChange">
+          <v-btn v-if="addressArray.length === 1" color="red lighten-1" class="mb-2" @click="noChange">
             No Change
           </v-btn>
           </v-card>
@@ -98,15 +98,16 @@
           <v-btn-toggle
             v-model="speed"
             class="mb-2"
+            mandatory
           >
             <v-btn>
-              <span class="hidden-sm-and-down">Slow</span>
+              <span>Slow</span>
             </v-btn>
             <v-btn>
-              <span class="hidden-sm-and-down">Meduim</span>
+              <span>Meduim</span>
             </v-btn>
-            <v-btn>
-              <span class="hidden-sm-and-down">Fast</span>
+            <v-btn color='green'>
+              <span>Fast</span>
             </v-btn>
           </v-btn-toggle>
           </v-card>
@@ -154,34 +155,34 @@ export default {
         case 2:
           return '~10-20 minutes'
       }
-      return 'Testing'
+      return 'Selection Error'
     },
     addressArray: function () {
       return this.transaction.addressArray
     },
     changeSatoshi: function () {
-      if (this.transactionInfo !== 'undefined') {
-        const utxoArray = this.transactionInfo.remainingUtxo
-        if (R.isEmpty(utxoArray)) {
-          return this.transactionInfo.changeAmount
-        }
-        const getValue = x => new BigNumber(x.value)
-        const mapValue = R.map(getValue, utxoArray)
-        const utxoSum = BigNumber.sum.apply(null, mapValue)
-        const change = utxoSum.plus(this.transactionInfo.changeAmount)
-        return change
+      if (this.transactionInfo === 'undefined') {
+        return new BigNumber(0)
       }
-      return new BigNumber(0)
+      const utxoArray = this.transactionInfo.remainingUtxo
+      if (R.isEmpty(utxoArray)) {
+        return this.transactionInfo.changeAmount
+      }
+      const getValue = x => new BigNumber(x.value)
+      const mapValue = R.map(getValue, utxoArray)
+      const utxoSum = BigNumber.sum.apply(null, mapValue)
+      const change = utxoSum.plus(this.transactionInfo.changeAmount)
+      return change
     },
     changeBTC: function () {
       return this.changeSatoshi.shiftedBy(-8)
     },
     feeAmountSatoshi: function () {
-      if (this.transactionInfo !== 'undefined') {
-        const fee = this.transactionInfo.feeAmount
-        return fee
+      if (this.transactionInfo === 'undefined') {
+        return new BigNumber(0)
       }
-      return new BigNumber(0)
+      const fee = this.transactionInfo.feeAmount
+      return fee
     },
     minFeeRatio: function () {
       const choice = this.speed
@@ -203,7 +204,8 @@ export default {
     allAddressesUsed: function () {
       const notZero = x => !x.isEqualTo(new BigNumber(0))
       const allUsed = R.all(notZero)(this.addressArraySat)
-      if (allUsed) {
+      const allValuesExist = this.addressArraySat.length === this.addressArray.length
+      if (allUsed && allValuesExist) {
         return true
       } else {
         return false
@@ -278,12 +280,19 @@ export default {
       this.midFee = new BigNumber(feeEstimates.medium_fee_per_kb).shiftedBy(-3)
       this.highFee = new BigNumber(feeEstimates.high_fee_per_kb).shiftedBy(-3)
       this.lowFee = new BigNumber(feeEstimates.low_fee_per_kb).shiftedBy(-3)
+    },
+    fillinAmounts: async function () {
+      for (var i = 0; i < this.transaction.addressArray.length; i++) {
+        this.amountArray.push('.00000001')
+      }
+      return true
     }
   },
   created: async function () {
     this.$emit('updateTransaction', { addressArray: this.transaction.addressArray })
     await this.setupFeeInfo()
     await this.getTransInfo
+    await this.fillinAmounts()
   }
 }
 </script>

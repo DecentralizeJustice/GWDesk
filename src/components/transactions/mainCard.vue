@@ -19,6 +19,7 @@
             <thead>
               <tr>
                 <th class="text-left">Input Addresses</th>
+                <th class="text-left" v-if="item.category==='send'">Value</th>
               </tr>
             </thead>
             <tbody>
