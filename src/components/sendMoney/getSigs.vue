@@ -1,6 +1,12 @@
 <template>
       <v-flex xs12>
-        <v-card-text>
+        <v-progress-circular
+        indeterminate
+        color="primary"
+        v-if='loading'
+        :size="150"
+        />
+        <v-card-text v-if='!loading'>
           <h1 class="display-1">Get Signatures</h1>
           <v-row
             no-gutters
@@ -61,7 +67,8 @@ export default {
   data: () => ({
     plainPsbt: '',
     signedPSBTs: {},
-    transctionData: {}
+    transctionData: {},
+    loading: true
   }),
   computed: {
     allsigned: function () {
@@ -95,6 +102,7 @@ export default {
     const psbt = await createPSBT(transctionData, vpubObject, xfp)
     this.plainPsbt = psbt
     this.transctionData = transctionData
+    this.loading = false
     console.log('psbt created')
   }
 }

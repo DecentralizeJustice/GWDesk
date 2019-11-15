@@ -1,7 +1,14 @@
 <template>
-
+  <div>
+  <v-progress-circular
+  indeterminate
+  color="primary"
+  v-if='loading'
+  :size="150"
+  />
   <v-col
   :cols="12"
+  v-if='!loading'
   >
     <v-row
       justify="center"
@@ -122,7 +129,7 @@
       </v-col>
     </v-row>
   </v-col>
-
+</div>
 </template>
 
 <script>
@@ -137,6 +144,7 @@ export default {
   data: function () {
     return {
       speed: 0,
+      loading: true,
       tooHigh: false,
       amountArray: [],
       highFee: new BigNumber('0'),
@@ -331,6 +339,7 @@ export default {
     await this.setupFeeInfo()
     await this.getTransInfo
     await this.fillinAmounts()
+    this.loading = false
   }
 }
 </script>

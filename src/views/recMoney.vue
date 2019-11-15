@@ -1,5 +1,6 @@
 <template>
   <v-layout align-center justify-center row fill-height>
+
     <v-flex xs8>
       <v-card >
         <v-card-title primary-title class="justify-center">
@@ -7,7 +8,15 @@
             <h3>Receive Bitcoin</h3>
           </div>
         </v-card-title>
-        <v-card-text class="text-center">
+        <v-progress-circular
+        indeterminate
+        class="mt-5 mb-5"
+        color="primary"
+        v-if='loading'
+        :size="150"
+        style="left: 50%;transform: translate(-50%, 0%);"
+        />
+        <v-card-text class="text-center" v-if='!loading'>
           <div class="text--primary subtitle-1">
             Address: <br>
             {{receiveAddress}}<br><br>
@@ -21,7 +30,7 @@
         </v-card-text>
 
         <mainCard
-          v-if="transactions.length!==0"
+          v-if="transactions.length!==0 && !loading"
           v-bind:transactions="transactions"
           style=" max-height: 35vh;overflow: scroll;"
           />
@@ -54,7 +63,8 @@ export default {
   data: () => ({
     receiveAddress: '',
     balance: '0',
-    transactions: []
+    transactions: [],
+    loading: true
   }),
   methods: {
   },
@@ -67,6 +77,7 @@ export default {
     this.receiveAddress = address
     this.balance = balance.shiftedBy(-8).toString()
     this.transactions = recToAddress
+    this.loading = false
   }
 }
 </script>

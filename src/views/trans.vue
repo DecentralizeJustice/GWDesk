@@ -1,14 +1,22 @@
 <template>
   <v-layout align-center justify-center row fill-height>
     <v-flex xs11>
-      <v-card >
+      <v-card class="text-xs-center">
         <v-card-title class="headline justify-center">
           Transactions
         </v-card-title>
         <v-divider></v-divider>
 
         <mainCard v-bind:transactions="transactions"
-          style="max-height: 75vh;overflow: scroll;"/>
+          style="max-height: 75vh;overflow: scroll;" v-if='!loading'/>
+          <v-progress-circular
+          indeterminate
+          class="mt-5 mb-5"
+          color="primary"
+          v-if='loading'
+          :size="150"
+          style="left: 50%;transform: translate(-50%, 0%);"
+          />
         <v-divider></v-divider>
         <v-card-actions>
           <v-btn
@@ -35,7 +43,8 @@ export default {
     mainCard
   },
   data: () => ({
-    transactions: []
+    transactions: [],
+    loading: true
   }),
   methods: {
     async getInputandOutputInfo (transactions) {
@@ -76,6 +85,7 @@ export default {
     const sortedTransactions = R.reverse(sortByTime(results))
     const updatedTransactions = await this.getInputandOutputInfo(sortedTransactions)
     this.transactions = updatedTransactions
+    this.loading = false
   }
 }
 </script>
