@@ -5,7 +5,7 @@
   >
     <v-row
       justify="center"
-      v-if="tooHigh"
+      v-if='tooHigh'
     >
       <v-col
       :cols="6"
@@ -13,13 +13,14 @@
       <v-alert type="error" >
         Not Enough Funds
       </v-alert>
+
       </v-col>
     </v-row>
 
-    <v-row class="mx-auto">
+    <v-row class="mx-auto" dense no-gutters>
       <v-col align-content='center' cols='12'>
         <v-card-text>
-          <h1 class="title">Pick Amounts:</h1>
+          <h1 class="title">Pick Amounts & Fees:</h1>
         </v-card-text>
       </v-col>
       <v-col align-content='center' cols='9'>
@@ -33,7 +34,6 @@
         </v-card-text>
       </v-col>
     </v-row>
-
       <v-row align-content='center' cols="12"
         v-for="(item,index) in addressArray" :key="index">
         <v-col
@@ -93,6 +93,8 @@
               {{time}}
               <h1 class="title">Fee Amount:</h1>
               {{feeAmountBTC}} BTC
+              <h1 class="title">Fee Ratio:</h1>
+              {{feeRatio}}%
             </v-card-text>
 
           <v-btn-toggle
@@ -110,6 +112,9 @@
               <span>Fast</span>
             </v-btn>
           </v-btn-toggle>
+          <v-alert v-if='feeRatio>10' :type='feeWarningRatio' >
+            High Fee Amount
+          </v-alert>
           </v-card>
 
         </v-col>
@@ -158,6 +163,18 @@ export default {
       }
       return 'Selection Error'
     },
+    feeWarningRatio: function () {
+      if (this.feeRatio > 30) {
+        return 'error'
+      }
+      if (this.feeRatio > 20) {
+        return 'warning'
+      }
+      if (this.feeRatio > 10) {
+        return 'info'
+      }
+      return 'info'
+    },
     addressArray: function () {
       return this.transaction.addressArray
     },
@@ -177,6 +194,17 @@ export default {
     },
     changeBTC: function () {
       return this.changeSatoshi.shiftedBy(-8)
+    },
+    feeRatio: function () {
+      if (this.transactionInfo === 'undefined') {
+        return 1
+      }
+      const fee = this.transactionInfo.feeAmount
+      const getInputValue = x => new BigNumber(x.value)
+      const mapValue = R.map(getInputValue, this.transactionInfo.inputs)
+      const utxoSum = BigNumber.sum.apply(null, mapValue)
+      const ratio = fee.dividedBy(utxoSum).shiftedBy(2).toFixed(0, 2)
+      return ratio
     },
     feeAmountSatoshi: function () {
       if (this.transactionInfo === 'undefined') {

@@ -127,10 +127,10 @@ async function getChangeCorrectAddress (inputsArray) {
   const vpubArray = R.values(vpubObject)
   const transactions = await getWalletTransactions('default', 'musig')
   const currentRecieveAddress = await getReceiveAddress(0, transactions, vpubArray, m)
-  const proposedChangeAddress = await getChangeAddress(0, transactions, vpubArray, m, false)
   const getAddress = n => n.address === currentRecieveAddress
   const involvesRecieveAddress = R.filter(getAddress, inputsArray).length > 0
   if (involvesRecieveAddress) {
+    const proposedChangeAddress = await getChangeAddress(0, transactions, vpubArray, m, false)
     return proposedChangeAddress
   } else {
     return currentRecieveAddress

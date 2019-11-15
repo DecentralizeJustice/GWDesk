@@ -1,20 +1,32 @@
 <template>
   <v-container class="">
     <v-card
-      class='light-blue darken-4'
+      class='light-blue darken-4 mt-2'
       :elevation="0"
       v-for="(item, index) in transactions" :key="index"
     >
-      <v-card-text class="mt-4 subtitle-1 white--text">
+
+      <v-card-text class=" subtitle-1 white--text">
         <v-icon
         large v-bind:color="getColor(item.category)">
         {{getArrow (item.category)}}</v-icon>
         {{getType(item.category)}}
-        {{item.amount}} BTC <v-divider/>
+        {{item.amount}} BTC
+        <br>
         {{getDate (item.blocktime)}}
+
+        <v-row
+            align="center"
+            justify="center"
+          >
+          <v-btn class="mt-2 ml-2" color="" @click="setPanelState(index)">
+            {{getButtonText(index)}}
+          </v-btn>
+          </v-row>
       </v-card-text>
 
-        <v-simple-table >
+      <div v-if="getPanelState(index)">
+        <v-simple-table light >
           <template v-slot:default>
             <thead>
               <tr>
@@ -31,7 +43,7 @@
           </template>
         </v-simple-table>
 
-        <v-simple-table class="mt-3">
+        <v-simple-table class="mt-3" light>
           <template v-slot:default>
             <thead>
               <tr>
@@ -47,12 +59,13 @@
             </tbody>
           </template>
         </v-simple-table>
-
+      </div>
     </v-card>
   </v-container>
 </template>
 
 <script>
+const R = require('ramda')
 export default {
   props: ['transactions'],
   data: () => ({
@@ -109,6 +122,26 @@ export default {
     getOutputInfo (info) {
       const test = info.bitcoinjsInfo.outs
       return test
+    },
+    setPanelState (index) {
+      const copy = R.clone(this.panel)
+      copy[index] = !copy[index]
+      this.panel = copy
+    },
+    getButtonText (index) {
+      if (this.panel[index]) {
+        return 'Close'
+      }
+      return 'More Info'
+    },
+    getPanelState (index) {
+      const state = this.panel[index]
+      return state
+    }
+  },
+  created: function () {
+    for (var i = 0; i < this.transactions.length; i++) {
+      this.panel.push(false)
     }
   }
 }
