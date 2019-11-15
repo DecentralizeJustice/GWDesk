@@ -3,8 +3,9 @@
     expand-on-hover
     permanent
     app
+    @transitionend="mouseOver"
   >
-    <template v-slot:prepend>
+    <template v-slot:prepend >
       <v-list>
         <v-list-item
           one-line
@@ -29,6 +30,14 @@
         <v-list-item-title>{{title}}</v-list-item-title>
       </v-list-item>
     </v-list>
+    <template v-slot:append >
+        <div class="pa-2" v-show='open'>
+          <v-btn block >Node Synced 100%</v-btn>
+        </div>
+        <v-icon v-show='!open' large color="green darken-2">
+          mdi-satellite-uplink
+        </v-icon>
+      </template>
   </v-navigation-drawer>
 </template>
 
@@ -48,7 +57,8 @@ export default {
     ],
     routerLinks: ['home', 'balance', 'receive', 'send', 'trans', 'lessons',
       'support', 'settings'
-    ]
+    ],
+    open: false
   }),
   methods: {
     navigate (index) {
@@ -57,6 +67,9 @@ export default {
       if (currentRoute !== desiredRoute) {
         this.$router.push(desiredRoute)
       }
+    },
+    mouseOver (event) {
+      this.open = !this.open
     }
   }
 }
