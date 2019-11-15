@@ -158,10 +158,17 @@ function creatChangeArray (addressArray) {
   return changeArray
 }
 
-async function formTransactionData (rawTranactionData) {
-  const outputArray = getOutputArray(rawTranactionData)
-  console.log(outputArray)
-  let updatedTransactionData = await addInputAdressIndex(rawTranactionData)
+async function formTransactionData (tranactionDataOG) {
+  const tranactionData = R.clone(tranactionDataOG)
+  const changeAmountToAdd = tranactionData.change
+  if (!changeAmountToAdd.isZero()) {
+    const changeAddress = await
+    getChangeCorrectAddress(tranactionData.transInputs)
+    tranactionData.addressArray.push(changeAddress)
+    tranactionData.addressArrayAmount.push(changeAmountToAdd)
+  }
+  const outputArray = getOutputArray(tranactionData)
+  let updatedTransactionData = await addInputAdressIndex(tranactionData)
   updatedTransactionData = await addUnlockingScript(updatedTransactionData)
   return { outputData: outputArray, inputData: updatedTransactionData }
 }

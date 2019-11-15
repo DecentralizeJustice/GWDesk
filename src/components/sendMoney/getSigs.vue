@@ -50,7 +50,7 @@ import softwareSign from '@/components/sendMoney/sign/software.vue'
 import { vpubObject, xfp, m } from '@/assets/constants/userConstantFiles.js'
 import { createPSBT, combineCompletedTrans } from '@/assets/util/psbtUtil.js'
 import { broadcastTrans } from '@/assets/util/networkUtil.js'
-import { formTransactionData, getChangeCorrectAddress } from '@/assets/util/transactionUtil/transactionUtil.js'
+import { formTransactionData } from '@/assets/util/transactionUtil/transactionUtil.js'
 const R = require('ramda')
 export default {
   props: ['transaction'],
@@ -64,12 +64,6 @@ export default {
     transctionData: {}
   }),
   computed: {
-    // addressArray: function () {
-    //   return this.transaction.addressArray
-    // },
-    // addressAmountArray: function () {
-    //   return this.transaction.addressArrayAmount
-    // },
     allsigned: function () {
       const signedPSBTs = this.signedPSBTs
       const signtaures = Object.keys(signedPSBTs).length
@@ -87,11 +81,6 @@ export default {
       this.signedPSBTs = newSigned
       console.log('trans added')
     },
-    // getAmount: function (index) {
-    //   const amount = this.addressAmountArray[index]
-    //   const exp = amount.shiftedBy(-8)
-    //   return exp.toFormat(9)
-    // },
     async combine () {
       const trans1 = this.signedPSBTs.web
       const trans2 = this.signedPSBTs.hardware
@@ -102,15 +91,7 @@ export default {
     }
   },
   async created () {
-    const changeAmountToAdd = this.transaction.change
-    const clone = R.clone(this.transaction)
-    if (!changeAmountToAdd.isZero()) {
-      const changeAddress = await
-      getChangeCorrectAddress(this.transaction.transInputs)
-      clone.addressArray.push(changeAddress)
-      clone.addressArrayAmount.push(changeAmountToAdd)
-    }
-    const transctionData = await formTransactionData(clone)
+    const transctionData = await formTransactionData(this.transaction)
     const psbt = await createPSBT(transctionData, vpubObject, xfp)
     this.plainPsbt = psbt
     this.transctionData = transctionData

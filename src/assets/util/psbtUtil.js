@@ -8,15 +8,15 @@ async function createPSBT (transctionData, vpubObject, xfp) {
   let psbt = new bitcoin.Psbt({ network: network })
   const transInputs = transctionData.inputData.transInputs
   const outPuts = transctionData.outputData
-  for (let i = 0; i < transInputs.length; i++) {
-    const transInfo = transInputs[i]
+  for (const index in transInputs) {
+    const transInfo = transInputs[index]
     const inputData = getInputData(transInfo)
     psbt.addInput(inputData)
   }
-  for (let i = 0; i < outPuts.length; i++) {
+  for (const index in outPuts) {
     psbt.addOutput({
-      address: outPuts[i].address,
-      value: Number(outPuts[i].value)
+      address: outPuts[index].address,
+      value: Number(outPuts[index].value)
     })
   }
   psbt = await addbip32DerivationInfo(psbt, vpubObject, xfp, transInputs)
@@ -25,9 +25,9 @@ async function createPSBT (transctionData, vpubObject, xfp) {
 }
 
 async function addbip32DerivationInfo (psbt, vpubObject, xfp, transInputs) {
-  for (var i = 0; i < transInputs.length; i++) {
-    const index = transInputs[i].addressIndex
-    psbt = await addKeyInfo(psbt, vpubObject, xfp, index, i)
+  for (const index in transInputs) {
+    const indexValue = transInputs[index].addressIndex
+    psbt = await addKeyInfo(psbt, vpubObject, xfp, indexValue, index)
   }
   return psbt
 }
