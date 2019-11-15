@@ -30,7 +30,8 @@
                     class='indigo darken-1'
                   >
                   <v-card-text class="subtitle-1 white--text">
-                    Send Amount: <br> {{getAmount(index)}}
+                    Send Amount:
+                    <br> {{getAmount(index)}} BTC
                   </v-card-text>
                   </v-card>
                 </v-col>
@@ -58,8 +59,8 @@ export default {
   methods: {
     getAmount: function (index) {
       const amount = this.addressAmountArray[index]
-      const exp = amount.shiftedBy(-8)
-      return exp.toFormat(9)
+      const exp = amount.dp(0).shiftedBy(-8).toFormat(8)
+      return exp
     }
   },
   created () {

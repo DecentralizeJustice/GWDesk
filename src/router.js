@@ -9,6 +9,7 @@ import Send from './views/sendMoney.vue'
 import Lessons from './views/lessons.vue'
 import Support from './views/support.vue'
 import Settings from './views/settings.vue'
+import Balance from './views/balance.vue'
 
 Vue.use(Router)
 
@@ -21,6 +22,11 @@ const router = new Router({
       path: '/home',
       name: 'home',
       component: Home
+    },
+    {
+      path: '/balance',
+      name: 'balance',
+      component: Balance
     },
     {
       path: '/intro',
