@@ -76,7 +76,7 @@ export default {
       if (type === 'send') {
         return 'Sent'
       } else {
-        return 'Recieved'
+        return 'Received'
       }
     },
     getArrow (type) {

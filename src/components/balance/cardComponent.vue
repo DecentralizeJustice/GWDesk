@@ -24,7 +24,7 @@
         <v-icon
         color="green darken-2">
         mdi-arrow-bottom-right-thick</v-icon>
-        Recieved
+        Received
         {{getBTC(item.value)}} BTC
         <br>
         {{getDate(item.transInfo.time)}}
