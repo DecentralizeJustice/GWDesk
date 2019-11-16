@@ -50,11 +50,12 @@
 </template>
 
 <script>
-import { getWalletTransactions } from '@/assets/util/nodeUtil.js'
+import { getWalletTransactions, getUTXO } from '@/assets/util/nodeUtil.js'
 import { account, walletName } from '@/assets/constants/genConstants.js'
 import { vpubObject, m } from '@/assets/constants/userConstantFiles.js'
-import { getReceiveAddress, getReceivedCoins, getRecTrans } from '@/assets/util/addressUtil.js'
+import { getReceiveAddress } from '@/assets/util/addressUtil.js'
 import mainCard from '@/components/recMoney/mainCard.vue'
+const BigNumber = require('bignumber.js')
 const R = require('ramda')
 export default {
   components: {
@@ -67,17 +68,24 @@ export default {
     loading: true
   }),
   methods: {
+    setup: async function () {
+      const vpubArray = R.values(vpubObject)
+      const transactions = await getWalletTransactions(account, walletName)
+      const address = await getReceiveAddress(0, transactions, vpubArray, m)
+      const walletBalance = await getUTXO(walletName)
+      const includesRec = trans => trans.address === address && trans.category === 'receive'
+      const involvesAddress = trans => trans.address === address
+      const recToAddress = R.filter(involvesAddress, walletBalance)
+      const getValue = x => x.value
+      const valueArray = R.map(getValue, recToAddress)
+      this.receiveAddress = address
+      this.balance = BigNumber.sum.apply(null, valueArray).shiftedBy(-8).toFormat()
+      this.transactions = R.filter(includesRec, transactions) // recToAddress
+      this.loading = false
+    }
   },
-  async mounted () {
-    const vpubArray = R.values(vpubObject)
-    const transactions = await getWalletTransactions(account, walletName)
-    const address = await getReceiveAddress(0, transactions, vpubArray, m)
-    const balance = await getReceivedCoins(address, transactions)
-    const recToAddress = await getRecTrans(address, transactions)
-    this.receiveAddress = address
-    this.balance = balance.shiftedBy(-8).toString()
-    this.transactions = recToAddress
-    this.loading = false
+  async created () {
+    await this.setup()
   }
 }
 </script>

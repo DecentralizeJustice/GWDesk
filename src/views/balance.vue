@@ -12,19 +12,29 @@
                 Pending Transactions
               </v-tab>
               <v-tab>
-                <v-icon left>mdi-lock</v-icon>
+                <v-icon left>mdi-lock-clock</v-icon>
                 Confirming Transactions
+              </v-tab>
+              <v-tab>
+                <v-icon left>mdi-lock</v-icon>
+                Confirmed Transactions
               </v-tab>
               <v-tab-item>
                 <transCard
                   v-bind:info="pendingTransInfo"
                   v-if='!loading'
-                  style="max-height: 50vh;overflow: scroll;min-height:15vh;"
+                  style="max-height: 50vh;overflow: scroll;"
                   />
               </v-tab-item>
               <v-tab-item>
                 <transCard class=""
                   v-bind:info="confirmingTransInfo" v-if='!loading'
+                  style="max-height: 50vh;overflow: scroll;"
+                  />
+              </v-tab-item>
+              <v-tab-item>
+                <transCard class=""
+                  v-bind:info="confirmedTransInfo" v-if='!loading'
                   style="max-height: 50vh;overflow: scroll;"
                   />
               </v-tab-item>
@@ -45,6 +55,13 @@
           >
             <v-icon>mdi-help</v-icon>
           </v-btn>
+          <v-btn
+            color="primary"
+            text
+            @click='setup()'
+          >
+            <v-icon>mdi-refresh</v-icon>
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-flex>
@@ -53,7 +70,7 @@
 
 <script>
 import transCard from '@/components/balance/cardComponent.vue'
-import { getTxByHash, getUTXO } from '@/assets/util/nodeUtil.js'
+import { getTxByHash, getUTXO, getNodeHeight } from '@/assets/util/nodeUtil.js'
 import { decodeRawTransactionBitcoinJS } from '@/assets/util/transactionUtil/transactionUtil.js'
 import { walletName } from '@/assets/constants/genConstants.js'
 import { addressFromScriptPub } from '@/assets/util/addressUtil.js'
@@ -98,6 +115,16 @@ export default {
         }
       }
       return transactions
+    },
+    async setup () {
+      const results = await getUTXO(walletName)
+      const sortByTime = R.sortBy(R.prop('blocktime'))
+      const sortedTransactions = sortByTime(results)
+      const currentBlock = await getNodeHeight()
+      this.currentBlock = currentBlock
+      const updatedTransactions = await this.getInputandOutputInfo(sortedTransactions)
+      this.transactions = updatedTransactions
+      this.loading = false
     }
   },
   computed: {
@@ -107,18 +134,18 @@ export default {
       return { trans: trans }
     },
     confirmingTransInfo: function () {
-      const isConfirming = n => n.height !== -1
-      const trans = R.filter(isConfirming, this.transactions)
+      const isConfirming = n => n.height !== -1 && (this.currentBlock - n.height) <= 1
+      const trans = R.reverse(R.filter(isConfirming, this.transactions))
+      return { trans: trans }
+    },
+    confirmedTransInfo: function () {
+      const isConfirming = n => (this.currentBlock - n.height) > 1
+      const trans = R.reverse(R.filter(isConfirming, this.transactions))
       return { trans: trans }
     }
   },
   async created () {
-    const results = await getUTXO(walletName)
-    const sortByTime = R.sortBy(R.prop('blocktime'))
-    const sortedTransactions = sortByTime(results)
-    const updatedTransactions = await this.getInputandOutputInfo(sortedTransactions)
-    this.transactions = updatedTransactions
-    this.loading = false
+    await this.setup()
   }
 }
 </script>
