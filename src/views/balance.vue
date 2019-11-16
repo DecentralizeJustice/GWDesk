@@ -1,24 +1,44 @@
 <template>
   <v-layout align-center justify-center row fill-height>
     <v-flex xs11>
-      <v-card class="text-xs-center">
+      <v-card class="text-xs-center no-gutters" style="">
         <v-card-title class="headline justify-center">
           Wallet Balance
         </v-card-title>
-        <v-divider></v-divider>
-
-        <mainCard v-bind:transactions="transactions"
-          style="max-height: 75vh;overflow: scroll;" v-if='!loading'/>
-          <v-progress-circular
-          indeterminate
-          class="mt-5 mb-5"
-          color="primary"
-          v-if='loading'
-          :size="150"
-          style="left: 50%;transform: translate(-50%, 0%);"
-          />
-        <v-divider></v-divider>
-        <v-card-actions>
+            <v-divider></v-divider>
+            <v-tabs background-color="">
+              <v-tab>
+                <v-icon left>mdi-timer-sand</v-icon>
+                Pending Transactions
+              </v-tab>
+              <v-tab>
+                <v-icon left>mdi-lock</v-icon>
+                Confirming Transactions
+              </v-tab>
+              <v-tab-item>
+                <transCard
+                  v-bind:info="pendingTransInfo"
+                  v-if='!loading'
+                  style="max-height: 50vh;overflow: scroll;min-height:15vh;"
+                  />
+              </v-tab-item>
+              <v-tab-item>
+                <transCard class=""
+                  v-bind:info="confirmingTransInfo" v-if='!loading'
+                  style="max-height: 50vh;overflow: scroll;"
+                  />
+              </v-tab-item>
+           </v-tabs>
+           <v-progress-circular
+           indeterminate
+           class="mt-5 mb-5"
+           color="primary"
+           v-if='loading'
+           :size="150"
+           style="left: 50%;transform: translate(-50%, 0%);"
+           />
+          <v-divider/>
+          <v-card-actions>
           <v-btn
             color="orange"
             text
@@ -32,15 +52,15 @@
 </template>
 
 <script>
-import mainCard from '@/components/transactions/mainCard.vue'
-import { getWalletTransactions, getTxByHash } from '@/assets/util/nodeUtil.js'
+import transCard from '@/components/balance/cardComponent.vue'
+import { getTxByHash, getUTXO } from '@/assets/util/nodeUtil.js'
 import { decodeRawTransactionBitcoinJS } from '@/assets/util/transactionUtil/transactionUtil.js'
-import { account, walletName } from '@/assets/constants/genConstants.js'
+import { walletName } from '@/assets/constants/genConstants.js'
 import { addressFromScriptPub } from '@/assets/util/addressUtil.js'
 const R = require('ramda')
 export default {
   components: {
-    mainCard
+    transCard
   },
   data: () => ({
     transactions: [],
@@ -49,9 +69,10 @@ export default {
   methods: {
     async getInputandOutputInfo (transactions) {
       for (let i = 0; i < transactions.length; i++) {
-        const txid = transactions[i].txid
+        const txid = transactions[i].hash
         const transInfo = await getTxByHash(txid, 'musig')
         transactions[i].bitcoinjsInfo = decodeRawTransactionBitcoinJS(transInfo.tx)
+        transactions[i].transInfo = transInfo
         if (transactions[i].category === 'send') {
           const ins = transactions[i].bitcoinjsInfo.ins
           for (let j = 0; j < ins.length; j++) {
@@ -79,10 +100,22 @@ export default {
       return transactions
     }
   },
+  computed: {
+    pendingTransInfo: function () {
+      const isPending = n => n.height === -1
+      const trans = R.filter(isPending, this.transactions)
+      return { trans: trans }
+    },
+    confirmingTransInfo: function () {
+      const isConfirming = n => n.height !== -1
+      const trans = R.filter(isConfirming, this.transactions)
+      return { trans: trans }
+    }
+  },
   async created () {
-    const results = await getWalletTransactions(account, walletName)
+    const results = await getUTXO(walletName)
     const sortByTime = R.sortBy(R.prop('blocktime'))
-    const sortedTransactions = R.reverse(sortByTime(results))
+    const sortedTransactions = sortByTime(results)
     const updatedTransactions = await this.getInputandOutputInfo(sortedTransactions)
     this.transactions = updatedTransactions
     this.loading = false

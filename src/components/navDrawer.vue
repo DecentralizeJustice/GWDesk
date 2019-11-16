@@ -31,12 +31,20 @@
       </v-list-item>
     </v-list>
     <template v-slot:append >
-        <div class="pa-2" v-show='open'>
-          <v-btn block >Node Synced 100%</v-btn>
-        </div>
-        <v-icon v-show='!open' large color="green darken-2">
-          mdi-satellite-uplink
-        </v-icon>
+        <v-list
+          nav
+          dense
+        >
+          <v-list-item
+          >
+            <v-list-item-icon >
+              <v-icon large color="green darken-2">
+                mdi-satellite-uplink
+              </v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>Node Synced 100%</v-list-item-title>
+          </v-list-item>
+        </v-list>
       </template>
   </v-navigation-drawer>
 </template>
@@ -49,13 +57,13 @@ export default {
   data: () => ({
     titles: [
       'Home', 'Balance', 'Receive Money', 'Send Money', 'Transactions',
-      'Lessons', 'Support', 'Settings'
+      'Education', 'Support', 'Settings'
     ],
     icons: ['home', 'cash-usd', 'arrow-right-bold',
-      'arrow-left-bold', 'history', 'book-open-outline', 'face-agent',
+      'arrow-left-bold', 'history', 'book-open-page-variant', 'face-agent',
       'settings'
     ],
-    routerLinks: ['home', 'balance', 'receive', 'send', 'trans', 'lessons',
+    routerLinks: ['home', 'balance', 'receive', 'send', 'trans', 'edu',
       'support', 'settings'
     ],
     open: false

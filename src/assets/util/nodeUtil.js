@@ -137,5 +137,5 @@ export {
   createWallet, getNodeSyncInfo, getWalletTransactions, broadcastHex,
   getTxByHash, importAddress, startNode, checkNodeAlive, stopNode, resetChainTo,
   getNodeInfo, listWalletAddresses, checkIfNodeMeaningfull, getFeeEstimate,
-  decodeRawTransaction, getUTXO
+  decodeRawTransaction, getUTXO, getNodeHeight
 }

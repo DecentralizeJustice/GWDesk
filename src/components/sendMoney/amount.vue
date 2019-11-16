@@ -119,7 +119,7 @@
               <span>Fast</span>
             </v-btn>
           </v-btn-toggle>
-          <v-alert v-if='feeRatio>10' :type='feeWarningRatio' >
+          <v-alert tile v-if='feeRatio>10' :type='feeWarningRatio' >
             High Fee Amount
           </v-alert>
           </v-card>

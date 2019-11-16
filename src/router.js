@@ -6,7 +6,7 @@ import Home from './views/home.vue'
 import Transactions from './views/trans.vue'
 import Recieve from './views/recMoney.vue'
 import Send from './views/sendMoney.vue'
-import Lessons from './views/lessons.vue'
+import Education from './views/edu.vue'
 import Support from './views/support.vue'
 import Settings from './views/settings.vue'
 import Balance from './views/balance.vue'
@@ -49,9 +49,9 @@ const router = new Router({
       component: Send
     },
     {
-      path: '/lessons',
-      name: 'lessons',
-      component: Lessons
+      path: '/edu',
+      name: 'edu',
+      component: Education
     },
     {
       path: '/support',
