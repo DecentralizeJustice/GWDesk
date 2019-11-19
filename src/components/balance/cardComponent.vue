@@ -38,6 +38,11 @@
           </v-btn>
           </v-row>
       </v-card-text>
+      <v-card-text class="white--text" v-if="getpanelState(index)">
+        Confirmations: {{item.transInfo.confirmations}}<br>
+        Block Height: {{item.height}}<br>
+        Transaction Id: {{item.hash}}
+      </v-card-text>
 
       <div v-if="getpanelState(index)" class="pb-3">
         <v-simple-table light class="ma-3">

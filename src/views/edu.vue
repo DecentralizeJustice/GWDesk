@@ -1,10 +1,34 @@
 <template>
-    <v-layout align-center justify-center row fill-height>
-      <v-flex xs8>
-          <v-card >
-            <v-card-text>
-              <h2>Lessons</h2>
-            </v-card-text>
+  <v-layout align-center justify-center row fill-height>
+    <v-flex xs11>
+      <v-card class="text-xs-center no-gutters">
+        <v-card-title class="headline justify-center">
+          Education
+        </v-card-title>
+            <v-divider></v-divider>
+            <v-row no-gutters justify-content='space-evenly'>
+               <v-col :key="item.title" v-for="(item) in cats" cols='4'>
+                 <v-card
+                   class="ma-3 primary"
+                 >
+                 <v-card-title class="headline justify-center">
+                   {{item.title}}
+                 </v-card-title>
+                 <v-row >
+                  <v-col cols='2' offset='5'>
+                    <v-icon x-large color="black" class="">mdi-{{item.icon}}</v-icon>
+                  </v-col>
+                </v-row>
+                 <v-card-actions class="justify-center">
+                   <v-btn
+                     color="deep-purple accent-4"
+                   >
+                     Explore
+                   </v-btn>
+                 </v-card-actions>
+                 </v-card>
+               </v-col>
+            </v-row>
             <v-divider></v-divider>
             <v-card-actions>
               <v-btn
@@ -20,52 +44,17 @@
 </template>
 
 <script>
-import { genAddress } from '@/assets/util/addressUtil.js'
-import { vpubObject, xfp } from '@/assets/constants/userConstantFiles.js'
-import { createPSBT } from '@/assets/util/psbtUtil.js'
-import { downloadPSBT, uploadPSBT } from '@/assets/util/electronUtil.js'
-import { updateTrans, getTrans } from '@/assets/util/networkUtil.js'
-
-const R = require('ramda')
 export default {
   data: () => ({
-    receiveAddress: '',
-    index: 4,
-    hardwareSignedHex: '',
-    webSignedTrans: '',
-    m: 2
+    cats: [
+      { title: 'Wallet Security', icon: 'lock' },
+      { title: 'Wallet Operations', icon: 'wallet' },
+      { title: 'Blockchain Mechanics', icon: 'bitcoin' },
+      { title: 'General Information', icon: 'book-information-variant' }
+      // { title: 'Games', icon: 'gamepad-variant' }
+    ]
   }),
   methods: {
-    async updatePSBT () {
-      const PSBT = await createPSBT(this.index, this.m, vpubObject, xfp)
-      const update = await updateTrans(PSBT, this.index)
-      console.log(update)
-    },
-    async getAddress () {
-      const vpubArray = R.values(vpubObject)
-      const receiveAddress = await genAddress(this.index, vpubArray, this.m)
-      this.receiveAddress = receiveAddress
-    },
-    async downloadPSBTTo () {
-      const PSBT = await createPSBT(this.index, this.m, vpubObject, xfp)
-      console.log(PSBT)
-      await downloadPSBT(PSBT)
-    },
-    async getWebSigned () {
-      const signedBlob = await getTrans()
-      this.webSignedTrans = signedBlob.blob.trans
-      console.log(this.webSignedTrans)
-    },
-    async uploadPSBT () {
-      const signedPSBT = await uploadPSBT()
-      this.hardwareSignedHex = signedPSBT
-      console.log(this.hardwareSignedHex)
-    },
-    async combine (trans1, trans2) {
-      // const trans = await combineCompletedTrans(trans1, trans2)
-      // const finalBraodcast = await broadcastTrans(trans)
-      // console.log(finalBraodcast)
-    }
   }
 }
 </script>
