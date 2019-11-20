@@ -71,7 +71,6 @@ function getByteCount (inputs, outputs) {
   totalWeight += 8 * 4
   totalWeight += varIntLength(inputCount) * 4
   totalWeight += varIntLength(outputCount) * 4
-
   return Math.ceil(totalWeight / 4)
 }
 export { getByteCount }

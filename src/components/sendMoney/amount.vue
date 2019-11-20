@@ -118,13 +118,15 @@
               <span>Fast</span>
             </v-btn>
           </v-btn-toggle>
-          <v-col cols="12" justify-self='center' align-self='center'>
+          <v-col cols="12" justify-self='center' align-self='center'
+            style="background-color: #263238;">
           <v-text-field
             :value='feeRatioInput'
             label="Fee sat/byte"
             type='number'
             @input="setCustomFee"
-            :rules="[rules.hasToExist(customFee), rules.test1(customFee)]"
+            :rules="[rules.feePrecise(feeRatioInput), rules.feeExist(feeRatioInput),
+              rules.feeNotZero(feeRatioInput)]"
           ></v-text-field>
         </v-col>
           <v-alert tile v-if='feeRatio>10' :type='feeWarningRatio' >
@@ -161,12 +163,13 @@ export default {
       transactionInfo: 'undefined',
       customFee: 0,
       rules: {
-        required: value => !new BigNumber(value).isEqualTo(new BigNumber(0)) ||
+        required: value => !new BigNumber(value).isZero() ||
           "Can't Be Zero",
         counter: value => new BigNumber(value).dp() < 9 || 'Invalid Amount',
         hasToExist: value => !!value || 'Required.',
-        test: value => !!value || 'Required Custom or Template Fee.',
-        test1: value => new BigNumber(value).dp() < 4 || 'Too Precise Amount'
+        feeExist: value => !value.isNaN() || 'Required Custom or Template Fee.',
+        feePrecise: value => new BigNumber(value).dp() < 4 || 'Too Precise Amount',
+        feeNotZero: value => !(new BigNumber(value).isZero()) || "Can't be zero."
       }
     }
   },

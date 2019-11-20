@@ -101,7 +101,7 @@ async function getTrasactionData (addressArray, addressArrayAmount, utxo,
   if (costToKeepChange.isGreaterThan(change)) {
     const changeAmount = new BigNumber(0)
     const inputs = inputsArrayPostFee
-    const feeAmount = change.plus(noChangeFeeAmountSatoshi)
+    const feeAmount = change.plus(minFees)
     const transactionSize =
       getTransactionSize(addressArray, m, musigTotalNumber,
         inputsArrayPostFee.length)
@@ -110,9 +110,9 @@ async function getTrasactionData (addressArray, addressArrayAmount, utxo,
       { changeAmount, inputs, feeAmount, transactionSize, remainingUtxo }
     return proposedTransaction
   } else {
-    const changeAmount = change
-    const inputs = inputsArrayPostFee
     const feeAmount = changeFeeAmountSatoshi
+    const changeAmount = change.minus(costToKeepChange)
+    const inputs = inputsArrayPostFee
     const transactionSize =
       getTransactionSize(changeAddressArray, m, musigTotalNumber,
         inputsArrayPostFee.length)

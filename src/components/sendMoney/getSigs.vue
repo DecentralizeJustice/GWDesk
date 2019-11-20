@@ -92,8 +92,8 @@ export default {
       const trans1 = this.signedPSBTs.web
       const trans2 = this.signedPSBTs.hardware
       const trans = await combineCompletedTrans(trans1, trans2)
-      const finalBraodcast = await broadcastTrans(trans)
       console.log(trans)
+      const finalBraodcast = await broadcastTrans(trans)
       console.log(finalBraodcast)
     }
   },

@@ -26,6 +26,11 @@ async function getNodeInfo () {
   const results = await client.getInfo()
   return results
 }
+async function getPendingTransactions (id) {
+  const wallet = walletClient.wallet(id)
+  const results = await wallet.getPending()
+  return results
+}
 async function stopNode () {
   // eslint-disable-next-line
   const pathTo = path.join(__static, "killNode.js")
@@ -137,5 +142,5 @@ export {
   createWallet, getNodeSyncInfo, getWalletTransactions, broadcastHex,
   getTxByHash, importAddress, startNode, checkNodeAlive, stopNode, resetChainTo,
   getNodeInfo, listWalletAddresses, checkIfNodeMeaningfull, getFeeEstimate,
-  decodeRawTransaction, getUTXO, getNodeHeight
+  decodeRawTransaction, getUTXO, getNodeHeight, getPendingTransactions
 }

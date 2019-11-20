@@ -33,7 +33,7 @@
                 text
                 v-on:click="start()"
               >
-                Start Node
+                Get Pending
               </v-btn>
               <v-btn
                 color="orange"
@@ -60,8 +60,9 @@
 <script>
 import { recoverFromPubs } from '@/assets/task/recoverFromPubs.js'
 import { vpubObject } from '@/assets/constants/userConstantFiles.js'
-import { startNode, createWallet, resetChainTo, getNodeInfo } from '@/assets/util/nodeUtil.js'
+import { getPendingTransactions, createWallet, resetChainTo, getNodeInfo } from '@/assets/util/nodeUtil.js'
 import { walletName } from '@/assets/constants/genConstants.js'
+import { decodeRawTransactionBitcoinJS } from '@/assets/util/transactionUtil/transactionUtil.js'
 const R = require('ramda')
 export default {
   components: {
@@ -79,8 +80,9 @@ export default {
       this.disable = false
     },
     async start () {
-      await startNode()
-      console.log('node started')
+      const rest = await getPendingTransactions('musig')
+      const tes = await decodeRawTransactionBitcoinJS(rest[0].tx)
+      console.log(tes)
     },
     async createWallet () {
       const results = await createWallet(walletName)
