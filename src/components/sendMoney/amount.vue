@@ -107,7 +107,6 @@
           <v-btn-toggle
             v-model="speed"
             class="mb-2"
-            mandatory
           >
             <v-btn>
               <span>Slow</span>
@@ -119,6 +118,15 @@
               <span>Fast</span>
             </v-btn>
           </v-btn-toggle>
+          <v-col cols="12" justify-self='center' align-self='center'>
+          <v-text-field
+            :value='feeRatioInput'
+            label="Fee sat/byte"
+            type='number'
+            @input="setCustomFee"
+            :rules="[rules.hasToExist(customFee), rules.test1(customFee)]"
+          ></v-text-field>
+        </v-col>
           <v-alert tile v-if='feeRatio>10' :type='feeWarningRatio' >
             High Fee Amount
           </v-alert>
@@ -151,11 +159,14 @@ export default {
       midFee: new BigNumber('0'),
       lowFee: new BigNumber('0'),
       transactionInfo: 'undefined',
+      customFee: 0,
       rules: {
         required: value => !new BigNumber(value).isEqualTo(new BigNumber(0)) ||
           "Can't Be Zero",
         counter: value => new BigNumber(value).dp() < 9 || 'Invalid Amount',
-        hasToExist: value => !!value || 'Required.'
+        hasToExist: value => !!value || 'Required.',
+        test: value => !!value || 'Required Custom or Template Fee.',
+        test1: value => new BigNumber(value).dp() < 4 || 'Too Precise Amount'
       }
     }
   },
@@ -169,7 +180,7 @@ export default {
         case 2:
           return '~10-20 minutes'
       }
-      return 'Selection Error'
+      return 'Unknown Custom Time'
     },
     feeWarningRatio: function () {
       if (this.feeRatio > 30) {
@@ -214,6 +225,12 @@ export default {
       const ratio = fee.dividedBy(utxoSum).shiftedBy(2).toFixed(0, 2)
       return ratio
     },
+    feeRatioInput: function () {
+      if (this.speed === undefined) {
+        return new BigNumber(this.customFee)
+      }
+      return this.minFeeRatio
+    },
     feeAmountSatoshi: function () {
       if (this.transactionInfo === 'undefined') {
         return new BigNumber(0)
@@ -222,6 +239,9 @@ export default {
       return fee
     },
     minFeeRatio: function () {
+      if (this.speed === undefined) {
+        return new BigNumber(this.customFee)
+      }
       const choice = this.speed
       const speedArray = [this.lowFee, this.midFee, this.highFee]
       const minFeeRatio = speedArray[choice]
@@ -266,7 +286,9 @@ export default {
       const allUsed = this.allAddressesUsed
       const notTooHigh = !this.tooHigh
       const allValidAmounts = this.allValidAmounts
-      const transGood = allUsed && notTooHigh && allValidAmounts
+      const feeValid = this.feeRatioInput.isNaN() === false &&
+        this.feeRatioInput.isZero() === false && this.feeRatioInput.dp() < 4
+      const transGood = allUsed && notTooHigh && allValidAmounts && feeValid
       if (transGood) {
         return {
           transSize: this.transactionInfo.transactionSize,
@@ -298,6 +320,10 @@ export default {
     }
   },
   methods: {
+    setCustomFee: async function (fee) {
+      this.speed = undefined
+      this.customFee = fee
+    },
     getTransInfo: async function () {
       try {
         const coins = await getUTXO(walletName)
@@ -323,9 +349,10 @@ export default {
     },
     setupFeeInfo: async function () {
       const feeEstimates = await getFeeEstimate()
-      this.midFee = new BigNumber(feeEstimates.medium_fee_per_kb).shiftedBy(-3)
-      this.highFee = new BigNumber(feeEstimates.high_fee_per_kb).shiftedBy(-3)
-      this.lowFee = new BigNumber(feeEstimates.low_fee_per_kb).shiftedBy(-3)
+      this.midFee = new BigNumber(feeEstimates.medium_fee_per_kb).shiftedBy(-3).dp(3)
+      this.highFee = new BigNumber(feeEstimates.high_fee_per_kb).shiftedBy(-3).dp(3)
+      this.lowFee = new BigNumber(feeEstimates.low_fee_per_kb).shiftedBy(-3).dp(3)
+      this.customFee = this.highFee.toFormat(3)
     },
     fillinAmounts: async function () {
       for (var i = 0; i < this.transaction.addressArray.length; i++) {
