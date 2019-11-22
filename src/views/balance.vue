@@ -131,17 +131,17 @@ export default {
     pendingTransInfo: function () {
       const isPending = n => n.height === -1
       const trans = R.filter(isPending, this.transactions)
-      return { trans: trans }
+      return { trans: trans, type: 'pending' }
     },
     confirmingTransInfo: function () {
       const isConfirming = n => n.height !== -1 && (this.currentBlock - n.height) <= 1
       const trans = R.reverse(R.filter(isConfirming, this.transactions))
-      return { trans: trans }
+      return { trans: trans, type: 'confirming' }
     },
     confirmedTransInfo: function () {
       const isConfirming = n => (this.currentBlock - n.height) > 1
       const trans = R.reverse(R.filter(isConfirming, this.transactions))
-      return { trans: trans }
+      return { trans: trans, type: 'confirmed' }
     }
   },
   async created () {

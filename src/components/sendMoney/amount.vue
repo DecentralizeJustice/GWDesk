@@ -75,7 +75,7 @@
       <v-col cols="12" class="mx-auto">
         <v-row align-content='center' justify='space-around'>
           <v-col
-            cols="4"
+            cols="3"
             align-self='center'
           >
           <v-card
@@ -91,7 +91,7 @@
           </v-btn>
           </v-card>
           </v-col>
-          <v-col cols="4" align-self='center'>
+          <v-col cols="7" align-self='center'>
             <v-card
               class='deep-purple lighten-1'
             >
@@ -108,6 +108,9 @@
             v-model="speed"
             class="mb-2"
           >
+          <v-btn>
+            <span>Lowest</span>
+          </v-btn>
             <v-btn>
               <span>Slow</span>
             </v-btn>
@@ -126,7 +129,7 @@
             type='number'
             @input="setCustomFee"
             :rules="[rules.feePrecise(feeRatioInput), rules.feeExist(feeRatioInput),
-              rules.feeNotZero(feeRatioInput)]"
+              rules.feeNotZero(feeRatioInput), rules.feeNotLessThan1(feeRatioInput)]"
           ></v-text-field>
         </v-col>
           <v-alert tile v-if='feeRatio>10' :type='feeWarningRatio' >
@@ -160,6 +163,7 @@ export default {
       highFee: new BigNumber('0'),
       midFee: new BigNumber('0'),
       lowFee: new BigNumber('0'),
+      minFee: new BigNumber('1'),
       transactionInfo: 'undefined',
       customFee: 0,
       rules: {
@@ -169,18 +173,19 @@ export default {
         hasToExist: value => !!value || 'Required.',
         feeExist: value => !value.isNaN() || 'Required Custom or Template Fee.',
         feePrecise: value => new BigNumber(value).dp() < 4 || 'Too Precise Amount',
-        feeNotZero: value => !(new BigNumber(value).isZero()) || "Can't be zero."
+        feeNotZero: value => !(new BigNumber(value).isZero()) || "Can't be zero.",
+        feeNotLessThan1: value => !(new BigNumber(value).isLessThan(new BigNumber(1))) || 'Below Min. Fee'
       }
     }
   },
   computed: {
     time: function () {
       switch (this.speed) {
-        case 0:
-          return '1 Hour +'
         case 1:
-          return '~30-60 minutes'
+          return '1 Hour +'
         case 2:
+          return '~30-60 minutes'
+        case 3:
           return '~10-20 minutes'
       }
       return 'Unknown Custom Time'
@@ -246,7 +251,7 @@ export default {
         return new BigNumber(this.customFee)
       }
       const choice = this.speed
-      const speedArray = [this.lowFee, this.midFee, this.highFee]
+      const speedArray = [this.minFee, this.lowFee, this.midFee, this.highFee]
       const minFeeRatio = speedArray[choice]
       return minFeeRatio
     },
@@ -289,9 +294,11 @@ export default {
       const allUsed = this.allAddressesUsed
       const notTooHigh = !this.tooHigh
       const allValidAmounts = this.allValidAmounts
+      const feeNotBelow1 = !this.feeRatioInput.isLessThan(new BigNumber(1))
       const feeValid = this.feeRatioInput.isNaN() === false &&
         this.feeRatioInput.isZero() === false && this.feeRatioInput.dp() < 4
-      const transGood = allUsed && notTooHigh && allValidAmounts && feeValid
+      const transGood = allUsed && notTooHigh && allValidAmounts && feeValid &&
+        feeNotBelow1
       if (transGood) {
         return {
           transSize: this.transactionInfo.transactionSize,

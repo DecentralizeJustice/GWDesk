@@ -58,7 +58,7 @@ noChange (desiredFeeRate, addressArray, addressArrayAmounts, utxo) {
   return newAmountArray
 }
 
-async function getTrasactionData (addressArray, addressArrayAmount, utxo,
+function getTrasactionData (addressArray, addressArrayAmount, utxo,
   targetFeeRatio) {
   const musigTotalNumber = Object.keys(vpubObject).length
   const fifoCoins = R.sortBy(R.prop('height'))(utxo)
@@ -152,9 +152,9 @@ function addNeededUtxo (currentInputSum, totalOutputsAmountNeeded, fifoUtxo,
 }
 
 function creatChangeArray (addressArray) {
+  const dummyAddress = 'tb1qfhswexghg04qj74dw6rl53ejtlvwfycsveqq0fegfvcz5ssk3jdsp32rme'
   const changeArray =
-  R.append('tb1qfhswexghg04qj74dw6rl53ejtlvwfycsveqq0fegfvcz5ssk3jdsp32rme',
-    addressArray)
+  R.append(dummyAddress, addressArray)
   return changeArray
 }
 

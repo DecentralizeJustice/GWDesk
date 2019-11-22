@@ -13,8 +13,9 @@ async function createPSBT (transctionData, vpubObject, xfp) {
     const transInfo = transInputs[index]
     const inputData = getInputData(transInfo)
     psbt.addInput(inputData)
-    psbt.setInputSequence(index, 0) // any number lessthan 4294967295 - 1
+    psbt.setInputSequence(index, 4294967293)
   }
+  // psbt.setLocktime(locktime) // next block include random past blockheight
   for (const index in outPuts) {
     psbt.addOutput({
       address: outPuts[index].address,

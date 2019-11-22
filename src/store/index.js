@@ -16,16 +16,17 @@ function storeState (key, state, storage) {
   return storage.set(key, state)
 }
 function getState (key, storage) {
+  console.log(storage.get(key))
   return storage.get(key)
 }
 export default new Vuex.Store({
   state: {
-    firstStepDone: true
+    userGeneratedInfo: 0
   },
   mutations: {
     increment (state) {
       // mutate state
-      state.yes += 1
+      state.userGeneratedInfo += 1
     }
   },
   actions: {

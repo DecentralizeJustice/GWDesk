@@ -60,9 +60,10 @@
 <script>
 import { recoverFromPubs } from '@/assets/task/recoverFromPubs.js'
 import { vpubObject } from '@/assets/constants/userConstantFiles.js'
-import { getPendingTransactions, createWallet, resetChainTo, getNodeInfo } from '@/assets/util/nodeUtil.js'
-import { walletName } from '@/assets/constants/genConstants.js'
+import { getPendingTransactions, resetChainTo, getNodeInfo } from '@/assets/util/nodeUtil.js' // createWallet
+// import { walletName } from '@/assets/constants/genConstants.js'
 import { decodeRawTransactionBitcoinJS } from '@/assets/util/transactionUtil/transactionUtil.js'
+import { mapMutations } from 'vuex'
 const R = require('ramda')
 export default {
   components: {
@@ -72,6 +73,10 @@ export default {
     transactions: []
   }),
   methods: {
+    ...mapMutations([
+    // Mounts the "incrementStoredNumber" mutation to `this.incrementStoredNumber()`.
+      'increment'
+    ]),
     async recover () {
       this.disable = true
       const vpubArray = R.values(vpubObject)
@@ -85,7 +90,8 @@ export default {
       console.log(tes)
     },
     async createWallet () {
-      const results = await createWallet(walletName)
+      this.increment()
+      const results = this.$store.state
       console.log(results)
     },
     async rescan () {
