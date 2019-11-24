@@ -1,39 +1,38 @@
 <template>
-  <v-container>
-    <video-player  class="video-player-box mx-auto"
-             ref="videoPlayer"
-             :options="playerOptions"
-             :playsinline="true"/>
+<v-container class="grey" style="height:100vh;width:100vw;" fluid>
+    <v-row
+    justify="center"
+    >
+      <v-col
+      cols='10'
+      style="margin: 0;
+      position: absolute;
+      top: 50%;
+      -ms-transform: translateY(-50%);
+      transform: translateY(-50%);"
+      >
+      <video style="width:100%;height:auto;" controls>
+          <source :src='getvid()' type="video/mp4">
+      </video>
+      </v-col>
+    </v-row>
     </v-container>
 </template>
 
 <script>
-import 'video.js/dist/video-js.css'
-
-import { videoPlayer } from 'vue-video-player'
-// import introVid from '../../public/sample.mp4'
 import path from 'path'
 export default {
   components: {
-    videoPlayer
+    // videoPlayer
   },
   data () {
     return {
-      filelocation: '',
-      playerOptions: {
-        // videojs options
-        muted: false,
-        language: 'en',
-        playbackRates: [0.5, 1.0, 1.5, 2.0],
-        sources: [{
-          type: 'video/mp4',
-          src: path.join(process.env.BASE_URL, 'videos/sample.mp4')
-        }],
-        poster: path.join(process.env.BASE_URL, 'favicon.ico')
-      }
     }
   },
   methods: {
+    getvid: function () {
+      return path.join(process.env.BASE_URL, 'videos/sample.mp4')
+    }
   },
   async created () {
     // eslint-disable-next-line
