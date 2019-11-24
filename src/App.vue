@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <navDrawer app />
+    <navDrawer app v-if='navBarvisible'/>
     <v-content>
       <transition name="fade">
         <router-view/>
@@ -12,6 +12,7 @@
 <script>
 import navDrawer from '@/components/navDrawer.vue'
 import { startNode } from '@/assets/util/nodeUtil.js'
+import store from './store/index.js'
 export default {
   name: 'App',
   components: {
@@ -21,6 +22,12 @@ export default {
     async start () {
       await startNode()
       console.log('node started')
+    }
+  },
+  computed: {
+    navBarvisible: function () {
+      const mainReady = store.state.stageInfo.main
+      return mainReady
     }
   },
   data: () => ({

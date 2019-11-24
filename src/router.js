@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-// import store from './store.js'
+import store from './store/index.js'
 import Intro from './views/membershipConfig.vue'
 import Home from './views/home.vue'
 import Transactions from './views/trans.vue'
@@ -10,6 +10,7 @@ import Education from './views/edu.vue'
 import Support from './views/support.vue'
 import Settings from './views/settings.vue'
 import Balance from './views/balance.vue'
+import Setup from './views/setup.vue'
 
 Vue.use(Router)
 
@@ -21,7 +22,20 @@ const router = new Router({
     {
       path: '/home',
       name: 'home',
-      component: Home
+      component: Home,
+      beforeEnter: function (to, from, next) {
+        const mainReady = store.state.stageInfo.main
+        if (!mainReady) {
+          router.push({ path: '/setup' })
+        } else {
+          next()
+        }
+      }
+    },
+    {
+      path: '/setup',
+      name: 'setup',
+      component: Setup
     },
     {
       path: '/balance',
