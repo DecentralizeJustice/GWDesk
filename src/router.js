@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import store from './store/index.js'
 import Intro from './views/membershipConfig.vue'
 import Home from './views/home.vue'
 import Transactions from './views/trans.vue'
@@ -11,6 +10,7 @@ import Support from './views/support.vue'
 import Settings from './views/settings.vue'
 import Balance from './views/balance.vue'
 import Setup from './views/setup.vue'
+import store from './store/index.js'
 
 Vue.use(Router)
 
@@ -79,13 +79,4 @@ const router = new Router({
     }
   ]
 })
-// router.beforeEach((to, from, next) => {
-//   console.log(to)
-//   if (store.state.firstStepDone === false) {
-//     console.log('ran')
-//     next({ path: '/intro' })
-//   } else {
-//     next()
-//   }
-// })
 export default router
