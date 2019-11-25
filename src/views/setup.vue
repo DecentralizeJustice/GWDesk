@@ -31,7 +31,7 @@ import stepper from '@/components/sendMoney/stepper.vue'
 import bottomNav from '@/components/sendMoney/bottomNav.vue'
 export default {
   data: () => ({
-    componentList: ['first', 'explainHardware', 'confirm', 'getSigs'],
+    componentList: ['first', 'explainHardware', 'mnemonicStorage', 'HardwareSummary'],
     currentSection: 0,
     transaction: {
     }
