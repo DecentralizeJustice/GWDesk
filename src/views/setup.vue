@@ -1,42 +1,55 @@
 <template>
-<v-container class="grey" style="height:100vh;width:100vw;" fluid>
-    <v-row
-    justify="center"
-    >
-      <v-col
-      cols='10'
-      style="margin: 0;
-      position: absolute;
-      top: 50%;
-      -ms-transform: translateY(-50%);
-      transform: translateY(-50%);"
-      >
-      <video style="width:100%;height:auto;" controls>
-          <source :src='getvid()' type="video/mp4">
-      </video>
-      </v-col>
-    </v-row>
-    </v-container>
+  <v-container  fill-height text-xs-center fluid>
+    <v-layout align-center justify-center row>
+      <v-flex xs10 >
+    <!--<v-layout align-center justify-center row fill-height>
+      <v-flex xs12 >
+        <v-card
+          class="text-center"
+        > -->
+        <!-- <v-flex xs10 class="mx-auto mb-5">
+          <stepper v-bind:currentSection="currentSection"/>
+        </v-flex> -->
+
+          <component
+          v-bind:is="currentMain"
+          v-on:next="updateStep"/>
+          <!-- <v-divider/> -->
+
+          <!-- <bottomNav v-on:change="updateStep"
+            v-bind:currentSection="currentSection"
+            v-bind:continueDisabled='continueDisabled'
+          /> -->
+        <!-- </v-card>-->
+    </v-flex>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>
-import path from 'path'
+import stepper from '@/components/sendMoney/stepper.vue'
+import bottomNav from '@/components/sendMoney/bottomNav.vue'
 export default {
+  data: () => ({
+    componentList: ['first', 'explainHardware', 'confirm', 'getSigs'],
+    currentSection: 0,
+    transaction: {
+    }
+  }),
   components: {
-    // videoPlayer
+    stepper,
+    bottomNav
   },
-  data () {
-    return {
+  computed: {
+    currentMain () {
+      const componentName = this.componentList[this.currentSection]
+      return () => import(`@/components/setup/${componentName}.vue`)
     }
   },
   methods: {
-    getvid: function () {
-      return path.join(process.env.BASE_URL, 'videos/sample.mp4')
+    updateStep (number) {
+      this.currentSection = number
     }
-  },
-  async created () {
-    // eslint-disable-next-line
-    // this.filelocation = path.join(process.env.BASE_URL, 'sample.mp4')
   }
 }
 </script>
