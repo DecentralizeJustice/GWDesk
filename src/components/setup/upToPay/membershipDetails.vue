@@ -5,7 +5,7 @@
       style=""
       >
       <v-card-title class="headline justify-center">
-        Needed Mnemonic Hardware
+        Memberhip Cost
       </v-card-title>
       <v-divider></v-divider>
       <v-container class="">
@@ -24,19 +24,9 @@
       <v-row
       >
       <v-col
-        cols='6'
+        cols='12'
       >
-      <v-card
-      color='grey darken-2'
-      >
-      <v-card-title class="headline justify-center">
-        Metal Storage Needed
-      </v-card-title>
-      <v-divider></v-divider>
-        <v-card-text>
-          <div>Tile Based Storage</div>
-        </v-card-text>
-      </v-card>
+      <membershipCost/>
       </v-col>
     </v-row>
   </v-container>
@@ -63,8 +53,10 @@
 
 <script>
 import path from 'path'
+import membershipCost from '@/components/setup/upToPay/components/membershipCost.vue'
 export default {
   components: {
+    membershipCost
   },
   data () {
     return {
@@ -75,10 +67,10 @@ export default {
       return path.join(process.env.BASE_URL, 'videos/sample.mp4')
     },
     nextOrder () {
-      this.$emit('next', 3)
+      this.$emit('next', 5)
     },
     back () {
-      this.$emit('next', 1)
+      this.$emit('next', 3)
     }
   },
   async created () {

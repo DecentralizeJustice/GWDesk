@@ -24,19 +24,19 @@
       <v-row
       >
       <v-col
-        cols='6'
+        cols='5'
       >
-      <v-card
-      color='grey darken-2'
+      <hardwareWallets/>
+      </v-col>
+      <v-col
+        cols='4'
       >
-      <v-card-title class="headline justify-center">
-        Metal Storage Needed
-      </v-card-title>
-      <v-divider></v-divider>
-        <v-card-text>
-          <div>Tile Based Storage</div>
-        </v-card-text>
-      </v-card>
+      <computers/>
+      </v-col>
+      <v-col
+        cols='3'
+      >
+      <metalStorage/>
       </v-col>
     </v-row>
   </v-container>
@@ -63,8 +63,14 @@
 
 <script>
 import path from 'path'
+import hardwareWallets from '@/components/setup/upToPay/components/hardwareWallets.vue'
+import computers from '@/components/setup/upToPay/components/computers.vue'
+import metalStorage from '@/components/setup/upToPay/components/metalStorage.vue'
 export default {
   components: {
+    metalStorage,
+    computers,
+    hardwareWallets
   },
   data () {
     return {

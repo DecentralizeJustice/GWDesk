@@ -2,24 +2,26 @@ export const stageInfo = {
   // This makes your getters, mutations, and actions accessed by, eg: 'myModule/myModularizedNumber' instead of mounting getters, mutations, and actions to the root namespace.
   namespaced: true,
   state: {
-    productInfo: false,
+    paid: false,
     hardwareSetupDone: false,
     main: false,
     walletTour: false
   },
   mutations: {
-    // increment (state) {
-    //   // mutate state
-    //   state.userGeneratedInfo += 1
-    // }
+    paid (state) {
+      // mutate state
+      state.paid = true
+    }
   },
   actions: {
-
+    paid (context) {
+      context.commit('paid')
+    }
   },
   getters: {
     currentStage: state => {
-      if (!state.productInfo) {
-        return 'productInfo'
+      if (!state.paid) {
+        return 'pay'
       }
       if (!state.hardwareSetupDone) {
         return 'hardwareSetup'

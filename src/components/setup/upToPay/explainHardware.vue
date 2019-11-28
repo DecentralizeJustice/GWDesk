@@ -26,55 +26,12 @@
       <v-col
         cols='6'
       >
-      <v-card
-      color='grey darken-2'
-      >
-      <v-card-title class="headline justify-center">
-        Needed Hardware Wallets
-      </v-card-title>
-      <v-divider></v-divider>
-        <v-card-text>
-          <div>ColdCard</div>
-          <v-list-item>
-      <v-list-item-content>
-        <v-list-item-title>2 ColdCards</v-list-item-title>
-        <v-list-item-title>Micro SD Card</v-list-item-title>
-        <v-list-item-title>Micro-USB Cable</v-list-item-title>
-      </v-list-item-content>
-    </v-list-item>
-    <v-alert type="warning">
-    Buy From 2 Differnt Places
-    </v-alert>
-        </v-card-text>
-      </v-card>
+      <hardwareWallets/>
       </v-col>
       <v-col
         cols='6'
       >
-      <v-card
-      color='grey darken-1'
-      >
-      <v-card-title class="headline justify-center">
-        Needed Computers
-      </v-card-title>
-      <v-divider></v-divider>
-        <v-card-text>
-          <div>Desktop Computer</div>
-          <v-list-item>
-      <v-list-item-content>
-        <v-list-item-title>Able To Install Apps</v-list-item-title>
-      </v-list-item-content>
-    </v-list-item>
-        </v-card-text>
-        <v-card-text>
-          <div>Phone or Tablet</div>
-          <v-list-item>
-      <v-list-item-content>
-        <v-list-item-title>Web Browser Required</v-list-item-title>
-      </v-list-item-content>
-    </v-list-item>
-        </v-card-text>
-      </v-card>
+      <computers/>
       </v-col>
     </v-row>
   </v-container>
@@ -101,9 +58,12 @@
 
 <script>
 import path from 'path'
+import hardwareWallets from '@/components/setup/upToPay/components/hardwareWallets.vue'
+import computers from '@/components/setup/upToPay/components/computers.vue'
 export default {
   components: {
-    // videoPlayer
+    hardwareWallets,
+    computers
   },
   data () {
     return {
