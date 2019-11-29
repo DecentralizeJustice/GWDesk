@@ -15,12 +15,23 @@ async function uploadPSBT () {
   const hex = buffer.toString('hex')
   return hex
 }
+async function uploadJSON () {
+  const options = {
+    defaultPath: app.getPath('desktop'),
+    buttonLabel: 'Upload JSON'
+  }
 
+  const fileName = await dialog.showOpenDialog(null, options)
+  const path = fileName.filePaths[0]
+  const rawFile = await fs.readFile(path)
+  const object = JSON.parse(rawFile)
+  return object
+}
 async function downloadPSBT (psbtHex) {
   const psbtBuffer = Buffer.from(psbtHex, 'hex')
 
   const options = {
-    title: 'Save file - Electron example',
+    title: 'Save PSBT',
     defaultPath: app.getPath('desktop') + '/rerun.psbt',
     buttonLabel: 'Save PSBT'
   }
@@ -31,4 +42,4 @@ async function downloadPSBT (psbtHex) {
   return true
 }
 
-export { downloadPSBT, uploadPSBT }
+export { downloadPSBT, uploadPSBT, uploadJSON }

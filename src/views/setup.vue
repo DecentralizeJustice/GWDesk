@@ -9,17 +9,18 @@ import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('stageInfo')
 export default {
   data: () => ({
-    componentList: [
-      'upToPay'
-    ],
-    currentSection: 0
+    componentList: {
+      pay: 'upToPay',
+      hardwareSetup: 'walletSetup'
+    }
   }),
   components: {
   },
   computed: {
     currentMain () {
-      const componentName = this.componentList[this.currentSection]
-      return () => import(`@/components/setup/upToPay/${componentName}.vue`)
+      const currentStage = this.currentStage
+      const componentName = this.componentList[currentStage]
+      return () => import(`@/components/setup/${componentName}/${componentName}.vue`)
     },
     ...mapGetters({
       currentStage: 'currentStage'
