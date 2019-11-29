@@ -11,7 +11,8 @@ export default {
   data: () => ({
     componentList: {
       pay: 'upToPay',
-      hardwareSetup: 'walletSetup'
+      hardwareSetup: 'walletSetup',
+      walletTour: 'walletTour'
     }
   }),
   components: {

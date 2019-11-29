@@ -9,13 +9,18 @@ export const stageInfo = {
   },
   mutations: {
     paid (state) {
-      // mutate state
       state.paid = true
+    },
+    setupWallet (state) {
+      state.hardwareSetupDone = true
     }
   },
   actions: {
     paid (context) {
       context.commit('paid')
+    },
+    setupWallet (context) {
+      context.commit('setupWallet')
     }
   },
   getters: {

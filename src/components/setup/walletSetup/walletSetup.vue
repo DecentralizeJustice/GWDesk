@@ -14,7 +14,7 @@
 export default {
   data: () => ({
     componentList: [
-      'first', 'hardwareInitial', 'getWalletInfo'
+      'first', 'hardwareInitial', 'getWalletInfo', 'initilizeMultisig'
     ],
     currentSection: 0,
     xpubInfo: {},

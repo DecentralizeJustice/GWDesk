@@ -1,11 +1,13 @@
 <template>
-
+  <v-container  fill-height text-xs-center fluid>
+    <v-layout align-center justify-center row>
+      <v-flex xs10 >
       <v-card
       class=""
       style=""
       >
       <v-card-title class="headline justify-center">
-        Initialize Hardware Wallets
+        Wallet Tour
       </v-card-title>
       <v-divider></v-divider>
     <v-card-text>
@@ -15,21 +17,18 @@
     </v-card-text>
     <v-divider></v-divider>
     <v-card-actions>
-      <v-btn
-        color="indigo lighten-1"
-        @click='back()'
-      >
-        Back
-      </v-btn>
       <v-spacer/>
       <v-btn
         color="green"
-        @click='next()'
+        @click='nextOrder()'
       >
-        Next Step
+        Explore Wallet
       </v-btn>
     </v-card-actions>
   </v-card>
+</v-flex>
+</v-layout>
+</v-container>
 </template>
 
 <script>
@@ -44,14 +43,8 @@ export default {
     }
   },
   methods: {
-    getvid: function () {
-      return path.join(process.env.BASE_URL, 'videos/sample.mp4')
-    },
-    back () {
-      this.$emit('next', 0)
-    },
-    next () {
-      this.$emit('next', 2)
+    nextOrder () {
+      // this.$emit('next', 1)
     }
   },
   computed: {

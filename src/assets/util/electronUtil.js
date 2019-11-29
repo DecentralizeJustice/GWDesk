@@ -20,7 +20,6 @@ async function uploadJSON () {
     defaultPath: app.getPath('desktop'),
     buttonLabel: 'Upload JSON'
   }
-
   const fileName = await dialog.showOpenDialog(null, options)
   const path = fileName.filePaths[0]
   const rawFile = await fs.readFile(path)
@@ -41,5 +40,17 @@ async function downloadPSBT (psbtHex) {
   await fs.writeFile(path, psbtBuffer)
   return true
 }
+async function downloadTXT (txt) {
+  const options = {
+    title: 'Save Multisig File',
+    defaultPath: app.getPath('desktop') + '/multisig.txt',
+    buttonLabel: 'Save File'
+  }
 
-export { downloadPSBT, uploadPSBT, uploadJSON }
+  const fileName = await dialog.showSaveDialog(null, options)
+  const path = fileName.filePath
+  await fs.writeFile(path, txt)
+  return true
+}
+
+export { downloadPSBT, uploadPSBT, uploadJSON, downloadTXT }
