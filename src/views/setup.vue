@@ -12,7 +12,8 @@ export default {
     componentList: {
       pay: 'upToPay',
       hardwareSetup: 'walletSetup',
-      walletTour: 'walletTour'
+      walletTour: 'walletTour',
+      main: 'walletTour'
     }
   }),
   components: {

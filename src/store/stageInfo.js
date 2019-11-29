@@ -13,6 +13,12 @@ export const stageInfo = {
     },
     setupWallet (state) {
       state.hardwareSetupDone = true
+    },
+    doneWalletTour (state) {
+      state.walletTour = true
+    },
+    mainReady (state) {
+      state.main = true
     }
   },
   actions: {
@@ -21,6 +27,10 @@ export const stageInfo = {
     },
     setupWallet (context) {
       context.commit('setupWallet')
+    },
+    completeWalletTour (context) {
+      context.commit('doneWalletTour')
+      context.commit('mainReady')
     }
   },
   getters: {

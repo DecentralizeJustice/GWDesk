@@ -20,7 +20,7 @@
       <v-spacer/>
       <v-btn
         color="green"
-        @click='nextOrder()'
+        @click='done()'
       >
         Explore Wallet
       </v-btn>
@@ -34,6 +34,8 @@
 <script>
 import path from 'path'
 import videoPlayer from '@/components/video.vue'
+import { createNamespacedHelpers } from 'vuex'
+const { mapActions } = createNamespacedHelpers('stageInfo')
 export default {
   components: {
     videoPlayer
@@ -43,8 +45,12 @@ export default {
     }
   },
   methods: {
-    nextOrder () {
-      // this.$emit('next', 1)
+    ...mapActions([
+      'completeWalletTour'
+    ]),
+    done: function () {
+      this.completeWalletTour()
+      this.$router.push({ path: 'edu' })
     }
   },
   computed: {
@@ -53,8 +59,6 @@ export default {
     }
   },
   async created () {
-    // eslint-disable-next-line
-    // this.filelocation = path.join(process.env.BASE_URL, 'sample.mp4')
   }
 }
 </script>
