@@ -15,9 +15,9 @@
         cols='9'
       >
       <v-card-text>
-        <video style="width:100%;height:auto;" controls>
-            <source :src='getvid()' type="video/mp4">
-        </video>
+        <videoPlayer
+        v-bind:url="url"
+        />
       </v-card-text>
       </v-col>
       </v-row>
@@ -66,11 +66,13 @@ import path from 'path'
 import hardwareWallets from '@/components/setup/upToPay/components/hardwareWallets.vue'
 import computers from '@/components/setup/upToPay/components/computers.vue'
 import metalStorage from '@/components/setup/upToPay/components/metalStorage.vue'
+import videoPlayer from '@/components/video.vue'
 export default {
   components: {
     metalStorage,
     computers,
-    hardwareWallets
+    hardwareWallets,
+    videoPlayer
   },
   data () {
     return {
@@ -85,6 +87,11 @@ export default {
     },
     back () {
       this.$emit('next', 2)
+    }
+  },
+  computed: {
+    url: function () {
+      return path.join(process.env.BASE_URL, 'videos/sample.mp4')
     }
   },
   async created () {

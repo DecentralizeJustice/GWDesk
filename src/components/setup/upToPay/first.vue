@@ -9,9 +9,9 @@
       </v-card-title>
       <v-divider></v-divider>
     <v-card-text>
-      <video style="width:100%;height:auto;" controls>
-          <source :src='getvid()' type="video/mp4">
-      </video>
+      <videoPlayer
+      v-bind:url="url"
+      />
     </v-card-text>
     <v-divider></v-divider>
     <v-card-actions>
@@ -39,9 +39,10 @@
 
 <script>
 import path from 'path'
+import videoPlayer from '@/components/video.vue'
 export default {
   components: {
-    // videoPlayer
+    videoPlayer
   },
   data () {
     return {
@@ -53,6 +54,11 @@ export default {
     },
     nextOrder () {
       this.$emit('next', 1)
+    }
+  },
+  computed: {
+    url: function () {
+      return path.join(process.env.BASE_URL, 'videos/sample.mp4')
     }
   },
   async created () {

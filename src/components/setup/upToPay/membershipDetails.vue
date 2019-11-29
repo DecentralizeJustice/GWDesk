@@ -15,9 +15,9 @@
         cols='9'
       >
       <v-card-text>
-        <video style="width:100%;height:auto;" controls>
-            <source :src='getvid()' type="video/mp4">
-        </video>
+        <videoPlayer
+        v-bind:url="url"
+        />
       </v-card-text>
       </v-col>
       </v-row>
@@ -54,9 +54,11 @@
 <script>
 import path from 'path'
 import membershipCost from '@/components/setup/upToPay/components/membershipCost.vue'
+import videoPlayer from '@/components/video.vue'
 export default {
   components: {
-    membershipCost
+    membershipCost,
+    videoPlayer
   },
   data () {
     return {
@@ -71,6 +73,11 @@ export default {
     },
     back () {
       this.$emit('next', 3)
+    }
+  },
+  computed: {
+    url: function () {
+      return path.join(process.env.BASE_URL, 'videos/sample.mp4')
     }
   },
   async created () {
