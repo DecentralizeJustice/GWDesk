@@ -12,7 +12,7 @@
     <v-row justify='center'
     >
       <v-col
-        cols='9'
+        cols='12'
       >
       <v-card-text>
         <videoPlayer
@@ -21,20 +21,21 @@
       </v-card-text>
       </v-col>
       </v-row>
-      <v-row
+      <v-row justify='center' align-conten='center'
       >
       <v-col
         cols='3'
+        justify='center' align-conten='center'
+        v-for="n in 3"
+      :key="n"
       >
-      <div class="">
-        <v-btn x-large color="success" dark @click='upload()'>
-          Upload Card Info
+      <div class="text-xs-center">
+        <v-btn x-large :color="uploaded(n)" dark @click='upload(n)'>
+          {{getCordinal(n)}} Card <br>
+          <v-icon>mdi-file-upload</v-icon>
         </v-btn>
+
       </div>
-      </v-col>
-      <v-col
-        cols='6'
-      >
       </v-col>
     </v-row>
   </v-container>
@@ -52,6 +53,7 @@
       <v-btn
         color="green"
         @click='nextOrder()'
+        v-if='allUploaded'
       >
         Next Step
       </v-btn>
@@ -63,15 +65,28 @@
 import path from 'path'
 import { uploadJSON } from '@/assets/util/electronUtil.js'
 import videoPlayer from '@/components/video.vue'
+const R = require('ramda')
 export default {
   components: {
     videoPlayer
   },
   data () {
     return {
+      cardInfo: ['', '', '']
     }
   },
   methods: {
+    getCordinal: function (number) {
+      if (number === 1) {
+        return '1st'
+      }
+      if (number === 2) {
+        return '2nd'
+      }
+      if (number === 3) {
+        return '3rd'
+      }
+    },
     getvid: function () {
       return path.join(process.env.BASE_URL, 'videos/sample.mp4')
     },
@@ -81,19 +96,40 @@ export default {
     back () {
       this.$emit('next', 1)
     },
-    async upload () {
-      const file = await uploadJSON()
-      console.log(file)
+    async upload (wallet) {
+      const index = wallet - 1
+      try {
+        const file = await uploadJSON()
+        const walletObject = {
+          xfp: file.xfp, p2wsh: file.p2wsh, p2wsh_deriv: file.p2wsh_deriv
+        }
+        const newCardInfo = JSON.parse(JSON.stringify(this.cardInfo))
+        newCardInfo[index] = walletObject
+        this.cardInfo = newCardInfo
+      } catch (error) {
+        console.log('Nothing Chosen')
+      }
+    },
+    uploaded (number) {
+      const info = this.cardInfo
+      if (info[number - 1] === '') {
+        return 'blue'
+      }
+      return 'green'
     }
   },
   computed: {
     url: function () {
       return path.join(process.env.BASE_URL, 'videos/sample.mp4')
+    },
+    allUploaded: function () {
+      const info = this.cardInfo
+      const isEmpty = R.equals('')
+      const anyEmpty = R.any(isEmpty)(info)
+      return !anyEmpty
     }
   },
   async created () {
-    // eslint-disable-next-line
-    // this.filelocation = path.join(process.env.BASE_URL, 'sample.mp4')
   }
 }
 </script>

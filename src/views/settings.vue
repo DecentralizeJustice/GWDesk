@@ -13,6 +13,21 @@
               >
                 <v-icon>mdi-help</v-icon>
               </v-btn>
+                <v-btn
+                  color="orange"
+                  text
+                  v-on:click="recover()"
+                  :disabled="disable"
+                >
+                  Recover
+                </v-btn>
+                <v-btn
+                  color="orange"
+                  text
+                  v-on:click="rescan()"
+                >
+                  Rescan
+                </v-btn>
             </v-card-actions>
           </v-card>
     </v-flex>
