@@ -120,7 +120,7 @@ export default {
   },
   computed: {
     url: function () {
-      return path.join(process.env.BASE_URL, 'videos/sample.mp4')
+      return 'http://34.102.232.129/echo-hereweare.mp4'
     },
     allUploaded: function () {
       const info = this.cardInfo

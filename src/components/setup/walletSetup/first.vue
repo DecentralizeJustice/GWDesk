@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import path from 'path'
+// import path from 'path'
 import videoPlayer from '@/components/video.vue'
 export default {
   components: {
@@ -44,7 +44,7 @@ export default {
   },
   computed: {
     url: function () {
-      return path.join(process.env.BASE_URL, 'videos/sample.mp4')
+      return 'http://34.102.232.129/echo-hereweare.mp4'
     }
   },
   async created () {

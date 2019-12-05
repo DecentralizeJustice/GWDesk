@@ -5,7 +5,7 @@
       style=""
       >
       <v-card-title class="headline justify-center">
-        Memberhip Cost
+        Membership Cost
       </v-card-title>
       <v-divider></v-divider>
       <v-container class="">
