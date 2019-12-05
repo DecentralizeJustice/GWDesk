@@ -21,7 +21,6 @@
     "bitcoin-address-validation": "^1.0.0",
     "bitcoinjs-lib": "^5.1.6",
     "blob-to-buffer": "^1.2.8",
-    "blob-to-stream": "^1.0.3",
     "bs58check": "^2.1.2",
     "bweb": "DecentralizeJustice/bweb#0cd9bd50b7ebf39b0087db550983ed81a07a58fe",
     "chai-as-promised": "^7.1.1",

@@ -9,7 +9,6 @@
 <script>
 const axios = require('axios')
 const crypto = require('crypto')
-// const toStream = require('blob-to-stream')
 const toBuffer = require('blob-to-buffer')
 export default {
   name: 'videoPlayer',

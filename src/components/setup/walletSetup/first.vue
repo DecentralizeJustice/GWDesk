@@ -27,7 +27,6 @@
 </template>
 
 <script>
-// import path from 'path'
 import videoPlayer from '@/components/video.vue'
 export default {
   components: {
