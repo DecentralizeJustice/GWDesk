@@ -43,7 +43,6 @@ export default {
       if (err) throw err
       hash.update(buffer)
       const testingHash = await hash.digest('base64')
-      console.log(testingHash)
       if (this.desiredHash === testingHash) {
         this.hashPassed = true
         console.log('right hash')

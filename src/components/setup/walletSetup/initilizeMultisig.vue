@@ -66,6 +66,7 @@ export default {
   components: {
     videoPlayer
   },
+  props: ['xpubInfo'],
   data () {
     return {
     }
@@ -75,15 +76,21 @@ export default {
       this.$emit('next', 2)
     },
     async download () {
-      let textContents = ''
+      const devpath = 'Derivation: ' + this.xpubInfo[0].p2wsh_deriv
       const lines = [
-        '# Coldcard Multisig setup file (exported from 4369050F)',
-        '#',
-        'Name: MeMyself',
-        'Policy: 2 of 4',
-        "Derivation: m/45'",
-        'Format: P2WSH'
+        '# Coldcard Multisig setup file',
+        '# (exported from decen desktop app)',
+        'Name: Main Wallet',
+        'Policy: 2 of 3',
+        devpath,
+        'Format: P2WSH',
+        ''
       ]
+      for (const element of this.xpubInfo) {
+        const string = element.xfp + ': ' + element.p2wsh
+        lines.push(string)
+      }
+      let textContents = ''
       for (var line in lines) {
         textContents = textContents.concat(lines[line])
         textContents = textContents.concat('\n')

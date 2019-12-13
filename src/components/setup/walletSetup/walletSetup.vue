@@ -4,7 +4,9 @@
       <v-flex xs10 >
           <component
           v-bind:is="currentMain"
-          v-on:next="updateStep"/>
+          v-on:next="updateStep"
+          v-on:updateXpubInfo="updateXpubInfo"
+          v-bind:xpubInfo='xpubInfo'/>
     </v-flex>
     </v-layout>
   </v-container>
@@ -17,7 +19,7 @@ export default {
       'first', 'hardwareInitial', 'getWalletInfo', 'initilizeMultisig'
     ],
     currentSection: 0,
-    xpubInfo: {},
+    xpubInfo: ['', '', ''],
     configInfo: {}
   }),
   components: {
@@ -31,6 +33,11 @@ export default {
   methods: {
     updateStep (number) {
       this.currentSection = number
+    },
+    updateXpubInfo (index, walletObject) {
+      const newCardInfo = JSON.parse(JSON.stringify(this.xpubInfo))
+      newCardInfo[index] = walletObject
+      this.xpubInfo = newCardInfo
     }
   }
 }

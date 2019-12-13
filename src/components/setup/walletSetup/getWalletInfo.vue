@@ -62,7 +62,6 @@
 </template>
 
 <script>
-import path from 'path'
 import { uploadJSON } from '@/assets/util/electronUtil.js'
 import videoPlayer from '@/components/video.vue'
 const R = require('ramda')
@@ -70,9 +69,9 @@ export default {
   components: {
     videoPlayer
   },
+  props: ['xpubInfo'],
   data () {
     return {
-      cardInfo: ['', '', '']
     }
   },
   methods: {
@@ -87,14 +86,14 @@ export default {
         return '3rd'
       }
     },
-    getvid: function () {
-      return path.join(process.env.BASE_URL, 'videos/sample.mp4')
-    },
     nextOrder () {
       this.$emit('next', 3)
     },
     back () {
       this.$emit('next', 1)
+    },
+    updateWalletInfo (index, object) {
+      this.$emit('updateXpubInfo', index, object)
     },
     async upload (wallet) {
       const index = wallet - 1
@@ -103,15 +102,13 @@ export default {
         const walletObject = {
           xfp: file.xfp, p2wsh: file.p2wsh, p2wsh_deriv: file.p2wsh_deriv
         }
-        const newCardInfo = JSON.parse(JSON.stringify(this.cardInfo))
-        newCardInfo[index] = walletObject
-        this.cardInfo = newCardInfo
+        this.updateWalletInfo(index, walletObject)
       } catch (error) {
         console.log('Nothing Chosen')
       }
     },
     uploaded (number) {
-      const info = this.cardInfo
+      const info = this.xpubInfo
       if (info[number - 1] === '') {
         return 'blue'
       }
@@ -123,7 +120,7 @@ export default {
       return 'http://34.102.232.129/echo-hereweare.mp4'
     },
     allUploaded: function () {
-      const info = this.cardInfo
+      const info = this.xpubInfo
       const isEmpty = R.equals('')
       const anyEmpty = R.any(isEmpty)(info)
       return !anyEmpty
