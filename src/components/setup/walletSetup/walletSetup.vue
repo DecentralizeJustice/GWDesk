@@ -19,8 +19,7 @@ export default {
       'first', 'hardwareInitial', 'getWalletInfo', 'initilizeMultisig'
     ],
     currentSection: 0,
-    xpubInfo: ['', '', ''],
-    configInfo: {}
+    xpubInfo: ['', '', '']
   }),
   components: {
   },

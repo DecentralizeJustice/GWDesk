@@ -49,7 +49,7 @@
       <v-spacer/>
       <v-btn
         color="green"
-        @click='setupWallet()'
+        @click='done()'
       >
         Next Step
       </v-btn>
@@ -61,7 +61,8 @@
 import videoPlayer from '@/components/video.vue'
 import { createNamespacedHelpers } from 'vuex'
 import { downloadTXT } from '@/assets/util/electronUtil.js'
-const { mapActions } = createNamespacedHelpers('stageInfo')
+const stageInfo = createNamespacedHelpers('stageInfo')
+const userConstants = createNamespacedHelpers('userConstants')
 export default {
   components: {
     videoPlayer
@@ -74,6 +75,10 @@ export default {
   methods: {
     back () {
       this.$emit('next', 2)
+    },
+    done () {
+      this.updateWalletObject(this.xpubInfo)
+      this.setupWallet()
     },
     async download () {
       const devpath = 'Derivation: ' + this.xpubInfo[0].p2wsh_deriv
@@ -97,8 +102,11 @@ export default {
       }
       await downloadTXT(textContents)
     },
-    ...mapActions([
+    ...stageInfo.mapActions([
       'setupWallet'
+    ]),
+    ...userConstants.mapActions([
+      'updateWalletObject'
     ])
   },
   computed: {

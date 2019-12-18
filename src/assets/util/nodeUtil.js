@@ -12,6 +12,8 @@ async function startNode () {
   const args = [location]
   // eslint-disable-next-line
   const process = fork(path.join(__static, "spvNodeStart.js"), args)
+  // eslint-disable-next-line
+  // const processes = fork(path.join(__static, "startTor.js"), args)
   return true
 }
 async function checkNodeAlive () {
