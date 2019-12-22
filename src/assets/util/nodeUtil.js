@@ -1,5 +1,5 @@
 import { client, walletClient } from '@/assets/constants/nodeConstants.js'
-import { minConfirmations } from '@/assets/constants/genConstants.js'
+// import { minConfirmations } from '@/assets/constants/genConstants.js'
 import { getFeeInfo } from '@/assets/util/networkUtil.js'
 import path from 'path'
 import { fork } from 'child_process'
@@ -62,7 +62,7 @@ async function getNodeSyncInfo () {
 }
 
 async function createWallet (id) {
-  const accountKey = 'tpubDDF921KoqbemP3yPiBMBzvkDY5pe4KpirJtXtSaTdRkZ3LyqorrHy1mv1XLNqrmTQQXztdTQiZxDtPxGZ9Lmiqtv8wJYJs5o52J54djLpqC'
+  const accountKey = 'tpubDCYNZmxUFv2rtR5DR1r4NXb4yr5TCw7AbqaiJ1MNEvYrhYwhVNRgRpAxzkD4EkzXFDJqCq6fDyLKVZbjaoxrsyjBBnYULCHBPUqGZ9gPmMs'
   const options = {
     watchOnly: true,
     accountKey: accountKey
@@ -83,11 +83,11 @@ async function getUTXO (id) {
 }
 
 async function getWalletTransactions (account, name) {
-  const minConfirmationsMet = trans => (trans.confirmations >= minConfirmations)
+  // const minConfirmationsMet = trans => (trans.confirmations >= minConfirmations)
   await walletClient.execute('selectwallet', [name])
   const accountIndex = 0
   const transAray = []
-  const returnAmount = 20
+  const returnAmount = 10
   async function transLoop (transAray, accountIndex) {
     let index = accountIndex
     let array = transAray
@@ -100,9 +100,18 @@ async function getWalletTransactions (account, name) {
       return transLoop(array, index)
     }
   }
-  const finalArray = await transLoop(transAray, accountIndex)
-  const result = R.filter(minConfirmationsMet, finalArray)
-  return result
+  let finalArray = []
+  const transInfo = await walletClient.execute('listsinceblock', ['0000000000234139a02f4f65bcdd06be3e216f22c59c2e6960dcba62422d9da3', 0, true])// await walletClient.execute('listtransactions', [account, 10, 0])
+  // if (transInfo.length > 1) {
+  //   finalArray = await transLoop(transAray, accountIndex)
+  // } else {
+  //   finalArray = transInfo
+  // }
+  finalArray = await transLoop(transAray, accountIndex)
+  // node bug ?
+  // const result = R.filter(minConfirmationsMet, finalArray)
+  // console.log(finalArray.transactions)
+  return finalArray
 }
 async function listWalletAddresses (account, name) {
   await walletClient.execute('selectwallet', [name])

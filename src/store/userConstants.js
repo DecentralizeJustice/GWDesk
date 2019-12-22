@@ -1,22 +1,44 @@
+
+const R = require('ramda')
 export const userConstants = {
-  // This makes your getters, mutations, and actions accessed by, eg: 'myModule/myModularizedNumber' instead of mounting getters, mutations, and actions to the root namespace.
   namespaced: true,
   state: {
     walletObjects: [],
-    token: '85ca804272de4e87fe6a9357260bc1b1b4eb5b7ffcba167eca17d60bc04e8e43',
+    token: '',
     apiKey: 'hunter2',
     m: 2
   },
   mutations: {
     updateWalletObject (state, walletObject) {
       state.walletObjects = walletObject
+    },
+    updateWalletToken (state, walletToken) {
+      state.token = walletToken
     }
   },
   actions: {
     updateWalletObject (context, walletObject) {
-      console.log(walletObject)
-      console.log('ran')
       context.commit('updateWalletObject', walletObject)
+    },
+    updateWalletToken (context, walletToken) {
+      context.commit('updateWalletToken', walletToken)
+    }
+
+  },
+  getters: {
+    walletVpubs: (state, getters) => {
+      const getWalletObject = walletObject => walletObject.p2wsh
+      const vpubArray = R.map(getWalletObject, state.walletObjects)
+      return vpubArray
+    },
+    walletIdandVpubs: (state, getters) => {
+      const getWalletObject = walletObject => walletObject.p2wsh
+      const vpubArray = R.map(getWalletObject, state.walletObjects)
+      const walletObject = {}
+      for (var i = 0; i < vpubArray.length; i++) {
+        walletObject[i] = vpubArray[i]
+      }
+      return walletObject
     }
   }
 }

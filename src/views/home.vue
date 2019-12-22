@@ -59,12 +59,11 @@
 
 <script>
 import { recoverFromPubs } from '@/assets/task/recoverFromPubs.js'
-import { vpubObject } from '@/assets/constants/userConstantFiles.js'
-import { getPendingTransactions, resetChainTo, getNodeInfo } from '@/assets/util/nodeUtil.js' // createWallet
-// import { walletName } from '@/assets/constants/genConstants.js'
+import { getPendingTransactions, resetChainTo, getNodeInfo, createWallet } from '@/assets/util/nodeUtil.js'
+import { walletName } from '@/assets/constants/genConstants.js'
 import { decodeRawTransactionBitcoinJS } from '@/assets/util/transactionUtil/transactionUtil.js'
-import { mapMutations } from 'vuex'
-const R = require('ramda')
+import { createNamespacedHelpers } from 'vuex'
+const { mapGetters, mapState, mapActions } = createNamespacedHelpers('userConstants')
 export default {
   components: {
   },
@@ -72,16 +71,22 @@ export default {
     disable: false,
     transactions: []
   }),
+  computed: {
+    ...mapGetters([
+      'walletVpubs'
+    ]),
+    ...mapState([
+      'm'
+    ])
+  },
   methods: {
-    ...mapMutations([
+    ...mapActions([
     // Mounts the "incrementStoredNumber" mutation to `this.incrementStoredNumber()`.
-      'increment'
+      'updateWalletToken'
     ]),
     async recover () {
       this.disable = true
-      const vpubArray = R.values(vpubObject)
-      await recoverFromPubs(vpubArray)
-      console.log('Done !!!')
+      await recoverFromPubs(this.walletVpubs, this.m)
       this.disable = false
     },
     async start () {
@@ -90,8 +95,8 @@ export default {
       console.log(tes)
     },
     async createWallet () {
-      this.increment()
-      const results = this.$store.state
+      const results = await createWallet(walletName)
+      await this.updateWalletToken(results.token)
       console.log(results)
     },
     async rescan () {

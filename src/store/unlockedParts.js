@@ -31,7 +31,7 @@ export const userConstants = {
       exchangeIntro: false,
       lightningNetworkOverview: false,
       introwhyCryptocurrency: false,
-      introWhyBitcoin: false,
+      whyBitcoin: false,
       whyLightning: false,
       whyEthereum: false,
       bitcoinBubbles: false

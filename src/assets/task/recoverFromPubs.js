@@ -1,3 +1,4 @@
+
 import {
   importAddress, resetChainTo, checkIfNodeMeaningfull,
   getNodeSyncInfo, listWalletAddresses, getWalletTransactions
@@ -7,14 +8,13 @@ import {
   walletName, oldestBlock, account, gapLimit
 } from '@/assets/constants/genConstants.js'
 
-import { m } from '@/assets/constants/userConstantFiles.js'
-
 import {
   genAddress, addressHasTransactions, checkArrayForAddress
 } from '@/assets/util/addressUtil.js'
+
 const R = require('ramda')
 
-async function recoverFromPubs (vpubArray) {
+async function recoverFromPubs (vpubArray, m) {
   const startingIndex = 0
   const readyNode = await checkIfNodeMeaningfull(oldestBlock)
   if (!readyNode) {
@@ -24,13 +24,13 @@ async function recoverFromPubs (vpubArray) {
     return recoverFromPubs(vpubArray)
   }
   const addressArray = await listWalletAddresses(account, walletName)
-  const results = await addAddresses(addressArray, gapLimit, startingIndex, vpubArray)
+  const results = await addAddresses(addressArray, gapLimit, startingIndex, vpubArray, m)
   return results
 }
 
-async function addAddresses (addressArray, limit, index, vpubArray) {
+async function addAddresses (addressArray, limit, index, vpubArray, m) {
   for (let i = index; i < (limit + index); i++) {
-    await addAddress(vpubArray, i)
+    await addAddress(vpubArray, i, m)
   }
   const transactionArray = await getWalletTransactions(account, walletName)
   let unusedArray = []
@@ -49,16 +49,16 @@ async function addAddresses (addressArray, limit, index, vpubArray) {
     await pause(4)
     const updatedAddressArray = await listWalletAddresses(account, walletName)
     console.log('just time')
-    return addAddresses(updatedAddressArray, limit, index, vpubArray)
+    return addAddresses(updatedAddressArray, limit, index, vpubArray, m)
   } else {
     console.log('adding address via recursion')
     const updatedAddressArray = await listWalletAddresses(account, walletName)
     const newIndex = index + 1
-    return addAddresses(updatedAddressArray, limit, newIndex, vpubArray)
+    return addAddresses(updatedAddressArray, limit, newIndex, vpubArray, m)
   }
 }
 
-async function addAddress (vpubArray, index) {
+async function addAddress (vpubArray, index, m) {
   const address = await genAddress(index, vpubArray, m)
   const addressArray = await listWalletAddresses(account, walletName)
   const addressInNode = await checkArrayForAddress(address, addressArray)

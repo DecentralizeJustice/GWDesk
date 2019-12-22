@@ -17,7 +17,6 @@
                   color="orange"
                   text
                   v-on:click="recover()"
-                  :disabled="disable"
                 >
                   Recover
                 </v-btn>

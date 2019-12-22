@@ -6,6 +6,7 @@ const nodeInfoLocation = process.argv[2]
 const SPVNode = require('bcoin/lib/node/spvnode')
 const node = new SPVNode({
   network: 'testnet',
+  timeout: 100000,
   file: true,
   argv: true,
   env: true,
