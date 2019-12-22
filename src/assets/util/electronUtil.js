@@ -31,7 +31,7 @@ async function downloadPSBT (psbtHex) {
 
   const options = {
     title: 'Save PSBT',
-    defaultPath: app.getPath('desktop') + '/rerun.psbt',
+    defaultPath: app.getPath('desktop') + '/musigTransaction.psbt',
     buttonLabel: 'Save PSBT'
   }
 

@@ -146,7 +146,7 @@
 </template>
 
 <script>
-import { getTrasactionData, noChange } from
+import { getTransactionData, noChange } from
   '@/assets/util/transactionUtil/transactionUtil.js'
 import { getFeeEstimate, getUTXO } from '@/assets/util/nodeUtil.js'
 import { walletName } from '@/assets/constants/genConstants.js'
@@ -337,7 +337,7 @@ export default {
     getTransInfo: async function () {
       try {
         const coins = await getUTXO(walletName)
-        const transaction = await getTrasactionData(this.addressArray,
+        const transaction = await getTransactionData(this.addressArray,
           this.addressArraySat, coins, this.minFeeRatio)
         this.transactionInfo = transaction
         this.tooHigh = false

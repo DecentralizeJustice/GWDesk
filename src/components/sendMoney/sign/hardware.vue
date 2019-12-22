@@ -52,7 +52,7 @@
 import { downloadPSBT, uploadPSBT } from '@/assets/util/electronUtil.js'
 export default {
   name: 'hardwareSign',
-  props: ['plainPsbt'],
+  props: ['plainPsbt', 'index'],
   data: () => ({
     dialog: false,
     hardwareSignedHex: ''
@@ -67,7 +67,7 @@ export default {
     async uploadPSBT () {
       const signedPSBT = await uploadPSBT()
       this.hardwareSignedHex = signedPSBT
-      this.$emit('addsigned', 'hardware', signedPSBT)
+      this.$emit('addsigned', this.index, signedPSBT)
     }
   },
   async created () {

@@ -82,6 +82,7 @@ export default {
     },
     async download () {
       const devpath = 'Derivation: ' + this.xpubInfo[0].p2wsh_deriv
+      console.log(devpath)
       const lines = [
         '# Coldcard Multisig setup file',
         '# (exported from decen desktop app)',

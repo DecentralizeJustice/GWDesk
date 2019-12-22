@@ -58,7 +58,7 @@ noChange (desiredFeeRate, addressArray, addressArrayAmounts, utxo) {
   return newAmountArray
 }
 
-function getTrasactionData (addressArray, addressArrayAmount, utxo,
+async function getTransactionData (addressArray, addressArrayAmount, utxo,
   targetFeeRatio) {
   const musigTotalNumber = Object.keys(vpubObject).length
   const fifoCoins = R.sortBy(R.prop('height'))(utxo)
@@ -91,7 +91,7 @@ function getTrasactionData (addressArray, addressArrayAmount, utxo,
     inputsArrayPostOutputs)
 
   const change = inputSumPostFee.minus(feeAndUTXONeeded)
-  const changeAddressArray = creatChangeArray(addressArray)
+  const changeAddressArray = await createChangeArray(addressArray)
   const changeFeeAmountSatoshi =
     getFeeAmountSatoshi(changeAddressArray, targetFeeRatio,
       inputsArrayPostFee.length, musigTotalNumber)
@@ -151,13 +151,18 @@ function addNeededUtxo (currentInputSum, totalOutputsAmountNeeded, fifoUtxo,
   return [currentInputSum, inputsArray, fifoUtxo]
 }
 
-function creatChangeArray (addressArray) {
-  const dummyAddress = 'tb1qfhswexghg04qj74dw6rl53ejtlvwfycsveqq0fegfvcz5ssk3jdsp32rme'
+async function createChangeArray (addressArray) {
+  const dummyAddress = await createDummyAddress()
   const changeArray =
   R.append(dummyAddress, addressArray)
   return changeArray
 }
 
+async function createDummyAddress () {
+  const vpubArray = R.values(vpubObject)
+  const dummyAddress = await genAddress(0, vpubArray, m)
+  return dummyAddress
+}
 async function formTransactionData (tranactionDataOG) {
   const tranactionData = R.clone(tranactionDataOG)
   const changeAmountToAdd = tranactionData.change
@@ -297,7 +302,7 @@ function addToOutPutInfo (addressTypeArray) {
 }
 
 export {
-  getTransactionSize, getScriptPubkey, getTrasactionData,
+  getTransactionSize, getScriptPubkey, getTransactionData,
   noChange, formTransactionData, decodeRawTransactionBitcoinJS,
   getChangeCorrectAddress
 }

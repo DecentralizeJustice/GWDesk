@@ -97,7 +97,6 @@ export default {
     async createWallet () {
       const results = await createWallet(walletName)
       await this.updateWalletToken(results.token)
-      console.log(results)
     },
     async rescan () {
       console.log('ran')

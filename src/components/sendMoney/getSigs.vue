@@ -13,32 +13,21 @@
             class="mb-5 mt-5"
             v-if='!allsigned'
           >
-            <v-col cols="4" class="mx-auto">
+            <v-col cols="3" class="mx-auto" v-for="(index, item) in wallets" :key="index">
                 <v-card
                   class='light-blue darken-4'
                 >
                   <v-card-text class="subtitle-1 white--text">
-                    Sign With Hardware Wallet
+                    Sign With Hardware Wallet {{item + 1}}
                   </v-card-text>
                   <hardwareSign
                   v-on:addsigned='addsigned'
-                  v-bind:plainPsbt="plainPsbt"/>
-                </v-card>
-            </v-col>
-            <v-col cols="4" class="mx-auto">
-                <v-card
-                  class='light-blue darken-1'
-                >
-                  <v-card-text class="subtitle-1 white--text">
-                    Sign With Web Wallet
-                  </v-card-text>
-                  <softwareSign
-                  v-on:addsigned='addsigned'
                   v-bind:plainPsbt="plainPsbt"
-                  />
+                  v-bind:index="index"/>
                 </v-card>
             </v-col>
             </v-row>
+
             <v-btn @click="combine()"
             class="ma-2" color="green" dark v-if='allsigned'>
               Finish
@@ -52,7 +41,6 @@
 
 <script>
 import hardwareSign from '@/components/sendMoney/sign/hardware.vue'
-import softwareSign from '@/components/sendMoney/sign/software.vue'
 import { vpubObject, xfp, m } from '@/assets/constants/userConstantFiles.js'
 import { createPSBT, combineCompletedTrans } from '@/assets/util/psbtUtil.js'
 import { broadcastTrans } from '@/assets/util/networkUtil.js'
@@ -61,13 +49,12 @@ const R = require('ramda')
 export default {
   props: ['transaction'],
   components: {
-    hardwareSign,
-    softwareSign
+    hardwareSign
   },
   data: () => ({
     plainPsbt: '',
     signedPSBTs: {},
-    transctionData: {},
+    transactionData: {},
     loading: true
   }),
   computed: {
@@ -79,6 +66,15 @@ export default {
       } else {
         return false
       }
+    },
+    wallets: function () {
+      const num = Object.keys(xfp).length
+      const array = []
+      console.log(num)
+      for (var i = 0; i < num; i++) {
+        array[i] = i
+      }
+      return array
     }
   },
   methods: {
@@ -89,19 +85,21 @@ export default {
       console.log('trans added')
     },
     async combine () {
-      const trans1 = this.signedPSBTs.web
-      const trans2 = this.signedPSBTs.hardware
-      const trans = await combineCompletedTrans(trans1, trans2)
+      const signedArray = []
+      for (var variable in this.signedPSBTs) {
+        signedArray.push(variable)
+      }
+      const trans = await combineCompletedTrans(signedArray[0], signedArray[1])
       console.log(trans)
       const finalBraodcast = await broadcastTrans(trans)
       console.log(finalBraodcast)
     }
   },
   async created () {
-    const transctionData = await formTransactionData(this.transaction)
-    const psbt = await createPSBT(transctionData, vpubObject, xfp)
+    const transactionData = await formTransactionData(this.transaction)
+    const psbt = await createPSBT(transactionData, vpubObject, xfp)
     this.plainPsbt = psbt
-    this.transctionData = transctionData
+    this.transactionData = transactionData
     this.loading = false
     console.log('psbt created')
   }

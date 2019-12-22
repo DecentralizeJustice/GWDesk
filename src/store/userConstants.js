@@ -39,6 +39,15 @@ export const userConstants = {
         walletObject[i] = vpubArray[i]
       }
       return walletObject
+    },
+    xfp: (state, getters) => {
+      const getXFP = walletObject => walletObject.xfp
+      const xfpArray = R.map(getXFP, state.walletObjects)
+      const xfpObject = {}
+      for (var i = 0; i < xfpArray.length; i++) {
+        xfpObject[i] = xfpArray[i]
+      }
+      return xfpObject// { coldcard: '6C6816CE', web: 'DFFED015' }
     }
   }
 }

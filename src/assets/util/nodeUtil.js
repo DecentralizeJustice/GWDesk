@@ -101,7 +101,7 @@ async function getWalletTransactions (account, name) {
     }
   }
   let finalArray = []
-  const transInfo = await walletClient.execute('listsinceblock', ['0000000000234139a02f4f65bcdd06be3e216f22c59c2e6960dcba62422d9da3', 0, true])// await walletClient.execute('listtransactions', [account, 10, 0])
+  // const transInfo = await walletClient.execute('listsinceblock', ['0000000000234139a02f4f65bcdd06be3e216f22c59c2e6960dcba62422d9da3', 0, true])// await walletClient.execute('listtransactions', [account, 10, 0])
   // if (transInfo.length > 1) {
   //   finalArray = await transLoop(transAray, accountIndex)
   // } else {
