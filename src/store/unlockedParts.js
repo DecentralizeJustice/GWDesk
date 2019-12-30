@@ -50,7 +50,8 @@ export const unlockedLessons = {
         state.walletSecurity.introSecurityModel,
         state.walletOperations.introSendMoney,
         state.walletOperations.introReceiveMoney,
-        state.walletOperations.introTransactions
+        state.walletOperations.introTransactions,
+        state.walletOperations.introSupport
       ]
       const equalsTrue = R.equals(true)
       const allDone = R.all(equalsTrue)(introStates)

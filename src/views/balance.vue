@@ -154,7 +154,6 @@ export default {
   },
   async created () {
     await this.setup()
-    console.log(this.introDone)
   }
 }
 </script>

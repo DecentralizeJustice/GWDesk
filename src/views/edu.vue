@@ -7,7 +7,7 @@
         </v-card-title>
             <v-divider></v-divider>
             <v-row no-gutters justify-content='space-evenly'>
-               <v-col :key="item.title" v-for="(item) in cats" cols='4'>
+               <v-col :key="item.title" v-for="(item) in lessons" cols='4'>
                  <v-card
                    class="ma-3 primary"
                  >
@@ -46,7 +46,7 @@
 <script>
 export default {
   data: () => ({
-    cats: [
+    lessons: [
       { title: 'Introduction', icon: 'atom-variant' },
       { title: 'Wallet Security', icon: 'lock' },
       { title: 'Wallet Operations', icon: 'wallet' },

@@ -1,7 +1,7 @@
 <template>
   <v-layout align-center justify-center row fill-height>
 
-    <v-flex xs8>
+    <v-flex xs11>
       <incompleteCard v-if="!introDone"/>
       <v-card v-if="introDone">
         <v-card-title primary-title class="justify-center">

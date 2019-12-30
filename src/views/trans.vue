@@ -1,7 +1,8 @@
 <template>
   <v-layout align-center justify-center row fill-height>
     <v-flex xs11>
-      <v-card class="text-xs-center">
+      <incompleteCard v-if="!introDone"/>
+      <v-card class="text-xs-center" v-if="introDone">
         <v-card-title class="headline justify-center">
           Transactions
         </v-card-title>
@@ -33,14 +34,18 @@
 
 <script>
 import mainCard from '@/components/transactions/mainCard.vue'
+import incompleteCard from '@/components/general/incompleteIntro.vue'
 import { getWalletTransactions, getTxByHash } from '@/assets/util/nodeUtil.js'
 import { decodeRawTransactionBitcoinJS } from '@/assets/util/transactionUtil/transactionUtil.js'
 import { account, walletName } from '@/assets/constants/genConstants.js'
 import { addressFromScriptPub } from '@/assets/util/addressUtil.js'
+import { createNamespacedHelpers } from 'vuex'
+const { mapGetters } = createNamespacedHelpers('unlockedLessons')
 const R = require('ramda')
 export default {
   components: {
-    mainCard
+    mainCard,
+    incompleteCard
   },
   data: () => ({
     transactions: [],
@@ -78,6 +83,11 @@ export default {
       }
       return transactions
     }
+  },
+  computed: {
+    ...mapGetters({
+      introDone: 'introDone'
+    })
   },
   async created () {
     const results = await getWalletTransactions(account, walletName)
