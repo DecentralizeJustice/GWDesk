@@ -1,7 +1,8 @@
 <template>
   <v-layout align-center justify-center row fill-height>
     <v-flex xs11>
-      <v-card class="text-xs-center no-gutters" style="">
+      <incompleteCard v-if="!introDone"/>
+      <v-card class="text-xs-center no-gutters" style="" v-if="introDone">
         <v-card-title class="headline justify-center">
           Wallet Balance
         </v-card-title>
@@ -70,14 +71,18 @@
 
 <script>
 import transCard from '@/components/balance/cardComponent.vue'
+import incompleteCard from '@/components/general/incompleteIntro.vue'
 import { getTxByHash, getUTXO, getNodeHeight } from '@/assets/util/nodeUtil.js'
 import { decodeRawTransactionBitcoinJS } from '@/assets/util/transactionUtil/transactionUtil.js'
 import { walletName } from '@/assets/constants/genConstants.js'
 import { addressFromScriptPub } from '@/assets/util/addressUtil.js'
+import { createNamespacedHelpers } from 'vuex'
+const { mapGetters } = createNamespacedHelpers('unlockedLessons')
 const R = require('ramda')
 export default {
   components: {
-    transCard
+    transCard,
+    incompleteCard
   },
   data: () => ({
     transactions: [],
@@ -142,10 +147,14 @@ export default {
       const isConfirming = n => (this.currentBlock - n.height) > 1
       const trans = R.reverse(R.filter(isConfirming, this.transactions))
       return { trans: trans, type: 'confirmed' }
-    }
+    },
+    ...mapGetters({
+      introDone: 'introDone'
+    })
   },
   async created () {
     await this.setup()
+    console.log(this.introDone)
   }
 }
 </script>

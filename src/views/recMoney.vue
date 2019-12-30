@@ -2,7 +2,8 @@
   <v-layout align-center justify-center row fill-height>
 
     <v-flex xs8>
-      <v-card >
+      <incompleteCard v-if="!introDone"/>
+      <v-card v-if="introDone">
         <v-card-title primary-title class="justify-center">
           <div>
             <h3>Receive Bitcoin</h3>
@@ -50,16 +51,20 @@
 </template>
 
 <script>
+import incompleteCard from '@/components/general/incompleteIntro.vue'
 import { getWalletTransactions, getUTXO } from '@/assets/util/nodeUtil.js'
 import { account, walletName } from '@/assets/constants/genConstants.js'
 import { vpubObject, m } from '@/assets/constants/userConstantFiles.js'
 import { getReceiveAddress } from '@/assets/util/addressUtil.js'
 import mainCard from '@/components/recMoney/mainCard.vue'
+import { createNamespacedHelpers } from 'vuex'
+const { mapGetters } = createNamespacedHelpers('unlockedLessons')
 const BigNumber = require('bignumber.js')
 const R = require('ramda')
 export default {
   components: {
-    mainCard
+    mainCard,
+    incompleteCard
   },
   data: () => ({
     receiveAddress: '',
@@ -83,6 +88,11 @@ export default {
       this.transactions = R.filter(includesRec, transactions) // recToAddress
       this.loading = false
     }
+  },
+  computed: {
+    ...mapGetters({
+      introDone: 'introDone'
+    })
   },
   async created () {
     await this.setup()

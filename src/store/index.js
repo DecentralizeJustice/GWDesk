@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import VuexPersistence from 'vuex-persist'
 import { userConstants } from './userConstants.js'
 import { stageInfo } from './stageInfo.js'
+import { unlockedLessons } from './unlockedParts.js'
 const FileStore = require('electron-store')
 const store = new FileStore()
 
@@ -22,7 +23,8 @@ function getState (key, storage) {
 export default new Vuex.Store({
   modules: {
     userConstants,
-    stageInfo
+    stageInfo,
+    unlockedLessons
   },
   plugins: [vuexLocal.plugin]
 })

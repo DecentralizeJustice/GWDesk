@@ -1,4 +1,5 @@
-export const userConstants = {
+const R = require('ramda')
+export const unlockedLessons = {
   namespaced: true,
   state: {
     walletSecurity: {
@@ -30,10 +31,10 @@ export const userConstants = {
       chainSpecialty: false,
       exchangeIntro: false,
       lightningNetworkOverview: false,
-      introwhyCryptocurrency: false,
+      whyCryptocurrencyintro: false,
       whyBitcoin: false,
       whyLightning: false,
-      whyEthereum: false,
+      whyMonero: false,
       bitcoinBubbles: false
     }
   },
@@ -42,5 +43,18 @@ export const userConstants = {
   },
   actions: {
 
+  },
+  getters: {
+    introDone: state => {
+      const introStates = [
+        state.walletSecurity.introSecurityModel,
+        state.walletOperations.introSendMoney,
+        state.walletOperations.introReceiveMoney,
+        state.walletOperations.introTransactions
+      ]
+      const equalsTrue = R.equals(true)
+      const allDone = R.all(equalsTrue)(introStates)
+      return allDone
+    }
   }
 }

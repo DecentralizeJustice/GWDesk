@@ -47,11 +47,12 @@
 export default {
   data: () => ({
     cats: [
+      { title: 'Introduction', icon: 'atom-variant' },
       { title: 'Wallet Security', icon: 'lock' },
       { title: 'Wallet Operations', icon: 'wallet' },
       { title: 'Blockchain Mechanics', icon: 'bitcoin' },
-      { title: 'General Information', icon: 'book-information-variant' }
-      // { title: 'Games', icon: 'gamepad-variant' }
+      { title: 'General Information', icon: 'book-information-variant' },
+      { title: 'Games', icon: 'gamepad-variant' }
     ]
   }),
   methods: {

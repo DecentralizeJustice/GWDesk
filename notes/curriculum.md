@@ -13,8 +13,8 @@
   Sending
 Over View:
   1. education material
-  2. testout 100% required, no random guessing
-  3. unlockfeature
+  2. test out 100% required, no random guessing
+  3. unlock features
 
 3. blockchain mechanics, only info needed to use bitcoin safely
   forks
