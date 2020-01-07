@@ -46,25 +46,9 @@
       persistent
       overlay-opacity='1'
     >
-      <v-card>
-        <v-card-title class="headline">Use Google's location service?</v-card-title>
-        <v-divider/>
-        <v-card-text>
-          Let Google help apps determine location. This means sending anonymous
-          location data to Google, even when no apps are running.
-        </v-card-text>
-        <v-divider></v-divider>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            color="green darken-1"
-            text
-            @click="dialog = false"
-          >
-            Exit
-          </v-btn>
-        </v-card-actions>
-      </v-card>
+    <component
+    v-bind:is="currentMain"
+    v-on:exit="dialog = false"/>
     </v-dialog>
     </v-layout>
 </template>
@@ -86,6 +70,13 @@ export default {
     openDialog: function (section) {
       console.log(section)
       this.dialog = true
+    }
+  },
+  computed: {
+    currentMain () {
+      // const currentStage = this.currentStage
+      const componentName = 'landing'
+      return () => import(`@/components/edu/intro/${componentName}.vue`)
     }
   }
 }
