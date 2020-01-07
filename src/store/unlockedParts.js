@@ -3,10 +3,11 @@ export const unlockedLessons = {
   namespaced: true,
   state: {
     walletSecurity: {
-      introSecurityModel: false,
+      multisigSecurityModel: false,
       HardwareWallletSecurityintro: false,
       updateHardwareWallet: false,
-      hardwareWalletHardwareSecurity: false
+      hardwareWalletHardwareSecurity: false,
+      introWalletTypes: false
     },
     walletOperations: {
       supportingAccounts: false,
@@ -31,11 +32,13 @@ export const unlockedLessons = {
       chainSpecialty: false,
       exchangeIntro: false,
       lightningNetworkOverview: false,
-      whyCryptocurrencyintro: false,
-      whyBitcoin: false,
+      introWhyCryptocurrency: false,
+      introWhyBitcoin: false,
       whyLightning: false,
       whyMonero: false,
-      bitcoinBubbles: false
+      bitcoinBubbles: false,
+      introToExchanges: false,
+      introMembershipInfo: false
     }
   },
   mutations: {
@@ -47,11 +50,12 @@ export const unlockedLessons = {
   getters: {
     introDone: state => {
       const introStates = [
-        state.walletSecurity.introSecurityModel,
-        state.walletOperations.introSendMoney,
-        state.walletOperations.introReceiveMoney,
-        state.walletOperations.introTransactions,
-        state.walletOperations.introSupport
+        state.walletSecurity.introWalletTypes,
+        state.walletOperations.introSupport,
+        state.generalInformation.introWhyBitcoin,
+        state.generalInformation.introWhyCryptocurrency,
+        state.generalInformation.introToExchanges,
+        state.generalInformation.introMembershipInfo
       ]
       const equalsTrue = R.equals(true)
       const allDone = R.all(equalsTrue)(introStates)

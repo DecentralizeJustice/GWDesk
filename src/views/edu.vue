@@ -22,7 +22,7 @@
                  <v-card-actions class="justify-center">
                    <v-btn
                      color="deep-purple accent-4"
-                     @click.stop="dialog = true"
+                     @click.stop="openDialog(item.title)"
                    >
                      Explore
                    </v-btn>
@@ -43,31 +43,25 @@
     </v-flex>
     <v-dialog
       v-model="dialog"
+      persistent
+      overlay-opacity='1'
     >
       <v-card>
         <v-card-title class="headline">Use Google's location service?</v-card-title>
-
+        <v-divider/>
         <v-card-text>
-          Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.
+          Let Google help apps determine location. This means sending anonymous
+          location data to Google, even when no apps are running.
         </v-card-text>
-
+        <v-divider></v-divider>
         <v-card-actions>
           <v-spacer></v-spacer>
-
           <v-btn
             color="green darken-1"
             text
             @click="dialog = false"
           >
-            Disagree
-          </v-btn>
-
-          <v-btn
-            color="green darken-1"
-            text
-            @click="dialog = false"
-          >
-            Agree
+            Exit
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -85,10 +79,14 @@ export default {
       { title: 'Wallet Operations', icon: 'wallet' },
       { title: 'Blockchain Mechanics', icon: 'bitcoin' },
       { title: 'General Information', icon: 'book-information-variant' },
-      { title: 'Games', icon: 'gamepad-variant' }
+      { title: 'Visualizations', icon: 'gamepad-variant' }
     ]
   }),
   methods: {
+    openDialog: function (section) {
+      console.log(section)
+      this.dialog = true
+    }
   }
 }
 </script>
