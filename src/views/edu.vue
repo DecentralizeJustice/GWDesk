@@ -75,7 +75,7 @@ export default {
   computed: {
     currentMain () {
       // const currentStage = this.currentStage
-      const componentName = 'landing'
+      const componentName = 'main'
       return () => import(`@/components/edu/intro/${componentName}.vue`)
     }
   }

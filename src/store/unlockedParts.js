@@ -50,10 +50,10 @@ export const unlockedLessons = {
   getters: {
     introDone: state => {
       const introStates = [
+        state.generalInformation.introWhyCryptocurrency,
+        state.generalInformation.introWhyBitcoin,
         state.walletSecurity.introWalletTypes,
         state.walletOperations.introSupport,
-        state.generalInformation.introWhyBitcoin,
-        state.generalInformation.introWhyCryptocurrency,
         state.generalInformation.introToExchanges,
         state.generalInformation.introMembershipInfo
       ]
