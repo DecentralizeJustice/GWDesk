@@ -30,12 +30,13 @@
   </v-card>
 </template>
 <script>
+import videoPlayer from '@/components/general/videoHashed.vue'
 export default {
   data: () => ({
-    componentList: {
-    }
+
   }),
   components: {
+    videoPlayer
   },
   computed: {
   },
