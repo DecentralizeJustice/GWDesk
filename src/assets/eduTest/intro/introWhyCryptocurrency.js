@@ -2,7 +2,7 @@ const questions = {
   part1:
   [
     {
-      q: 'How Many Cryptocurrencies can exist?',
+      q: 'How many cryptocurrencies can exist?',
       opt: [
         '10',
         '50',
@@ -12,7 +12,7 @@ const questions = {
       ans: 3
     },
     {
-      q: 'Who Can Make A Cryptocurrency?',
+      q: 'Who can make a cryptocurrency?',
       opt: [
         'Banks',
         'Governments',
@@ -23,7 +23,7 @@ const questions = {
       ans: 4
     },
     {
-      q: 'What is the most usefull aspect of a Cryptocurrency?',
+      q: 'What is the most usefull aspect of a cryptocurrency?',
       opt: [
         'The Ability To Make Online Payments',
         'Creating systems Without Centralized Authorities',
@@ -57,6 +57,28 @@ const questions = {
   ],
   part2:
   [
+    {
+      q: 'What is the most important thing a cryptocurrency must do?',
+      opt: [
+        'Have strong marketing department',
+        'Have cool logo',
+        'Solve a problem',
+        'Get coportate sponsorships and partnerships'
+      ],
+      ans: 2
+    },
+    {
+      q: 'Some proven use cases for cryptocurrency are:',
+      opt: [
+        'Easy collection of taxes',
+        'Store of value',
+        'Sending money privately',
+        'A and B',
+        'B and C',
+        'All of the above'
+      ],
+      ans: 4
+    },
     {
       q: 'The Best Cryptocurrency is:',
       opt: [
@@ -115,6 +137,6 @@ const questions = {
   ]
 }
 
-export {
+export default {
   questions
 }

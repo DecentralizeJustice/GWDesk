@@ -39,6 +39,14 @@ export const unlockedLessons = {
       bitcoinBubbles: false,
       introToExchanges: false,
       introMembershipInfo: false
+    },
+    intro: {
+      introWhyCryptocurrency: false,
+      introToCoins: false,
+      introWalletTypes: false,
+      introSupport: false,
+      introToExchanges: false,
+      introMembershipInfo: false
     }
   },
   mutations: {
@@ -50,12 +58,12 @@ export const unlockedLessons = {
   getters: {
     introDone: state => {
       const introStates = [
-        state.generalInformation.introWhyCryptocurrency,
-        state.generalInformation.introWhyBitcoin,
-        state.walletSecurity.introWalletTypes,
-        state.walletOperations.introSupport,
-        state.generalInformation.introToExchanges,
-        state.generalInformation.introMembershipInfo
+        state.intro.introWhyCryptocurrency,
+        state.intro.introToCoins,
+        state.intro.introWalletTypes,
+        state.intro.introSupport,
+        state.intro.introToExchanges,
+        state.intro.introMembershipInfo
       ]
       const equalsTrue = R.equals(true)
       const allDone = R.all(equalsTrue)(introStates)

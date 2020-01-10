@@ -28,7 +28,6 @@
     </v-row>
     <v-divider/>
     <v-card-actions>
-      <v-spacer></v-spacer>
       <v-btn
         color="green darken-1"
         text
@@ -36,6 +35,7 @@
       >
         Exit
       </v-btn>
+      <v-spacer></v-spacer>
     </v-card-actions>
   </v-card>
 </template>
