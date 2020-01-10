@@ -1,5 +1,8 @@
 <template>
   <v-row align="center">
+    <v-alert type="error" v-if='wrong'>
+      I'm an error alert.
+  </v-alert>
     <v-col class="d-flex" cols="10" offset='1'>
       <v-card class="mx-auto" color='blue darken-4'
         >
@@ -11,7 +14,10 @@
       <v-col class="d-flex" cols="6" offset='3'>
         <v-select
           :items="items"
-          label="Answer"
+          label="Choices"
+          item-text="value"
+          item-value="index"
+          v-model="select"
           outlined
         ></v-select>
       </v-col>
@@ -19,6 +25,7 @@
         <v-btn
           color="red darken-2"
           @click="checkAnswer()"
+          :disabled='answerDisabled'
         >
           Submit
         </v-btn>
@@ -42,7 +49,9 @@ export default {
   props: ['questions'],
   data () {
     return {
-      questionNum: 0
+      questionNum: 0,
+      select: undefined,
+      wrong: false
     }
   },
   methods: {
@@ -50,21 +59,50 @@ export default {
       this.$emit('backToVideo')
     },
     checkAnswer () {
-      console.log('checked')
+      if (this.select === this.correctAnswer) {
+        this.correct()
+      } else {
+        this.wrong = true
+      }
+    },
+    correct () {
+      this.wrong = false
+      this.select = undefined
+      if (this.questionNum === this.questions.length - 1) {
+        this.$emit('done')
+      } else {
+        this.questionNum += 1
+      }
     }
   },
   computed: {
     items: function () {
       const letters = ['A. ', 'B. ', 'C. ', 'D. ', 'E. ', 'F. ', 'G. ']
       const options = []
-      for (var i = 0; i < this.questions[this.questionNum].opt.length; i++) {
-        options.push(letters[i].concat(this.questions[this.questionNum].opt[i]))
+      const quest = this.questions
+      for (var i = 0; i < quest[this.questionNum].opt.length; i++) {
+        options.push(
+          {
+            value: letters[i].concat(quest[this.questionNum].opt[i]),
+            index: i
+          }
+        )
       }
       return options
     },
     question: function () {
       const value = this.questions[this.questionNum].q
       return value
+    },
+    correctAnswer: function () {
+      const value = this.questions[this.questionNum].ans
+      return value
+    },
+    answerDisabled: function () {
+      if (this.select === undefined) {
+        return true
+      }
+      return false
     }
   }
 }

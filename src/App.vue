@@ -41,7 +41,7 @@ export default {
     //
   }),
   async created () {
-    this.start()
+    // this.start()
   }
 }
 </script>
