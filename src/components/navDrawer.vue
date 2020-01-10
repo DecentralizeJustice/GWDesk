@@ -30,7 +30,7 @@
         <v-list-item-title>{{title}}</v-list-item-title>
       </v-list-item>
     </v-list>
-    <template v-slot:append >
+    <!-- <template v-slot:append >
         <v-list
           nav
           dense
@@ -45,7 +45,7 @@
             <v-list-item-title>Node Synced 100%</v-list-item-title>
           </v-list-item>
         </v-list>
-      </template>
+      </template> -->
   </v-navigation-drawer>
 </template>
 
@@ -56,15 +56,15 @@ export default {
   },
   data: () => ({
     titles: [
-      'Home', 'Balance', 'Receive Money', 'Send Money', 'Transactions',
-      'Education', 'Support', 'Settings'
+      // 'Home', 'Balance', 'Receive Money', 'Send Money', 'Transactions',
+      'Education'//, 'Support', 'Settings'
     ],
     icons: ['home', 'cash-usd', 'arrow-right-bold',
       'arrow-left-bold', 'history', 'book-open-page-variant', 'face-agent',
       'settings'
     ],
-    routerLinks: ['home', 'balance', 'receive', 'send', 'trans', 'edu',
-      'support', 'settings'
+    routerLinks: ['edu' // 'home', 'balance', 'receive', 'send', 'trans',
+      // 'support', 'settings'
     ],
     open: false
   }),

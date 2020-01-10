@@ -1,8 +1,10 @@
 <template>
   <v-row align="center">
-    <v-alert type="error" v-if='wrong'>
-      I'm an error alert.
-  </v-alert>
+    <v-col cols='6' class="text-center" offset='3'>
+      <v-alert type="error" v-if='wrong'>
+        Sorry, your answer is wrong. Try Again.
+    </v-alert>
+    </v-col>
     <v-col class="d-flex" cols="10" offset='1'>
       <v-card class="mx-auto" color='blue darken-4'
         >
