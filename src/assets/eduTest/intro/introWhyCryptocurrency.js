@@ -23,9 +23,9 @@ const questions = {
       ans: 4
     },
     {
-      q: 'What is the most usefull aspect of a cryptocurrency?',
+      q: 'What is the most single usefull aspect of a cryptocurrency?',
       opt: [
-        'The Ability To Make Online Payments',
+        'The ability to make online payments',
         'Creating systems Without Centralized Authorities',
         'Creating an Open Transaction Histoy',
         'The ability to make quick payments'
@@ -33,15 +33,14 @@ const questions = {
       ans: 1
     },
     {
-      q: 'The hardest part about using Cryptocurrencies is:',
+      q: 'One of the hardest parts about using cryptocurrencies is:',
       opt: [
         'Figuring Out Which To Use.',
-        'Using it privately.',
         'Securing it.',
         'Buying Cryptocurrencies.',
         'Finding Places to Spend It.'
       ],
-      ans: 2
+      ans: 1
     },
     {
       q: 'Who is responsible for securing and protecting your Cryptocurrency in the United States?',
@@ -73,9 +72,9 @@ const questions = {
         'Easy collection of taxes',
         'Store of value',
         'Sending money privately',
-        'A and B',
-        'B and C',
-        'All of the above'
+        'Both A and B',
+        'Both B and C',
+        'All of A, B, and C'
       ],
       ans: 4
     },
@@ -86,7 +85,7 @@ const questions = {
         'Litecoin',
         'Monero',
         'Ethereum',
-        'It Depends.'
+        'It depends on the use case.'
       ],
       ans: 4
     },
@@ -123,17 +122,17 @@ const questions = {
         'Useless Ethereum Token'
       ],
       ans: 0
-    },
-    {
-      q: 'The first Product bought with cryptocurrency was:',
-      opt: [
-        'A House',
-        'A Mac Computer',
-        'A Pizza',
-        'A Lamborghini Hurrican'
-      ],
-      ans: 2
     }
+    // {
+    //   q: 'The first Product bought with cryptocurrency was:',
+    //   opt: [
+    //     'A House',
+    //     'A Mac Computer',
+    //     'A Pizza',
+    //     'A Lamborghini Hurrican'
+    //   ],
+    //   ans: 2
+    // }
   ]
 }
 

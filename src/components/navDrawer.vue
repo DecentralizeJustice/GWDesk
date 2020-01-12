@@ -59,8 +59,10 @@ export default {
       // 'Home', 'Balance', 'Receive Money', 'Send Money', 'Transactions',
       'Education'//, 'Support', 'Settings'
     ],
-    icons: ['home', 'cash-usd', 'arrow-right-bold',
-      'arrow-left-bold', 'history', 'book-open-page-variant', 'face-agent',
+    icons: [
+      // 'home', 'cash-usd', 'arrow-right-bold',
+      // 'arrow-left-bold', 'history',
+      'book-open-page-variant', 'face-agent',
       'settings'
     ],
     routerLinks: ['edu' // 'home', 'balance', 'receive', 'send', 'trans',

@@ -29,7 +29,7 @@
     <v-divider/>
     <v-card-actions>
       <v-btn
-        color="green darken-1"
+        color="red darken-1"
         text
         @click="exit()"
       >

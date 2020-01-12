@@ -14,7 +14,6 @@ export default {
       if (this.lesson === '') {
         return () => import('@/components/edu/intro/landing.vue')
       }
-      // const currentStage = this.currentStage
       const componentName = this.lesson
       return () => import(`@/components/edu/intro/${componentName}.vue`)
     }

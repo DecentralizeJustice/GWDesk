@@ -1,9 +1,12 @@
 <template>
   <v-row align="center">
     <v-col cols='6' class="text-center" offset='3'>
+      <v-alert type="info" v-if='bonus'>
+        Bonus Question
+      </v-alert>
       <v-alert type="error" v-if='wrong'>
         Sorry, your answer is wrong. Try Again.
-    </v-alert>
+      </v-alert>
     </v-col>
     <v-col class="d-flex" cols="10" offset='1'>
       <v-card class="mx-auto" color='blue darken-4'
@@ -32,7 +35,18 @@
           Submit
         </v-btn>
       </v-col>
-      <v-col cols='3' class="text-center">
+      <v-col cols='4' offset='4'>
+        <v-progress-linear
+          :value='progress'
+          color="green"
+          height="25"
+        >
+          <template v-slot="{ value }">
+            <strong>{{ Math.ceil(value) }}%</strong>
+          </template>
+        </v-progress-linear>
+      </v-col>
+      <v-col cols='11' class="text-left" offset='1'>
         <v-btn
           color="primary darken-1"
           @click="backToVideo()"
@@ -48,7 +62,7 @@ export default {
   name: 'quiz',
   components: {
   },
-  props: ['questions'],
+  props: ['questions', 'bonus'],
   data () {
     return {
       questionNum: 0,
@@ -71,7 +85,7 @@ export default {
       this.wrong = false
       this.select = undefined
       if (this.questionNum === this.questions.length - 1) {
-        this.$emit('done')
+        this.$emit('quizDone')
       } else {
         this.questionNum += 1
       }
@@ -105,6 +119,10 @@ export default {
         return true
       }
       return false
+    },
+    progress: function () {
+      const numberOfQuestions = this.questions.length
+      return (this.questionNum / numberOfQuestions) * 100
     }
   }
 }

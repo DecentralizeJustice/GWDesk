@@ -68,13 +68,11 @@ export default {
   }),
   methods: {
     openDialog: function (section) {
-      console.log(section)
       this.dialog = true
     }
   },
   computed: {
     currentMain () {
-      // const currentStage = this.currentStage
       const componentName = 'main'
       return () => import(`@/components/edu/intro/${componentName}.vue`)
     }
