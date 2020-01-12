@@ -12,7 +12,15 @@
    </v-col>
    <v-col class="text-center" cols="12">
      <v-btn
-       color="primary darken-1"
+       color="primary lighten-1"
+       @click="skip()"
+       v-if='bonus'
+       class="mr-6"
+     >
+       Skip
+     </v-btn>
+     <v-btn
+       color="primary darken-2"
        @click="startQuiz()"
      >
        Take Quiz
@@ -36,6 +44,9 @@ export default {
   methods: {
     startQuiz () {
       this.$emit('startQuiz')
+    },
+    skip () {
+      this.$emit('quizDone')
     }
   },
   computed: {

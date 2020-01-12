@@ -108,7 +108,6 @@ export default {
       }
       if (!this.bonus) {
         this.backToVideo()
-      } else {
       }
     }
   }

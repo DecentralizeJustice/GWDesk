@@ -46,13 +46,31 @@
           </template>
         </v-progress-linear>
       </v-col>
-      <v-col cols='11' class="text-left" offset='1'>
+      <v-col cols='12' class="text-center" offset='' v-if='!bonus'>
         <v-btn
           color="primary darken-1"
           @click="backToVideo()"
         >
           Back To Video
         </v-btn>
+        </v-col>
+        <v-col cols='12' class="text-center" offset='' v-if='bonus'>
+        <v-btn
+          color="primary lighten-1"
+          @click="skip()"
+          class="mr-3"
+        >
+          Skip
+        </v-btn>
+        <v-btn
+          color="primary darken-2"
+          @click="backToVideo()"
+          class=""
+        >
+          See Answer Video
+        </v-btn>
+        </v-col>
+        <v-col cols='3' class="" offset='1' v-if='bonus'>
       </v-col>
     </v-row>
 </template>
@@ -71,6 +89,9 @@ export default {
     }
   },
   methods: {
+    skip () {
+      this.$emit('quizDone')
+    },
     backToVideo () {
       this.$emit('backToVideo')
     },
