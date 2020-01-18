@@ -39,6 +39,12 @@
    />
     <v-divider/>
     <v-card-actions>
+        <v-btn
+          color="orange"
+          text
+        >
+          <v-icon>mdi-help</v-icon>
+        </v-btn>
       <v-btn
         color="red darken-1"
         text

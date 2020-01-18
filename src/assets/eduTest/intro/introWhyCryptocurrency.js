@@ -23,12 +23,43 @@ const questions = {
       ans: 4
     },
     {
-      q: 'What is the most single usefull aspect of a cryptocurrency?',
+      q: 'A cryptocurrency can be used to:',
       opt: [
-        'The ability to make online payments',
-        'Creating systems Without Centralized Authorities',
-        'Creating an Open Transaction Histoy',
-        'The ability to make quick payments'
+        'Avoid censorship from a bank',
+        'Stop a bank from tracking your payments',
+        'Build a censorship resistance social network',
+        'All of the above'
+      ],
+      ans: 3
+    },
+    {
+      q: "Which item isn't an digital asset?",
+      opt: [
+        'Your computer',
+        'A facebook profile',
+        'An email',
+        'An online photo'
+      ],
+      ans: 0
+    }
+  ],
+  part2:
+  [
+    {
+      q: 'Cryptocurrencies have only upsides and no downsides.',
+      opt: [
+        'True',
+        'False'
+      ],
+      ans: 1
+    },
+    {
+      q: 'One advantage of using cryptocurrencies for money instead of banks is:',
+      opt: [
+        'Cryptocurrencies requrie more education',
+        'Cryptocurrencies are more secure',
+        'Cryptocurrencies require more password security',
+        'Cryptocurrencies require more personal responsibility'
       ],
       ans: 1
     },
@@ -54,62 +85,71 @@ const questions = {
       ans: 3
     }
   ],
-  part2:
-  [
-    {
-      q: 'What is the most important thing a cryptocurrency must do?',
-      opt: [
-        'Have strong marketing department',
-        'Have cool logo',
-        'Solve a problem',
-        'Get coportate sponsorships and partnerships'
-      ],
-      ans: 2
-    },
-    {
-      q: 'Some proven use cases for cryptocurrency are:',
-      opt: [
-        'Easy collection of taxes',
-        'Store of value',
-        'Sending money privately',
-        'Both A and B',
-        'Both B and C',
-        'All of A, B, and C'
-      ],
-      ans: 4
-    },
-    {
-      q: 'The Best Cryptocurrency is:',
-      opt: [
-        'Bitcoin',
-        'Litecoin',
-        'Monero',
-        'Ethereum',
-        'It depends on the use case.'
-      ],
-      ans: 4
-    },
-    {
-      q: 'The best cryptocurrency for long term store of value (savings) is:',
-      opt: [
-        'Bitcoin',
-        'Litecoin',
-        'Ethereum',
-        'Monero'
-      ],
-      ans: 0
-    },
-    {
-      q: 'The best cryptocurrency for private transactions is:',
-      opt: [
-        'Bitcoin',
-        'Litecoin',
-        'Ethereum',
-        'Monero'
-      ],
-      ans: 3
-    }
-  ],
+  // part3: [
+  //   {
+  //     q: 'What is the most important thing a cryptocurrency must do?',
+  //     opt: [
+  //       'Have strong marketing department',
+  //       'Have cool logo',
+  //       'Solve a problem',
+  //       'Get coportate sponsorships and partnerships'
+  //     ],
+  //     ans: 2
+  //   },
+  //   {
+  //     q: 'Some proven use cases for cryptocurrency are:',
+  //     opt: [
+  //       'Easy collection of taxes',
+  //       'Store of value',
+  //       'Sending money privately',
+  //       'Both A and B',
+  //       'Both B and C',
+  //       'All of A, B, and C'
+  //     ],
+  //     ans: 4
+  //   },
+  //   {
+  //     q: 'Which is a bad use case for cryptocurrency?',
+  //     opt: [
+  //       'Sending money to a relative in another country.',
+  //       'Running software on a decentralized network.',
+  //       'Using a banks cryptocurrency to pay your bills.',
+  //       'Buying things privately online.'
+  //     ],
+  //     ans: 3
+  //   },
+  //   {
+  //     q: 'The Best Cryptocurrency is:',
+  //     opt: [
+  //       'Bitcoin',
+  //       'Litecoin',
+  //       'Monero',
+  //       'Ethereum',
+  //       'It depends on the use case.'
+  //     ],
+  //     ans: 4
+  //   },
+  //   {
+  //     q: 'The best cryptocurrency for long term store of value (savings) is:',
+  //     opt: [
+  //       'Bitcoin',
+  //       'Litecoin',
+  //       'Ethereum',
+  //       'Monero'
+  //     ],
+  //     ans: 0
+  //   },
+  //   {
+  //     q: 'The best cryptocurrency for private transactions is:',
+  //     opt: [
+  //       'Bitcoin',
+  //       'Litecoin',
+  //       'Ethereum',
+  //       'Monero'
+  //     ],
+  //     ans: 3
+  //   }
+  // ],
   bonus:
   [
     {
@@ -123,16 +163,6 @@ const questions = {
       ],
       ans: 0
     }
-    // {
-    //   q: 'The first Product bought with cryptocurrency was:',
-    //   opt: [
-    //     'A House',
-    //     'A Mac Computer',
-    //     'A Pizza',
-    //     'A Lamborghini Hurrican'
-    //   ],
-    //   ans: 2
-    // }
   ]
 }
 

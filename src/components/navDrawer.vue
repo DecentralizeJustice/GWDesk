@@ -11,7 +11,7 @@
           one-line
         >
           <v-list-item-content>
-            <v-list-item-title class="title">Distributed Keys</v-list-item-title>
+            <v-list-item-title class="title">Guide Wallet</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>

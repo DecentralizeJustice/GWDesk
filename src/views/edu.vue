@@ -14,9 +14,11 @@
                  <v-card-title class="headline justify-center">
                    {{item.title}}
                  </v-card-title>
-                 <v-row >
-                  <v-col cols='2' offset='5'>
-                    <v-icon x-large color="black" class="">mdi-{{item.icon}}</v-icon>
+                 <v-row no-gutters justify-content='center' >
+                  <v-col cols='2' offset='5' class="justify-center text-center">
+                    <v-icon x-large color="black" class="" style="">
+                      mdi-{{item.icon}}
+                    </v-icon>
                   </v-col>
                 </v-row>
                  <v-card-actions class="justify-center">

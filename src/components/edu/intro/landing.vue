@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-card-title class="headline justify-center">Intro To Cryptocurrency Course</v-card-title>
+    <v-card-title class="headline justify-center">Intro To Cryptocurrency Use Course</v-card-title>
     <v-divider/>
     <v-row no-gutters justify-content='space-evenly'>
        <v-col :key="item.title" v-for="(item) in lessons" cols='6'>
@@ -10,9 +10,12 @@
          <v-card-title class="headline justify-center">
            {{item.title}}
          </v-card-title>
-         <v-row >
-          <v-col cols='2' offset='5'>
-            <v-icon x-large color="black" class="">mdi-{{item.icon}}</v-icon>
+
+         <v-row no-gutters justify-content='center' >
+          <v-col cols='2' offset='5' class="justify-center text-center">
+            <v-icon x-large color="black" class="" style="">
+              mdi-{{item.icon}}
+            </v-icon>
           </v-col>
         </v-row>
          <v-card-actions class="justify-center">
@@ -28,6 +31,12 @@
     </v-row>
     <v-divider/>
     <v-card-actions>
+      <v-btn
+        color="orange"
+        text
+      >
+        <v-icon>mdi-help</v-icon>
+      </v-btn>
       <v-btn
         color="red darken-1"
         text
@@ -46,12 +55,12 @@ export default {
     },
     lesson: '',
     lessons: [
-      { title: 'Why Cryptocurrency?', icon: 'atom-variant', comp: 'whyCrypto' },
-      { title: 'Why Bitcoin?', icon: 'lock' },
-      { title: 'All About Wallets', icon: 'wallet' },
-      { title: 'How Support Works', icon: 'bitcoin' },
-      { title: 'All About Exchanges', icon: 'book-information-variant' },
-      { title: 'Membership Information', icon: 'gamepad-variant' }
+      { title: 'What is Cryptocurrency?', icon: 'atom-variant', comp: 'whyCrypto', unlocked: 'true' },
+      { title: 'Which Cryptocurrency should I use?', icon: 'lock', unlocked: 'true' },
+      { title: 'How To Store Cryptocurrency', icon: 'wallet', unlocked: 'true' },
+      // { title: 'How Support Works', icon: 'bitcoin' },
+      { title: 'How To Buy Cryptocurrency', icon: 'book-information-variant', unlocked: 'true' }
+      // { title: 'Membership Information', icon: 'gamepad-variant' }
     ]
   }),
   components: {
