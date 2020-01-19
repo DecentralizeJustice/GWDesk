@@ -5,7 +5,7 @@
     <v-row no-gutters justify-content='space-evenly'>
        <v-col :key="item.title" v-for="(item) in lessons" cols='6'>
          <v-card
-           class="ma-3 green"
+           class="ma-3" :color="cardColor(item.unlocked)"
          >
          <v-card-title class="headline justify-center">
            {{item.title}}
@@ -13,7 +13,7 @@
 
          <v-row no-gutters justify-content='center' >
           <v-col cols='2' offset='5' class="justify-center text-center">
-            <v-icon x-large color="black" class="" style="">
+            <v-icon x-large :color="iconColor(item.unlocked)" class="" style="">
               mdi-{{item.icon}}
             </v-icon>
           </v-col>
@@ -21,6 +21,7 @@
          <v-card-actions class="justify-center">
            <v-btn
              color="deep-purple accent-4"
+             :disabled='!unlocked(item.unlocked)'
              @click="startLesson (item.comp)"
            >
              Start
@@ -56,11 +57,9 @@ export default {
     lesson: '',
     lessons: [
       { title: 'What is Cryptocurrency?', icon: 'atom-variant', comp: 'whyCrypto', unlocked: 'true' },
-      { title: 'Which Cryptocurrency should I use?', icon: 'lock', unlocked: 'true' },
-      { title: 'How To Store Cryptocurrency', icon: 'wallet', unlocked: 'true' },
-      // { title: 'How Support Works', icon: 'bitcoin' },
-      { title: 'How To Buy Cryptocurrency', icon: 'book-information-variant', unlocked: 'true' }
-      // { title: 'Membership Information', icon: 'gamepad-variant' }
+      { title: 'Which Cryptocurrency should I use?', icon: 'lock', unlocked: 'false' },
+      { title: 'How To Store Cryptocurrency', icon: 'wallet', unlocked: 'false' },
+      { title: 'How To Buy Cryptocurrency', icon: 'book-information-variant', unlocked: 'false' }
     ]
   }),
   components: {
@@ -73,6 +72,24 @@ export default {
     }
   },
   methods: {
+    cardColor (state) {
+      if (state === 'true') {
+        return 'blue'
+      }
+      return 'grey darken-4'
+    },
+    iconColor (state) {
+      if (state === 'true') {
+        return 'black'
+      }
+      return 'white'
+    },
+    unlocked (state) {
+      if (state === 'true') {
+        return true
+      }
+      return false
+    },
     exit () {
       this.$emit('exit')
     },

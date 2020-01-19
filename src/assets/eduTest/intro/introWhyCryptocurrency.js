@@ -64,26 +64,45 @@ const questions = {
       ans: 1
     },
     {
-      q: 'One of the hardest parts about using cryptocurrencies is:',
+      q: 'If someone steals your id and social security card, is your crypto still secure?',
       opt: [
-        'Figuring Out Which To Use.',
-        'Securing it.',
-        'Buying Cryptocurrencies.',
-        'Finding Places to Spend It.'
+        'Yes',
+        'No'
       ],
-      ans: 1
+      ans: 0
     },
     {
-      q: 'Who is responsible for securing and protecting your Cryptocurrency in the United States?',
+      q: `Who can help you recover your crypto if you loose your cryptocurrency
+      password?`,
       opt: [
-        'The U.S. Securities and Exchange Commission',
-        'The Bitcoin Foundation',
-        'Your Bank.',
-        'You are.',
-        'Your Exchange.'
+        'Your bank.',
+        'A smart programmer.',
+        'No one',
+        'The Police'
       ],
-      ans: 3
+      ans: 2
     }
+    // {
+    //   q: 'One of the hardest parts about using cryptocurrencies is:',
+    //   opt: [
+    //     'Figuring Out Which To Use.',
+    //     'Securing it.',
+    //     'Buying Cryptocurrencies.',
+    //     'Finding Places to Spend It.'
+    //   ],
+    //   ans: 1
+    // },
+    // {
+    //   q: 'Who is responsible for securing and protecting your Cryptocurrency in the United States?',
+    //   opt: [
+    //     'The U.S. Securities and Exchange Commission',
+    //     'The Bitcoin Foundation',
+    //     'Your Bank.',
+    //     'You are.',
+    //     'Your Exchange.'
+    //   ],
+    //   ans: 3
+    // }
   ],
   // part3: [
   //   {

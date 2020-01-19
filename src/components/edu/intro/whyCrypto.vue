@@ -16,47 +16,61 @@
      </v-col>
     </v-row>
 
+    <div v-if='currentComponent === "mainQuiz"'>
+      <vidComp
+      v-on:startQuiz='startQuiz()'
+      v-bind:vidUrl="vidUrl"
+      v-bind:bonus="false"
+      v-if='vid'/>
+     <quiz
+     v-bind:questions="test"
+     v-on:backToVideo='backToVideo()'
+     v-on:quizDone='partDone'
+     v-if='!vid'
+     v-bind:bonus="false"
+     :key="234"
+     />
+  </div>
+  <div v-if='currentComponent === "bonus"'>
     <vidComp
     v-on:startQuiz='startQuiz()'
     v-bind:vidUrl="vidUrl"
-    v-bind:bonus="bonus"
+    v-bind:bonus="true"
     v-if='vid'/>
    <quiz
    v-bind:questions="test"
    v-on:backToVideo='backToVideo()'
-   v-on:quizDone='quizDone'
-   v-if='!vid&&!bonus'
-   v-bind:bonus="bonus"
-   :key="234"
-   />
-   <quiz
-   v-bind:questions="test"
-   v-on:backToVideo='backToVideo()'
-   v-on:quizDone='quizDone'
-   v-if='!vid&&bonus'
-   v-bind:bonus="bonus"
+   v-on:quizDone='partDone'
+   v-if='!vid'
+   v-bind:bonus="true"
    :key="12"
    />
+ </div>
+   <congrats
+   v-bind:vidUrl="vidUrl"
+   v-if='currentComponent === "congrats"'
+   v-on:quizDone='partDone'/>
     <v-divider/>
     <v-card-actions>
-        <v-btn
-          color="orange"
-          text
-        >
-          <v-icon>mdi-help</v-icon>
-        </v-btn>
       <v-btn
-        color="red darken-1"
+        color="orange"
         text
-        @click="exit()"
       >
-        Exit
+        <v-icon>mdi-help</v-icon>
       </v-btn>
-      <v-spacer></v-spacer>
+    <v-btn
+      color="red darken-1"
+      text
+      @click="exit()"
+    >
+      Exit
+    </v-btn>
+    <v-spacer></v-spacer>
     </v-card-actions>
   </v-card>
 </template>
 <script>
+import congrats from '@/components/general/congrats.vue'
 import vidComp from '@/components/general/vidComp.vue'
 import quiz from '@/components/general/quiz.vue'
 import questions from '@/assets/eduTest/intro/introWhyCryptocurrency.js'
@@ -67,13 +81,13 @@ export default {
   }),
   components: {
     quiz,
-    vidComp
+    vidComp,
+    congrats
   },
   computed: {
     test: function () {
-      if (this.bonus) {
-        const q = questions.questions
-        return q.bonus
+      if (this.currentComponent === 'bonus') {
+        return questions.questions.bonus
       } else {
         const q = questions.questions
         const c = this.part
@@ -81,19 +95,24 @@ export default {
         return q[part]
       }
     },
-    bonus: function () {
-      const numberOfQuestions = Object.keys(questions.questions).length
-      if (numberOfQuestions - 1 === this.part) {
-        return true
-      }
-      return false
-    },
     vidUrl: function () {
       return '/videos/video.mp4'
     },
     progress: function () {
       const numberOfQuestions = Object.keys(questions.questions).length
       return (this.part / numberOfQuestions) * 100
+    },
+    currentComponent: function () {
+      const numberOfQuestions = Object.keys(questions.questions).length
+      if (this.part < numberOfQuestions - 1) {
+        return 'mainQuiz'
+      }
+      if (this.part === numberOfQuestions - 1) {
+        return 'bonus'
+      }
+      if (this.part === numberOfQuestions) {
+        return 'congrats'
+      }
     }
   },
   methods: {
@@ -106,13 +125,13 @@ export default {
     backToVideo () {
       this.vid = true
     },
-    quizDone () {
-      this.part += 1
-      if (this.part === Object.keys(questions.questions).length) {
+    partDone () {
+      if (this.currentComponent === 'congrats') {
         this.exit()
         return
       }
-      if (!this.bonus) {
+      this.part += 1
+      if (this.currentComponent !== 'bonus') {
         this.backToVideo()
       }
     }

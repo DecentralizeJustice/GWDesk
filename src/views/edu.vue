@@ -65,7 +65,7 @@ export default {
       { title: 'Wallet Operations', icon: 'wallet' },
       { title: 'Blockchain Mechanics', icon: 'bitcoin' },
       { title: 'General Information', icon: 'book-information-variant' },
-      { title: 'Visualizations', icon: 'gamepad-variant' }
+      { title: 'About Guide Wallet', icon: 'information-outline' }
     ]
   }),
   methods: {
