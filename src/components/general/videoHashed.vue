@@ -1,7 +1,6 @@
 <template>
-      <video style="width:100%;height:auto;" controls v-if='!bloburl=="" && hashPassed'
-      preload="auto">
-          <source :src='bloburl' type="video/mp4">
+      <video style="width:100%;height:auto;" controls v-if='true'
+     :src='bloburl' type="video/mp4">
       </video>
 </template>
 
@@ -19,7 +18,7 @@ export default {
       hashPassed: false,
       bloburl: '',
       vidHash: '',
-      desiredHash: 'bOfgFx+J+ClDWENG6PeHYFf2DK3ffckkvfM/fc4g6CCmBfUBMEt13cq1DdO3WzTWdDgXv2Hsi80GXDsdyBl8sw=='
+      desiredHash: '+3ZDXg/BiFaFWw8XCFfpsuOX3XJF21yeRBUIQOXWkRQ3QWIvqZ/cJB8Z/cKbnAcrX4SurgmPrftKL/mVT4SA7A=='
     }
   },
   methods: {
@@ -47,6 +46,7 @@ export default {
         this.hashPassed = true
         // console.log('right hash')
       } else {
+        console.log(testingHash)
         console.log('wrong hash')
       }
     }.bind(this))

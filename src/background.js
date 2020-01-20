@@ -1,4 +1,5 @@
 'use strict'
+import path from 'path'
 /* eslint-disable */
 import { app, protocol, BrowserWindow } from 'electron'
 import {
@@ -18,6 +19,7 @@ function createWindow () {
   // Create the browser window.
   win = new BrowserWindow({ width: 1500,
     height: 1000,
+    icon: path.join(__static, 'icon.png'),
     webPreferences: {
       nodeIntegration: true,
       webSecurity: true

@@ -113,6 +113,8 @@ export default {
       if (this.part === numberOfQuestions) {
         return 'congrats'
       }
+      // edge case that should never be reached
+      return true
     }
   },
   methods: {

@@ -51,8 +51,10 @@ export default {
   },
   computed: {
     url: function () {
+      console.log('ran')
       const path = require('path')
       const fileLocation = path.join(process.env.BASE_URL, this.vidUrl)
+      console.log(fileLocation)
       return fileLocation
     }
   }

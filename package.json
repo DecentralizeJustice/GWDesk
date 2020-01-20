@@ -1,7 +1,10 @@
 {
-  "name": "Distributed-Keys-Desktop-App",
+  "name": "GuideWallet",
   "version": "0.1.0",
   "private": true,
+  "resolutions": {
+    "@babel/parser": "7.7.5"
+  },
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -11,20 +14,18 @@
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps",
     "test:e2e": "vue-cli-service test:e2e",
-    "test:unit": "vue-cli-service test:unit"
+    "test:unit": "vue-cli-service test:unit",
+    "electron:generate-icons": "electron-icon-builder --input=./public/icon.png --output=build --flatten"
   },
   "dependencies": {
-    "@deadcanaries/granax": "^3.2.4",
     "axios": "^0.19.0",
-    "bclient": "^0.1.7",
-    "bcoin": "bcoin-org/bcoin#e166009fb39c33fc4be42ec9857a65a7c012168b",
     "bignumber.js": "^9.0.0",
     "bitcoin-address-validation": "^1.0.0",
     "bitcoinjs-lib": "^5.1.6",
     "blob-to-buffer": "^1.2.8",
     "bs58check": "^2.1.2",
-    "bweb": "DecentralizeJustice/bweb#0cd9bd50b7ebf39b0087db550983ed81a07a58fe",
     "chai-as-promised": "^7.1.1",
+    "clean-webpack-plugin": "^3.0.0",
     "core-js": "^2.6.5",
     "electron-store": "^5.0.0",
     "find-process": "^1.4.2",
@@ -47,6 +48,7 @@
     "babel-eslint": "^10.0.1",
     "chai": "^4.1.2",
     "electron": "^6.0.0",
+    "electron-icon-builder": "^1.0.2",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
     "sass": "^1.17.4",
