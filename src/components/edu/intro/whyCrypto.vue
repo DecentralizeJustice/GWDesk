@@ -46,10 +46,10 @@
    :key="12"
    />
  </div>
-   <congrats
-   v-bind:vidUrl="vidUrl"
-   v-if='currentComponent === "congrats"'
-   v-on:quizDone='partDone'/>
+  <congrats
+  v-bind:vidUrl="vidUrl"
+  v-if='currentComponent === "congrats"'
+  v-on:quizDone='partDone'/>
     <v-divider/>
     <v-card-actions>
       <v-btn

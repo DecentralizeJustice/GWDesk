@@ -9,20 +9,21 @@
             <v-row no-gutters justify-content='space-evenly'>
                <v-col :key="item.title" v-for="(item) in lessons" cols='4'>
                  <v-card
-                   class="ma-3 primary"
+                   class="ma-3" :color="cardColor(item.unlocked)"
                  >
                  <v-card-title class="headline justify-center">
                    {{item.title}}
                  </v-card-title>
                  <v-row no-gutters justify-content='center' >
                   <v-col cols='2' offset='5' class="justify-center text-center">
-                    <v-icon x-large color="black" class="" style="">
+                    <v-icon x-large :color="iconColor(item.unlocked)" class="" style="">
                       mdi-{{item.icon}}
                     </v-icon>
                   </v-col>
                 </v-row>
                  <v-card-actions class="justify-center">
                    <v-btn
+                     :disabled='!unlocked(item.unlocked)'
                      color="deep-purple accent-4"
                      @click.stop="openDialog(item.title)"
                    >
@@ -60,17 +61,36 @@ export default {
   data: () => ({
     dialog: false,
     lessons: [
-      { title: 'Introduction', icon: 'atom-variant' },
-      { title: 'Wallet Security', icon: 'lock' },
-      { title: 'Wallet Operations', icon: 'wallet' },
-      { title: 'Blockchain Mechanics', icon: 'bitcoin' },
-      { title: 'General Information', icon: 'book-information-variant' },
-      { title: 'About Guide Wallet', icon: 'information-outline' }
+      { title: 'Introduction', icon: 'atom-variant', unlocked: 'true' },
+      { title: 'Wallet Security', icon: 'lock', unlocked: 'false' },
+      { title: 'Wallet Operations', icon: 'wallet', unlocked: 'false' },
+      { title: 'Blockchain Mechanics', icon: 'bitcoin', unlocked: 'false' },
+      { title: 'General Information', icon: 'book-information-variant', unlocked: 'false' },
+      { title: 'Heart to Heart', icon: 'account-heart', unlocked: 'false' },
+      { title: 'About Guide Wallet', icon: 'information-outline', unlocked: 'false' }
     ]
   }),
   methods: {
     openDialog: function (section) {
       this.dialog = true
+    },
+    cardColor (state) {
+      if (state === 'true') {
+        return 'blue'
+      }
+      return 'grey darken-4'
+    },
+    unlocked (state) {
+      if (state === 'true') {
+        return true
+      }
+      return false
+    },
+    iconColor (state) {
+      if (state === 'true') {
+        return 'black'
+      }
+      return 'white'
     }
   },
   computed: {
