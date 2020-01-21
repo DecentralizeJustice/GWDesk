@@ -1,6 +1,6 @@
 <template>
       <video style="width:100%;height:auto;" controls v-if='true'
-     :src="require('@/assets/video.mp4')" type="video/mp4">
+     :src="require('@/assets/videos/video.mp4')" type="video/mp4">
       </video>
       <!-- <img :src="require('@/assets/logo.png')"> -->
 </template>
