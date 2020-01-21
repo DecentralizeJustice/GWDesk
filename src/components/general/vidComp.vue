@@ -5,7 +5,7 @@
         Bonus Question
       </v-alert>
     </v-col>
-   <v-col cols='8' offset='2'>
+   <v-col cols='6' offset='3'>
      <videoPlayer
      v-bind:url="url"
      />

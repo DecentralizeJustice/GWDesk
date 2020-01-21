@@ -22,7 +22,7 @@ function createWindow () {
     icon: path.join(__static, 'icon.png'),
     webPreferences: {
       nodeIntegration: true,
-      webSecurity: true
+      webSecurity: false
     } })
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {

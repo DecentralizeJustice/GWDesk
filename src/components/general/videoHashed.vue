@@ -1,13 +1,15 @@
 <template>
       <video style="width:100%;height:auto;" controls v-if='true'
-     :src='bloburl' type="video/mp4">
+     :src="require('@/assets/video.mp4')" type="video/mp4">
       </video>
+      <!-- <img :src="require('@/assets/logo.png')"> -->
 </template>
 
 <script>
 const axios = require('axios')
 const crypto = require('crypto')
 const toBuffer = require('blob-to-buffer')
+const path = require('path')
 export default {
   name: 'videoPlayer',
   components: {
@@ -16,6 +18,7 @@ export default {
   data () {
     return {
       hashPassed: false,
+      publicPath: process.env.BASE_URL,
       bloburl: '',
       vidHash: '',
       desiredHash: '+3ZDXg/BiFaFWw8XCFfpsuOX3XJF21yeRBUIQOXWkRQ3QWIvqZ/cJB8Z/cKbnAcrX4SurgmPrftKL/mVT4SA7A=='
@@ -24,6 +27,10 @@ export default {
   methods: {
   },
   computed: {
+    file: function () {
+      const fileLocation = path.join(process.env.BASE_URL, 'icon.png')
+      return fileLocation
+    }
   },
   async beforeMount () {
     const url = this.url

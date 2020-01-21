@@ -20,10 +20,9 @@ export default {
     navDrawer
   },
   methods: {
-    // async start () {
-    //   await startNode()
-    //   console.log('node started')
-    // }
+    async start () {
+      this.$router.push({ path: 'edu' })
+    }
   },
   computed: {
     // ...mapGetters({
@@ -40,8 +39,8 @@ export default {
   data: () => ({
     //
   }),
-  async created () {
-    // this.start()
+  async mounted () {
+    this.start()
   }
 }
 </script>
