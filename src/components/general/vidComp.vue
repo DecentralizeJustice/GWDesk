@@ -7,7 +7,6 @@
     </v-col>
    <v-col cols='6' offset='3'>
      <videoPlayer
-     v-bind:url="url"
      />
    </v-col>
    <v-col class="text-center" cols="12">
@@ -50,13 +49,13 @@ export default {
     }
   },
   computed: {
-    url: function () {
-      console.log('ran')
-      const path = require('path')
-      const fileLocation = path.join(process.env.BASE_URL, this.vidUrl)
-      console.log(fileLocation)
-      return fileLocation
-    }
+    // url: function () {
+    //   console.log('ran')
+    //   const path = require('path')
+    //   const fileLocation = path.join(process.env.BASE_URL, this.vidUrl)
+    //   console.log(fileLocation)
+    //   return fileLocation
+    // }
   }
 }
 </script>

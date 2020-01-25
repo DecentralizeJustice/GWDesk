@@ -70,6 +70,7 @@
   </v-card>
 </template>
 <script>
+// import drag from '@/components/general/drag.vue'
 import congrats from '@/components/general/congrats.vue'
 import vidComp from '@/components/general/vidComp.vue'
 import quiz from '@/components/general/quiz.vue'
@@ -83,6 +84,7 @@ export default {
     quiz,
     vidComp,
     congrats
+    // drag
   },
   computed: {
     test: function () {

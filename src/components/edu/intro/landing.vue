@@ -58,7 +58,7 @@ export default {
     lessons: [
       { title: 'What is Cryptocurrency?', icon: 'atom-variant', comp: 'whyCrypto', unlocked: 'true' },
       { title: 'Which Cryptocurrency should I use?', icon: 'lock', unlocked: 'false' },
-      { title: 'How To Store Cryptocurrency', icon: 'wallet', unlocked: 'false' },
+      // { title: 'How To Store Cryptocurrency', icon: 'wallet', unlocked: 'false' },
       { title: 'How To Buy Cryptocurrency', icon: 'book-information-variant', unlocked: 'false' }
     ]
   }),

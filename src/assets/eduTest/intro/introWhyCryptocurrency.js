@@ -81,6 +81,17 @@ const questions = {
         'The Police'
       ],
       ans: 2
+    },
+    {
+      q: 'Who is responsible for securing and protecting your Cryptocurrency in the United States?',
+      opt: [
+        'The U.S. Securities and Exchange Commission',
+        'The Bitcoin Foundation',
+        'Your Bank.',
+        'You are.',
+        'Your Exchange.'
+      ],
+      ans: 3
     }
     // {
     //   q: 'One of the hardest parts about using cryptocurrencies is:',
@@ -92,17 +103,6 @@ const questions = {
     //   ],
     //   ans: 1
     // },
-    // {
-    //   q: 'Who is responsible for securing and protecting your Cryptocurrency in the United States?',
-    //   opt: [
-    //     'The U.S. Securities and Exchange Commission',
-    //     'The Bitcoin Foundation',
-    //     'Your Bank.',
-    //     'You are.',
-    //     'Your Exchange.'
-    //   ],
-    //   ans: 3
-    // }
   ],
   // part3: [
   //   {
