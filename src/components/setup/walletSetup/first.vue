@@ -1,5 +1,4 @@
 <template>
-
       <v-card
       class=""
       style=""

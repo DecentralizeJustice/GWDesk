@@ -57,15 +57,15 @@ export default {
   data: () => ({
     titles: [
       // 'Home', 'Balance', 'Receive Money', 'Send Money', 'Transactions',
-      'Education'//, 'Support', 'Settings'
+      'Education', 'BTC Multisig'//, 'Support', 'Settings'
     ],
     icons: [
       // 'home', 'cash-usd', 'arrow-right-bold',
       // 'arrow-left-bold', 'history',
-      'book-open-page-variant', 'face-agent',
+      'book-open-page-variant', 'lock',
       'settings'
     ],
-    routerLinks: ['edu' // 'home', 'balance', 'receive', 'send', 'trans',
+    routerLinks: ['edu', 'btcMusig' //, 'home', 'balance', 'receive', 'send', 'trans',
       // 'support', 'settings'
     ],
     open: false

@@ -6,6 +6,7 @@ import Router from 'vue-router'
 // import Recieve from './views/recMoney.vue'
 // import Send from './views/sendMoney.vue'
 import Education from './views/edu.vue'
+import btcMusig from './views/btcMusig.vue'
 // import Support from './views/support.vue'
 // import Settings from './views/settings.vue'
 // import Balance from './views/balance.vue'
@@ -23,6 +24,11 @@ const router = new Router({
       path: '/edu',
       name: 'edu',
       component: Education
+    },
+    {
+      path: '/btcMusig',
+      name: 'btcMusig',
+      component: btcMusig
     }
     // {
     //   path: '/home',

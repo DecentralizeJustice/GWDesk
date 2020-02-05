@@ -2,6 +2,16 @@ const questions = {
   part1:
   [
     {
+      q: 'Decentralized means to:',
+      opt: [
+        'be affordable',
+        'have as few middlmen as possible',
+        'have fast transactions',
+        'have government support'
+      ],
+      ans: 1
+    },
+    {
       q: 'How many cryptocurrencies can exist?',
       opt: [
         '10',
@@ -18,27 +28,26 @@ const questions = {
         'Governments',
         'Independent Programmers',
         'Large Technology Companies',
+        'You',
         'All Of The Above'
       ],
-      ans: 4
+      ans: 5
     },
     {
-      q: 'A cryptocurrency can be used to:',
+      q: 'Cryptocurrency is a technology that helps you:',
       opt: [
-        'Avoid censorship from a bank',
-        'Stop a bank from tracking your payments',
-        'Build a censorship resistance social network',
+        'Track your banking history',
+        'Pay your taxes',
+        'Do things without middlmen',
         'All of the above'
       ],
-      ans: 3
+      ans: 2
     },
     {
-      q: "Which item isn't an digital asset?",
+      q: 'All Cryptocurrencies are great.',
       opt: [
-        'Your computer',
-        'A facebook profile',
-        'An email',
-        'An online photo'
+        'False',
+        'True'
       ],
       ans: 0
     }
@@ -47,6 +56,14 @@ const questions = {
   [
     {
       q: 'Cryptocurrencies have only upsides and no downsides.',
+      opt: [
+        'True',
+        'False'
+      ],
+      ans: 1
+    },
+    {
+      q: 'Middlemen are always bad and removing them will always be good.',
       opt: [
         'True',
         'False'

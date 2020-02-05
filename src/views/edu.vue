@@ -62,10 +62,16 @@ export default {
     dialog: false,
     lessons: [
       { title: 'Introduction', icon: 'atom-variant', unlocked: 'true' },
-      { title: 'Wallet Security', icon: 'lock', unlocked: 'false' },
-      { title: 'Wallet Operations', icon: 'wallet', unlocked: 'false' },
-      { title: 'Blockchain Mechanics', icon: 'bitcoin', unlocked: 'false' },
-      { title: 'General Information', icon: 'book-information-variant', unlocked: 'false' },
+      { title: 'Monero', icon: 'eye-off', unlocked: 'false' },
+      { title: 'Bitcoin', icon: 'lock', unlocked: 'false' },
+      { title: 'Dai', icon: 'lock', unlocked: 'false' },
+      { title: 'Pool Together', icon: 'lock', unlocked: 'false' },
+      { title: 'Ethereum', icon: 'lock', unlocked: 'false' },
+      // { title: 'Uniswap', icon: 'lock', unlocked: 'false' },
+      { title: 'Bisq', icon: 'lock', unlocked: 'false' },
+      { title: 'Custom Tokens', icon: 'lock', unlocked: 'false' },
+      // { title: 'Blockchain Mechanics', icon: 'bitcoin', unlocked: 'false' },
+      { title: 'General Education', icon: 'book-information-variant', unlocked: 'false' },
       { title: 'Heart to Heart', icon: 'account-heart', unlocked: 'false' },
       { title: 'About Guide Wallet', icon: 'information-outline', unlocked: 'false' }
     ]

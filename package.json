@@ -8,7 +8,7 @@
     "@babel/parser": "7.7.5"
   },
   "scripts": {
-    "serve": "vue-cli-service serve",
+    "serve": "vue-cli-service electron:serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "electron:build": "vue-cli-service electron:build",
@@ -21,6 +21,10 @@
   },
   "dependencies": {
     "axios": "^0.19.0",
+    "@deadcanaries/granax": "^3.2.4",
+    "bclient": "^0.1.7",
+    "bcoin": "bcoin-org/bcoin#e166009fb39c33fc4be42ec9857a65a7c012168b",
+    "bweb": "DecentralizeJustice/bweb#0cd9bd50b7ebf39b0087db550983ed81a07a58fe",
     "bignumber.js": "^9.0.0",
     "bitcoin-address-validation": "^1.0.0",
     "bitcoinjs-lib": "^5.1.6",

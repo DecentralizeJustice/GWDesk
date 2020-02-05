@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-card-title class="headline justify-center">Intro To Cryptocurrency Use Course</v-card-title>
+    <v-card-title class="headline justify-center">Intro To Cryptocurrency</v-card-title>
     <v-divider/>
     <v-row no-gutters justify-content='space-evenly'>
        <v-col :key="item.title" v-for="(item) in lessons" cols='4'>
@@ -57,18 +57,15 @@ export default {
     lesson: '',
     lessons: [
       { title: 'What is Cryptocurrency?', icon: 'atom-variant', comp: 'whyCrypto', unlocked: 'true' },
-      { title: 'Which Cryptocurrency should I use?', icon: 'lock', unlocked: 'false' },
-      // { title: 'How To Store Cryptocurrency', icon: 'wallet', unlocked: 'false' },
-      { title: 'How To Buy Cryptocurrency', icon: 'book-information-variant', unlocked: 'false' }
+      { title: 'Which Cryptocurrency is Best For Me?', icon: 'account-question', comp: 'whichCrypto', unlocked: 'true' },
+      { title: 'Pick Your First Cryptocurrency', icon: 'account-cash', unlocked: 'false' }
     ]
   }),
   components: {
   },
   computed: {
     currentMain () {
-      // const currentStage = this.currentStage
-      const componentName = 'landing'
-      return () => import(`@/components/edu/intro/${componentName}.vue`)
+      return () => import('@/components/edu/intro/landing.vue')
     }
   },
   methods: {
