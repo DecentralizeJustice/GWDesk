@@ -21,7 +21,9 @@ export default {
   },
   methods: {
     async start () {
-      this.$router.push({ path: 'edu' })
+      if (!this.$router.currentRoute.name === 'edu') {
+        this.$router.push({ path: 'edu' })
+      }
     }
   },
   computed: {
