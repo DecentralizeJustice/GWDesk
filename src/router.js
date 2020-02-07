@@ -7,6 +7,7 @@ import Router from 'vue-router'
 // import Send from './views/sendMoney.vue'
 import Education from './views/edu.vue'
 import btcMusig from './views/btcMusig.vue'
+import dev from './views/dev.vue'
 // import Support from './views/support.vue'
 // import Settings from './views/settings.vue'
 // import Balance from './views/balance.vue'
@@ -29,6 +30,11 @@ const router = new Router({
       path: '/btcMusig',
       name: 'btcMusig',
       component: btcMusig
+    },
+    {
+      path: '/dev',
+      name: 'dev',
+      component: dev
     }
     // {
     //   path: '/home',

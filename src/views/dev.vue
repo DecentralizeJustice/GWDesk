@@ -9,6 +9,13 @@
               <v-btn
                 color="orange"
                 text
+                v-on:click="startNode()"
+              >
+                Start Node
+              </v-btn>
+              <v-btn
+                color="orange"
+                text
                 v-on:click="recover()"
                 :disabled="disable"
               >
@@ -59,7 +66,7 @@
 
 <script>
 import { recoverFromPubs } from '@/assets/task/recoverFromPubs.js'
-import { getPendingTransactions, resetChainTo, getNodeInfo, createWallet } from '@/assets/util/nodeUtil.js'
+import { getPendingTransactions, resetChainTo, getNodeInfo, createWallet, startNode } from '@/assets/util/nodeUtil.js'
 import { walletName } from '@/assets/constants/genConstants.js'
 import { decodeRawTransactionBitcoinJS } from '@/assets/util/transactionUtil/transactionUtil.js'
 import { createNamespacedHelpers } from 'vuex'
@@ -93,6 +100,10 @@ export default {
       const rest = await getPendingTransactions('musig')
       const tes = await decodeRawTransactionBitcoinJS(rest[0].tx)
       console.log(tes)
+    },
+    async startNode () {
+      await startNode()
+      console.log('started')
     },
     async createWallet () {
       const results = await createWallet(walletName)
