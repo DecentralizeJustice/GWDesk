@@ -17,9 +17,9 @@
     "electron:generate-icons": "electron-icon-builder --input=./public/icon.png --output=build --flatten"
   },
   "resolutions": {
-  "@babel/parser": "7.7.5"
-},
-"dependencies": {
+    "@babel/parser": "7.7.5"
+  },
+  "dependencies": {
     "axios": "^0.19.0",
     "bclient": "^0.1.7",
     "bcoin": "bcoin-org/bcoin#e166009fb39c33fc4be42ec9857a65a7c012168b",
