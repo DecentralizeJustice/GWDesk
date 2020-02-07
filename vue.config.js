@@ -1,7 +1,8 @@
 module.exports = {
   pluginOptions: {
     electronBuilder: {
-      externals: ['bcoin', '@deadcanaries/granax']
+      externals: ['bcoin', '@deadcanaries/granax'],
+      nodeIntegration: true
     }
   }
 }
