@@ -47,7 +47,7 @@ export const userConstants = {
       for (var i = 0; i < xfpArray.length; i++) {
         xfpObject[i] = xfpArray[i]
       }
-      return xfpObject// { coldcard: '6C6816CE', web: 'DFFED015' }
+      return xfpObject
     }
   }
 }

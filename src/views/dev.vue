@@ -1,9 +1,9 @@
 <template>
     <v-layout align-center justify-center row fill-height>
       <v-flex xs11>
-          <v-card >
+          <v-card xs10 wrap>
             <v-card-text>
-              <h2>Home</h2>
+              <h2>Dev Portal</h2>
             </v-card-text>
             <v-card-actions>
               <v-btn
@@ -12,6 +12,13 @@
                 v-on:click="startNode()"
               >
                 Start Node
+              </v-btn>
+              <v-btn
+                color="orange"
+                text
+                v-on:click="updateWalletInfo()"
+              >
+                Update Wallet Info
               </v-btn>
               <v-btn
                 color="orange"
@@ -50,15 +57,6 @@
                 Create Wallet
               </v-btn>
             </v-card-actions>
-            <v-divider></v-divider>
-            <v-card-actions>
-              <v-btn
-                color="orange"
-                text
-              >
-                <v-icon>mdi-help</v-icon>
-              </v-btn>
-            </v-card-actions>
           </v-card>
     </v-flex>
     </v-layout>
@@ -70,6 +68,7 @@ import { getPendingTransactions, resetChainTo, getNodeInfo, createWallet, startN
 import { walletName } from '@/assets/constants/genConstants.js'
 import { decodeRawTransactionBitcoinJS } from '@/assets/util/transactionUtil/transactionUtil.js'
 import { createNamespacedHelpers } from 'vuex'
+import { uploadTXT } from '@/assets/util/electronUtil.js'
 const { mapGetters, mapState, mapActions } = createNamespacedHelpers('userConstants')
 export default {
   components: {
@@ -88,7 +87,6 @@ export default {
   },
   methods: {
     ...mapActions([
-    // Mounts the "incrementStoredNumber" mutation to `this.incrementStoredNumber()`.
       'updateWalletToken'
     ]),
     async recover () {
@@ -117,6 +115,10 @@ export default {
     async info () {
       const results = await getNodeInfo()
       console.log(results)
+    },
+    async updateWalletInfo () {
+      const arraySplitText = await uploadTXT()
+      console.log(arraySplitText)
     }
   },
   async mounted () {

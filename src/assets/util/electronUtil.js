@@ -52,5 +52,16 @@ async function downloadTXT (txt) {
   await fs.writeFile(path, txt)
   return true
 }
+async function uploadTXT (txt) {
+  const options = {
+    defaultPath: app.getPath('desktop'),
+    buttonLabel: 'Upload Txt'
+  }
+  const fileName = await dialog.showOpenDialog(null, options)
+  const path = fileName.filePaths[0]
+  const rawFile = await fs.readFile(path, 'utf8')
+  const arraySplitFile = rawFile.split('\n')
+  return arraySplitFile
+}
 
-export { downloadPSBT, uploadPSBT, uploadJSON, downloadTXT }
+export { downloadPSBT, uploadPSBT, uploadJSON, downloadTXT, uploadTXT }
