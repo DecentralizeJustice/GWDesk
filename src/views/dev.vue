@@ -1,65 +1,71 @@
 <template>
-    <v-layout align-center justify-center row fill-height>
-      <v-flex xs11>
-          <v-card xs10 wrap>
-            <v-card-text>
-              <h2>Dev Portal</h2>
-            </v-card-text>
-            <v-card-actions>
-              <v-btn
-                color="orange"
-                text
-                v-on:click="startNode()"
-              >
-                Start Node
-              </v-btn>
-              <v-btn
-                color="orange"
-                text
-                v-on:click="updateWalletInfo()"
-              >
-                Update Wallet Info
-              </v-btn>
-              <v-btn
-                color="orange"
-                text
-                v-on:click="recover()"
-                :disabled="disable"
-              >
-                Recover
-              </v-btn>
-              <v-btn
-                color="orange"
-                text
-                v-on:click="rescan()"
-              >
-                Rescan
-              </v-btn>
-              <v-btn
-                color="orange"
-                text
-                v-on:click="info()"
-              >
-                Get Info
-              </v-btn>
-              <v-btn
-                color="orange"
-                text
-                v-on:click="start()"
-              >
-                Get Pending
-              </v-btn>
-              <v-btn
-                color="orange"
-                text
-                v-on:click="createWallet()"
-              >
-                Create Wallet
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-    </v-flex>
-    </v-layout>
+  <v-container fluid fill-height>
+    <v-row no-gutters>
+      <v-col
+        cols="12">
+      <v-card xs11 wrap
+      align="center"
+      justify="center">
+        <v-card-text>
+          <h2>Dev Portal</h2>
+        </v-card-text>
+        <v-divider></v-divider>
+        <div class="ma-4 pb-4">
+          <v-btn
+            color="orange"
+            text
+            v-on:click="startNode()"
+          >
+            Start Node
+          </v-btn>
+          <v-btn
+            color="orange"
+            text
+            v-on:click="updateWalletInfo()"
+          >
+            Update Wallet Info
+          </v-btn>
+          <v-btn
+            color="orange"
+            text
+            v-on:click="recover()"
+            :disabled="disable"
+          >
+            Recover
+          </v-btn>
+          <v-btn
+            color="orange"
+            text
+            v-on:click="rescan()"
+          >
+            Rescan
+          </v-btn>
+          <v-btn
+            color="orange"
+            text
+            v-on:click="info()"
+          >
+            Get Info
+          </v-btn>
+          <v-btn
+            color="orange"
+            text
+            v-on:click="start()"
+          >
+            Get Pending
+          </v-btn>
+          <v-btn
+            color="orange"
+            text
+            v-on:click="createWallet()"
+          >
+            Create Wallet
+          </v-btn>
+        </div>
+      </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -74,8 +80,7 @@ export default {
   components: {
   },
   data: () => ({
-    disable: false,
-    transactions: []
+    disable: false
   }),
   computed: {
     ...mapGetters([
@@ -118,7 +123,7 @@ export default {
     },
     async updateWalletInfo () {
       const arraySplitText = await uploadTXT()
-      console.log(arraySplitText)
+      console.log(arraySplitText[5])
     }
   },
   async mounted () {
