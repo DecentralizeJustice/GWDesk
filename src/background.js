@@ -21,7 +21,7 @@ function createWindow () {
     height: 1000,
     icon: path.join(__static, 'icon.png'),
     webPreferences: {
-      nodeIntegration: true,
+      nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
       webSecurity: false
     } })
 
