@@ -21,6 +21,13 @@
           <v-btn
             color="orange"
             text
+            v-on:click="testColdCard()"
+          >
+            Test Coldcard
+          </v-btn>
+          <v-btn
+            color="orange"
+            text
             v-on:click="updateWalletInfo()"
           >
             Update Wallet Info
@@ -75,6 +82,7 @@ import { walletName } from '@/assets/constants/genConstants.js'
 import { decodeRawTransactionBitcoinJS } from '@/assets/util/transactionUtil/transactionUtil.js'
 import { createNamespacedHelpers } from 'vuex'
 import { uploadTXT } from '@/assets/util/electronUtil.js'
+import { test } from '@/assets/util/coldCardUtil.js'
 const { mapGetters, mapState, mapActions } = createNamespacedHelpers('userConstants')
 export default {
   components: {
@@ -103,6 +111,10 @@ export default {
       const rest = await getPendingTransactions('musig')
       const tes = await decodeRawTransactionBitcoinJS(rest[0].tx)
       console.log(tes)
+    },
+    async testColdCard () {
+      const results = await test()
+      console.log(results)
     },
     async startNode () {
       await startNode()
