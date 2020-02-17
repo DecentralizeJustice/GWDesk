@@ -58,10 +58,10 @@ async function uploadTXT (txt) {
     buttonLabel: 'Upload Txt'
   }
   const fileName = await dialog.showOpenDialog(null, options)
-  const path = fileName.filePaths[0]
+  const path = fileName[0]
   const rawFile = await fs.readFile(path, 'utf8')
-  const arraySplitFile = rawFile.split('\n')
-  return arraySplitFile
+  // const arraySplitFile = rawFile.split('\n')
+  return rawFile
 }
 
 export { downloadPSBT, uploadPSBT, uploadJSON, downloadTXT, uploadTXT }

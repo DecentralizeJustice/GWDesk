@@ -82,7 +82,7 @@ import { walletName } from '@/assets/constants/genConstants.js'
 import { decodeRawTransactionBitcoinJS } from '@/assets/util/transactionUtil/transactionUtil.js'
 import { createNamespacedHelpers } from 'vuex'
 import { uploadTXT } from '@/assets/util/electronUtil.js'
-import { test } from '@/assets/util/coldCardUtil.js'
+import { test, recoverColdCardsInfo } from '@/assets/util/coldCardUtil.js'
 const { mapGetters, mapState, mapActions } = createNamespacedHelpers('userConstants')
 export default {
   components: {
@@ -100,7 +100,8 @@ export default {
   },
   methods: {
     ...mapActions([
-      'updateWalletToken'
+      'updateWalletToken',
+      'updateWalletObject'
     ]),
     async recover () {
       this.disable = true
@@ -134,8 +135,9 @@ export default {
       console.log(results)
     },
     async updateWalletInfo () {
-      const arraySplitText = await uploadTXT()
-      console.log(arraySplitText[5])
+      const text = await uploadTXT()
+      const walletObject = await recoverColdCardsInfo(text)
+      this.updateWalletObject(walletObject)
     }
   },
   async mounted () {
