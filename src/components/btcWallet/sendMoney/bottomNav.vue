@@ -4,12 +4,6 @@
           <v-btn
             color="orange"
             text
-          >
-            <v-icon>mdi-help</v-icon>
-          </v-btn>
-          <v-btn
-            color="orange"
-            text
             v-show='false'
             v-on:click="toggleAdvanced"
           >

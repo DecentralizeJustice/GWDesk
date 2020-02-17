@@ -31,7 +31,7 @@
                 <balance/>
               </v-tab-item>
               <v-tab-item>
-                no
+                <sendMoney/>
               </v-tab-item>
               <v-tab-item>
                 no
@@ -66,9 +66,11 @@
 
 <script>
 import balance from '@/components/btcWallet/balance/balance.vue'
+import sendMoney from '@/components/btcWallet/sendMoney/main.vue'
 export default {
   components: {
-    balance
+    balance,
+    sendMoney
   },
   data: () => ({
     transactions: [],

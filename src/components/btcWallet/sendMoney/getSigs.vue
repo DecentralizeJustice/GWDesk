@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import hardwareSign from '@/components/sendMoney/sign/hardware.vue'
+import hardwareSign from '@/components/btcWallet/sendMoney/sign/hardware.vue'
 import { vpubObject, xfp, m } from '@/assets/constants/userConstantFiles.js'
 import { createPSBT, combineCompletedTrans } from '@/assets/util/psbtUtil.js'
 import { broadcastTrans } from '@/assets/util/networkUtil.js'

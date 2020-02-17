@@ -13,7 +13,6 @@
           v-bind:is="currentMain"
           v-bind:transaction="transaction"
           v-on:updateTransaction="updateTransaction"/>
-          <v-divider/>
 
           <bottomNav v-on:change="updateStep"
             v-bind:currentSection="currentSection"
@@ -26,8 +25,8 @@
 </template>
 
 <script>
-import stepper from '@/components/sendMoney/stepper.vue'
-import bottomNav from '@/components/sendMoney/bottomNav.vue'
+import stepper from '@/components/btcWallet/sendMoney/stepper.vue'
+import bottomNav from '@/components/btcWallet/sendMoney/bottomNav.vue'
 export default {
   data: () => ({
     componentList: ['sendToAddresses', 'amount', 'confirm', 'getSigs'],
@@ -64,7 +63,7 @@ export default {
     },
     currentMain () {
       const componentName = this.componentList[this.currentSection]
-      return () => import(`@/components/sendMoney/${componentName}.vue`)
+      return () => import('@/components/btcWallet/sendMoney/' + componentName + '.vue')
     }
   },
   methods: {
