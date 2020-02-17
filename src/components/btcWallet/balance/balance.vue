@@ -1,24 +1,21 @@
 <template>
   <v-layout align-center justify-center row fill-height>
     <v-flex xs11>
-      <incompleteCard v-if="!introDone"/>
-      <v-card class="text-xs-center no-gutters" style="" v-if="introDone">
-        <v-card-title class="headline justify-center">
-          Wallet Balance
-        </v-card-title>
+      <v-card class="text-xs-center no-gutters" style="" >
             <v-divider></v-divider>
-            <v-tabs background-color="">
+            <v-tabs background-color="" v-bind:vertical="true"
+            color="green">
               <v-tab>
                 <v-icon left>mdi-timer-sand</v-icon>
-                Pending Transactions
+                Pending
               </v-tab>
               <v-tab>
                 <v-icon left>mdi-lock-clock</v-icon>
-                Confirming Transactions
+                Confirming
               </v-tab>
               <v-tab>
                 <v-icon left>mdi-lock</v-icon>
-                Confirmed Transactions
+                Confirmed
               </v-tab>
               <v-tab-item>
                 <transCard
@@ -40,38 +37,13 @@
                   />
               </v-tab-item>
            </v-tabs>
-           <v-progress-circular
-           indeterminate
-           class="mt-5 mb-5"
-           color="primary"
-           v-if='loading'
-           :size="150"
-           style="left: 50%;transform: translate(-50%, 0%);"
-           />
-          <v-divider/>
-          <v-card-actions>
-          <v-btn
-            color="orange"
-            text
-          >
-            <v-icon>mdi-help</v-icon>
-          </v-btn>
-          <v-btn
-            color="primary"
-            text
-            @click='setup()'
-          >
-            <v-icon>mdi-refresh</v-icon>
-          </v-btn>
-        </v-card-actions>
       </v-card>
     </v-flex>
   </v-layout>
 </template>
 
 <script>
-import transCard from '@/components/balance/cardComponent.vue'
-import incompleteCard from '@/components/general/incompleteIntro.vue'
+import transCard from '@/components/btcWallet/balance/cardComponent.vue'
 import { getTxByHash, getUTXO, getNodeHeight } from '@/assets/util/nodeUtil.js'
 import { decodeRawTransactionBitcoinJS } from '@/assets/util/transactionUtil/transactionUtil.js'
 import { walletName } from '@/assets/constants/genConstants.js'
@@ -81,8 +53,7 @@ const { mapGetters } = createNamespacedHelpers('unlockedLessons')
 const R = require('ramda')
 export default {
   components: {
-    transCard,
-    incompleteCard
+    transCard
   },
   data: () => ({
     transactions: [],

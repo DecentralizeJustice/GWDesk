@@ -28,7 +28,7 @@
                 Tools
               </v-tab>
               <v-tab-item>
-                <!-- <balance/> -->
+                <balance/>
               </v-tab-item>
               <v-tab-item>
                 no
@@ -65,10 +65,10 @@
 </template>
 
 <script>
-// import balance from '@/components/balance/balance.vue'
+import balance from '@/components/btcWallet/balance/balance.vue'
 export default {
   components: {
-    // balance
+    balance
   },
   data: () => ({
     transactions: [],
