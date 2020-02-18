@@ -4,6 +4,7 @@
       <v-flex xs12 >
         <v-card
           class="text-center"
+          elevation="0"
         >
         <v-flex xs10 class="mx-auto mb-5">
           <stepper v-bind:currentSection="currentSection"/>

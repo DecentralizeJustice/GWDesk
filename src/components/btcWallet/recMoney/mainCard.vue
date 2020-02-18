@@ -1,42 +1,57 @@
 <template>
   <v-container>
       <div class=" title text-center">
-        Transactions:
+        Recieve Address:
       </div>
       <v-row
-        v-for="n in 1"
-        :key="n"
         no-gutters
+        align="center"
+        justify="center"
       >
-        <v-col>
-          <v-hover v-slot:default="{ hover }" v-for="item in transactions" :key="item.txid">
-          <v-card
-            class='light-blue darken-4'
-            link
-            :elevation="hover ? 12 : 2"
-          >
-            <v-card-text class="mt-4 subtitle-1 white--text">
-              <v-icon
-              large color="green">
-              mdi-arrow-bottom-right-thick</v-icon>
-              Received
-              {{item.amount}} BTC
-            </v-card-text>
-          </v-card>
-        </v-hover>
+        <v-col align="center"
+            justify="center" xs12>
+          <div>
+            {{address}}
+          </div>
+
+          <div class="">
+            <v-btn large color="primary" v-on:click='copyToClipboard'
+            >
+              Copy
+            </v-btn>
+          </div>
         </v-col>
       </v-row>
     </v-container>
 </template>
 
 <script>
+import { getWalletTransactions } from '@/assets/util/nodeUtil.js'
+import { getReceiveAddress } from '@/assets/util/addressUtil.js'
+import { account, walletName, m } from '@/assets/constants/genConstants.js'
+import { createNamespacedHelpers } from 'vuex'
+const userConstants = createNamespacedHelpers('userConstants')
+const { clipboard } = require('electron')
 export default {
   props: ['transactions'],
   data: () => ({
+    address: ''
   }),
   methods: {
+    copyToClipboard () {
+      const text = this.address
+      clipboard.writeText(text)
+    }
+  },
+  computed: {
+    ...userConstants.mapGetters([
+      'walletVpubs'
+    ])
   },
   async mounted () {
+    const transactions = await getWalletTransactions(account, walletName)
+    const address = await getReceiveAddress(0, transactions, this.walletVpubs, m)
+    this.address = address
   }
 }
 </script>

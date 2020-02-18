@@ -12,19 +12,19 @@
                 Balance
               </v-tab>
               <v-tab>
-                <v-icon left>mdi-lock</v-icon>
+                <v-icon left>mdi-send-check</v-icon>
                 Send Money
               </v-tab>
               <v-tab>
-                <v-icon left>mdi-lock</v-icon>
-                Recieve Money
+                <v-icon left>mdi-email-receive</v-icon>
+                Receive Money
               </v-tab>
               <v-tab>
-                <v-icon left>mdi-timer-sand</v-icon>
+                <v-icon left>mdi-history</v-icon>
                 Transactions
               </v-tab>
               <v-tab>
-                <v-icon left>mdi-lock</v-icon>
+                <v-icon left>mdi-cogs</v-icon>
                 Tools
               </v-tab>
               <v-tab-item>
@@ -34,10 +34,10 @@
                 <sendMoney/>
               </v-tab-item>
               <v-tab-item>
-                no
+                <recieveMoney/>
               </v-tab-item>
               <v-tab-item>
-                maybe
+                <transactions/>
               </v-tab-item>
               <v-tab-item>
                 Tools
@@ -54,7 +54,6 @@
           <v-btn
             color="primary"
             text
-            @click='setup()'
           >
             <v-icon>mdi-refresh</v-icon>
           </v-btn>
@@ -67,27 +66,17 @@
 <script>
 import balance from '@/components/btcWallet/balance/balance.vue'
 import sendMoney from '@/components/btcWallet/sendMoney/main.vue'
+import recieveMoney from '@/components/btcWallet/recMoney/mainCard.vue'
+import transactions from '@/components/btcWallet/transactions/mainCard.vue'
 export default {
   components: {
     balance,
-    sendMoney
+    sendMoney,
+    recieveMoney,
+    transactions
   },
   data: () => ({
-    transactions: [],
-    loading: true
-  }),
-  methods: {
-    async getInputandOutputInfo (transactions) {
-    },
-    async setup () {
-    }
-  },
-  computed: {
-
-  },
-  async created () {
-    // await this.setup()
-  }
+  })
 }
 </script>
 <style scoped>
