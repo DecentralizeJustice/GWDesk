@@ -1,4 +1,6 @@
 module.exports = {
+  configureWebpack: {
+  },
   pluginOptions: {
     electronBuilder: {
       builderOptions: {
