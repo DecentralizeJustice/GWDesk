@@ -1,3 +1,5 @@
+import '@mdi/font/css/materialdesignicons.css'
+// import 'typeface-roboto/index.css'
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'

@@ -102,7 +102,7 @@ export default {
   computed: {
     currentMain () {
       const componentName = 'main'
-      return () => import(`@/components/edu/intro/${componentName}.vue`)
+      return () => import('@/components/edu/intro/' + componentName + '.vue')
     }
   }
 }

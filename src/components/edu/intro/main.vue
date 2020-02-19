@@ -15,7 +15,7 @@ export default {
         return () => import('@/components/edu/intro/landing.vue')
       }
       const componentName = this.lesson
-      return () => import(`@/components/edu/intro/${componentName}.vue`)
+      return () => import('@/components/edu/intro/' + componentName + '.vue')
     }
   },
   methods: {
