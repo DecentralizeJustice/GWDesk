@@ -86,8 +86,8 @@ export default {
     },
     async combine () {
       const signedArray = []
-      for (var variable in this.signedPSBTs) {
-        signedArray.push(variable)
+      for (const variable in this.signedPSBTs) {
+        signedArray.push(this.signedPSBTs[variable])
       }
       const trans = await combineCompletedTrans(signedArray[0], signedArray[1])
       console.log(trans)

@@ -10,7 +10,7 @@ async function uploadPSBT () {
   }
 
   const fileName = await dialog.showOpenDialog(null, options)
-  const path = fileName.filePaths[0]
+  const path = fileName[0]
   const buffer = await fs.readFile(path)
   const hex = buffer.toString('hex')
   return hex
@@ -36,7 +36,7 @@ async function downloadPSBT (psbtHex) {
   }
 
   const fileName = await dialog.showSaveDialog(null, options)
-  const path = fileName.filePath
+  const path = fileName
   await fs.writeFile(path, psbtBuffer)
   return true
 }
