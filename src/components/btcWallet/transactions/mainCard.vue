@@ -26,11 +26,16 @@
       </v-card-text>
 
       <div v-if="getPanelState(index)">
+        <v-card-text class="subtitle-1">
+          Confirmations: {{item.confirmations}}<br>
+          Block Height: {{item.blockheight}}<br>
+          Transaction Id: {{item.txid}}
+        </v-card-text>
         <v-simple-table light >
           <template v-slot:default>
             <thead>
               <tr>
-                <th class="text-left">Input Addresses</th>
+                <th class="text-left">Sent From:</th>
                 <th class="text-left" v-if="item.category==='send'">Value</th>
               </tr>
             </thead>
@@ -47,7 +52,7 @@
           <template v-slot:default>
             <thead>
               <tr>
-                <th class="text-left">Outputs</th>
+                <th class="text-left">Sent To:</th>
                 <th class="text-left">Value</th>
               </tr>
             </thead>

@@ -42,7 +42,7 @@ export default {
   computed: {
     confirmedTransInfo: function () {
       let inputSum = BigNumber(0)
-      const isConfirming = n => (this.currentBlock - n.height) > 2
+      const isConfirming = n => (this.currentBlock - Math.abs(n.height)) >= 2
       const trans = R.reverse(R.filter(isConfirming, this.transactions))
       if (trans.length !== 0) {
         for (const element of trans) {
