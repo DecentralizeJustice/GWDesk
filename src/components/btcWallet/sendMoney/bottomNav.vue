@@ -4,13 +4,7 @@
           <v-btn
             color="orange"
             text
-          >
-            <v-icon>mdi-help</v-icon>
-          </v-btn>
-          <v-btn
-            color="orange"
-            text
-            v-show='advancedAvailable'
+            v-show='false'
             v-on:click="toggleAdvanced"
           >
             <v-icon>mdi-wrench</v-icon>
@@ -19,6 +13,7 @@
             text
             color="red"
             v-on:click="goBack"
+            v-show='backAvailable'
           >
             Back
           </v-btn>
@@ -27,6 +22,7 @@
             color="blue"
             v-on:click="continueForward"
             v-bind:disabled="continueDisabled"
+            v-show='fowardAvailable'
           >
             Continue
           </v-btn>
@@ -52,11 +48,23 @@ export default {
     }
   },
   computed: {
-    advancedAvailable () {
+    // advancedAvailable () {
+    //   if (this.currentSection === 0) {
+    //     return true
+    //   }
+    //   return false
+    // }
+    backAvailable () {
       if (this.currentSection === 0) {
-        return true
+        return false
       }
-      return false
+      return true
+    },
+    fowardAvailable () {
+      if (this.currentSection === 3) {
+        return false
+      }
+      return true
     }
   }
 }

@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import hardwareSign from '@/components/sendMoney/sign/hardware.vue'
+import hardwareSign from '@/components/btcWallet/sendMoney/sign/hardware.vue'
 import { vpubObject, xfp, m } from '@/assets/constants/userConstantFiles.js'
 import { createPSBT, combineCompletedTrans } from '@/assets/util/psbtUtil.js'
 import { broadcastTrans } from '@/assets/util/networkUtil.js'
@@ -86,8 +86,8 @@ export default {
     },
     async combine () {
       const signedArray = []
-      for (var variable in this.signedPSBTs) {
-        signedArray.push(variable)
+      for (const variable in this.signedPSBTs) {
+        signedArray.push(this.signedPSBTs[variable])
       }
       const trans = await combineCompletedTrans(signedArray[0], signedArray[1])
       console.log(trans)
