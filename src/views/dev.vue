@@ -21,6 +21,13 @@
           <v-btn
             color="orange"
             text
+            v-on:click="stopNode()"
+          >
+            Stop Node
+          </v-btn>
+          <v-btn
+            color="orange"
+            text
             v-on:click="testColdCard()"
           >
             Test Coldcard
@@ -64,7 +71,7 @@
           <v-btn
             color="orange"
             text
-            v-on:click="createWallet()"
+            v-on:click="initWallet()"
           >
             Create Wallet
           </v-btn>
@@ -77,7 +84,8 @@
 
 <script>
 import { recoverFromPubs } from '@/assets/task/recoverFromPubs.js'
-import { getPendingTransactions, resetChainTo, getNodeInfo, createWallet, startNode } from '@/assets/util/nodeUtil.js'
+import { initWallet } from '@/assets/task/initWallet.js'
+import { getPendingTransactions, resetChainTo, getNodeInfo, createWallet, startNode, stopNode } from '@/assets/util/nodeUtil.js'
 import { walletName } from '@/assets/constants/genConstants.js'
 import { decodeRawTransactionBitcoinJS } from '@/assets/util/transactionUtil/transactionUtil.js'
 import { createNamespacedHelpers } from 'vuex'
@@ -138,6 +146,13 @@ export default {
       const text = await uploadTXT()
       const walletObject = await recoverColdCardsInfo(text)
       this.updateWalletObject(walletObject)
+    },
+    async initWallet () {
+      const results = await initWallet()
+      console.log(results)
+    },
+    async stopNode () {
+      await stopNode()
     }
   },
   async mounted () {

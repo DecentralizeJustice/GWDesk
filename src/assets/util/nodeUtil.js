@@ -76,6 +76,20 @@ async function importAddress (account, address, id) {
   const result = await wallet.importAddress(account, address)
   return result
 }
+async function getAccounts (id) {
+  const wallet = walletClient.wallet(id)
+  const result = await wallet.getAccounts()
+  return result
+}
+async function createAccount (id, accountName) {
+  const wallet = walletClient.wallet(id)
+  const options = {
+    name: accountName,
+    accountKey: 'tpubDCYNZmxUFv2rtR5DR1r4NXb4yr5TCw7AbqaiJ1MNEvYrhYwhVNRgRpAxzkD4EkzXFDJqCq6fDyLKVZbjaoxrsyjBBnYULCHBPUqGZ9gPmMs'
+  }
+  const result = await wallet.createAccount(accountName, options)
+  return result
+}
 async function getUTXO (id) {
   const wallet = walletClient.wallet(id)
   const result = await wallet.getCoins()
@@ -153,5 +167,6 @@ export {
   createWallet, getNodeSyncInfo, getWalletTransactions, broadcastHex,
   getTxByHash, importAddress, startNode, checkNodeAlive, stopNode, resetChainTo,
   getNodeInfo, listWalletAddresses, checkIfNodeMeaningfull, getFeeEstimate,
-  decodeRawTransaction, getUTXO, getNodeHeight, getPendingTransactions
+  decodeRawTransaction, getUTXO, getNodeHeight, getPendingTransactions, getAccounts,
+  createAccount
 }
