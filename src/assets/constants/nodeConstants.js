@@ -1,6 +1,5 @@
 import { apiKey, token } from '@/assets/constants/userConstantFiles.js'
 
-// const { } = require('bclient')
 const { WalletClient, NodeClient } = require('bcoin')
 
 const network = {
