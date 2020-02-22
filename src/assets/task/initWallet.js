@@ -1,7 +1,7 @@
 import store from '../../store/index.js'
 import { testnet } from '@/assets/constants/networkConstants.js'
 import {
-  walletName, oldestBlock, m, gapLimit, changeAccount // receiveAccount,
+  walletName, oldestBlock, m, gapLimit, changeAccount, receiveAccount
 } from '@/assets/constants/genConstants.js'
 import {
   importAddress, resetChainTo, checkIfNodeMeaningfull,
@@ -17,14 +17,18 @@ const R = require('ramda')
 
 async function initWallet () {
   await createWalletFunc(walletName, testnet)
-  await createAccountFunc(changeAccount, testnet)
-  // await createAccountFunc(receiveAccount, testnet)
-  const nextLevePubs = []
+  await createAccountFunc(walletName, changeAccount, testnet)
+  await createAccountFunc(walletName, receiveAccount, testnet)
+  const recAccounts = []
+  const changeAccounts = []
   for (var pub of vpubs) {
-    nextLevePubs.push(await getNextXpub(0, pub, testnet))
+    recAccounts.push(await getNextXpub(0, pub, testnet))
   }
-  // await recoverAccountFromPubs(nextLevePubs, m, gapLimit, receiveAccount, walletName, testnet)
-  await recoverAccountFromPubs(nextLevePubs, m, gapLimit, changeAccount, walletName, testnet)
+  for (const pubk of vpubs) {
+    changeAccounts.push(await getNextXpub(1, pubk, testnet))
+  }
+  await recoverAccountFromPubs(changeAccounts, m, gapLimit, changeAccount, walletName, testnet)
+  await recoverAccountFromPubs(recAccounts, m, gapLimit, receiveAccount, walletName, testnet)
   return true
 }
 
@@ -74,8 +78,6 @@ async function addAddress (vpubArray, index, m, network, account, walletName) {
   if (!addressInAccount) {
     console.log('resetting chain')
     try {
-      // console.log('adding', address)
-      console.log(account, address, walletName)
       const result = await importAddress(account, address, walletName)
       await resetChainTo(oldestBlock)
       return result
@@ -98,7 +100,7 @@ async function pause (seconds) {
 async function createWalletFunc (walletName, network) {
   try {
     const results = await createWallet(walletName, network)
-    await this.updateWalletToken(results.token)
+    await store.dispatch('userConstants/updateWalletToken', results.token)
   } catch (error) {
     if (error.message !== 'WDB: Wallet already exists.') {
       throw (error)
@@ -114,11 +116,12 @@ async function recoverAccountFromPubs (vpubArray, m, gapLimit, account, walletNa
     await pause(10)
     return recoverAccountFromPubs(vpubArray, m, gapLimit, account, walletName, network)
   }
-  // const addressArray = await listWalletAddresses(account, walletName)
+  const addressArray = await listAccountAddresses(account, walletName)
   const results =
-  await addAddresses([], gapLimit, startingIndex, vpubArray, m, network, account, walletName)
+  await addAddresses(addressArray, gapLimit, startingIndex, vpubArray, m, network, account, walletName)
   return results
 }
+
 async function createAccountFunc (walletName, accountName, network) {
   try {
     await createAccount(walletName, accountName, network)
