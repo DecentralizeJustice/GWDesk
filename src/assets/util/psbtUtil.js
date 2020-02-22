@@ -1,11 +1,8 @@
 import { getPubkey } from '@/assets/util/keyUtil.js'
-import { testnet } from '@/assets/constants/networkConstants.js'
-import { divPath } from '@/assets/constants/genConstants.js'
 // import { getTxByHash, decodeRawTransaction, getWalletTransactions } from '@/assets/util/nodeUtil.js'
 const bitcoin = require('bitcoinjs-lib')
 
-async function createPSBT (transctionData, vpubObject, xfp) {
-  const network = testnet
+async function createPSBT (transctionData, vpubObject, xfp, network) {
   let psbt = new bitcoin.Psbt({ network: network })
   const transInputs = transctionData.inputData.transInputs
   const outPuts = transctionData.outputData
@@ -37,7 +34,7 @@ async function addbip32DerivationInfo (psbt, vpubObject, xfp, transInputs) {
   return psbt
 }
 
-async function addKeyInfo (psbt, vpubObject, xfp, index, i) {
+async function addKeyInfo (psbt, vpubObject, xfp, index, i, divPath) {
   for (var property1 in vpubObject) {
     const path = divPath + '/' + index.toString()
     const updateData = { bip32Derivation: [{}] }

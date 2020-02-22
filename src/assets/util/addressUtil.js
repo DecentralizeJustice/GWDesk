@@ -1,15 +1,11 @@
-
-import { testnet } from '@/assets/constants/networkConstants.js'
 import { getPubkeyArray } from '@/assets/util/keyUtil.js'
-import { walletName } from '@/assets/constants/genConstants.js'
 import { getTxByHash } from '@/assets/util/nodeUtil.js'
 const BigNumber = require('bignumber.js')
 const bitcoin = require('bitcoinjs-lib')
 const R = require('ramda')
 
-async function genAddress (index, vpubArray, m) {
-  const network = testnet
-  const pubkeys = await getPubkeyArray(index, vpubArray)
+async function genAddress (index, vpubArray, m, network) {
+  const pubkeys = await getPubkeyArray(index, vpubArray, network)
   const scriptInfo = { m: m, pubkeys: pubkeys, network: network }
   const info = bitcoin.payments.p2wsh({
     network: network,
@@ -17,8 +13,8 @@ async function genAddress (index, vpubArray, m) {
   })
   return info.address
 }
-async function addressFromScriptPub (scriptBuffer) {
-  const address = bitcoin.address.fromOutputScript(scriptBuffer, testnet)
+async function addressFromScriptPub (scriptBuffer, network) {
+  const address = bitcoin.address.fromOutputScript(scriptBuffer, network)
   return address
 }
 async function checkArrayForAddress (address, addressArray) {
@@ -58,8 +54,8 @@ async function getReceiveIndex (index, transactions, vpubArray, m) {
   }
 }
 
-async function getChangeAddress (index, transactions, vpubArray, m, wouldBeChanage) {
-  const address = await genAddress(index, vpubArray, m)
+async function getChangeAddress (index, transactions, vpubArray, m, divPath, wouldBeChanage) {
+  const address = await genAddress(index, vpubArray, m, divPath)
   const sentPresent = await checkSentTrans(address, transactions)
   const noSentAndIsChange = !sentPresent && wouldBeChanage
   if (sentPresent) {
@@ -109,7 +105,7 @@ async function getRecTrans (address, transactions) {
   const recToAddress = R.filter(hasAddress, recTrans)
   return recToAddress
 }
-async function checkSentTrans (address, transactions) {
+async function checkSentTrans (address, transactions, walletName) {
   let transDetails = []
   const isSent = trans => trans.category === 'send'
   const sendTrans = R.filter(isSent, transactions)
