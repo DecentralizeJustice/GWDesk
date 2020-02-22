@@ -3,8 +3,6 @@ import { getPubkeyArray } from '@/assets/util/keyUtil.js'
 import validate from 'bitcoin-address-validation'
 import { getTxByHash, decodeRawTransaction, getWalletTransactions } from '@/assets/util/nodeUtil.js'
 import { genAddress, getReceiveAddress, getChangeAddress } from '@/assets/util/addressUtil.js'
-import { m, vpubObject } from '@/assets/constants/userConstantFiles.js'
-import { testnet } from '@/assets/constants/networkConstants.js'
 const R = require('ramda')
 const BigNumber = require('bignumber.js')
 const bitcoin = require('bitcoinjs-lib')
@@ -41,7 +39,7 @@ async function getScriptPubkey (txId, vout, walletId) {
 }
 
 async function
-noChange (desiredFeeRate, addressArray, addressArrayAmounts, utxo) {
+noChange (desiredFeeRate, addressArray, addressArrayAmounts, utxo, vpubObject) {
   const musigTotalNumber = Object.keys(vpubObject).length
   const feeAmountSatoshi = getFeeAmountSatoshi(addressArray,
     desiredFeeRate, utxo.length, musigTotalNumber)
@@ -59,7 +57,7 @@ noChange (desiredFeeRate, addressArray, addressArrayAmounts, utxo) {
 }
 
 async function getTransactionData (addressArray, addressArrayAmount, utxo,
-  targetFeeRatio) {
+  targetFeeRatio, vpubObject, m) {
   const musigTotalNumber = Object.keys(vpubObject).length
   const fifoCoins = R.sortBy(R.prop('height'))(utxo)
   const totalOutputsAmountNeeded = BigNumber.sum.apply(null, addressArrayAmount)
@@ -123,7 +121,7 @@ async function getTransactionData (addressArray, addressArrayAmount, utxo,
   }
 }
 
-async function getChangeCorrectAddress (inputsArray) {
+async function getChangeCorrectAddress (inputsArray, vpubObject, m) {
   const vpubArray = R.values(vpubObject)
   const transactions = await getWalletTransactions('default', 'musig')
   const currentRecieveAddress = await getReceiveAddress(0, transactions, vpubArray, m)
@@ -158,7 +156,7 @@ async function createChangeArray (addressArray) {
   return changeArray
 }
 
-async function createDummyAddress () {
+async function createDummyAddress (vpubObject, m) {
   const vpubArray = R.values(vpubObject)
   const dummyAddress = await genAddress(0, vpubArray, m)
   return dummyAddress
@@ -189,11 +187,10 @@ async function addUnlockingScript (tranactionData) {
   return updatedTransactionData
 }
 
-async function getUnlockingScript (index) {
+async function getUnlockingScript (index, vpubObject, network, m) {
   const vpubArray = R.values(vpubObject)
   const pubkeyArray = await getPubkeyArray(index, vpubArray)
   const n = pubkeyArray.length
-  const network = testnet
   const paymentInfo = await createPayment(`p2wsh-p2ms(${m} of ${n})`,
     pubkeyArray, network)
   const witness = paymentInfo.payment.redeem.output
@@ -241,7 +238,7 @@ async function addInputAdressIndex (rawTranactionData) {
   return updatedTransactionData
 }
 
-async function findAddressIndex (index, address) {
+async function findAddressIndex (index, address, vpubObject, m) {
   const vpubArray = R.values(vpubObject)
   const proposedAdress = await genAddress(index, vpubArray, m)
   if (index > 30) {
@@ -282,7 +279,7 @@ function checkIfEnoughFunds (funds, desiredAmount) {
 }
 
 function getFeeAmountSatoshi (addressArray, feePerB, inputNumber,
-  musigTotalNumber) {
+  musigTotalNumber, m) {
   const transSizeVBtyes = getTransactionSize(addressArray, m,
     musigTotalNumber, inputNumber)
   const correctValue = transSizeVBtyes.multipliedBy(feePerB).dp(0)

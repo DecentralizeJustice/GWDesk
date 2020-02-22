@@ -1,6 +1,7 @@
 import { client, walletClient } from '@/assets/constants/nodeConstants.js'
 // import { minConfirmations } from '@/assets/constants/genConstants.js'
 import { getFeeInfo } from '@/assets/util/networkUtil.js'
+import { createRandomXPub } from '@/assets/util/pubUtil.js'
 import path from 'path'
 import { fork } from 'child_process'
 const remote = require('electron').remote
@@ -61,18 +62,20 @@ async function getNodeSyncInfo () {
   return percentage
 }
 
-async function createWallet (id) {
-  const accountKey = 'tpubDCYNZmxUFv2rtR5DR1r4NXb4yr5TCw7AbqaiJ1MNEvYrhYwhVNRgRpAxzkD4EkzXFDJqCq6fDyLKVZbjaoxrsyjBBnYULCHBPUqGZ9gPmMs'
+async function createWallet (walletName, network) {
+  const pub = await createRandomXPub(network)
   const options = {
     watchOnly: true,
-    accountKey: accountKey
+    accountKey: pub
   }
-  const result = await walletClient.createWallet(id, options)
+  const result = await walletClient.createWallet(walletName, options)
   return result
 }
 
-async function importAddress (account, address, id) {
-  const wallet = walletClient.wallet(id)
+async function importAddress (account, address, name) {
+  console.log(account, address, name)
+  await walletClient.execute('selectwallet', [name])
+  const wallet = walletClient.wallet(name)
   const result = await wallet.importAddress(account, address)
   return result
 }
@@ -81,12 +84,14 @@ async function getAccounts (id) {
   const result = await wallet.getAccounts()
   return result
 }
-async function createAccount (id, accountName) {
-  const wallet = walletClient.wallet(id)
+async function createAccount (walletName, accountName, network) {
+  const wallet = walletClient.wallet(walletName)
+  const pub = await createRandomXPub(network)
   const options = {
     name: accountName,
-    accountKey: 'tpubDCYNZmxUFv2rtR5DR1r4NXb4yr5TCw7AbqaiJ1MNEvYrhYwhVNRgRpAxzkD4EkzXFDJqCq6fDyLKVZbjaoxrsyjBBnYULCHBPUqGZ9gPmMs'
+    accountKey: pub
   }
+  console.log(accountName, options)
   const result = await wallet.createAccount(accountName, options)
   return result
 }
@@ -127,15 +132,13 @@ async function getWalletTransactions (account, name) {
   // console.log(finalArray.transactions)
   return finalArray
 }
-async function listWalletAddresses (account, name) {
-  await walletClient.execute('selectwallet', [name])
-  // eslint-disable-next-line
+async function listAccountAddresses (account, walletName) {
+  console.log(account, walletName)
+  await walletClient.execute('selectwallet', [walletName])
   const result = await walletClient.execute('getaddressesbyaccount', [account])
-  // console.log(result)
   return result
 }
 async function getFeeEstimate (blocks) {
-  // eslint-disable-next-line
   const result = await getFeeInfo()
   return result
 }
@@ -166,7 +169,7 @@ async function broadcastHex (txHex) {
 export {
   createWallet, getNodeSyncInfo, getWalletTransactions, broadcastHex,
   getTxByHash, importAddress, startNode, checkNodeAlive, stopNode, resetChainTo,
-  getNodeInfo, listWalletAddresses, checkIfNodeMeaningfull, getFeeEstimate,
+  getNodeInfo, listAccountAddresses, checkIfNodeMeaningfull, getFeeEstimate,
   decodeRawTransaction, getUTXO, getNodeHeight, getPendingTransactions, getAccounts,
   createAccount
 }
