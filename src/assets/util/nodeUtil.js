@@ -73,7 +73,6 @@ async function createWallet (walletName, network) {
 }
 
 async function importAddress (account, address, name) {
-  console.log(account, address, name)
   await walletClient.execute('selectwallet', [name])
   const wallet = walletClient.wallet(name)
   const result = await wallet.importAddress(account, address)
@@ -91,7 +90,6 @@ async function createAccount (walletName, accountName, network) {
     name: accountName,
     accountKey: pub
   }
-  console.log(accountName, options)
   const result = await wallet.createAccount(accountName, options)
   return result
 }
@@ -133,7 +131,6 @@ async function getWalletTransactions (account, name) {
   return finalArray
 }
 async function listAccountAddresses (account, walletName) {
-  console.log(account, walletName)
   await walletClient.execute('selectwallet', [walletName])
   const result = await walletClient.execute('getaddressesbyaccount', [account])
   return result
