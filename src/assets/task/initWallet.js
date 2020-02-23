@@ -5,7 +5,7 @@ import {
 } from '@/assets/constants/genConstants.js'
 import {
   importAddress, resetChainTo, checkIfNodeMeaningfull,
-  getNodeSyncInfo, listAccountAddresses, getWalletTransactions,
+  getNodeSyncInfo, listAccountAddresses, getAccountTransactions,
   createWallet, createAccount
 } from '@/assets/util/nodeUtil.js'
 import { getNextXpub } from '@/assets/util/keyUtil.js'
@@ -37,7 +37,7 @@ async function addAddresses (addressArray, gapLimit, index, vpubArray, m, networ
     for (let i = index; i < (gapLimit + index); i++) {
       await addAddress(vpubArray, i, m, network, account, walletName)
     }
-    const transactionArray = await getWalletTransactions(account, walletName)
+    const transactionArray = await getAccountTransactions(account, walletName)
     let unusedArray = []
     const nodeSyncStatus = await getNodeSyncInfo()
     const nodeUpToDate = (nodeSyncStatus === 100)
@@ -46,14 +46,14 @@ async function addAddresses (addressArray, gapLimit, index, vpubArray, m, networ
       const addressUsed = await addressHasTransactions(transactionArray, address)
       unusedArray = R.append(addressUsed, unusedArray)
     }
-    const finished = R.all(R.equals(false))(unusedArray) && nodeUpToDate
     const allGapAddressesEmpty = R.all(R.equals(false))(unusedArray)
+    const finished = allGapAddressesEmpty && nodeUpToDate
     if (finished) {
       return true
     } else if (!nodeUpToDate && allGapAddressesEmpty) {
+      console.log('just time')
       await pause(5)
       const updatedAddressArray = await listAccountAddresses(account, walletName)
-      console.log('just time')
       return addAddresses(updatedAddressArray, gapLimit, index, vpubArray, m, network, account, walletName)
     } else {
       console.log('adding address via recursion')
@@ -77,18 +77,9 @@ async function addAddress (vpubArray, index, m, network, account, walletName) {
   const addressInAccount = await checkArrayForAddress(address, addressArray)
   if (!addressInAccount) {
     console.log('resetting chain')
-    try {
-      const result = await importAddress(account, address, walletName)
-      await resetChainTo(oldestBlock)
-      return result
-    } catch (e) {
-      console.log(e)
-      if (e.message !== 'Address already exists.') {
-        throw (e)
-      }
-      await resetChainTo(oldestBlock)
-      return { success: true }
-    }
+    const result = await importAddress(account, address, walletName)
+    await resetChainTo(oldestBlock)
+    return result
   }
   return { success: true }
 }

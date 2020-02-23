@@ -99,7 +99,7 @@ async function getUTXO (id) {
   return result
 }
 
-async function getWalletTransactions (account, name) {
+async function getAccountTransactions (account, name) {
   // const minConfirmationsMet = trans => (trans.confirmations >= minConfirmations)
   await walletClient.execute('selectwallet', [name])
   const accountIndex = 0
@@ -164,7 +164,7 @@ async function broadcastHex (txHex) {
 }
 
 export {
-  createWallet, getNodeSyncInfo, getWalletTransactions, broadcastHex,
+  createWallet, getNodeSyncInfo, getAccountTransactions, broadcastHex,
   getTxByHash, importAddress, startNode, checkNodeAlive, stopNode, resetChainTo,
   getNodeInfo, listAccountAddresses, checkIfNodeMeaningfull, getFeeEstimate,
   decodeRawTransaction, getUTXO, getNodeHeight, getPendingTransactions, getAccounts,
