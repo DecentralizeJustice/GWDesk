@@ -24,7 +24,6 @@
       </v-row>
     </v-container>
 </template>
-
 <script>
 import store from '../../../store/index.js'
 import { getAccountTransactions, importAddress } from '@/assets/util/nodeUtil.js'
