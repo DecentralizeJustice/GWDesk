@@ -45,6 +45,22 @@ export default {
     copyToClipboard () {
       const text = this.address
       clipboard.writeText(text)
+    },
+    async getaddress () {
+      const transactions = await getAccountTransactions(receiveAccount, walletName)
+      const recAccounts = []
+      for (var pub of vpubs) {
+        recAccounts.push(await getNextXpub(0, pub, testnet))
+      }
+      const address = await getReceiveAddress(0, transactions, recAccounts, m, testnet)
+      try {
+        await importAddress(receiveAccount, address, walletName)
+      } catch (e) {
+        if (e.message !== 'Address already exists.') {
+          throw (e)
+        }
+      }
+      this.address = address
     }
   },
   computed: {
@@ -53,21 +69,7 @@ export default {
     ])
   },
   async mounted () {
-    const transactions = await getAccountTransactions(receiveAccount, walletName)
-    const recAccounts = []
-    for (var pub of vpubs) {
-      recAccounts.push(await getNextXpub(0, pub, testnet))
-    }
-    const address = await getReceiveAddress(0, transactions, recAccounts, m, testnet)
-    try {
-      await importAddress(receiveAccount, address, walletName)
-    } catch (e) {
-      if (e.message !== 'Address already exists.') {
-        throw (e)
-      }
-    }
-    console.log(address)
-    this.address = address
+    await this.getaddress()
   }
 }
 </script>
