@@ -33,12 +33,12 @@ async function addressHasTransactions (transactions, address) {
     return false
   }
 }
-async function getReceiveAddress (index, transactions, vpubArray, m) {
-  const address = await genAddress(index, vpubArray, m)
-  const sentPresent = await checkSentTrans(address, transactions)
+async function getReceiveAddress (index, transactions, vpubArray, m, network) {
+  const address = await genAddress(index, vpubArray, m, network)
+  const sentPresent = await checkRecTrans(address, transactions)
   if (sentPresent) {
     const nextIndex = index + 1
-    return getReceiveAddress(nextIndex, transactions, vpubArray, m)
+    return getReceiveAddress(nextIndex, transactions, vpubArray, m, network)
   } else {
     return address
   }

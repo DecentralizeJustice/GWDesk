@@ -100,7 +100,6 @@ async function getUTXO (id) {
 }
 
 async function getAccountTransactions (account, name) {
-  // const minConfirmationsMet = trans => (trans.confirmations >= minConfirmations)
   await walletClient.execute('selectwallet', [name])
   const accountIndex = 0
   const transAray = []
@@ -118,16 +117,7 @@ async function getAccountTransactions (account, name) {
     }
   }
   let finalArray = []
-  // const transInfo = await walletClient.execute('listsinceblock', ['0000000000234139a02f4f65bcdd06be3e216f22c59c2e6960dcba62422d9da3', 0, true])// await walletClient.execute('listtransactions', [account, 10, 0])
-  // if (transInfo.length > 1) {
-  //   finalArray = await transLoop(transAray, accountIndex)
-  // } else {
-  //   finalArray = transInfo
-  // }
   finalArray = await transLoop(transAray, accountIndex)
-  // node bug ?
-  // const result = R.filter(minConfirmationsMet, finalArray)
-  // console.log(finalArray.transactions)
   return finalArray
 }
 async function listAccountAddresses (account, walletName) {

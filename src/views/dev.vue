@@ -42,14 +42,6 @@
           <v-btn
             color="orange"
             text
-            v-on:click="recover()"
-            :disabled="disable"
-          >
-            Recover
-          </v-btn>
-          <v-btn
-            color="orange"
-            text
             v-on:click="rescan()"
           >
             Rescan
@@ -128,7 +120,6 @@
 import { pubToVpub, createRandomXPub } from '@/assets/util/pubUtil.js'
 import { testnet } from '@/assets/constants/networkConstants.js'
 import { getPubkey, getNextXpub } from '@/assets/util/keyUtil.js'
-import { recoverFromPubs } from '@/assets/task/recoverFromPubs.js'
 import { initWallet } from '@/assets/task/initWallet.js'
 import {
   getPendingTransactions, resetChainTo, getNodeInfo, createWallet,
@@ -181,11 +172,6 @@ export default {
     async getPubkey () {
       const tes = await getPubkey(0, 'xpub6GWRq8UfAooYLs43fdcjcxDHwSMCPWk9SFk4nsKDs4UQHS4MYm9MsVjqXowkVd4naDYXL4XcxWx2e4Q61LgDMnZyX6pH8ZZG5jr5819KY7q', testnet)
       console.log(tes.toString('hex'))
-    },
-    async recover () {
-      this.disable = true
-      await recoverFromPubs(this.walletVpubs, this.m)
-      this.disable = false
     },
     async start () {
       const rest = await getPendingTransactions('musig')
