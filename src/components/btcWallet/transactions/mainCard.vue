@@ -71,8 +71,8 @@
 
 <script>
 import { addressFromScriptPub } from '@/assets/util/addressUtil.js'
-import { account, walletName } from '@/assets/constants/genConstants.js'
-import { getWalletTransactions, getTxByHash } from '@/assets/util/nodeUtil.js'
+import { receiveAccount, walletName } from '@/assets/constants/genConstants.js'
+import { getAccountTransactions, getTxByHash } from '@/assets/util/nodeUtil.js'
 import { decodeRawTransactionBitcoinJS } from '@/assets/util/transactionUtil/transactionUtil.js'
 const R = require('ramda')
 const BigNumber = require('bignumber.js')
@@ -146,6 +146,19 @@ export default {
         return 'mdi-arrow-bottom-right-thick'
       }
     },
+    getpanelolor (confs) {
+      switch (confs) {
+        case -1:
+          return 'blue lighten-1'
+        case 0:
+          return 'blue'
+        case 1:
+          return 'blue darken-2'
+        case 2:
+          return 'blue darken-3'
+      }
+      return 'blue darken-4'
+    },
     getColor (type) {
       if (type === 'send') {
         return 'red darken-2'
@@ -201,7 +214,7 @@ export default {
   },
   created: async function () {
     BigNumber.config({ EXPONENTIAL_AT: 10 })
-    const results = await getWalletTransactions(account, walletName)
+    const results = await getAccountTransactions(receiveAccount, walletName)
     const sortByTime = R.sortBy(R.prop('blocktime'))
     const sortedTransactions = R.reverse(sortByTime(results))
     const updatedTransactions = await this.getInputandOutputInfo(sortedTransactions)

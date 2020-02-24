@@ -11,7 +11,7 @@
         <v-col align="center"
             justify="center" xs12>
           <div class="display-1 mt-5">
-            {{confirmedTransInfo}} BTC
+            {{balance}} BTC
           </div>
         </v-col>
       </v-row>
