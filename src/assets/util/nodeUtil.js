@@ -93,8 +93,8 @@ async function createAccount (walletName, accountName, network) {
   const result = await wallet.createAccount(accountName, options)
   return result
 }
-async function getUTXO (id) {
-  const wallet = walletClient.wallet(id)
+async function getUTXO (name) {
+  const wallet = walletClient.wallet(name)
   const result = await wallet.getCoins()
   return result
 }
