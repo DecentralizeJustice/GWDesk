@@ -216,7 +216,7 @@ export default {
     BigNumber.config({ EXPONENTIAL_AT: 10 })
     const results = await getAccountTransactions(receiveAccount, walletName)
     const sortByTime = R.sortBy(R.prop('blocktime'))
-    const sortedTransactions = R.reverse(sortByTime(results))
+    const sortedTransactions = sortByTime(results)
     const updatedTransactions = await this.getInputandOutputInfo(sortedTransactions)
     this.transactions = updatedTransactions
     for (var i = 0; i < this.transactions.length; i++) {
