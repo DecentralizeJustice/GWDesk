@@ -3,7 +3,7 @@
     <v-card-title class="headline justify-center">Intro To Cryptocurrency</v-card-title>
     <v-divider/>
     <v-row no-gutters justify-content='space-evenly'>
-       <v-col :key="item.title" v-for="(item) in lessons" cols='4'>
+       <v-col :key="item.title" v-for="(item) in lessons" cols='6'>
          <v-card
            class="ma-3" :color="cardColor(item.unlocked)"
          >
@@ -57,8 +57,8 @@ export default {
     lesson: '',
     lessons: [
       { title: 'What is Cryptocurrency?', icon: 'atom-variant', comp: 'whyCrypto', unlocked: 'true' },
-      { title: 'Which Cryptocurrency is Best For Me?', icon: 'account-question', comp: 'whichCrypto', unlocked: 'true' },
-      { title: 'Pick Your First Cryptocurrency', icon: 'account-cash', unlocked: 'false' }
+      { title: 'Which Cryptocurrency is Best For Me?', icon: 'account-question', comp: 'whichCrypto', unlocked: 'true' }
+      // { title: 'Pick Your First Cryptocurrency', icon: 'account-cash', unlocked: 'false' }
     ]
   }),
   components: {

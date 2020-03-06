@@ -148,8 +148,11 @@
 <script>
 import { getTransactionData, noChange } from
   '@/assets/util/transactionUtil/transactionUtil.js'
-import { getFeeEstimate, getUTXO } from '@/assets/util/nodeUtil.js'
-import { walletName } from '@/assets/constants/genConstants.js'
+import { testnet } from '@/assets/constants/networkConstants.js'
+import store from '../../../store/index.js'
+import { getUTXO } from '@/assets/util/nodeUtil.js' // getFeeEstimate,
+import { walletName, m } from '@/assets/constants/genConstants.js'
+const vpubs = store.getters['userConstants/walletVpubs']
 const BigNumber = require('bignumber.js')
 const R = require('ramda')
 export default {
@@ -338,7 +341,8 @@ export default {
       try {
         const coins = await getUTXO(walletName)
         const transaction = await getTransactionData(this.addressArray,
-          this.addressArraySat, coins, this.minFeeRatio)
+          this.addressArraySat, coins, this.minFeeRatio, vpubs, m, testnet)
+        // console.log(transaction)
         this.transactionInfo = transaction
         this.tooHigh = false
       } catch (error) {
@@ -358,10 +362,12 @@ export default {
       this.amountArray = newarray
     },
     setupFeeInfo: async function () {
-      const feeEstimates = await getFeeEstimate()
-      this.midFee = new BigNumber(feeEstimates.medium_fee_per_kb).shiftedBy(-3).dp(3)
-      this.highFee = new BigNumber(feeEstimates.high_fee_per_kb).shiftedBy(-3).dp(3)
-      this.lowFee = new BigNumber(feeEstimates.low_fee_per_kb).shiftedBy(-3).dp(3)
+      // const feeEstimates = await getFeeEstimate()
+      // console.log(feeEstimates)
+      console.log('slow network fix')
+      this.midFee = new BigNumber('7068').shiftedBy(-3).dp(3)
+      this.highFee = new BigNumber('7068').shiftedBy(-3).dp(3)
+      this.lowFee = new BigNumber('7068').shiftedBy(-3).dp(3)
       this.customFee = this.highFee.toFormat(3)
     },
     fillinAmounts: async function () {
@@ -374,7 +380,7 @@ export default {
   created: async function () {
     this.$emit('updateTransaction', { addressArray: this.transaction.addressArray })
     await this.setupFeeInfo()
-    await this.getTransInfo
+    await this.getTransInfo()
     await this.fillinAmounts()
     this.loading = false
   }

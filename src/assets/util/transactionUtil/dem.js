@@ -57,41 +57,45 @@ noChange (desiredFeeRate, addressArray, addressArrayAmounts, utxo, vpubObject) {
 }
 
 async function getTransactionData (addressArray, addressArrayAmount, utxo,
-  targetFeeRatio, vpubArray, m, network) {
-  const musigTotalNumber = vpubArray.length
+  targetFeeRatio, vpubObject, m) {
+  console.log(vpubObject)
+  const musigTotalNumber = Object.keys(vpubObject).length
   const fifoCoins = R.sortBy(R.prop('height'))(utxo)
   const totalOutputsAmountNeeded = BigNumber.sum.apply(null, addressArrayAmount)
   const totalOutputsPossible = checkIfEnoughFunds(fifoCoins,
     totalOutputsAmountNeeded)
 
-  // check if enough utxo in wallet for address array amounts
   if (!totalOutputsPossible) { throw new Error('Not Enough Funds') }
 
-  // need to combine functions???
   const [inputSumPostOutputs, inputsArrayPostOutputs, utxoPostOutputs] =
     addNeededUtxo(new BigNumber(0), totalOutputsAmountNeeded, fifoCoins, [])
+
   const noChangeFeeAmountSatoshi =
     getFeeAmountSatoshi(addressArray, targetFeeRatio,
-      inputsArrayPostOutputs.length, musigTotalNumber, m)
-  const minFees = noChangeFeeAmountSatoshi
-  const totalAvaible = sumUTXO(utxoPostOutputs).plus(inputSumPostOutputs).minus(totalOutputsAmountNeeded)
+      inputsArrayPostOutputs.length, musigTotalNumber)
 
-  // check if min fee can be paid with utxo in wallet
-  if (minFees.isGreaterThan(totalAvaible)) {
+  const minFees = noChangeFeeAmountSatoshi
+  const totalOutputsPossibleWithFees =
+    checkIfEnoughFunds(utxoPostOutputs, minFees)
+  const changeExist = inputSumPostOutputs.isGreaterThan(minFees)
+
+  if (!totalOutputsPossibleWithFees && !changeExist) {
     throw new Error('Not Enough Funds')
   }
-
   const feeAndUTXONeeded = minFees.plus(totalOutputsAmountNeeded)
+
   const [inputSumPostFee, inputsArrayPostFee, utxoPostFee] =
   addNeededUtxo(inputSumPostOutputs, feeAndUTXONeeded, utxoPostOutputs,
     inputsArrayPostOutputs)
+
   const change = inputSumPostFee.minus(feeAndUTXONeeded)
-  const changeAddressArray = await createChangeArray(vpubArray, m, network, addressArray)
+  const changeAddressArray = await createChangeArray(addressArray)
   const changeFeeAmountSatoshi =
     getFeeAmountSatoshi(changeAddressArray, targetFeeRatio,
       inputsArrayPostFee.length, musigTotalNumber)
   const costToKeepChange =
     changeFeeAmountSatoshi.minus(noChangeFeeAmountSatoshi)
+
   if (costToKeepChange.isGreaterThan(change)) {
     const changeAmount = new BigNumber(0)
     const inputs = inputsArrayPostFee
@@ -145,15 +149,16 @@ function addNeededUtxo (currentInputSum, totalOutputsAmountNeeded, fifoUtxo,
   return [currentInputSum, inputsArray, fifoUtxo]
 }
 
-async function createChangeArray (vpubArray, m, network, addressArray) {
-  const dummyAddress = await createDummyAddress(vpubArray, m, network)
+async function createChangeArray (addressArray) {
+  const dummyAddress = await createDummyAddress()
   const changeArray =
   R.append(dummyAddress, addressArray)
   return changeArray
 }
 
-async function createDummyAddress (vpubArray, m, network) {
-  const dummyAddress = await genAddress(0, vpubArray, m, network)
+async function createDummyAddress (vpubObject, m) {
+  const vpubArray = R.values(vpubObject)
+  const dummyAddress = await genAddress(0, vpubArray, m)
   return dummyAddress
 }
 async function formTransactionData (tranactionDataOG) {
@@ -271,12 +276,6 @@ function checkIfEnoughFunds (funds, desiredAmount) {
     return false
   }
   return true
-}
-function sumUTXO (funds) {
-  const getValue = x => new BigNumber(x.value)
-  const fundArray = R.map(getValue, funds)
-  const fundsTotal = BigNumber.sum.apply(null, fundArray)
-  return fundsTotal
 }
 
 function getFeeAmountSatoshi (addressArray, feePerB, inputNumber,
