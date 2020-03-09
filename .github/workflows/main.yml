@@ -19,5 +19,5 @@ jobs:
         python-version: '3.7'
         architecture: 'x64'
     - run: node -v
-    - run: yarn run install
+    - run: yarn install
     - run: yarn run build
