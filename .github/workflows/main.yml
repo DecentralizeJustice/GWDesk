@@ -13,17 +13,20 @@ jobs:
   # This workflow contains a single job called "build"
   buildRelease:
     # The type of runner that the job will run on
-    runs-on: macos-latest
+    runs-on: macos-10.15
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
-    - uses: actions/setup-node@master
-      with:
-        node-version: 13.x
+    #- uses: actions/setup-node@master
+      # with:
+        # fix till
+        # node-version: 12.16.1
     - uses: actions/setup-python@v1
       with:
         python-version: '3.7'
         architecture: 'x64'
+    - run: node -v
     - run: yarn add node-gyp
+    - run: xcode-select --install
