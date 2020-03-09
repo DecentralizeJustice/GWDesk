@@ -11,7 +11,7 @@
           one-line
         >
           <v-list-item-content>
-            <v-list-item-title class="title">Guide Wallet</v-list-item-title>
+            <v-list-item-title class="title">Guiding Wallet</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -21,31 +21,15 @@
       nav
       dense
     >
-      <v-list-item link v-for="(title, index) in titles"
-        :key="`title-${index}`" v-on:click="navigate(index)"
+      <v-list-item link v-for="(title, index) in options"
+        :key="`title-${index}`" v-on:click="navigate(title)"
       >
         <v-list-item-icon >
-          <v-icon>mdi-{{icons[index]}}</v-icon>
+          <v-icon>mdi-{{icons[title]}}</v-icon>
         </v-list-item-icon>
         <v-list-item-title>{{title}}</v-list-item-title>
       </v-list-item>
     </v-list>
-    <!-- <template v-slot:append >
-        <v-list
-          nav
-          dense
-        >
-          <v-list-item
-          >
-            <v-list-item-icon >
-              <v-icon large color="green darken-2">
-                mdi-satellite-uplink
-              </v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>Node Synced 100%</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </template> -->
   </v-navigation-drawer>
 </template>
 
@@ -55,25 +39,28 @@ export default {
   components: {
   },
   data: () => ({
-    titles: [
-      // 'Home', 'Balance', 'Receive Money', 'Send Money', 'Transactions',
-      'Education', 'BTC Multisig', 'Dev'//, 'Support', 'Settings'
+    devOptions: [
+      'Education', 'BTC Multisig', 'Dev'
     ],
-    icons: [
-      // 'home', 'cash-usd', 'arrow-right-bold',
-      // 'arrow-left-bold', 'history',
-      'book-open-page-variant', 'lock',
-      'settings'
+    prodOptions: [
+      'Education'
     ],
-    routerLinks: ['edu', 'btcMusig', 'dev' //, 'home', 'balance', 'receive', 'send', 'trans',
-      // 'support', 'settings'
-    ],
+    icons: {
+      Education: 'book-open-page-variant',
+      'BTC Multisig': 'lock',
+      Dev: 'settings'
+    },
+    routerLinks: {
+      Education: 'edu',
+      'BTC Multisig': 'btcMusig',
+      Dev: 'dev'
+    },
     open: false
   }),
   methods: {
-    navigate (index) {
+    navigate (title) {
       const currentRoute = this.$router.currentRoute.name
-      const desiredRoute = this.routerLinks[index]
+      const desiredRoute = this.routerLinks[title]
       if (currentRoute !== desiredRoute) {
         this.$router.push(desiredRoute)
       }
@@ -81,6 +68,16 @@ export default {
     mouseOver (event) {
       this.open = !this.open
     }
+  },
+  computed: {
+    options: function () {
+      if (process.env.NODE_ENV === 'development') {
+        return this.devOptions
+      }
+      return this.prodOptions
+    }
   }
+  // async mounted () {
+  // }
 }
 </script>
