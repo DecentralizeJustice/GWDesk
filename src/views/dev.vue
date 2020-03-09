@@ -21,6 +21,13 @@
           <v-btn
             color="orange"
             text
+            v-on:click="stopNode()"
+          >
+            Stop Node
+          </v-btn>
+          <v-btn
+            color="orange"
+            text
             v-on:click="testColdCard()"
           >
             Test Coldcard
@@ -31,14 +38,6 @@
             v-on:click="updateWalletInfo()"
           >
             Update Wallet Info
-          </v-btn>
-          <v-btn
-            color="orange"
-            text
-            v-on:click="recover()"
-            :disabled="disable"
-          >
-            Recover
           </v-btn>
           <v-btn
             color="orange"
@@ -68,6 +67,48 @@
           >
             Create Wallet
           </v-btn>
+          <v-btn
+            color="orange"
+            text
+            v-on:click="initWallet()"
+          >
+            Init Wallet
+          </v-btn>
+          <v-btn
+            color="orange"
+            text
+            v-on:click="getPubkey()"
+          >
+            Test Pubkey
+          </v-btn>
+          <v-btn
+            color="orange"
+            text
+            v-on:click="pubToXpub()"
+          >
+            Convert Pub To Xpub
+          </v-btn>
+          <v-btn
+            color="orange"
+            text
+            v-on:click="getnextXpub()"
+          >
+            Get Next Xpub
+          </v-btn>
+          <v-btn
+            color="orange"
+            text
+            v-on:click="testWalletAddressList()"
+          >
+            Test Import
+          </v-btn>
+          <v-btn
+            color="orange"
+            text
+            v-on:click="createRandomXPub()"
+          >
+            Create Random Xpub
+          </v-btn>
         </div>
       </v-card>
       </v-col>
@@ -76,9 +117,15 @@
 </template>
 
 <script>
-import { recoverFromPubs } from '@/assets/task/recoverFromPubs.js'
-import { getPendingTransactions, resetChainTo, getNodeInfo, createWallet, startNode } from '@/assets/util/nodeUtil.js'
-import { walletName } from '@/assets/constants/genConstants.js'
+import { pubToVpub, createRandomXPub } from '@/assets/util/pubUtil.js'
+import { testnet } from '@/assets/constants/networkConstants.js'
+import { getPubkey, getNextXpub } from '@/assets/util/keyUtil.js'
+import { initWallet } from '@/assets/task/initWallet.js'
+import {
+  getPendingTransactions, resetChainTo, getNodeInfo, createWallet,
+  listAccountAddresses, startNode, stopNode, importAddress
+} from '@/assets/util/nodeUtil.js'
+import { walletName, changeAccount } from '@/assets/constants/genConstants.js'
 import { decodeRawTransactionBitcoinJS } from '@/assets/util/transactionUtil/transactionUtil.js'
 import { createNamespacedHelpers } from 'vuex'
 import { uploadTXT } from '@/assets/util/electronUtil.js'
@@ -103,10 +150,28 @@ export default {
       'updateWalletToken',
       'updateWalletObject'
     ]),
-    async recover () {
-      this.disable = true
-      await recoverFromPubs(this.walletVpubs, this.m)
-      this.disable = false
+    async testWalletAddressList () {
+      const tes = await listAccountAddresses(changeAccount, walletName)
+      console.log(tes)
+      await importAddress(changeAccount, 'tb1quy554arqg4z3e92d5jqatuuun6fqnv8u8mz45mv9hdwl0eah490sl23a5j', walletName)
+      const after = await listAccountAddresses(changeAccount, walletName)
+      console.log(tes, after)
+    },
+    async createRandomXPub () {
+      const tes = await createRandomXPub(testnet)
+      console.log(tes)
+    },
+    async pubToXpub () {
+      const tes = await pubToVpub('xpub6GWRq8UfAooYLs43fdcjcxDHwSMCPWk9SFk4nsKDs4UQHS4MYm9MsVjqXowkVd4naDYXL4XcxWx2e4Q61LgDMnZyX6pH8ZZG5jr5819KY7q')
+      console.log(tes)
+    },
+    async getnextXpub () {
+      const tes = await getNextXpub(0, 'tpubDEDCwTRhZt6JapCDEaGLF5bKV5f7y7jjs1NJX499JYrBLPp9ehvnXwMJAjHcBgudjhgSAy4y9kCBXgqRmv8bJhCARAykxVGt5U85gzsefaZ', testnet)
+      console.log(tes)
+    },
+    async getPubkey () {
+      const tes = await getPubkey(0, 'xpub6GWRq8UfAooYLs43fdcjcxDHwSMCPWk9SFk4nsKDs4UQHS4MYm9MsVjqXowkVd4naDYXL4XcxWx2e4Q61LgDMnZyX6pH8ZZG5jr5819KY7q', testnet)
+      console.log(tes.toString('hex'))
     },
     async start () {
       const rest = await getPendingTransactions('musig')
@@ -138,6 +203,13 @@ export default {
       const text = await uploadTXT()
       const walletObject = await recoverColdCardsInfo(text)
       this.updateWalletObject(walletObject)
+    },
+    async initWallet () {
+      const results = await initWallet()
+      console.log(results)
+    },
+    async stopNode () {
+      await stopNode()
     }
   },
   async mounted () {

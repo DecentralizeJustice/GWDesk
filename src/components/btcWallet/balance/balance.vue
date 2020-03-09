@@ -11,7 +11,7 @@
         <v-col align="center"
             justify="center" xs12>
           <div class="display-1 mt-5">
-            {{confirmedTransInfo}} BTC
+            {{balance}} BTC
           </div>
         </v-col>
       </v-row>
@@ -19,7 +19,7 @@
 </template>
 <script>
 import { getUTXO, getNodeHeight } from '@/assets/util/nodeUtil.js'
-import { walletName } from '@/assets/constants/genConstants.js'
+import { walletName, minConfirmations } from '@/assets/constants/genConstants.js'
 const R = require('ramda')
 const BigNumber = require('bignumber.js')
 export default {
@@ -27,23 +27,15 @@ export default {
   },
   data: () => ({
     transactions: [],
-    currentBlock: 0
+    currentBlock: 0,
+    balance: BigNumber(0)
   }),
   methods: {
-    async setup () {
-      const results = await getUTXO(walletName)
-      const sortByTime = R.sortBy(R.prop('blocktime'))
-      const sortedTransactions = sortByTime(results)
-      const currentBlock = await getNodeHeight()
-      this.currentBlock = currentBlock
-      this.transactions = sortedTransactions
-    }
-  },
-  computed: {
-    confirmedTransInfo: function () {
+    async getBalance () {
       let inputSum = BigNumber(0)
-      const isConfirming = n => (this.currentBlock - Math.abs(n.height)) >= 2
-      const trans = R.reverse(R.filter(isConfirming, this.transactions))
+      const isConfirming = n =>
+        (this.currentBlock - Math.abs(n.height)) >= (minConfirmations - 1)
+      const trans = R.filter(isConfirming, this.transactions)
       if (trans.length !== 0) {
         for (const element of trans) {
           const value = BigNumber(element.value)
@@ -51,8 +43,17 @@ export default {
         }
         return inputSum.shiftedBy(-8).toString()
       }
-      return 0
+      return BigNumber(0).toString()
+    },
+    async setup () {
+      const utxo = await getUTXO(walletName)
+      const currentBlock = await getNodeHeight()
+      this.currentBlock = currentBlock
+      this.transactions = utxo
+      this.balance = await this.getBalance()
     }
+  },
+  computed: {
   },
   async mounted () {
     await this.setup()

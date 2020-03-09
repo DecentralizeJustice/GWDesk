@@ -11,9 +11,6 @@
 
 <script>
 import navDrawer from '@/components/navDrawer.vue'
-// import { startNode } from '@/assets/util/nodeUtil.js'
-// import { createNamespacedHelpers } from 'vuex'
-// const { mapGetters } = createNamespacedHelpers('stageInfo')
 export default {
   name: 'App',
   components: {
@@ -21,22 +18,10 @@ export default {
   },
   methods: {
     async start () {
-      if (!this.$router.currentRoute.name === 'edu') {
-        this.$router.push({ path: 'edu' })
-      }
+      this.$router.push({ path: 'edu' })
     }
   },
   computed: {
-    // ...mapGetters({
-    //   currentStage: 'currentStage'
-    // }),
-    // mainReady: function () {
-    //   if (this.currentStage === 'main') {
-    //     return true
-    //   } else {
-    //     return false
-    //   }
-    // }
   },
   data: () => ({
     //

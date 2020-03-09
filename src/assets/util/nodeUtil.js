@@ -1,6 +1,7 @@
 import { client, walletClient } from '@/assets/constants/nodeConstants.js'
 // import { minConfirmations } from '@/assets/constants/genConstants.js'
 import { getFeeInfo } from '@/assets/util/networkUtil.js'
+import { createRandomXPub } from '@/assets/util/pubUtil.js'
 import path from 'path'
 import { fork } from 'child_process'
 const remote = require('electron').remote
@@ -61,29 +62,44 @@ async function getNodeSyncInfo () {
   return percentage
 }
 
-async function createWallet (id) {
-  const accountKey = 'tpubDCYNZmxUFv2rtR5DR1r4NXb4yr5TCw7AbqaiJ1MNEvYrhYwhVNRgRpAxzkD4EkzXFDJqCq6fDyLKVZbjaoxrsyjBBnYULCHBPUqGZ9gPmMs'
+async function createWallet (walletName, network) {
+  const pub = await createRandomXPub(network)
   const options = {
     watchOnly: true,
-    accountKey: accountKey
+    accountKey: pub
   }
-  const result = await walletClient.createWallet(id, options)
+  const result = await walletClient.createWallet(walletName, options)
   return result
 }
 
-async function importAddress (account, address, id) {
-  const wallet = walletClient.wallet(id)
+async function importAddress (account, address, name) {
+  await walletClient.execute('selectwallet', [name])
+  const wallet = walletClient.wallet(name)
   const result = await wallet.importAddress(account, address)
   return result
 }
-async function getUTXO (id) {
+async function getAccounts (id) {
   const wallet = walletClient.wallet(id)
+  const result = await wallet.getAccounts()
+  return result
+}
+async function createAccount (walletName, accountName, network) {
+  const wallet = walletClient.wallet(walletName)
+  const pub = await createRandomXPub(network)
+  const options = {
+    name: accountName,
+    accountKey: pub
+  }
+  const result = await wallet.createAccount(accountName, options)
+  return result
+}
+async function getUTXO (name) {
+  const wallet = walletClient.wallet(name)
   const result = await wallet.getCoins()
   return result
 }
 
-async function getWalletTransactions (account, name) {
-  // const minConfirmationsMet = trans => (trans.confirmations >= minConfirmations)
+async function getAccountTransactions (account, name) {
   await walletClient.execute('selectwallet', [name])
   const accountIndex = 0
   const transAray = []
@@ -101,27 +117,15 @@ async function getWalletTransactions (account, name) {
     }
   }
   let finalArray = []
-  // const transInfo = await walletClient.execute('listsinceblock', ['0000000000234139a02f4f65bcdd06be3e216f22c59c2e6960dcba62422d9da3', 0, true])// await walletClient.execute('listtransactions', [account, 10, 0])
-  // if (transInfo.length > 1) {
-  //   finalArray = await transLoop(transAray, accountIndex)
-  // } else {
-  //   finalArray = transInfo
-  // }
   finalArray = await transLoop(transAray, accountIndex)
-  // node bug ?
-  // const result = R.filter(minConfirmationsMet, finalArray)
-  // console.log(finalArray.transactions)
   return finalArray
 }
-async function listWalletAddresses (account, name) {
-  await walletClient.execute('selectwallet', [name])
-  // eslint-disable-next-line
+async function listAccountAddresses (account, walletName) {
+  await walletClient.execute('selectwallet', [walletName])
   const result = await walletClient.execute('getaddressesbyaccount', [account])
-  // console.log(result)
   return result
 }
 async function getFeeEstimate (blocks) {
-  // eslint-disable-next-line
   const result = await getFeeInfo()
   return result
 }
@@ -150,8 +154,9 @@ async function broadcastHex (txHex) {
 }
 
 export {
-  createWallet, getNodeSyncInfo, getWalletTransactions, broadcastHex,
+  createWallet, getNodeSyncInfo, getAccountTransactions, broadcastHex,
   getTxByHash, importAddress, startNode, checkNodeAlive, stopNode, resetChainTo,
-  getNodeInfo, listWalletAddresses, checkIfNodeMeaningfull, getFeeEstimate,
-  decodeRawTransaction, getUTXO, getNodeHeight, getPendingTransactions
+  getNodeInfo, listAccountAddresses, checkIfNodeMeaningfull, getFeeEstimate,
+  decodeRawTransaction, getUTXO, getNodeHeight, getPendingTransactions, getAccounts,
+  createAccount
 }
