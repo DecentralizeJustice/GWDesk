@@ -11,7 +11,7 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  build:
+  buildRelease:
     # The type of runner that the job will run on
     runs-on: macos-latest
 
@@ -22,3 +22,8 @@ jobs:
     - uses: actions/setup-node@master
       with:
         node-version: 10.x
+    - uses: actions/setup-python@v1
+      with:
+        python-version: '3.x'
+        architecture: 'x64'
+    run: python --version
