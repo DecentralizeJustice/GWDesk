@@ -26,4 +26,5 @@ jobs:
       with:
         python-version: '3.x'
         architecture: 'x64'
-    run: python --version
+    - name: Run a one-line script
+      run: echo python --version
