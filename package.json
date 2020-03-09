@@ -6,14 +6,15 @@
   "author": "Decentralize Justice",
   "scripts": {
     "serve": "vue-cli-service electron:serve",
-    "build": "npm-run-all postinstall electron:generate-icons electron:build",
+    "build": "npm-run-all buildNativeMod electron:generate-icons electron:build",
     "test:unit": "vue-cli-service test:unit",
     "test:e2e": "vue-cli-service test:e2e",
     "lint": "vue-cli-service lint",
     "electron:build": "vue-cli-service electron:build",
     "electron:generate-icons": "electron-icon-builder --input=./public/icon.png --output=build --flatten",
     "electron:serve": "vue-cli-service electron:serve",
-    "postinstall": "npm-run-all nativebuild fixbcrypto",
+    "postinstall": "",
+    "buildNativeMod": "npm-run-all nativebuild fixbcrypto",
     "fixbcrypto": "node-gyp rebuild -v12.4.0 --directory=node_modules/bcrypto",
     "nativebuild": "electron-builder install-app-deps"
   },
