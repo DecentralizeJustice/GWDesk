@@ -10,6 +10,8 @@ jobs:
     runs-on: macos-10.15
     steps:
     - uses: actions/checkout@v2
+      with:
+        lfs: 'true'
     - uses: actions/setup-node@master
       with:
         # fix till https://github.com/actions/setup-node/issues/121 is solved
@@ -20,7 +22,8 @@ jobs:
         architecture: 'x64'
     - run: yarn install
     - run: yarn run build
+    - run: ls
     - uses: actions/upload-artifact@v1
       with:
         name: Mac App Zip
-        path: dist_electron/GuideWallet-0.1.0-mac.zip
+        path: dist_electron/GuidingWallet-0.1.0-mac.zip
