@@ -24,7 +24,6 @@ jobs:
         node-version: 13.x
     - uses: actions/setup-python@v1
       with:
-        python-version: '3.x'
+        python-version: '3.7'
         architecture: 'x64'
-    - name: Run a one-line script
-      run: echo python --version
+    - run: yarn install node-gyp
