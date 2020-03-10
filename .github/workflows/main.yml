@@ -26,6 +26,7 @@ jobs:
     #   with:
     #     name: Mac App Zip
     #     path: dist_electron/GuidingWallet-0.1.0-mac.zip
+    
     - run: echo ${{github.ref}}
 
     # - name: Create Release
