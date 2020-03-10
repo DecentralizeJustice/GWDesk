@@ -31,7 +31,7 @@ jobs:
       uses: actions/create-release@latest
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-        Commit_Sha: ${{GITHUB_SHA}}
+        Commit_Sha: ${{ env.GITHUB_SHA }}
       with:
         tag_name: DemoBuild
         release_name: Demo Build For $Commit_Sha
