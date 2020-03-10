@@ -36,10 +36,10 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
       with:
         tag_name: DemoBuild
-        release_name: Demo Build ${{github.run_number}}
+        release_name: Demo Build [Insert Demo Number]
         body: |
           Add Release Notes
-          Built From Commit ${{github.sha}}
+          Built From Master Commit ${{github.sha}}
         draft: true
         prerelease: true
     - name: Upload Release Asset
