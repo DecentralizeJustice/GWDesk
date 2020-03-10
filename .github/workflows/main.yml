@@ -39,7 +39,7 @@ jobs:
         release_name: Demo Build ${{ github.run_number}}
         body: |
           Add Release Notes
-          Built From Commit ${GITHUB_SHA::8}
+          Built From Commit ${{ github['sha']::8}}
         draft: true
         prerelease: true
     - name: Upload Release Asset
