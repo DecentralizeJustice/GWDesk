@@ -35,8 +35,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
       with:
-        tag_name: DemoBuild
-        release_name: Demo Build [Insert Demo Number
+        tag_name: v0.1.0
+        release_name: Demo Build v0.1.0
         body: |
           Add Release Notes
           Built From Master Commit ${{github.sha}}
