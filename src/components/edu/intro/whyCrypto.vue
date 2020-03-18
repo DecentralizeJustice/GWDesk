@@ -84,7 +84,6 @@ export default {
     quiz,
     vidComp,
     congrats
-    // drag
   },
   computed: {
     test: function () {

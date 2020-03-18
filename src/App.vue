@@ -18,7 +18,10 @@ export default {
   },
   methods: {
     async start () {
-      this.$router.push({ path: 'edu' })
+      try {
+        await this.$router.push({ path: 'edu' })
+      } catch (err) {
+      }
     }
   },
   computed: {
