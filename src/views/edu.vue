@@ -3,7 +3,7 @@
     <v-flex xs11>
       <v-card class="text-xs-center no-gutters">
         <v-card-title class="headline justify-center">
-          Education
+          Courses
         </v-card-title>
             <v-divider></v-divider>
             <v-row no-gutters justify-content='space-evenly'>

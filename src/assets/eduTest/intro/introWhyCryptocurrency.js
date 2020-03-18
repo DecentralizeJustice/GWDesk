@@ -2,12 +2,12 @@ const questions = {
   part1:
   [
     {
-      q: 'Decentralized means to:',
+      q: 'Cryptos give you:',
       opt: [
-        'be affordable',
-        'have as few middlmen as possible',
-        'have fast transactions',
-        'have government support'
+        'state aproved investments.',
+        'digital freedom.',
+        'easier to use money.',
+        'faster payments.'
       ],
       ans: 1
     },

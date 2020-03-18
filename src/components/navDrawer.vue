@@ -40,18 +40,18 @@ export default {
   },
   data: () => ({
     devOptions: [
-      'Education', 'BTC Multisig', 'Dev'
+      'Courses', 'BTC Multisig', 'Dev'
     ],
     prodOptions: [
-      'Education'
+      'Courses'
     ],
     icons: {
-      Education: 'book-open-page-variant',
+      Courses: 'book-open-page-variant',
       'BTC Multisig': 'lock',
       Dev: 'settings'
     },
     routerLinks: {
-      Education: 'edu',
+      Courses: 'edu',
       'BTC Multisig': 'btcMusig',
       Dev: 'dev'
     },
