@@ -86,4 +86,20 @@ export default {
   overflow-y: auto;
   background-color:#424242;
 }
+#content > h1{
+  text-align: center;
+}
+#content > h2{
+  margin-top: .2rem;
+  font-size: 1.5rem;
+  text-align: left;
+}
+#content > p{
+  font-size: 1.2rem;
+  text-align: left;
+}
+#content > ul{
+  font-size: 1.2rem;
+  text-align: left;
+}
 </style>
