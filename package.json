@@ -38,6 +38,7 @@
     "ramda": "^0.27.0",
     "typeface-roboto": "^0.0.75",
     "vue": "^2.6.10",
+    "vue-markdown": "^2.2.4",
     "vue-router": "^3.0.3",
     "vuetify": "^2.2.13",
     "vuex": "^3.0.1",
