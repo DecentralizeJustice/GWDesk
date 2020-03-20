@@ -1,13 +1,17 @@
 <template>
-  <v-row align="center">
+  <v-row align="center" justify='space-around'>
     <v-col cols='6' class="text-center" offset='3'>
       <v-alert type="info" v-if='bonus'>
         Bonus Question
       </v-alert>
     </v-col>
-   <v-col cols='6' offset='3'>
+   <v-col cols='5'>
      <videoPlayer
      />
+   </v-col>
+   <v-col cols='5' v-if='notes' class="text-center">
+      <vue-markdown id='md' style=""
+      :source='mdText'></vue-markdown>
    </v-col>
    <v-col class="text-center" cols="12">
      <v-btn
@@ -19,7 +23,23 @@
        Skip
      </v-btn>
      <v-btn
-       color="primary darken-2"
+      v-if='!notes'
+      color="primary darken-2"
+       @click="viewNotes()"
+       class="mr-6"
+     >
+       Show Notes
+     </v-btn>
+     <v-btn
+      v-if='notes'
+      color="primary darken-2"
+       @click="hideNotes()"
+       class="mr-6"
+     >
+       Hide Notes
+     </v-btn>
+     <v-btn
+       color="success darken-2"
        @click="startQuiz()"
      >
        Take Quiz
@@ -29,15 +49,21 @@
 </template>
 
 <script>
+import VueMarkdown from 'vue-markdown'
 import videoPlayer from '@/components/general/videoHashed.vue'
+const fs = require('fs')
+const path = require('path')
 export default {
   name: 'vidComp',
   components: {
-    videoPlayer
+    videoPlayer,
+    VueMarkdown
   },
   props: ['vidUrl', 'bonus'],
   data () {
     return {
+      mdText: '',
+      notes: false
     }
   },
   methods: {
@@ -46,16 +72,29 @@ export default {
     },
     skip () {
       this.$emit('quizDone')
+    },
+    viewNotes () {
+      this.notes = true
+    },
+    hideNotes () {
+      this.notes = false
     }
   },
   computed: {
-    // url: function () {
-    //   console.log('ran')
-    //   const path = require('path')
-    //   const fileLocation = path.join(process.env.BASE_URL, this.vidUrl)
-    //   console.log(fileLocation)
-    //   return fileLocation
-    // }
+  },
+  mounted () {
+    // eslint-disable-next-line
+    const fileLocation = path.join(__static, 'courseNotes/intro/whyCrypto/part1.md')
+    const fileContents = fs.readFileSync(fileLocation, 'utf8')
+    this.mdText = fileContents
   }
 }
 </script>
+<style >
+#md {
+  max-height:40vh;
+  width:100%;
+  overflow-y: auto;
+  background-color:#424242;
+}
+</style>
