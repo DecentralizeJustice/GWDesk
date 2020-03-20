@@ -72,7 +72,7 @@
   </v-card>
 </template>
 <script>
-import html from '@/assets/part1.html'
+import html from '@/assets/courseNotes/intro/whyCrypto/part1.html'
 import congrats from '@/components/general/congrats.vue'
 import vidComp from '@/components/general/vid&NotesComp.vue'
 import quiz from '@/components/general/quiz.vue'
