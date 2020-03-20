@@ -71,7 +71,7 @@
 </template>
 <script>
 import congrats from '@/components/general/congrats.vue'
-import vidComp from '@/components/general/vidComp.vue'
+import vidComp from '@/components/general/vid&NotesComp.vue'
 import quiz from '@/components/general/quiz.vue'
 import questions from '@/assets/eduTest/intro/introWhichCryptocurrency.js'
 export default {
