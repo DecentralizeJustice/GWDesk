@@ -21,7 +21,8 @@
       v-on:startQuiz='startQuiz()'
       v-bind:vidUrl="vidUrl"
       v-bind:bonus="false"
-      v-if='vid'/>
+      v-if='vid'
+      :html='html'/>
      <quiz
      v-bind:questions="test"
      v-on:backToVideo='backToVideo()'
@@ -33,6 +34,7 @@
   </div>
   <div v-if='currentComponent === "bonus"'>
     <vidComp
+    :html='html'
     v-on:startQuiz='startQuiz()'
     v-bind:vidUrl="vidUrl"
     v-bind:bonus="true"
@@ -70,14 +72,16 @@
   </v-card>
 </template>
 <script>
+import html from '@/assets/part1.html'
 import congrats from '@/components/general/congrats.vue'
-import vidComp from '@/components/general/vidComp.vue'
+import vidComp from '@/components/general/vid&NotesComp.vue'
 import quiz from '@/components/general/quiz.vue'
 import questions from '@/assets/eduTest/intro/introWhyCryptocurrency.js'
 export default {
   data: () => ({
     vid: true,
-    part: 0
+    part: 0,
+    html: html
   }),
   components: {
     quiz,

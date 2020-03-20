@@ -9,9 +9,8 @@
      <videoPlayer
      />
    </v-col>
-   <v-col cols='5' v-if='notes' class="text-center">
-      <vue-markdown id='md' style=""
-      :source='mdText'></vue-markdown>
+   <v-col id=md cols='5' v-if='notes' class="text-center">
+      <div v-html="html"></div>
    </v-col>
    <v-col class="text-center" cols="12">
      <v-btn
@@ -49,20 +48,15 @@
 </template>
 
 <script>
-import VueMarkdown from 'vue-markdown'
 import videoPlayer from '@/components/general/videoHashed.vue'
-const fs = require('fs')
-const path = require('path')
 export default {
   name: 'vidComp',
   components: {
-    videoPlayer,
-    VueMarkdown
+    videoPlayer
   },
-  props: ['vidUrl', 'bonus'],
+  props: ['vidUrl', 'bonus', 'html'],
   data () {
     return {
-      mdText: '',
       notes: false
     }
   },
@@ -83,17 +77,12 @@ export default {
   computed: {
   },
   mounted () {
-    // eslint-disable-next-line
-    const fileLocation = path.join(__static, 'courseNotes/intro/whyCrypto/part1.md')
-    const fileContents = fs.readFileSync(fileLocation, 'utf8')
-    this.mdText = fileContents
   }
 }
 </script>
 <style >
 #md {
-  max-height:40vh;
-  width:100%;
+  max-height: 40vh;
   overflow-y: auto;
   background-color:#424242;
 }
