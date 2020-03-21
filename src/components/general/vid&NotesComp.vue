@@ -90,7 +90,7 @@ export default {
   text-align: center;
 }
 #content > h2{
-  margin-top: .2rem;
+  margin-top: .5rem;
   font-size: 1.5rem;
   text-align: left;
 }
