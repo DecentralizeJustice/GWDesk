@@ -27,7 +27,7 @@
         ></v-select>
       </v-col>
       <v-col cols='12' class="text-center">
-        <v-btn
+        <v-btn class="mr-2"
           color="red darken-2"
           @click="checkAnswer()"
           :disabled='answerDisabled'

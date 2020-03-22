@@ -23,7 +23,7 @@
     "@mdi/font": "^4.9.95",
     "axios": "^0.19.0",
     "bclient": "^0.1.7",
-    "bcoin": "bcoin-org/bcoin#6beb54dddc1256cca379ad765b71fd5cdee427f3",
+    "bcoin": "bcoin-org/bcoin#7b47913f3c92cc661c9bcf3af6ab619db46e551e",
     "bignumber.js": "^9.0.0",
     "bip39": "^3.0.2",
     "bitcoin-address-validation": "^1.0.0",
