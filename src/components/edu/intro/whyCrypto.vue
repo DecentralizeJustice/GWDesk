@@ -19,7 +19,7 @@
     <div v-if='currentComponent === "mainQuiz"'>
       <vidComp
       v-on:startQuiz='startQuiz()'
-      v-bind:vidUrl="vidUrl"
+      v-bind:vidUrl="vidFileName"
       v-bind:bonus="false"
       v-if='vid'
       :html='html'/>
@@ -99,8 +99,8 @@ export default {
         return q[part]
       }
     },
-    vidUrl: function () {
-      return '/videos/video.mp4'
+    vidFileName: function () {
+      return 'video.mp4'
     },
     progress: function () {
       const numberOfQuestions = Object.keys(questions.questions).length

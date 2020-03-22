@@ -7,6 +7,7 @@
     </v-col>
    <v-col cols='5'>
      <videoPlayer
+     v-bind:vidUrl="vidUrl"
      />
    </v-col>
    <v-col id=md cols='5' v-if='notes' class="text-center pa-5">
@@ -89,6 +90,7 @@ export default {
 }
 #content > h1{
   text-align: center;
+  text-decoration: underline;
 }
 #content > h2{
   margin-top: .5rem;
