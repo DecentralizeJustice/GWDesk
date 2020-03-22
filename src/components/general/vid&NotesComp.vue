@@ -9,8 +9,8 @@
      <videoPlayer
      />
    </v-col>
-   <v-col id=md cols='5' v-if='notes' class="text-center">
-      <div v-html="html"></div>
+   <v-col id=md cols='5' v-if='notes' class="text-center pa-5">
+      <div v-html="html" ></div>
    </v-col>
    <v-col class="text-center" cols="12">
      <v-btn
@@ -85,6 +85,7 @@ export default {
   max-height: 40vh;
   overflow-y: auto;
   background-color:#424242;
+  padding: 25px 50px 75px 100px;
 }
 #content > h1{
   text-align: center;
