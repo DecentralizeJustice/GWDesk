@@ -34,6 +34,13 @@
         >
           Submit
         </v-btn>
+        <v-btn
+          color="green darken-2"
+          @click="skip()"
+          v-if='dev'
+        >
+          Skip
+        </v-btn>
       </v-col>
       <v-col cols='4' offset='4'>
         <v-progress-linear
@@ -113,6 +120,12 @@ export default {
     }
   },
   computed: {
+    dev: function () {
+      if (process.env.NODE_ENV === 'development') {
+        return true
+      }
+      return false
+    },
     items: function () {
       const letters = ['A. ', 'B. ', 'C. ', 'D. ', 'E. ', 'F. ', 'G. ']
       const options = []
