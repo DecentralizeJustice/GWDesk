@@ -25,6 +25,7 @@ export default {
   computed: {
   },
   async mounted () {
+    // console.log(this.vidUrl)
     const url = 'videos/' + this.vidUrl
     // eslint-disable-next-line
     const fileLocation = path.join(__static, url)

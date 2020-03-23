@@ -1,7 +1,7 @@
 <template>
   <v-row align="center" justify='space-around'>
-    <v-col cols='6' class="text-center" offset='3'>
-      <v-alert type="info" v-if='bonus'>
+    <v-col cols='12' class="text-center" offset='0'>
+      <v-alert type="info" v-if='bonus' style="width:30%;margin: auto;">
         Bonus Question
       </v-alert>
     </v-col>
@@ -23,7 +23,7 @@
        Skip
      </v-btn>
      <v-btn
-      v-if='!notes'
+      v-if='!notes && !bonus'
       color="primary darken-2"
        @click="viewNotes()"
        class="mr-6"
@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import videoPlayer from '@/components/general/videoHashed.vue'
+import videoPlayer from '@/components/general/localVideo.vue'
 export default {
   name: 'vidComp',
   components: {
