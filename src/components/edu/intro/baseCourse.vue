@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-card-title class="headline justify-center">What is Cryptocurrency?</v-card-title>
+    <v-card-title class="headline justify-center">{{title}}</v-card-title>
     <v-divider/>
     <v-row align="center">
      <v-col cols='10' offset='1'>
@@ -72,13 +72,11 @@
   </v-card>
 </template>
 <script>
-import notes1 from '@/assets/courseNotes/intro/whyCrypto/part1.html'
-import notes2 from '@/assets/courseNotes/intro/whyCrypto/part2.html'
 import congrats from '@/components/general/congrats.vue'
 import vidComp from '@/components/general/vid&NotesComp.vue'
 import quiz from '@/components/general/quiz.vue'
-import questions from '@/assets/eduTest/intro/introWhyCryptocurrency.js'
 export default {
+  props: ['courseInfo'],
   data: () => ({
     vid: true,
     part: 0
@@ -90,17 +88,16 @@ export default {
   },
   computed: {
     html: function () {
-      const notes = {
-        0: notes1,
-        1: notes2
-      }
-      return notes[this.part]
+      return this.courseInfo.notes[this.part]
+    },
+    title: function () {
+      return this.courseInfo.title
     },
     test: function () {
       if (this.currentComponent === 'bonus') {
-        return questions.questions.bonus
+        return this.courseInfo.questions.questions.bonus
       } else {
-        const q = questions.questions
+        const q = this.courseInfo.questions.questions
         const c = this.part
         const part = 'part' + (c + 1).toString()
         return q[part]
@@ -110,11 +107,11 @@ export default {
       return 'video.mp4'
     },
     progress: function () {
-      const numberOfQuestions = Object.keys(questions.questions).length
+      const numberOfQuestions = Object.keys(this.courseInfo.questions.questions).length
       return (this.part / numberOfQuestions) * 100
     },
     currentComponent: function () {
-      const numberOfQuestions = Object.keys(questions.questions).length
+      const numberOfQuestions = Object.keys(this.courseInfo.questions.questions).length
       if (this.part < numberOfQuestions - 1) {
         return 'mainQuiz'
       }
