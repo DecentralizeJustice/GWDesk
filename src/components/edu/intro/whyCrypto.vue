@@ -36,7 +36,7 @@
     <vidComp
     :html='html'
     v-on:startQuiz='startQuiz()'
-    v-bind:vidUrl="vidUrl"
+    v-bind:vidUrl="vidFileName"
     v-bind:bonus="true"
     v-if='vid'/>
    <quiz
@@ -49,7 +49,7 @@
    />
  </div>
   <congrats
-  v-bind:vidUrl="vidUrl"
+  v-bind:vidUrl="vidFileName"
   v-if='currentComponent === "congrats"'
   v-on:quizDone='partDone'/>
     <v-divider/>
@@ -72,7 +72,8 @@
   </v-card>
 </template>
 <script>
-import html from '@/assets/courseNotes/intro/whyCrypto/part1.html'
+import notes1 from '@/assets/courseNotes/intro/whyCrypto/part1.html'
+import notes2 from '@/assets/courseNotes/intro/whyCrypto/part2.html'
 import congrats from '@/components/general/congrats.vue'
 import vidComp from '@/components/general/vid&NotesComp.vue'
 import quiz from '@/components/general/quiz.vue'
@@ -80,8 +81,7 @@ import questions from '@/assets/eduTest/intro/introWhyCryptocurrency.js'
 export default {
   data: () => ({
     vid: true,
-    part: 0,
-    html: html
+    part: 0
   }),
   components: {
     quiz,
@@ -89,6 +89,13 @@ export default {
     congrats
   },
   computed: {
+    html: function () {
+      const notes = {
+        0: notes1,
+        1: notes2
+      }
+      return notes[this.part]
+    },
     test: function () {
       if (this.currentComponent === 'bonus') {
         return questions.questions.bonus

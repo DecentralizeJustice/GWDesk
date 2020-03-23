@@ -37,7 +37,7 @@
         <v-btn
           color="green darken-2"
           @click="skip()"
-          v-if='dev'
+          v-if='dev && !bonus'
         >
           Skip
         </v-btn>
@@ -77,8 +77,6 @@
           See Answer Video
         </v-btn>
         </v-col>
-        <v-col cols='3' class="" offset='1' v-if='bonus'>
-      </v-col>
     </v-row>
 </template>
 
