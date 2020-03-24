@@ -7,6 +7,7 @@ const whyCrypto = {
   notes: {
     0: notes1,
     1: notes2
-  }
+  },
+  nextLesson: 'whichCrypto'
 }
 export default whyCrypto
