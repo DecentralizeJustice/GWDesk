@@ -12,10 +12,18 @@
    </v-col>
    <v-col class="text-center" cols="12">
      <v-btn
+     class="mr-3"
        color="primary darken-2"
        @click="done()"
      >
        Done
+     </v-btn>
+     <v-btn
+      v-if='nextLessonavAilable'
+      color="primary darken"
+      @click="nextLesson()"
+     >
+       Next Lesson
      </v-btn>
    </v-col>
   </v-row>
@@ -28,7 +36,7 @@ export default {
   components: {
     videoPlayer
   },
-  props: ['vidUrl'],
+  props: ['vidUrl', 'nextLessonavAilable'],
   data () {
     return {
     }
@@ -36,6 +44,9 @@ export default {
   methods: {
     done () {
       this.$emit('quizDone')
+    },
+    nextLesson () {
+      this.$emit('nextLesson')
     }
   },
   computed: {

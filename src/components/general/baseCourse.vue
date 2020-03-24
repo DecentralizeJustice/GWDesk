@@ -50,8 +50,10 @@
  </div>
   <congrats
   v-bind:vidUrl="vidFileName"
+  v-bind:nextLessonavAilable='nextLessonavAilable'
   v-if='currentComponent === "congrats"'
-  v-on:quizDone='partDone'/>
+  v-on:quizDone='partDone'
+  v-on:nextLesson='nextLesson()'/>
     <v-divider/>
     <v-card-actions>
       <v-btn
@@ -93,6 +95,15 @@ export default {
     title: function () {
       return this.courseInfo.title
     },
+    nextLessonTitle: function () {
+      return this.courseInfo.nextLesson
+    },
+    nextLessonavAilable: function () {
+      if (this.nextLessonTitle === undefined) {
+        return false
+      }
+      return true
+    },
     test: function () {
       if (this.currentComponent === 'bonus') {
         return this.courseInfo.questions.questions.bonus
@@ -126,6 +137,9 @@ export default {
     }
   },
   methods: {
+    nextLesson () {
+      this.$emit('changeLesson', this.nextLessonTitle)
+    },
     exit () {
       this.$emit('changeLesson', '')
     },
