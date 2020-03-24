@@ -86,7 +86,6 @@ export default {
   max-height: 40vh;
   overflow-y: auto;
   background-color:#424242;
-  padding: 25px 50px 75px 100px;
 }
 #content > h1{
   text-align: center;
