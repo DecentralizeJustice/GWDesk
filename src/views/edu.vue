@@ -24,7 +24,7 @@
                  <v-card-actions class="justify-center">
                    <v-btn
                      :disabled='!item.unlocked'
-                     color="deep-purple accent-4"
+                     :color="iconColor(true)"
                      @click.stop="openDialog(item.title)"
                    >
                      Explore

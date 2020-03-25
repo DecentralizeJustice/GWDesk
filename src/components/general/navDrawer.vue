@@ -8,11 +8,12 @@
     <template v-slot:prepend >
       <v-list>
         <v-list-item
-          one-line
+        class="px-2"
         >
-          <v-list-item-content>
-            <v-list-item-title class="title">Guiding Wallet</v-list-item-title>
-          </v-list-item-content>
+              <v-list-item-avatar>
+                <v-img :src="`${publicPath}icon.png`"></v-img>
+              </v-list-item-avatar>
+            <v-list-item-title class="headline">Guiding Wallet</v-list-item-title>
         </v-list-item>
       </v-list>
     </template>
@@ -39,6 +40,7 @@ export default {
   components: {
   },
   data: () => ({
+    publicPath: process.env.BASE_URL,
     devOptions: [
       'Courses', 'BTC Multisig', 'Dev'
     ],
