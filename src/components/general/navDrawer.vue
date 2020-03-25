@@ -24,11 +24,14 @@
     >
       <v-list-item link v-for="(title, index) in options"
         :key="`title-${index}`" v-on:click="navigate(title)"
+        style=""
       >
         <v-list-item-icon >
           <v-icon>mdi-{{icons[title]}}</v-icon>
         </v-list-item-icon>
-        <v-list-item-title>{{title}}</v-list-item-title>
+        <v-list-item-title class="subtitle-1" >
+          {{title}}
+        </v-list-item-title>
       </v-list-item>
     </v-list>
   </v-navigation-drawer>

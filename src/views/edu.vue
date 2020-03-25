@@ -72,6 +72,7 @@ export default {
       // { title: 'Custom Tokens', icon: 'lock', unlocked: 'false' },
       // { title: 'Blockchain Mechanics', icon: 'bitcoin', unlocked: 'false' },
       { title: 'General Education', icon: 'book-information-variant', unlocked: false },
+      { title: 'Tools', icon: 'hammer-wrench', unlocked: false },
       // { title: 'Heart to Heart', icon: 'account-heart', unlocked: 'false' },
       { title: 'About Guide Wallet', icon: 'information-outline', unlocked: false }
     ]
