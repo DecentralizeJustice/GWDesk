@@ -1,34 +1,42 @@
 <template>
-  <v-row align="center">
-    <v-col cols='6' class="text-center" offset='3'>
-      <v-alert type="success">
+  <v-row align="center" justify='center'>
+    <v-col cols='12' class="text-center">
+      <v-alert type="success" style="margin:auto;width:50%;">
         Congratulations !!!
       </v-alert>
     </v-col>
-   <v-col cols='8' offset='2'>
+   <v-col cols='4'>
      <videoPlayer
-     v-bind:url="url"
+      v-bind:vidUrl="vidUrl"
      />
    </v-col>
    <v-col class="text-center" cols="12">
      <v-btn
+     class="mr-3"
        color="primary darken-2"
        @click="done()"
      >
        Done
+     </v-btn>
+     <v-btn
+      v-if='nextLessonavAilable'
+      color="primary darken"
+      @click="nextLesson()"
+     >
+       Next Lesson
      </v-btn>
    </v-col>
   </v-row>
 </template>
 
 <script>
-import videoPlayer from '@/components/general/videoHashed.vue'
+import videoPlayer from '@/components/general/localVideo.vue'
 export default {
   name: 'congrats',
   components: {
     videoPlayer
   },
-  props: ['vidUrl'],
+  props: ['vidUrl', 'nextLessonavAilable'],
   data () {
     return {
     }
@@ -36,14 +44,14 @@ export default {
   methods: {
     done () {
       this.$emit('quizDone')
+    },
+    nextLesson () {
+      this.$emit('nextLesson')
     }
   },
   computed: {
-    url: function () {
-      const path = require('path')
-      const fileLocation = path.join(process.env.BASE_URL, this.vidUrl)
-      return fileLocation
-    }
+  },
+  async mounted () {
   }
 }
 </script>

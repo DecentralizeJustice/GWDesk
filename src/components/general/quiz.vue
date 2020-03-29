@@ -27,12 +27,19 @@
         ></v-select>
       </v-col>
       <v-col cols='12' class="text-center">
-        <v-btn
+        <v-btn class="mr-2"
           color="red darken-2"
           @click="checkAnswer()"
           :disabled='answerDisabled'
         >
           Submit
+        </v-btn>
+        <v-btn
+          color="green darken-2"
+          @click="skip()"
+          v-if='dev && !bonus'
+        >
+          Skip
         </v-btn>
       </v-col>
       <v-col cols='4' offset='4'>
@@ -70,8 +77,6 @@
           See Answer Video
         </v-btn>
         </v-col>
-        <v-col cols='3' class="" offset='1' v-if='bonus'>
-      </v-col>
     </v-row>
 </template>
 
@@ -113,6 +118,12 @@ export default {
     }
   },
   computed: {
+    dev: function () {
+      if (process.env.NODE_ENV === 'development') {
+        return true
+      }
+      return false
+    },
     items: function () {
       const letters = ['A. ', 'B. ', 'C. ', 'D. ', 'E. ', 'F. ', 'G. ']
       const options = []

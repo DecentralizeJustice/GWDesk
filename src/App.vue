@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import navDrawer from '@/components/navDrawer.vue'
+import navDrawer from '@/components/general/navDrawer.vue'
 export default {
   name: 'App',
   components: {
@@ -18,7 +18,10 @@ export default {
   },
   methods: {
     async start () {
-      this.$router.push({ path: 'edu' })
+      try {
+        await this.$router.push({ path: 'edu' })
+      } catch (err) {
+      }
     }
   },
   computed: {

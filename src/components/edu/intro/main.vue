@@ -1,21 +1,45 @@
 <template>
   <component
+  :key='lesson'
   v-bind:is="currentMain"
+  v-bind:courseInfo="courseInfo"
+  v-bind:landingInfo='landingInfo'
   v-on:exit="exit()"
   v-on:changeLesson="changeLesson"/>
 </template>
 <script>
+import whyCrypto from '@/assets/courseData/courses/intro/whyCrypto.js'
+import whichCrypto from '@/assets/courseData/courses/intro/whichCrypto.js'
+import landing from '@/components/general/landing.vue'
+import baseCourse from '@/components/general/baseCourse.vue'
 export default {
   data: () => ({
-    lesson: ''
+    lesson: '',
+    landingInfo: {
+      title: 'Intro To Cryptocurrency',
+      lessons: [
+        { title: 'What is Cryptocurrency?', icon: 'atom-variant', comp: 'whyCrypto', unlocked: true },
+        { title: 'Which Cryptocurrency is Best For Me?', icon: 'account-question', comp: 'whichCrypto', unlocked: false }
+        // { title: 'Pick Your First Cryptocurrency', icon: 'account-cash', unlocked: 'false' }
+      ]
+    }
+
   }),
   computed: {
+    courseInfo () {
+      if (this.lesson === 'whichCrypto') {
+        return whichCrypto
+      }
+      if (this.lesson === 'whyCrypto') {
+        return whyCrypto
+      }
+      return true
+    },
     currentMain () {
       if (this.lesson === '') {
-        return () => import('@/components/edu/intro/landing.vue')
+        return landing
       }
-      const componentName = this.lesson
-      return () => import('@/components/edu/intro/' + componentName + '.vue')
+      return baseCourse
     }
   },
   methods: {
