@@ -45,7 +45,7 @@ export default {
   data: () => ({
     publicPath: process.env.BASE_URL,
     devOptions: [
-      'Courses', 'BTC Multisig', 'Dev'
+      'Courses' //, 'BTC Multisig', 'Dev'
     ],
     prodOptions: [
       'Courses'
