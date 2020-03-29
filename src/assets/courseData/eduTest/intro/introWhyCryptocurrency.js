@@ -2,24 +2,32 @@ const questions = {
   part1:
   [
     {
-      q: 'Decentralized means to:',
+      q: 'Cryptocurrencies are quick ways to make a lot of money.',
       opt: [
-        'be affordable',
-        'have as few middlmen as possible',
-        'have fast transactions',
-        'have government support'
+        'True',
+        'False'
       ],
       ans: 1
     },
     {
-      q: 'How many cryptocurrencies can exist?',
+      q: 'Cryptocurrencies are special becuase they are:',
       opt: [
-        '10',
-        '50',
-        '34',
-        'Infinite'
+        'new technology.',
+        'online reward points.',
+        'a cool thing to invest in.',
+        'money that you can control.'
       ],
       ans: 3
+    },
+    {
+      q: "Cryptocurrencies don't help you avoid:",
+      opt: [
+        'unjust and inconsistent laws.',
+        'personnel responsibility.',
+        'discrimination.',
+        'unfair political influence and power.'
+      ],
+      ans: 1
     },
     {
       q: 'Who can make a cryptocurrency?',
@@ -34,51 +42,44 @@ const questions = {
       ans: 5
     },
     {
-      q: 'Cryptocurrency is a technology that helps you:',
-      opt: [
-        'Track your banking history',
-        'Pay your taxes',
-        'Do things without middlmen',
-        'All of the above'
-      ],
-      ans: 2
-    },
-    {
       q: 'All Cryptocurrencies are great.',
       opt: [
         'False',
         'True'
       ],
       ans: 0
+    },
+    {
+      q: 'Crypto is about giving you financial:',
+      opt: [
+        'laws.',
+        'promises.',
+        'limits.',
+        'choices.',
+        'guidelines.'
+      ],
+      ans: 3
     }
   ],
   part2:
   [
     {
-      q: 'Cryptocurrencies have only upsides and no downsides.',
+      q: 'Cryptocurrencies require you to:',
+      opt: [
+        'protect yours keys.',
+        'study cryptogrophy deeply.',
+        'be able to program in atleast one programming language.',
+        'understand computer science.'
+      ],
+      ans: 0
+    },
+    {
+      q: 'A cryptocurrency key is similar to a password.',
       opt: [
         'True',
         'False'
       ],
-      ans: 1
-    },
-    {
-      q: 'Middlemen are always bad and removing them will always be good.',
-      opt: [
-        'True',
-        'False'
-      ],
-      ans: 1
-    },
-    {
-      q: 'One advantage of using cryptocurrencies for money instead of banks is:',
-      opt: [
-        'Cryptocurrencies requrie more education',
-        'Cryptocurrencies are more secure',
-        'Cryptocurrencies require more password security',
-        'Cryptocurrencies require more personal responsibility'
-      ],
-      ans: 1
+      ans: 0
     },
     {
       q: 'If someone steals your id and social security card, is your crypto still secure?',
@@ -90,7 +91,7 @@ const questions = {
     },
     {
       q: `Who can help you recover your crypto if you loose your cryptocurrency
-      password?`,
+      keys?`,
       opt: [
         'Your bank.',
         'A smart programmer.',

@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-card-title class="headline justify-center">What is Cryptocurrency?</v-card-title>
+    <v-card-title class="headline justify-center">{{title}}</v-card-title>
     <v-divider/>
     <v-row align="center">
      <v-col cols='10' offset='1'>
@@ -19,9 +19,10 @@
     <div v-if='currentComponent === "mainQuiz"'>
       <vidComp
       v-on:startQuiz='startQuiz()'
-      v-bind:vidUrl="vidUrl"
+      v-bind:vidUrl="vidFileName"
       v-bind:bonus="false"
-      v-if='vid'/>
+      v-if='vid'
+      :html='html'/>
      <quiz
      v-bind:questions="test"
      v-on:backToVideo='backToVideo()'
@@ -33,8 +34,9 @@
   </div>
   <div v-if='currentComponent === "bonus"'>
     <vidComp
+    :html='html'
     v-on:startQuiz='startQuiz()'
-    v-bind:vidUrl="vidUrl"
+    v-bind:vidUrl="vidFileName"
     v-bind:bonus="true"
     v-if='vid'/>
    <quiz
@@ -47,17 +49,19 @@
    />
  </div>
   <congrats
-  v-bind:vidUrl="vidUrl"
+  v-bind:vidUrl="vidFileName"
+  v-bind:nextLessonavAilable='nextLessonavAilable'
   v-if='currentComponent === "congrats"'
-  v-on:quizDone='partDone'/>
+  v-on:quizDone='partDone'
+  v-on:nextLesson='nextLesson()'/>
     <v-divider/>
     <v-card-actions>
-      <v-btn
+      <!-- <v-btn
         color="orange"
         text
       >
         <v-icon>mdi-help</v-icon>
-      </v-btn>
+      </v-btn> -->
     <v-btn
       color="red darken-1"
       text
@@ -70,12 +74,11 @@
   </v-card>
 </template>
 <script>
-// import drag from '@/components/general/drag.vue'
 import congrats from '@/components/general/congrats.vue'
-import vidComp from '@/components/general/vidComp.vue'
+import vidComp from '@/components/general/vid&NotesComp.vue'
 import quiz from '@/components/general/quiz.vue'
-import questions from '@/assets/eduTest/intro/introWhyCryptocurrency.js'
 export default {
+  props: ['courseInfo'],
   data: () => ({
     vid: true,
     part: 0
@@ -84,28 +87,42 @@ export default {
     quiz,
     vidComp,
     congrats
-    // drag
   },
   computed: {
+    html: function () {
+      return this.courseInfo.notes[this.part]
+    },
+    title: function () {
+      return this.courseInfo.title
+    },
+    nextLessonTitle: function () {
+      return this.courseInfo.nextLesson
+    },
+    nextLessonavAilable: function () {
+      if (this.nextLessonTitle === undefined) {
+        return false
+      }
+      return true
+    },
     test: function () {
       if (this.currentComponent === 'bonus') {
-        return questions.questions.bonus
+        return this.courseInfo.questions.questions.bonus
       } else {
-        const q = questions.questions
+        const q = this.courseInfo.questions.questions
         const c = this.part
         const part = 'part' + (c + 1).toString()
         return q[part]
       }
     },
-    vidUrl: function () {
-      return '/videos/video.mp4'
+    vidFileName: function () {
+      return 'video.mp4'
     },
     progress: function () {
-      const numberOfQuestions = Object.keys(questions.questions).length
+      const numberOfQuestions = Object.keys(this.courseInfo.questions.questions).length
       return (this.part / numberOfQuestions) * 100
     },
     currentComponent: function () {
-      const numberOfQuestions = Object.keys(questions.questions).length
+      const numberOfQuestions = Object.keys(this.courseInfo.questions.questions).length
       if (this.part < numberOfQuestions - 1) {
         return 'mainQuiz'
       }
@@ -120,6 +137,9 @@ export default {
     }
   },
   methods: {
+    nextLesson () {
+      this.$emit('changeLesson', this.nextLessonTitle)
+    },
     exit () {
       this.$emit('changeLesson', '')
     },

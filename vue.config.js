@@ -1,5 +1,21 @@
 module.exports = {
   configureWebpack: {
+    module: {
+      rules: [
+        {
+          test: /\.html$/i,
+          loader: 'html-loader'
+        },
+        {
+          test: /\.(png|jpe?g|gif)$/i,
+          use: [
+            {
+              loader: 'file-loader'
+            }
+          ]
+        }
+      ]
+    }
   },
   pluginOptions: {
     electronBuilder: {

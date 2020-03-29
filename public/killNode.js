@@ -2,9 +2,14 @@
 const find = require('find-process')
 
 async function killSPVNode () {
-  const list = await find('name', 'Guide-Wallet-bcoinSPVNode-2012', true)
-  const pid = list[0].pid
-  process.kill(pid)
-  process.exit()
+  try {
+    const list = await find('name', 'Guiding-Wallet-bcoinSPVNode-5678', true)
+    const pid = list[0].pid
+    process.kill(pid)
+    process.exit()
+  } catch (err) {
+    console.log(err)
+    process.exit()
+  }
 }
 killSPVNode()

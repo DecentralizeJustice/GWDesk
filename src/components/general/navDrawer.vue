@@ -8,11 +8,12 @@
     <template v-slot:prepend >
       <v-list>
         <v-list-item
-          one-line
+        class="px-2"
         >
-          <v-list-item-content>
-            <v-list-item-title class="title">Guiding Wallet</v-list-item-title>
-          </v-list-item-content>
+              <v-list-item-avatar>
+                <v-img :src="`${publicPath}icon.png`"></v-img>
+              </v-list-item-avatar>
+            <v-list-item-title class="headline">Guiding Wallet</v-list-item-title>
         </v-list-item>
       </v-list>
     </template>
@@ -23,11 +24,14 @@
     >
       <v-list-item link v-for="(title, index) in options"
         :key="`title-${index}`" v-on:click="navigate(title)"
+        style=""
       >
         <v-list-item-icon >
           <v-icon>mdi-{{icons[title]}}</v-icon>
         </v-list-item-icon>
-        <v-list-item-title>{{title}}</v-list-item-title>
+        <v-list-item-title class="subtitle-1" >
+          {{title}}
+        </v-list-item-title>
       </v-list-item>
     </v-list>
   </v-navigation-drawer>
@@ -39,19 +43,20 @@ export default {
   components: {
   },
   data: () => ({
+    publicPath: process.env.BASE_URL,
     devOptions: [
-      'Education', 'BTC Multisig', 'Dev'
+      'Courses', 'BTC Multisig', 'Dev'
     ],
     prodOptions: [
-      'Education'
+      'Courses'
     ],
     icons: {
-      Education: 'book-open-page-variant',
+      Courses: 'book-open-page-variant',
       'BTC Multisig': 'lock',
       Dev: 'settings'
     },
     routerLinks: {
-      Education: 'edu',
+      Courses: 'edu',
       'BTC Multisig': 'btcMusig',
       Dev: 'dev'
     },

@@ -3,7 +3,7 @@
     <v-flex xs11>
       <v-card class="text-xs-center no-gutters">
         <v-card-title class="headline justify-center">
-          Education
+          Courses
         </v-card-title>
             <v-divider></v-divider>
             <v-row no-gutters justify-content='space-evenly'>
@@ -23,8 +23,8 @@
                 </v-row>
                  <v-card-actions class="justify-center">
                    <v-btn
-                     :disabled='!unlocked(item.unlocked)'
-                     color="deep-purple accent-4"
+                     :disabled='!item.unlocked'
+                     :color="iconColor(true)"
                      @click.stop="openDialog(item.title)"
                    >
                      Explore
@@ -33,7 +33,7 @@
                  </v-card>
                </v-col>
             </v-row>
-            <v-divider></v-divider>
+            <!-- <v-divider></v-divider>
             <v-card-actions>
               <v-btn
                 color="orange"
@@ -41,7 +41,7 @@
               >
                 <v-icon>mdi-help</v-icon>
               </v-btn>
-            </v-card-actions>
+            </v-card-actions> -->
           </v-card>
     </v-flex>
     <v-dialog
@@ -61,9 +61,9 @@ export default {
   data: () => ({
     dialog: false,
     lessons: [
-      { title: 'Introduction', icon: 'atom-variant', unlocked: 'true' },
+      { title: 'Introduction', icon: 'atom-variant', unlocked: true },
       // { title: 'Monero', icon: 'eye-off', unlocked: 'false' },
-      { title: 'Bitcoin', icon: 'lock', unlocked: 'false' },
+      { title: 'Bitcoin', icon: 'lock', unlocked: false },
       // { title: 'Dai', icon: 'lock', unlocked: 'false' },
       // { title: 'Pool Together', icon: 'lock', unlocked: 'false' },
       // { title: 'Ethereum', icon: 'lock', unlocked: 'false' },
@@ -71,9 +71,10 @@ export default {
       // { title: 'Bisq', icon: 'lock', unlocked: 'false' },
       // { title: 'Custom Tokens', icon: 'lock', unlocked: 'false' },
       // { title: 'Blockchain Mechanics', icon: 'bitcoin', unlocked: 'false' },
-      { title: 'General Education', icon: 'book-information-variant', unlocked: 'false' },
+      { title: 'General Education', icon: 'book-information-variant', unlocked: false },
+      { title: 'Tools', icon: 'hammer-wrench', unlocked: false },
       // { title: 'Heart to Heart', icon: 'account-heart', unlocked: 'false' },
-      { title: 'About Guide Wallet', icon: 'information-outline', unlocked: 'false' }
+      { title: 'About Guide Wallet', icon: 'information-outline', unlocked: false }
     ]
   }),
   methods: {
@@ -81,28 +82,22 @@ export default {
       this.dialog = true
     },
     cardColor (state) {
-      if (state === 'true') {
+      if (state) {
         return 'blue'
       }
-      return 'grey darken-4'
-    },
-    unlocked (state) {
-      if (state === 'true') {
-        return true
-      }
-      return false
+      return 'grey darken-3'
     },
     iconColor (state) {
-      if (state === 'true') {
-        return 'black'
+      if (state) {
+        return 'indigo darken-4'
       }
       return 'white'
     }
   },
   computed: {
     currentMain () {
-      const componentName = 'main'
-      return () => import('@/components/edu/intro/' + componentName + '.vue')
+      // const componentName = 'main'
+      return () => import('@/components/edu/intro/main.vue')
     }
   }
 }
