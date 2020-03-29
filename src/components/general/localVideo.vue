@@ -8,7 +8,7 @@
 </template>
 
 <script>
-const fs = require('fs')
+const fs = require('fs-extra')
 const path = require('path')
 export default {
   name: 'videoPlayer',
