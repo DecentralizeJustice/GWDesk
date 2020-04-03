@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Education from './views/edu.vue'
+import hwiDev from './components/dev/hwiDev.vue'
 // import btcMusig from './views/btcMusig.vue'
 // import dev from './views/dev.vue'
 
@@ -15,6 +16,11 @@ const router = new Router({
       path: '/edu',
       name: 'edu',
       component: Education
+    },
+    {
+      path: '/hwiDev',
+      name: 'hwiDev',
+      component: hwiDev
     }
     // {
     //   path: '/btcMusig',

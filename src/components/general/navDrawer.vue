@@ -45,7 +45,7 @@ export default {
   data: () => ({
     publicPath: process.env.BASE_URL,
     devOptions: [
-      'Courses' //, 'BTC Multisig', 'Dev'
+      'Courses', 'HWI Dev' //, 'BTC Multisig', 'Dev'
     ],
     prodOptions: [
       'Courses'
@@ -53,12 +53,14 @@ export default {
     icons: {
       Courses: 'book-open-page-variant',
       'BTC Multisig': 'lock',
-      Dev: 'settings'
+      Dev: 'settings',
+      'HWI Dev': 'settings'
     },
     routerLinks: {
       Courses: 'edu',
       'BTC Multisig': 'btcMusig',
-      Dev: 'dev'
+      Dev: 'dev',
+      'HWI Dev': 'hwiDev'
     },
     open: false
   }),
