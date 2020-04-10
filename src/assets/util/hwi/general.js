@@ -68,7 +68,7 @@ export async function wipe (brand, path) {
 
 export function setup (brand, path) {
   const binaryFolder = app.getPath('userData') + '/binaries'
-  const commands = ['-t', `${brand}`, '-d', `${path}`, '-i', 'restore']
+  const commands = ['-t', `${brand}`, '-d', `${path}`, '-i', 'setup']
   // console.log(commands)
   const ls = spawn('hwi', commands,
     { cwd: binaryFolder })

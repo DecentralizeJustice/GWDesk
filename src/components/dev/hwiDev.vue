@@ -18,14 +18,15 @@
                 </v-col>
               </v-row>
               <v-row justify="space-around">
-                <v-col  v-for="(wallet, index) in hardwareWallets" cols="4"
+                <v-col  v-for="(wallet, index) in hardwareWallets" cols="6"
                   v-bind:key="index">
                   <walletCard v-bind:walletType="wallet.model"
                   v-bind:walletInfo='wallet'
                   v-on:promptPin="promptPin"
                   v-on:wipe="wipe"
                   v-on:enterPin="enterPin"
-                  v-on:setup="setup"/>
+                  v-on:setup="setup"
+                  v-on:enter="write"/>
                 </v-col>
               </v-row>
             </v-container>
@@ -47,7 +48,7 @@
             <v-btn
               color="orange"
               text
-              v-on:click="test()"
+              v-on:click="write('1234')"
             >
               Test
             </v-btn>
@@ -99,12 +100,14 @@ export default {
     setup: async function (brand, path) {
       this.channel = setup(brand, path)
     },
-    test: function () {
-      this.channel.stdin.write('1234\n')
-      // process.stdin.pipe(this.channel.stdin)
+    write: function (string) {
+      this.channel.stdin.write(string + '\n')
     }
   },
   computed: {
+  },
+  mounted () {
+    this.getDevices()
   }
 }
 </script>
