@@ -69,22 +69,34 @@ export async function wipe (brand, path) {
 export function setup (brand, path) {
   const binaryFolder = app.getPath('userData') + '/binaries'
   const commands = ['-t', `${brand}`, '-d', `${path}`, '-i', 'setup']
-  // console.log(commands)
-  const ls = spawn('hwi', commands,
+  const command = spawn('hwi', commands,
     { cwd: binaryFolder })
-  ls.stdout.on('data', (data) => {
+  command.stdout.on('data', (data) => {
     console.log(`stdout: ${data}`)
   })
-  ls.stdin.on('data', (data) => {
-    console.log('frfrfr')
-  })
-  ls.stderr.on('data', (data) => {
+  command.stderr.on('data', (data) => {
     console.error(`stderr: ${data}`)
   })
-
-  ls.on('close', (code) => {
+  command.on('close', (code) => {
     console.log(`child process exited with code ${code}`)
   })
 
-  return ls
+  return command
+}
+export function restore (brand, path) {
+  const binaryFolder = app.getPath('userData') + '/binaries'
+  const commands = ['-t', `${brand}`, '-d', `${path}`, '-i', 'restore']
+  const command = spawn('hwi', commands,
+    { cwd: binaryFolder })
+  command.stdout.on('data', (data) => {
+    console.log(`stdout: ${data}`)
+  })
+  command.stderr.on('data', (data) => {
+    console.error(`stderr: ${data}`)
+  })
+  command.on('close', (code) => {
+    console.log(`child process exited with code ${code}`)
+  })
+
+  return command
 }

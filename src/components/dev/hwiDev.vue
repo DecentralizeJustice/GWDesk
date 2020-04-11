@@ -20,13 +20,15 @@
               <v-row justify="space-around">
                 <v-col  v-for="(wallet, index) in hardwareWallets" cols="6"
                   v-bind:key="index">
-                  <walletCard v-bind:walletType="wallet.model"
+                  <component
+                  v-bind:is="correctComponent(wallet.model)"
                   v-bind:walletInfo='wallet'
                   v-on:promptPin="promptPin"
                   v-on:wipe="wipe"
                   v-on:enterPin="enterPin"
                   v-on:setup="setup"
-                  v-on:enter="write"/>
+                  v-on:enter="write"
+                  v-on:restore="restore"/>
                 </v-col>
               </v-row>
             </v-container>
@@ -60,19 +62,18 @@
 <script>
 import {
   unpackBinary, listDevices,
-  promtpin, enterpin, wipe, setup
+  promtpin, enterpin, wipe, setup, restore
 } from '@/assets/util/hwi/general.js'
-import image from '@/assets/photos/trezor.jpeg'
-import walletCard from '@/components/dev/walletCard.vue'
+import trezorOne from '@/components/dev/trezorOneCard.vue'
+import trezorT from '@/components/dev/trezorT.vue'
 
 export default {
   components: {
-    walletCard
+    trezorOne
   },
   data: () => ({
     dialog: false,
     hardwareWallets: [],
-    image: image,
     channel: {}
   }),
   methods: {
@@ -83,7 +84,6 @@ export default {
     getDevices: async function () {
       const test = await listDevices()
       this.hardwareWallets = test
-      console.log(this.hardwareWallets)
     },
     promptPin: async function (brand, path) {
       const test = await promtpin(brand, path)
@@ -100,8 +100,20 @@ export default {
     setup: async function (brand, path) {
       this.channel = setup(brand, path)
     },
+    restore: async function (brand, path) {
+      this.channel = restore(brand, path)
+    },
     write: function (string) {
       this.channel.stdin.write(string + '\n')
+    },
+    correctComponent: function (info) {
+      if (info === 'trezor_t') {
+        return trezorT
+      }
+      if (info === 'trezor_1') {
+        return trezorOne
+      }
+      console.log('Unknown Wallet')
     }
   },
   computed: {
