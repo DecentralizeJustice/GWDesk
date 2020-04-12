@@ -33,6 +33,16 @@
           </v-btn>
         </v-col>
         <v-col
+          cols="6"
+        >
+          <v-btn
+            color="brown"
+            v-on:click="displayAddress"
+          >
+            Display Address
+          </v-btn>
+        </v-col>
+        <v-col
           cols="4"
         >
           <v-btn
@@ -66,7 +76,8 @@ export default {
   data: () => ({
     dialog: false,
     pingridUse: false,
-    xpubpath: 'm/44h/0h/0h'
+    xpubpath: 'm/44h/0h/0h',
+    addressPath: 'm/84h/1h/0h/0/0'
   }),
   methods: {
     wipe: function () {
@@ -77,6 +88,9 @@ export default {
     },
     getxpub: function () {
       this.$emit('getxpub', this.model, this.path, this.xpubpath)
+    },
+    displayAddress: function () {
+      this.$emit('displayAddress', this.model, this.path, this.addressPath)
     },
     restore: function () {
       this.$emit('restore', this.model, this.path)

@@ -65,7 +65,12 @@ export async function wipe (brand, path) {
   const json = JSON.parse(stdout)
   return json
 }
-
+export async function displayAddress (brand, path, addressPath) {
+  const binary = app.getPath('userData') + '/binaries/hwi'
+  const { stdout } = await exec(`"${binary}" -t ${brand} -d ${path} displayaddress --wpkh --path ${addressPath} `)
+  const json = JSON.parse(stdout)
+  return json
+}
 export function setup (brand, path) {
   const binaryFolder = app.getPath('userData') + '/binaries'
   const commands = ['-t', `${brand}`, '-d', `${path}`, '-i', 'setup']

@@ -29,7 +29,8 @@
                   v-on:setup="setup"
                   v-on:enter="write"
                   v-on:restore="restore"
-                  v-on:getxpub="getxpub"/>
+                  v-on:getxpub="getxpub"
+                  v-on:displayAddress='displayAddress'/>
                 </v-col>
               </v-row>
             </v-container>
@@ -64,7 +65,7 @@
 import {
   unpackBinary, listDevices,
   promtpin, enterpin, wipe, setup, restore,
-  getxpub
+  getxpub, displayAddress
 } from '@/assets/util/hwi/general.js'
 import trezorOne from '@/components/dev/trezorOneCard.vue'
 import trezorT from '@/components/dev/trezorT.vue'
@@ -89,6 +90,10 @@ export default {
     },
     getxpub: async function (model, path, xpubpath) {
       const pub = await getxpub(model, path, xpubpath)
+      console.log(pub)
+    },
+    displayAddress: async function (model, path, addressPath) {
+      const pub = await displayAddress(model, path, addressPath)
       console.log(pub)
     },
     promptPin: async function (model, path) {
