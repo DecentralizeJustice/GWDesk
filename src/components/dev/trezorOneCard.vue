@@ -82,6 +82,16 @@
             Xpub
           </v-btn>
         </v-col>
+        <v-col
+          cols="6"
+        >
+          <v-btn
+            color="brown"
+            v-on:click="displayAddress"
+          >
+            Display Address
+          </v-btn>
+        </v-col>
       </v-row>
     </v-container>
     <v-row v-if='textUse'>
@@ -125,9 +135,13 @@ export default {
     pingridUse: false,
     text: '',
     textUse: false,
-    xpubpath: 'm/44h/0h/0h'
+    xpubpath: 'm/44h/0h/0h',
+    addressPath: 'm/84h/1h/0h/0/0'
   }),
   methods: {
+    displayAddress: function () {
+      this.$emit('displayAddress', this.model, this.path, this.addressPath)
+    },
     promptPin: function () {
       this.$emit('promptPin', this.model, this.path)
     },
@@ -163,7 +177,7 @@ export default {
     }
   },
   mounted () {
-    // console.log(this.pingridUse)
+    // console.log(this.walletInfo)
   }
 }
 </script>
