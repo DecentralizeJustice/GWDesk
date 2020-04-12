@@ -26,6 +26,16 @@
           cols="4"
         >
           <v-btn
+            color="lime darken-4"
+            v-on:click="getxpub"
+          >
+            Xpub
+          </v-btn>
+        </v-col>
+        <v-col
+          cols="4"
+        >
+          <v-btn
             color="blue"
             v-on:click="setup()"
           >
@@ -55,7 +65,8 @@ export default {
   },
   data: () => ({
     dialog: false,
-    pingridUse: false
+    pingridUse: false,
+    xpubpath: 'm/44h/0h/0h'
   }),
   methods: {
     wipe: function () {
@@ -63,6 +74,9 @@ export default {
     },
     setup: function () {
       this.$emit('setup', this.model, this.path)
+    },
+    getxpub: function () {
+      this.$emit('getxpub', this.model, this.path, this.xpubpath)
     },
     restore: function () {
       this.$emit('restore', this.model, this.path)

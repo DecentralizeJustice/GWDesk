@@ -72,6 +72,16 @@
             Text
           </v-btn>
         </v-col>
+        <v-col
+          cols="4"
+        >
+          <v-btn
+            color="lime darken-4"
+            v-on:click="getxpub"
+          >
+            Xpub
+          </v-btn>
+        </v-col>
       </v-row>
     </v-container>
     <v-row v-if='textUse'>
@@ -114,7 +124,8 @@ export default {
     dialog: false,
     pingridUse: false,
     text: '',
-    textUse: false
+    textUse: false,
+    xpubpath: 'm/44h/0h/0h'
   }),
   methods: {
     promptPin: function () {
@@ -123,6 +134,9 @@ export default {
     enterPin: function (pin) {
       this.$emit('enterPin', this.model, this.path, pin)
     },
+    getxpub: function () {
+      this.$emit('getxpub', this.model, this.path, this.xpubpath)
+    },
     wipe: function () {
       this.$emit('wipe', this.model, this.path)
     },
@@ -130,6 +144,7 @@ export default {
       this.$emit('setup', this.model, this.path)
     },
     enter: function (pin) {
+      this.text = ''
       this.$emit('enter', pin)
     },
     restore: function () {

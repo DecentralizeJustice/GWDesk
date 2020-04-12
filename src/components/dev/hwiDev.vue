@@ -28,7 +28,8 @@
                   v-on:enterPin="enterPin"
                   v-on:setup="setup"
                   v-on:enter="write"
-                  v-on:restore="restore"/>
+                  v-on:restore="restore"
+                  v-on:getxpub="getxpub"/>
                 </v-col>
               </v-row>
             </v-container>
@@ -62,7 +63,8 @@
 <script>
 import {
   unpackBinary, listDevices,
-  promtpin, enterpin, wipe, setup, restore
+  promtpin, enterpin, wipe, setup, restore,
+  getxpub
 } from '@/assets/util/hwi/general.js'
 import trezorOne from '@/components/dev/trezorOneCard.vue'
 import trezorT from '@/components/dev/trezorT.vue'
@@ -85,23 +87,29 @@ export default {
       const test = await listDevices()
       this.hardwareWallets = test
     },
-    promptPin: async function (brand, path) {
-      const test = await promtpin(brand, path)
+    getxpub: async function (model, path, xpubpath) {
+      const pub = await getxpub(model, path, xpubpath)
+      console.log(pub)
+    },
+    promptPin: async function (model, path) {
+      const test = await promtpin(model, path)
       console.log(test)
     },
-    enterPin: async function (brand, path, pin) {
-      const test = await enterpin(brand, path, pin)
+    enterPin: async function (model, path, pin) {
+      const test = await enterpin(model, path, pin)
       console.log(test)
     },
-    wipe: async function (brand, path) {
-      const test = await wipe(brand, path)
+    wipe: async function (model, path) {
+      const test = await wipe(model, path)
       console.log(test)
     },
-    setup: async function (brand, path) {
-      this.channel = setup(brand, path)
+    setup: async function (model, path) {
+      this.channel = setup(model, path)
+      this.addListeners(this.channel)
     },
-    restore: async function (brand, path) {
-      this.channel = restore(brand, path)
+    restore: async function (model, path) {
+      this.channel = restore(model, path)
+      this.addListeners(this.channel)
     },
     write: function (string) {
       this.channel.stdin.write(string + '\n')
@@ -114,6 +122,17 @@ export default {
         return trezorOne
       }
       console.log('Unknown Wallet')
+    },
+    addListeners: function (stream) {
+      stream.stdout.on('data', (data) => {
+        console.log(`stdout: ${data}`)
+      })
+      stream.stderr.on('data', (data) => {
+        console.error(`stderr: ${data}`)
+      })
+      stream.on('close', (code) => {
+        console.log(`child process exited with code ${code}`)
+      })
     }
   },
   computed: {
