@@ -71,16 +71,6 @@ export function setup (brand, path) {
   const commands = ['-t', `${brand}`, '-d', `${path}`, '-i', 'setup']
   const command = spawn('hwi', commands,
     { cwd: binaryFolder })
-  command.stdout.on('data', (data) => {
-    console.log(`stdout: ${data}`)
-  })
-  command.stderr.on('data', (data) => {
-    console.error(`stderr: ${data}`)
-  })
-  command.on('close', (code) => {
-    console.log(`child process exited with code ${code}`)
-  })
-
   return command
 }
 export function restore (brand, path) {
@@ -88,15 +78,5 @@ export function restore (brand, path) {
   const commands = ['-t', `${brand}`, '-d', `${path}`, '-i', 'restore']
   const command = spawn('hwi', commands,
     { cwd: binaryFolder })
-  command.stdout.on('data', (data) => {
-    console.log(`stdout: ${data}`)
-  })
-  command.stderr.on('data', (data) => {
-    console.error(`stderr: ${data}`)
-  })
-  command.on('close', (code) => {
-    console.log(`child process exited with code ${code}`)
-  })
-
   return command
 }
