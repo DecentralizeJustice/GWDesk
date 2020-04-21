@@ -19,6 +19,7 @@
 
 <script>
 const axios = require('axios')
+const crypto = require('crypto')
 export default {
   components: {
   },
@@ -32,9 +33,13 @@ export default {
       try {
         const data = {
           method: 'getbalance',
-          params: [],
-          id: '567tyuf'
+          params: []
         }
+        data.id =
+        crypto
+          .createHash('sha256')
+          .update(JSON.stringify(data) + Date.now(), 'utf8')
+          .digest('hex')
         const yes = await axios.post('http://127.0.0.1:7777', data, {
           auth: {
             username: 'user',
