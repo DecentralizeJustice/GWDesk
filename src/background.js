@@ -23,7 +23,7 @@ function createWindow () {
     icon: path.join(__static, 'icon.png'),
     webPreferences: {
       nodeIntegration: true,
-      webSecurity: true
+      webSecurity: false
     } })
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
@@ -41,7 +41,6 @@ function createWindow () {
   })
   win.webContents.on("will-navigate", function(event, url) {
     console.log('no navigation Allowed')
-    event.preventDefault()
   })
   win.webContents.on("new-window", function(event, url) {
     console.log('no new Windows Allowed')

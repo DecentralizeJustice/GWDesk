@@ -21,7 +21,7 @@
   "main": "background.js",
   "dependencies": {
     "@mdi/font": "^4.9.95",
-    "axios": "^0.19.0",
+    "axios": "^0.19.2",
     "bclient": "^0.1.7",
     "bcoin": "bcoin-org/bcoin#7b47913f3c92cc661c9bcf3af6ab619db46e551e",
     "bignumber.js": "^9.0.0",
