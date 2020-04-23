@@ -19,24 +19,24 @@
             </v-btn>
             <v-btn
               color="green"
-              v-on:click="daemonControl('start')"
+              v-on:click="startDeamon()"
             >
               Start Daemon
             </v-btn>
             <v-btn
               color="red"
-              v-on:click="daemonControl('stop')"
+              v-on:click="stopDeamon()"
             >
-              Stop Daemon
+              Hard Stop Daemon
             </v-btn>
             <v-btn
               color="dark pink"
-              v-on:click="configDaemon()"
+              v-on:click="configDaemon(rpcport, rpcuser, rpcpassword)"
             >
               Config Daemon
             </v-btn>
             <v-btn
-              color="dark pink"
+              color="teal darken-3"
               v-on:click="deleteWallet(walletName)"
             >
               Delete Wallet
@@ -48,7 +48,7 @@
               Restore Wallet
             </v-btn>
             <v-btn
-              color="brown"
+              color="deep-orange darken-2"
               v-on:click="loadWallet(walletName)"
             >
               Load Wallet
@@ -60,41 +60,25 @@
 
 <script>
 import {
-  unpackElectrum, daemonControl, configDaemon, deleteWallet,
-  restoreWallet, loadWallet
+  unpackElectrum, startDeamon, configDaemon, deleteWallet,
+  restoreWallet, loadWallet, hardStopDeamon, makeRpcRequest
 } from '@/assets/util/electrum/general.js'
-const axios = require('axios')
-const crypto = require('crypto')
 export default {
   components: {
   },
   data: () => ({
+    rpcport: '7777',
+    rpcuser: 'user',
+    rpcpassword: '1',
     walletName: 'no',
     recoveryInfo: 'zpub6s6rVfipFin9ckR2yotyoNf978XkhoLHEkK9bZWdVqUx35Aw3UC7SpmN1RLsxMzoKmYRJcgUKN93iY1CKFqiqy1nJevw89TEXWx39AdmHZy'
   }),
   methods: {
     get: async function () {
       try {
-        const data = {
-          method: 'getinfo',
-          params: {},
-          jsonrpc: '2.0'
-        }
-        data.id = 'curlText'
-        crypto
-          .createHash('sha256')
-          .update(JSON.stringify(data) + Date.now(), 'utf8')
-          .digest('hex')
-        const yes = await axios.post('http://127.0.0.1:7777', data, {
-          auth: {
-            username: 'user',
-            password: '1'
-          }
-        }
-        )
-        console.log(yes.data.result)
+        const yes = await makeRpcRequest('getinfo', {}, this.rpcport, this.rpcuser, this.rpcpassword)
+        console.log(yes.data)
       } catch (error) {
-        console.log('ran')
         console.error(error)
       }
     },
@@ -114,12 +98,16 @@ export default {
       const result = await restoreWallet(walletName, recoveryInfo)
       console.log(result)
     },
-    daemonControl: async function (command) {
-      const result = await daemonControl(command)
+    startDeamon: async function () {
+      const result = await startDeamon()
       console.log(result)
     },
-    configDaemon: async function () {
-      const result = await configDaemon('7777', 'user', '1')
+    stopDeamon: async function () {
+      const result = await hardStopDeamon()
+      console.log(result)
+    },
+    configDaemon: async function (rpcport, rpcuser, rpcpassword) {
+      const result = await configDaemon(rpcport, rpcuser, rpcpassword)
       console.log(result)
     }
   },
