@@ -55,7 +55,7 @@ export default {
       'BTC Multisig': 'lock',
       Dev: 'settings',
       'HWI Dev': 'settings',
-      'Electrum Dev': 'settings'
+      'Electrum Dev': 'electron-framework'
     },
     routerLinks: {
       Courses: 'edu',
