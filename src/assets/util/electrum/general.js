@@ -1,87 +1,74 @@
 import path from 'path'
-const util = require('util')
-const exec = util.promisify(require('child_process').exec)
-const spawn = require('child_process').spawn
+// const exec = util.promisify(require('child_process').exec)
 const remote = require('electron').remote
 const app = remote.app
 const fs = require('fs-extra')
-const zlib = require('zlib')
-const tar = require('tar-fs')
+const copyFile = fs.promises.copyFile
+const unlink = fs.promises.unlink
 const binaryFolder = '/binaries/'
 const os = require('os')
+const spawn = require('child_process').spawn
+// eslint-disable-next-line
+const timeout = ms => new Promise(res => setTimeout(res, ms))
 
-export async function unpackBinary () {
-  const destination = app.getPath('userData') + '/binaries'
-  let tarName
+export async function unpackElectrum () {
+  const destination = app.getPath('userData') + '/binaries/macElectrum'
   const platform = os.platform()
-
+  let fileName
   if (platform === 'darwin') {
-    tarName = 'hwi--mac-amd64.tar.gz'
+    fileName = 'macElectrum'
   } else {
     throw new Error('Your OS Is Unsupported')
   }
   // eslint-disable-next-line
-  const source = path.join(__static, binaryFolder + tarName)
-  return new Promise((resolve, reject) => {
-    fs.createReadStream(source)
-      .on('error', err => reject(err))
-      .pipe(zlib.Unzip())
-      .pipe(tar.extract(destination))
-      .on('finish', resolve)
-  })
+  const source = path.join(__static, binaryFolder + fileName)
+  await copyFile(source, destination)
+  return true
 }
 
-export async function listDevices () {
-  const binary = app.getPath('userData') + '/binaries/hwi'
-  const { stdout } = await exec(`"${binary}" enumerate`)
-  const json = JSON.parse(stdout)
-  return json
+export async function deleteWallet (walletName) {
+  const destination = app.getPath('userData') + '/binaries/electrum_data/wallets/'
+  await unlink(destination + walletName)
+  return true
 }
 
-export async function promtpin (brand, path) {
-  const binary = app.getPath('userData') + '/binaries/hwi'
-  const { stdout } = await exec(`"${binary}" -t ${brand} -d ${path} promptpin`)
-  const json = JSON.parse(stdout)
-  return json
-}
-
-export async function enterpin (brand, path, pin) {
-  const binary = app.getPath('userData') + '/binaries/hwi'
-  const { stdout } = await exec(`"${binary}" -t ${brand} -d ${path} sendpin ${pin}`)
-  const json = JSON.parse(stdout)
-  return json
-}
-
-export async function getxpub (brand, path, xpubpath) {
-  const binary = app.getPath('userData') + '/binaries/hwi'
-  const { stdout } = await exec(`"${binary}" -t ${brand} -d ${path} getxpub ${xpubpath}`)
-  const json = JSON.parse(stdout)
-  return json
-}
-
-export async function wipe (brand, path) {
-  const binary = app.getPath('userData') + '/binaries/hwi'
-  const { stdout } = await exec(`"${binary}" -t ${brand} -d ${path} wipe`)
-  const json = JSON.parse(stdout)
-  return json
-}
-export async function displayAddress (brand, path, addressPath) {
-  const binary = app.getPath('userData') + '/binaries/hwi'
-  const { stdout } = await exec(`"${binary}" -t ${brand} -d ${path} displayaddress --wpkh --path ${addressPath} `)
-  const json = JSON.parse(stdout)
-  return json
-}
-export function setup (brand, path) {
-  const binaryFolder = app.getPath('userData') + '/binaries'
-  const commands = ['-t', `${brand}`, '-d', `${path}`, '-i', 'setup']
-  const command = spawn('hwi', commands,
+export async function daemonControl (command) {
+  const binaryFolder = app.getPath('userData') + '/binaries/'
+  const commands = ['-P', 'daemon', command]
+  await spawn('./macElectrum', commands,
     { cwd: binaryFolder })
-  return command
+  await timeout(3000)
+  return true
 }
-export function restore (brand, path) {
-  const binaryFolder = app.getPath('userData') + '/binaries'
-  const commands = ['-t', `${brand}`, '-d', `${path}`, '-i', 'restore']
-  const command = spawn('hwi', commands,
+export async function restoreWallet (walletName, recoveryInfo) {
+  const binaryFolder = app.getPath('userData') + '/binaries/'
+  const commands = ['-P', '-w', `electrum_data/wallets/${walletName}`, 'restore',
+    recoveryInfo]
+  await spawn('./macElectrum', commands,
     { cwd: binaryFolder })
-  return command
+  await timeout(10000)
+  return true
+}
+export async function loadWallet (walletName) {
+  const binaryFolder = app.getPath('userData') + '/binaries/'
+  const commands = ['-P', '-w', `electrum_data/wallets/${walletName}`, 'daemon',
+    'load_wallet']
+  await spawn('./macElectrum', commands,
+    { cwd: binaryFolder })
+  await timeout(5000)
+  return true
+}
+export async function configDaemon (port, user, password) {
+  const binaryFolder = app.getPath('userData') + '/binaries/'
+  await spawn('./macElectrum',
+    ['-P', 'setconfig', 'rpcport', port],
+    { cwd: binaryFolder })
+  await spawn('./macElectrum',
+    ['-P', 'setconfig', 'rpcuser', user],
+    { cwd: binaryFolder })
+  await spawn('./macElectrum',
+    ['-P', 'setconfig', 'rpcpassword', password],
+    { cwd: binaryFolder })
+  await timeout(5000)
+  return true
 }
