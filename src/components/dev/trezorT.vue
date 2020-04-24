@@ -75,9 +75,7 @@ export default {
   },
   data: () => ({
     dialog: false,
-    pingridUse: false,
-    xpubpath: 'm/44h/0h/0h',
-    addressPath: 'm/84h/1h/0h/0/0'
+    pingridUse: false
   }),
   methods: {
     wipe: function () {
@@ -87,10 +85,10 @@ export default {
       this.$emit('setup', this.model, this.path)
     },
     getxpub: function () {
-      this.$emit('getxpub', this.model, this.path, this.xpubpath)
+      this.$emit('getxpub', this.model, this.path)
     },
     displayAddress: function () {
-      this.$emit('displayAddress', this.model, this.path, this.addressPath)
+      this.$emit('displayAddress', this.model, this.path)
     },
     restore: function () {
       this.$emit('restore', this.model, this.path)

@@ -134,13 +134,11 @@ export default {
     dialog: false,
     pingridUse: false,
     text: '',
-    textUse: false,
-    xpubpath: 'm/44h/0h/0h',
-    addressPath: 'm/84h/1h/0h/0/0'
+    textUse: false
   }),
   methods: {
     displayAddress: function () {
-      this.$emit('displayAddress', this.model, this.path, this.addressPath)
+      this.$emit('displayAddress', this.model, this.path)
     },
     promptPin: function () {
       this.$emit('promptPin', this.model, this.path)
@@ -149,7 +147,7 @@ export default {
       this.$emit('enterPin', this.model, this.path, pin)
     },
     getxpub: function () {
-      this.$emit('getxpub', this.model, this.path, this.xpubpath)
+      this.$emit('getxpub', this.model, this.path)
     },
     wipe: function () {
       this.$emit('wipe', this.model, this.path)

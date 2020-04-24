@@ -77,23 +77,26 @@ export default {
   data: () => ({
     dialog: false,
     hardwareWallets: [],
-    channel: {}
+    channel: {},
+    network: 'testnet',
+    xpubpath: 'm/84h/1h/0h',
+    addressPath: 'm/84h/1h/0h/0/0'
   }),
   methods: {
     unpack: async function () {
-      await unpackBinary()
-      console.log('binary ready')
+      const results = await unpackBinary()
+      console.log(results)
     },
     getDevices: async function () {
       const test = await listDevices()
       this.hardwareWallets = test
     },
-    getxpub: async function (model, path, xpubpath) {
-      const pub = await getxpub(model, path, xpubpath)
+    getxpub: async function (model, path) {
+      const pub = await getxpub(model, path, this.xpubpath)
       console.log(pub)
     },
     displayAddress: async function (model, path, addressPath) {
-      const pub = await displayAddress(model, path, addressPath)
+      const pub = await displayAddress(model, path, this.addressPath, this.network)
       console.log(pub)
     },
     promptPin: async function (model, path) {

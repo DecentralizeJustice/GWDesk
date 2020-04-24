@@ -5,43 +5,52 @@
             <v-card-title class="headline justify-center">
               Electrum Dev
             </v-card-title>
+            <v-divider class='mb-5'/>
+            <div class="text-center">
             <v-btn
               color="orange"
               v-on:click="get()"
+              class="mx-2 my-2"
             >
               Test Request
             </v-btn>
             <v-btn
-              color="pink"
+              color="red darken-4"
               v-on:click="unpackFile()"
+              class="mx-2 my-2"
             >
               Copy Binary
             </v-btn>
             <v-btn
               color="green"
               v-on:click="startDeamon(network)"
+              class="mx-2 my-2"
             >
               Start Daemon
             </v-btn>
             <v-btn
               color="red"
               v-on:click="hardStopDeamon(network)"
+              class="mx-2 my-2"
             >
               Hard Stop Daemon
             </v-btn>
             <v-btn
               color="green darken-4"
               v-on:click="softStopDeamon(rpcport, rpcuser, rpcpassword)"
+              class="mx-2 my-2"
             >
               Soft Stop Daemon
             </v-btn>
             <v-btn
               color="dark pink"
               v-on:click="configDaemon(rpcport, rpcuser, rpcpassword, network)"
+              class="mx-2 my-2"
             >
               Config Daemon
             </v-btn>
             <v-btn
+              class="mx-2 my-2"
               color="teal darken-3"
               v-on:click="deleteWallet(walletName, network)"
             >
@@ -49,12 +58,14 @@
             </v-btn>
             <v-btn
               color="amber darken-4"
+              class="mx-2 my-2"
               v-on:click="getinfo(rpcport, rpcuser, rpcpassword)"
             >
               Get Node Info
             </v-btn>
             <v-btn
               color="brown"
+              class="mx-2 my-2"
               v-on:click="restoreWallet(walletName, recoveryInfo, rpcport, rpcuser,
                 rpcpassword, network)"
             >
@@ -62,28 +73,33 @@
             </v-btn>
             <v-btn
               color="deep-orange darken-2"
+              class="mx-2 my-2"
               v-on:click="loadWallet(walletName, rpcport, rpcuser, rpcpassword, network)"
             >
               Load Wallet
             </v-btn>
             <v-btn
               color="light-blue darken-4"
+              class="mx-2 my-2"
               v-on:click="listaddresses(walletName, rpcport, rpcuser, rpcpassword, network)"
             >
               List Addresses
             </v-btn>
             <v-btn
               color="lime darken-4"
+              class="mx-2 my-2"
               v-on:click="listLoadedWallets(rpcport, rpcuser, rpcpassword)"
             >
               List Loaded Wallets
             </v-btn>
             <v-btn
               color="deep-purple darken-2"
+              class="mx-2 my-2"
               v-on:click="listWalletsThatExist(network)"
             >
               List Wallets Exist
             </v-btn>
+          </div>
           </v-card>
     </v-flex>
     </v-layout>
@@ -104,7 +120,7 @@ export default {
     rpcuser: 'user',
     rpcpassword: '1',
     walletName: 'no',
-    recoveryInfo: 'vpub5ZPW5CcXwrNeX24iqCmrbb2WodVvsyrPPFyMzPQmU5R3rLLh3G9VnV8o7vmwSpa5z6zqGTDuCdrBZJr9CU5AnooV2hdAZsYWMoKuGw2wJyj'
+    recoveryInfo: 'vpub5YhwwGPiiVo9JpARL8kog2vhhTQvcM7vtAdVhz8DL9YLHAJVxDnaDCoecdUDBMm2Hd4qNBcwUqW61DSXW4mR5G7qkFSNUwL6B6XpotCZeyM'
   }),
   methods: {
     get: async function () {
