@@ -1,16 +1,16 @@
 import path from 'path'
-const remote = require('electron').remote
-const app = remote.app
-const fs = require('fs-extra')
-const copyFile = fs.promises.copyFile
-const unlink = fs.promises.unlink
 const binaryFolder = '/binaries/'
-const os = require('os')
+const remote = require('electron').remote
 const spawn = require('child_process').spawn
-// eslint-disable-next-line
-const timeout = ms => new Promise(res => setTimeout(res, ms))
+const os = require('os')
 const crypto = require('crypto')
 const axios = require('axios')
+const fs = require('fs-extra')
+const app = remote.app
+const copyFile = fs.promises.copyFile
+const unlink = fs.promises.unlink
+const readdir = fs.promises.readdir
+const timeout = ms => new Promise(resolve => setTimeout(resolve, ms))
 
 export async function unpackElectrum () {
   const destination = app.getPath('userData') + '/binaries/macElectrum'
@@ -27,82 +27,148 @@ export async function unpackElectrum () {
   return true
 }
 
-export async function deleteWallet (walletName) {
-  const destination = app.getPath('userData') + '/binaries/electrum_data/wallets/'
+export async function deleteWallet (walletName, network) {
+  const pathAddition = getPathNetwork(network)
+  const destination =
+  app.getPath('userData') + `/binaries/electrumFolder/${pathAddition}wallets/`
   await unlink(destination + walletName)
   return true
 }
 
-export async function startDeamon () {
+export async function listWalletsThatExist (network) {
+  const pathAddition = getPathNetwork(network)
+  const destination =
+  app.getPath('userData') + `/binaries/electrumFolder/${pathAddition}wallets/`
+  const files = await readdir(destination)
+  return files
+}
+
+export async function startDeamon (network) {
   const binaryFolder = app.getPath('userData') + '/binaries/'
-  const commands = ['-D', 'electrumFolder', 'daemon', '-d']
+  const baseCommands = ['-D', 'electrumFolder', 'daemon', '-d']
+  const commands = addCommandNetwork(baseCommands, network)
   await spawn('./macElectrum', commands,
     { cwd: binaryFolder })
-  await timeout(3000)
+  await timeout(5000)
   return true
 }
+
+export async function getinfo (rpcport, rpcuser, rpcpassword) {
+  const request = await makeRpcRequest('getinfo', {}, rpcport, rpcuser,
+    rpcpassword)
+  return request
+}
+
 export async function makeRpcRequest (method, params, rpcport, rpcuser,
   rpcpassword) {
-  try {
-    const data = {
-      method: method,
-      params: params,
-      jsonrpc: '2.0'
-    }
-    data.id = crypto.createHash('sha256')
-      .update(JSON.stringify(data) + Date.now(), 'utf8')
-      .digest('hex')
-    const request = await axios.post('http://127.0.0.1' + `:${rpcport}`, data, {
-      auth: {
-        username: rpcuser,
-        password: rpcpassword
-      }
-    }
-    )
-    return request
-  } catch (error) {
-    return error
+  const data = {
+    method: method,
+    params: params,
+    jsonrpc: '2.0'
   }
+  data.id = crypto.createHash('sha256')
+    .update(JSON.stringify(data) + Date.now(), 'utf8')
+    .digest('hex')
+  const request = await axios.post('http://127.0.0.1' + `:${rpcport}`, data, {
+    auth: {
+      username: rpcuser,
+      password: rpcpassword
+    }
+  }
+  )
+  return request
 }
-export async function hardStopDeamon () {
+
+export async function hardStopDeamon (network) {
   const binaryFolder = app.getPath('userData') + '/binaries/'
-  const commands = ['-D', 'electrumFolder', 'stop']
-  await spawn('./macElectrum', commands,
-    { cwd: binaryFolder })
-  await timeout(3000)
-  return true
-}
-export async function restoreWallet (walletName, recoveryInfo) {
-  const binaryFolder = app.getPath('userData') + '/binaries/'
-  const commands = ['-P', '-w', `electrum_data/wallets/${walletName}`, 'restore',
-    recoveryInfo]
+  const baseCommands = ['-D', 'electrumFolder', 'stop']
+  const commands = addCommandNetwork(baseCommands, network)
   await spawn('./macElectrum', commands,
     { cwd: binaryFolder })
   await timeout(10000)
   return true
 }
-export async function loadWallet (walletName) {
+
+export async function requestStopDeamon (rpcport, rpcuser, rpcpassword) {
+  const request = await makeRpcRequest('stop', {}, rpcport, rpcuser,
+    rpcpassword)
+  return request
+}
+
+export async function restoreWallet (walletName, recoveryInfo, rpcport, rpcuser,
+  rpcpassword, network) {
+  const pathAddition = getPathNetwork(network)
+  const request = await makeRpcRequest('restore',
+    {
+      text: recoveryInfo,
+      wallet_path: `electrumFolder/${pathAddition}wallets/${walletName}`
+    },
+    rpcport, rpcuser, rpcpassword)
+  return request
+}
+
+export async function listaddresses (walletName, rpcport, rpcuser, rpcpassword, network) {
+  const pathAddition = getPathNetwork(network)
+  const request = await makeRpcRequest('listaddresses',
+    { wallet: `electrumFolder/${pathAddition}wallets/${walletName}` },
+    rpcport, rpcuser, rpcpassword)
+  return request
+}
+
+export async function listLoadedWallets (rpcport, rpcuser, rpcpassword) {
+  const request = await makeRpcRequest('list_wallets', {},
+    rpcport, rpcuser, rpcpassword)
+  return request
+}
+
+export async function loadWallet (walletName, rpcport, rpcuser, rpcpassword, network) {
+  const pathAddition = getPathNetwork(network)
+  const request = await makeRpcRequest('load_wallet',
+    { wallet_path: `electrumFolder/${pathAddition}wallets/${walletName}` },
+    rpcport, rpcuser, rpcpassword)
+  return request
+}
+
+export async function configDaemon (port, user, password, network) {
   const binaryFolder = app.getPath('userData') + '/binaries/'
-  const commands = ['-P', '-w', `electrum_data/wallets/${walletName}`, 'daemon',
-    'load_wallet']
-  await spawn('./macElectrum', commands,
+  const commands0 =
+  addCommandNetwork(['-D', 'electrumFolder', '-o', 'setconfig', 'rpcport', port], network)
+  await spawn('./macElectrum',
+    commands0,
+    { cwd: binaryFolder })
+  await timeout(1000)
+  const commands1 =
+  addCommandNetwork(['-D', 'electrumFolder', '-o', 'setconfig', 'rpcuser', user], network)
+  await spawn('./macElectrum',
+    commands1,
+    { cwd: binaryFolder })
+  await timeout(1000)
+  const commands2 =
+  addCommandNetwork(['-D', 'electrumFolder', '-o', 'setconfig', 'rpcpassword', password], network)
+  await spawn('./macElectrum',
+    commands2,
     { cwd: binaryFolder })
   await timeout(5000)
   return true
 }
-export async function configDaemon (port, user, password) {
-  const binaryFolder = app.getPath('userData') + '/binaries/'
-  await spawn('./macElectrum',
-    ['-D', 'electrumFolder', '-o', 'setconfig', 'rpcport', port],
-    { cwd: binaryFolder })
-  await timeout(1000)
-  await spawn('./macElectrum',
-    ['-D', 'electrumFolder', '-o', 'setconfig', 'rpcuser', user],
-    { cwd: binaryFolder })
-  await timeout(1000)
-  await spawn('./macElectrum',
-    ['-D', 'electrumFolder', '-o', 'setconfig', 'rpcpassword', password],
-    { cwd: binaryFolder })
-  await timeout(5000)
-  return true
+
+function getPathNetwork (network) {
+  if (network === 'testnet') {
+    return 'testnet/'
+  } else if (network === 'mainnet') {
+    return ''
+  } else {
+    throw new Error('No recognized network')
+  }
+}
+
+function addCommandNetwork (commands, network) {
+  if (network === 'testnet') {
+    commands.unshift('--testnet')
+    return commands
+  } else if (network === 'mainnet') {
+    return commands
+  } else {
+    throw new Error('No recognized network')
+  }
 }
