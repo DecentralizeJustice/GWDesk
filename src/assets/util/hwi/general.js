@@ -22,13 +22,14 @@ export async function unpackBinary () {
   }
   // eslint-disable-next-line
   const source = path.join(__static, binaryFolder + tarName)
-  return new Promise((resolve, reject) => {
+  await new Promise((resolve, reject) => {
     fs.createReadStream(source)
       .on('error', err => reject(err))
       .pipe(zlib.Unzip())
       .pipe(tar.extract(destination))
       .on('finish', resolve)
   })
+  return true
 }
 
 export async function listDevices () {
@@ -65,9 +66,10 @@ export async function wipe (brand, path) {
   const json = JSON.parse(stdout)
   return json
 }
-export async function displayAddress (brand, path, addressPath) {
+export async function displayAddress (brand, path, addressPath, network) {
   const binary = app.getPath('userData') + '/binaries/hwi'
-  const { stdout } = await exec(`"${binary}" -t ${brand} -d ${path} displayaddress --wpkh --path ${addressPath} `)
+  const extraFlag = getNetworkFlag(network)
+  const { stdout } = await exec(`"${binary}" ${extraFlag} -t ${brand} -d ${path} displayaddress --wpkh --path ${addressPath} `)
   const json = JSON.parse(stdout)
   return json
 }
@@ -84,4 +86,13 @@ export function restore (brand, path) {
   const command = spawn('hwi', commands,
     { cwd: binaryFolder })
   return command
+}
+function getNetworkFlag (network) {
+  if (network === 'testnet') {
+    return '--testnet'
+  } else if (network === 'mainnet') {
+    return ''
+  } else {
+    throw new Error('No recognized network')
+  }
 }

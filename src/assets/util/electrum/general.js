@@ -1,5 +1,4 @@
 import path from 'path'
-const binaryFolder = '/binaries/'
 const remote = require('electron').remote
 const spawn = require('child_process').spawn
 const os = require('os')
@@ -13,7 +12,6 @@ const readdir = fs.promises.readdir
 const timeout = ms => new Promise(resolve => setTimeout(resolve, ms))
 
 export async function unpackElectrum () {
-  const destination = app.getPath('userData') + '/binaries/macElectrum'
   const platform = os.platform()
   let fileName
   if (platform === 'darwin') {
@@ -21,8 +19,9 @@ export async function unpackElectrum () {
   } else {
     throw new Error('Your OS Is Unsupported')
   }
+  const destination = app.getPath('userData') + '/binaries/' + fileName
   // eslint-disable-next-line
-  const source = path.join(__static, binaryFolder + fileName)
+  const source = path.join(__static, '/binaries/' + fileName)
   await copyFile(source, destination)
   return true
 }
@@ -49,7 +48,7 @@ export async function startDeamon (network) {
   const commands = addCommandNetwork(baseCommands, network)
   await spawn('./macElectrum', commands,
     { cwd: binaryFolder })
-  await timeout(5000)
+  await timeout(10000)
   return true
 }
 
