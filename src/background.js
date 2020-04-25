@@ -1,6 +1,5 @@
 'use strict'
 import path from 'path'
-import { fork } from 'child_process'
 /* eslint-disable */
 import { app, protocol, BrowserWindow } from 'electron'
 import {
@@ -48,8 +47,6 @@ function createWindow () {
   })
 }
 app.on('will-quit', () => {
-  const pathTo = path.join(__static, "killNode.js")
-  fork(pathTo)
 })
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {

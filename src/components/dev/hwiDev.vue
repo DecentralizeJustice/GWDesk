@@ -1,10 +1,7 @@
 <template>
     <v-layout align-center justify-center row fill-height>
-      <v-flex xs8>
-          <v-card >
-            <v-card-title class="headline justify-center">
-              Hardware Wallet Interface BTC Dev Panel
-            </v-card-title>
+      <v-flex xs11>
+          <v-card flat>
             <v-container>
               <v-row justify="space-around">
                 <v-col cols="6">
@@ -30,7 +27,8 @@
                   v-on:enter="write"
                   v-on:restore="restore"
                   v-on:getxpub="getxpub"
-                  v-on:displayAddress='displayAddress'/>
+                  v-on:displayAddress='displayAddress'
+                  v-on:signTrans='signTrans'/>
                 </v-col>
               </v-row>
             </v-container>
@@ -63,7 +61,7 @@
 
 <script>
 import {
-  unpackBinary, listDevices,
+  unpackBinary, listDevices, signTrans,
   promtpin, enterpin, wipe, setup, restore,
   getxpub, displayAddress
 } from '@/assets/util/hwi/general.js'
@@ -72,7 +70,6 @@ import trezorT from '@/components/dev/trezorT.vue'
 
 export default {
   components: {
-    trezorOne
   },
   data: () => ({
     dialog: false,
@@ -80,7 +77,8 @@ export default {
     channel: {},
     network: 'testnet',
     xpubpath: 'm/84h/1h/0h',
-    addressPath: 'm/84h/1h/0h/0/0'
+    addressPath: 'm/84h/1h/0h/0/0',
+    psbt: 'cHNidP8BAHQCAAAAAQbJHPKysjoQL7Wp14NaqSvwSbp5Kb6HvnIJzfp5lzacAAAAAAD9////AhAnAAAAAAAAGXapFDRKD0jKFQ7CuQOBdmC5tosTpnAmiKwAXwEAAAAAABYAFDo6R3hsz/nPa1EsnO43dP7NpGDMbEUaAAABAR+ghgEAAAAAABYAFLKIli+FcPse3tUCzHiKAhvb1zeSIgYDFws1kBmrPheQWVtrsoJmj6yEFrG+HF+YQXXahO9sTAYMcOe/wQAAAAAAAAAAAAAiAgPnADp3xhbACZ6gd3fXwg0Gs3TtDlp0NIy4V/uU4bofpgxw57/BAQAAAAAAAAAA'
   }),
   methods: {
     unpack: async function () {
@@ -90,6 +88,10 @@ export default {
     getDevices: async function () {
       const test = await listDevices()
       this.hardwareWallets = test
+    },
+    signTrans: async function (model, path) {
+      const test = await signTrans(model, path, this.network, this.psbt)
+      console.log(test)
     },
     getxpub: async function (model, path) {
       const pub = await getxpub(model, path, this.xpubpath)

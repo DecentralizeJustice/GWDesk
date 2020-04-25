@@ -1,8 +1,7 @@
-import { getPubkey } from '@/assets/util/keyUtil.js'
-// import { getTxByHash, decodeRawTransaction, getWalletTransactions } from '@/assets/util/nodeUtil.js'
+import { getPubkey } from '@/assets/util/btc/keyUtil.js'
 const bitcoin = require('bitcoinjs-lib')
 
-async function createPSBT (transctionData, vpubObject, xfp, network) {
+export async function createPSBT (transctionData, vpubObject, xfp, network) {
   let psbt = new bitcoin.Psbt({ network: network })
   const transInputs = transctionData.inputData.transInputs
   const outPuts = transctionData.outputData
@@ -74,7 +73,7 @@ function getInputData (transInfo) {
   }
 }
 
-async function combineCompletedTrans (hex1, hex2) {
+export async function combineCompletedTrans (hex1, hex2) {
   const signer1 = bitcoin.Psbt.fromHex(hex1)
   const signer2 = bitcoin.Psbt.fromHex(hex2)
   signer1.combine(signer2)
@@ -84,4 +83,10 @@ async function combineCompletedTrans (hex1, hex2) {
   return finalHex
 }
 
-export { createPSBT, combineCompletedTrans }
+export async function finalizeTrans (base64Trans) {
+  const signer1 = bitcoin.Psbt.fromBase64(base64Trans)
+  console.log(signer1.validateSignaturesOfInput(0) === true)
+  signer1.finalizeAllInputs()
+  const finalHex = signer1.extractTransaction().toHex()
+  return finalHex
+}

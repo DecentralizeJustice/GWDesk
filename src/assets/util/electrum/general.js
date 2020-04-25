@@ -106,7 +106,21 @@ export async function restoreWallet (walletName, recoveryInfo, rpcport, rpcuser,
   return request
 }
 
-export async function listaddresses (walletName, rpcport, rpcuser, rpcpassword, network) {
+export async function sendAll (destination, walletName, rpcport, rpcuser, rpcpassword, network) {
+  const pathAddition = getPathNetwork(network)
+  const request = await makeRpcRequest('payto',
+    {
+      wallet: `electrumFolder/${pathAddition}wallets/${walletName}`,
+      destination: destination,
+      unsigned: true,
+      rbf: true,
+      amount: '!'
+    },
+    rpcport, rpcuser, rpcpassword)
+  return request
+}
+
+export async function listAddresses (walletName, rpcport, rpcuser, rpcpassword, network) {
   const pathAddition = getPathNetwork(network)
   const request = await makeRpcRequest('listaddresses',
     { wallet: `electrumFolder/${pathAddition}wallets/${walletName}` },
@@ -114,6 +128,20 @@ export async function listaddresses (walletName, rpcport, rpcuser, rpcpassword, 
   return request
 }
 
+export async function getWalletHistory (walletName, rpcport, rpcuser, rpcpassword, network) {
+  const pathAddition = getPathNetwork(network)
+  const request = await makeRpcRequest('onchain_history',
+    { wallet: `electrumFolder/${pathAddition}wallets/${walletName}`, show_addresses: true },
+    rpcport, rpcuser, rpcpassword)
+  return request
+}
+export async function getBalance (walletName, rpcport, rpcuser, rpcpassword, network) {
+  const pathAddition = getPathNetwork(network)
+  const request = await makeRpcRequest('getbalance',
+    { wallet: `electrumFolder/${pathAddition}wallets/${walletName}` },
+    rpcport, rpcuser, rpcpassword)
+  return request
+}
 export async function listLoadedWallets (rpcport, rpcuser, rpcpassword) {
   const request = await makeRpcRequest('list_wallets', {},
     rpcport, rpcuser, rpcpassword)

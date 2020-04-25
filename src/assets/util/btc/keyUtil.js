@@ -1,6 +1,4 @@
-
-// import { testnet } from '@/assets/constants/networkConstants.js'
-import { pubToTpub } from '@/assets/util/pubUtil.js'
+import { pubToTpub } from '@/assets/util/btc/pubUtil.js'
 const bitcoin = require('bitcoinjs-lib')
 
 function sort (pubkeyBuffers) {
