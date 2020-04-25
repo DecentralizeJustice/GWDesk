@@ -1,10 +1,7 @@
 <template>
     <v-layout align-center justify-center row fill-height>
-      <v-flex xs8>
-          <v-card >
-            <v-card-title class="headline justify-center">
-              Electrum Dev
-            </v-card-title>
+      <v-flex xs11>
+          <v-card flat>
             <v-divider class='mb-5'/>
             <div class="text-center">
             <v-btn
@@ -81,9 +78,23 @@
             <v-btn
               color="light-blue darken-4"
               class="mx-2 my-2"
-              v-on:click="listaddresses(walletName, rpcport, rpcuser, rpcpassword, network)"
+              v-on:click="listAddresses(walletName, rpcport, rpcuser, rpcpassword, network)"
             >
               List Addresses
+            </v-btn>
+            <v-btn
+              color="red darken-3"
+              class="mx-2 my-2"
+              v-on:click="sendAll(destination, walletName, rpcport, rpcuser, rpcpassword, network)"
+            >
+              Send All
+            </v-btn>
+            <v-btn
+              color="blue-grey darken-1"
+              class="mx-2 my-2"
+              v-on:click="getBalance(walletName, rpcport, rpcuser, rpcpassword, network)"
+            >
+              Get Balance
             </v-btn>
             <v-btn
               color="lime darken-4"
@@ -99,6 +110,13 @@
             >
               List Wallets Exist
             </v-btn>
+            <v-btn
+              color="deep-orange darken-4"
+              class="mx-2 my-2"
+              v-on:click="getWalletHistory(walletName, rpcport, rpcuser, rpcpassword, network)"
+            >
+              Get Wallet History
+            </v-btn>
           </div>
           </v-card>
     </v-flex>
@@ -109,12 +127,15 @@
 import {
   unpackElectrum, startDeamon, configDaemon, deleteWallet,
   restoreWallet, loadWallet, hardStopDeamon, makeRpcRequest,
-  getinfo, requestStopDeamon, listaddresses, listLoadedWallets, listWalletsThatExist
+  getinfo, requestStopDeamon, listAddresses, listLoadedWallets,
+  listWalletsThatExist, getBalance, getWalletHistory, sendAll
 } from '@/assets/util/electrum/general.js'
 export default {
   components: {
   },
   data: () => ({
+    psbt: '',
+    destination: 'mkHS9ne12qx9pS9VojpwU5xtRd4T7X7ZUt',
     network: 'testnet',
     rpcport: '7777',
     rpcuser: 'user',
@@ -125,7 +146,15 @@ export default {
   methods: {
     get: async function () {
       try {
-        const yes = await makeRpcRequest('listaddresses', { wallet: 'electrumFolder/wallets/no' }, this.rpcport, this.rpcuser, this.rpcpassword)
+        const yes = await makeRpcRequest('payto',
+          {
+            wallet: 'electrumFolder/testnet/wallets/no',
+            destination: 'mkHS9ne12qx9pS9VojpwU5xtRd4T7X7ZUt',
+            unsigned: true,
+            rbf: true,
+            amount: '!'
+          },
+          this.rpcport, this.rpcuser, this.rpcpassword)
         console.log(yes.data)
       } catch (error) {
         console.error(error)
@@ -143,8 +172,20 @@ export default {
       const result = await loadWallet(walletName, rpcport, rpcuser, rpcpassword, network)
       console.log(result)
     },
-    listaddresses: async function (walletName, rpcport, rpcuser, rpcpassword, network) {
-      const result = await listaddresses(walletName, rpcport, rpcuser, rpcpassword, network)
+    listAddresses: async function (walletName, rpcport, rpcuser, rpcpassword, network) {
+      const result = await listAddresses(walletName, rpcport, rpcuser, rpcpassword, network)
+      console.log(result)
+    },
+    sendAll: async function (destination, walletName, rpcport, rpcuser, rpcpassword, network) {
+      const result = await sendAll(destination, walletName, rpcport, rpcuser, rpcpassword, network)
+      console.log(result)
+    },
+    getBalance: async function (walletName, rpcport, rpcuser, rpcpassword, network) {
+      const result = await getBalance(walletName, rpcport, rpcuser, rpcpassword, network)
+      console.log(result)
+    },
+    getWalletHistory: async function (walletName, rpcport, rpcuser, rpcpassword, network) {
+      const result = await getWalletHistory(walletName, rpcport, rpcuser, rpcpassword, network)
       console.log(result)
     },
     listLoadedWallets: async function (rpcport, rpcuser, rpcpassword) {

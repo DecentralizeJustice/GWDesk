@@ -62,6 +62,16 @@
             Restore
           </v-btn>
         </v-col>
+        <v-col
+          cols="4"
+        >
+          <v-btn
+            color="purple darken-4"
+            v-on:click="signTrans()"
+          >
+            Sign Trans
+          </v-btn>
+        </v-col>
       </v-row>
     </v-container>
   </v-card>
@@ -92,6 +102,9 @@ export default {
     },
     restore: function () {
       this.$emit('restore', this.model, this.path)
+    },
+    signTrans: function () {
+      this.$emit('signTrans', this.model, this.path)
     }
   },
   computed: {

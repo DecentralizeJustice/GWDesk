@@ -39,50 +39,56 @@ export async function listDevices () {
   return json
 }
 
-export async function promtpin (brand, path) {
+export async function promtpin (model, path) {
   const binary = app.getPath('userData') + '/binaries/hwi'
-  const { stdout } = await exec(`"${binary}" -t ${brand} -d ${path} promptpin`)
+  const { stdout } = await exec(`"${binary}" -t ${model} -d ${path} promptpin`)
   const json = JSON.parse(stdout)
   return json
 }
 
-export async function enterpin (brand, path, pin) {
+export async function enterpin (model, path, pin) {
   const binary = app.getPath('userData') + '/binaries/hwi'
-  const { stdout } = await exec(`"${binary}" -t ${brand} -d ${path} sendpin ${pin}`)
+  const { stdout } = await exec(`"${binary}" -t ${model} -d ${path} sendpin ${pin}`)
   const json = JSON.parse(stdout)
   return json
 }
-
-export async function getxpub (brand, path, xpubpath) {
-  const binary = app.getPath('userData') + '/binaries/hwi'
-  const { stdout } = await exec(`"${binary}" -t ${brand} -d ${path} getxpub ${xpubpath}`)
-  const json = JSON.parse(stdout)
-  return json
-}
-
-export async function wipe (brand, path) {
-  const binary = app.getPath('userData') + '/binaries/hwi'
-  const { stdout } = await exec(`"${binary}" -t ${brand} -d ${path} wipe`)
-  const json = JSON.parse(stdout)
-  return json
-}
-export async function displayAddress (brand, path, addressPath, network) {
+export async function signTrans (model, path, network, psbt) {
   const binary = app.getPath('userData') + '/binaries/hwi'
   const extraFlag = getNetworkFlag(network)
-  const { stdout } = await exec(`"${binary}" ${extraFlag} -t ${brand} -d ${path} displayaddress --wpkh --path ${addressPath} `)
+  const { stdout } = await exec(`"${binary}" ${extraFlag} -t ${model} -d ${path} signtx ${psbt}`)
   const json = JSON.parse(stdout)
   return json
 }
-export function setup (brand, path) {
+export async function getxpub (model, path, xpubpath) {
+  const binary = app.getPath('userData') + '/binaries/hwi'
+  const { stdout } = await exec(`"${binary}" -t ${model} -d ${path} getxpub ${xpubpath}`)
+  const json = JSON.parse(stdout)
+  return json
+}
+
+export async function wipe (model, path) {
+  const binary = app.getPath('userData') + '/binaries/hwi'
+  const { stdout } = await exec(`"${binary}" -t ${model} -d ${path} wipe`)
+  const json = JSON.parse(stdout)
+  return json
+}
+export async function displayAddress (model, path, addressPath, network) {
+  const binary = app.getPath('userData') + '/binaries/hwi'
+  const extraFlag = getNetworkFlag(network)
+  const { stdout } = await exec(`"${binary}" ${extraFlag} -t ${model} -d ${path} displayaddress --wpkh --path ${addressPath} `)
+  const json = JSON.parse(stdout)
+  return json
+}
+export function setup (model, path) {
   const binaryFolder = app.getPath('userData') + '/binaries'
-  const commands = ['-t', `${brand}`, '-d', `${path}`, '-i', 'setup']
+  const commands = ['-t', `${model}`, '-d', `${path}`, '-i', 'setup']
   const command = spawn('hwi', commands,
     { cwd: binaryFolder })
   return command
 }
-export function restore (brand, path) {
+export function restore (model, path) {
   const binaryFolder = app.getPath('userData') + '/binaries'
-  const commands = ['-t', `${brand}`, '-d', `${path}`, '-i', 'restore']
+  const commands = ['-t', `${model}`, '-d', `${path}`, '-i', 'restore']
   const command = spawn('hwi', commands,
     { cwd: binaryFolder })
   return command
