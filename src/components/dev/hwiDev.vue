@@ -78,7 +78,8 @@ export default {
     network: 'testnet',
     xpubpath: 'm/84h/1h/0h',
     addressPath: 'm/84h/1h/0h/0/0',
-    psbt: 'cHNidP8BAHQCAAAAAQbJHPKysjoQL7Wp14NaqSvwSbp5Kb6HvnIJzfp5lzacAAAAAAD9////AhAnAAAAAAAAGXapFDRKD0jKFQ7CuQOBdmC5tosTpnAmiKwAXwEAAAAAABYAFDo6R3hsz/nPa1EsnO43dP7NpGDMbEUaAAABAR+ghgEAAAAAABYAFLKIli+FcPse3tUCzHiKAhvb1zeSIgYDFws1kBmrPheQWVtrsoJmj6yEFrG+HF+YQXXahO9sTAYMcOe/wQAAAAAAAAAAAAAiAgPnADp3xhbACZ6gd3fXwg0Gs3TtDlp0NIy4V/uU4bofpgxw57/BAQAAAAAAAAAA'
+    psbt: 'cHNidP8BAFUCAAAAAQbJHPKysjoQL7Wp14NaqSvwSbp5Kb6HvnIJzfp5lzacAAAAAAD/////AS+GAQAAAAAAGXapFDRKD0jKFQ7CuQOBdmC5tosTpnAmiKwAAAAAAAEBH6CGAQAAAAAAFgAUsoiWL4Vw+x7e1QLMeIoCG9vXN5IiBgMXCzWQGas+F5BZW2uygmaPrIQWsb4cX5hBddqE72xMBhiuqiVkVAAAgAEAAIAAAACAAAAAAAAAAAAAAA=='
+
   }),
   methods: {
     unpack: async function () {
@@ -86,12 +87,12 @@ export default {
       console.log(results)
     },
     getDevices: async function () {
-      const test = await listDevices()
-      this.hardwareWallets = test
+      const result = await listDevices()
+      this.hardwareWallets = result
     },
     signTrans: async function (model, path) {
-      const test = await signTrans(model, path, this.network, this.psbt)
-      console.log(test)
+      const result = await signTrans(model, path, this.network, this.psbt)
+      console.log(result)
     },
     getxpub: async function (model, path) {
       const pub = await getxpub(model, path, this.xpubpath)
@@ -102,16 +103,16 @@ export default {
       console.log(pub)
     },
     promptPin: async function (model, path) {
-      const test = await promtpin(model, path)
-      console.log(test)
+      const result = await promtpin(model, path)
+      console.log(result)
     },
     enterPin: async function (model, path, pin) {
-      const test = await enterpin(model, path, pin)
-      console.log(test)
+      const result = await enterpin(model, path, pin)
+      console.log(result)
     },
     wipe: async function (model, path) {
-      const test = await wipe(model, path)
-      console.log(test)
+      const result = await wipe(model, path)
+      console.log(result)
     },
     setup: async function (model, path) {
       this.channel = setup(model, path)
