@@ -44,10 +44,13 @@ export async function listWalletsThatExist (network) {
 
 export async function startDeamon (network) {
   const binaryFolder = app.getPath('userData') + '/binaries/'
-  const baseCommands = ['-D', 'electrumFolder', 'daemon', '-d']
+  const baseCommands = ['-D', 'electrumFolder', 'daemon']
   const commands = addCommandNetwork(baseCommands, network)
-  await spawn('./macElectrum', commands,
+  const process = await spawn('./macElectrum', commands,
     { cwd: binaryFolder })
+  process.stdout.on('data', function (data) {
+    console.log(data.toString())
+  })
   await timeout(10000)
   return true
 }
@@ -115,6 +118,20 @@ export async function sendAll (destination, walletName, rpcport, rpcuser, rpcpas
       unsigned: true,
       rbf: true,
       amount: '!'
+    },
+    rpcport, rpcuser, rpcpassword)
+  return request
+}
+
+export async function send (amount, destination, walletName, rpcport, rpcuser, rpcpassword, network) {
+  const pathAddition = getPathNetwork(network)
+  const request = await makeRpcRequest('payto',
+    {
+      wallet: `electrumFolder/${pathAddition}wallets/${walletName}`,
+      destination: destination,
+      unsigned: true,
+      rbf: true,
+      amount: amount
     },
     rpcport, rpcuser, rpcpassword)
   return request

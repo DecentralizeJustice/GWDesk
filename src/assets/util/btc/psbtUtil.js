@@ -1,5 +1,7 @@
 import { getPubkey } from '@/assets/util/btc/keyUtil.js'
+// import { testnet } from '@/assets/constants/networkConstants'
 const bitcoin = require('bitcoinjs-lib')
+const psbtTools = require('psbt')
 
 export async function createPSBT (transctionData, vpubObject, xfp, network) {
   let psbt = new bitcoin.Psbt({ network: network })
@@ -84,9 +86,64 @@ export async function combineCompletedTrans (hex1, hex2) {
 }
 
 export async function finalizeTrans (base64Trans) {
-  const signer1 = bitcoin.Psbt.fromBase64(base64Trans)
-  console.log(signer1.validateSignaturesOfInput(0) === true)
-  signer1.finalizeAllInputs()
-  const finalHex = signer1.extractTransaction().toHex()
+  const psbt = bitcoin.Psbt.fromBase64(base64Trans)
+  // console.log(signer1.validateSignaturesOfInput(0) === true)
+  psbt.finalizeAllInputs()
+  const finalHex = psbt.extractTransaction().toHex()
   return finalHex
+}
+
+export async function addInfo (psbt) {
+  const path = "m/84'/1'/0'/0/0"
+  const updateData = { bip32Derivation: [{}] }
+  updateData.bip32Derivation[0].masterFingerprint = Buffer.from('aeaa2564', 'hex')
+  updateData.bip32Derivation[0].path = path
+  updateData.bip32Derivation[0].pubkey = Buffer.from('03170b359019ab3e1790595b6bb282668fac8416b1be1c5f984175da84ef6c4c06', 'hex')
+  psbt.updateInput(0, updateData)
+  return psbt
+}
+
+export async function bitcoinjsTransToPSBT (bitcoinjsTX) {
+  return bitcoinjsTX
+}
+
+export async function createPSBTfromTrans (transactionHex, hex) {
+  const network = bitcoin.networks.testnet
+  const transIns = transactionHex.ins[0]
+  const transOut = transactionHex.outs[0]
+  // console.log(transOut)
+  const input = {
+    hash: transIns.hash,
+    index: 0,
+    witnessUtxo: {
+      script: Buffer.from(
+        hex.inputs[0].witness_utxo.script_pub,
+        'hex'),
+      value: Number(hex.inputs[0].witness_utxo.tokens)
+    }
+  }
+  // console.log(transactionHex.outs[0].script.toString('hex'))
+  // console.log(bitcoin.address.fromOutputScript(input.witnessUtxo.script, network))
+  // console.log(input.witnessUtxo.script.toString('hex'))
+  let psbt = new bitcoin.Psbt({ network })
+    .addInput(input)
+    .addOutput({
+      address: bitcoin.address.fromOutputScript(transactionHex.outs[0].script, network),
+      value: Number(transOut.value)
+    })
+  psbt = await addInfo(psbt)
+  // const transHex = psbtTools.decodePsbt({ psbt: psbt.toHex() })
+  // console.log(transHex)
+  // console.log(psbt.toBase64())
+  return psbt.toHex()
+}
+
+export async function transactionFromPSBT (base64PSBT) {
+  const buff = Buffer.from(base64PSBT, 'base64')
+  const hex = buff.toString('hex')
+  const transHex = psbtTools.decodePsbt({ psbt: hex })
+  console.log(transHex)
+  const bitcoinJSTrans = bitcoin.Transaction.fromHex(transHex.unsigned_transaction)
+  console.log(bitcoinJSTrans)
+  return createPSBTfromTrans(bitcoinJSTrans, transHex)
 }

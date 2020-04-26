@@ -28,6 +28,7 @@
     "core-js": "^3.6.4",
     "electron-store": "^5.0.0",
     "fs-extra": "^8.1.0",
+    "psbt": "^1.1.2",
     "ramda": "^0.27.0",
     "tar-fs": "^2.0.1",
     "typeface-roboto": "^0.0.75",
