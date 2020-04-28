@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Education from './views/edu.vue'
 import DevPannel from './views/dev.vue'
-// import btcMusig from './views/btcMusig.vue'
+import BtcSingleSig from './views/btcSingleSig.vue'
 
 Vue.use(Router)
 
@@ -20,12 +20,12 @@ const router = new Router({
       path: '/devPannel',
       name: 'DevPannel',
       component: DevPannel
+    },
+    {
+      path: '/btcMusig',
+      name: 'btcMusig',
+      component: BtcSingleSig
     }
-    // {
-    //   path: '/btcMusig',
-    //   name: 'btcMusig',
-    //   component: btcMusig
-    // },
   ]
 })
 export default router

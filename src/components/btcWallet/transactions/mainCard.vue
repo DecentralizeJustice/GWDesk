@@ -6,7 +6,7 @@
       v-for="(item, index) in transactions" :key="index"
     >
 
-      <v-card-text class=" subtitle-1 white--text">
+      <!-- <v-card-text class=" subtitle-1 white--text">
         <v-icon
         large v-bind:color="getColor(item.category)">
         {{getArrow (item.category)}}</v-icon>
@@ -64,16 +64,16 @@
             </tbody>
           </template>
         </v-simple-table>
-      </div>
+      </div> -->
     </v-card>
   </v-container>
 </template>
 
 <script>
-import { addressFromScriptPub } from '@/assets/util/addressUtil.js'
-import { receiveAccount, walletName } from '@/assets/constants/genConstants.js'
-import { getAccountTransactions, getTxByHash } from '@/assets/util/nodeUtil.js'
-import { decodeRawTransactionBitcoinJS } from '@/assets/util/transactionUtil/transactionUtil.js'
+// import { addressFromScriptPub } from '@/assets/util/addressUtil.js'
+// import { receiveAccount, walletName } from '@/assets/constants/genConstants.js'
+// import { getAccountTransactions, getTxByHash } from '@/assets/util/nodeUtil.js'
+// import { decodeRawTransactionBitcoinJS } from '@/assets/util/transactionUtil/transactionUtil.js'
 const R = require('ramda')
 const BigNumber = require('bignumber.js')
 export default {
@@ -92,35 +92,35 @@ export default {
       return btc.toString()
     },
     async getInputandOutputInfo (transactions) {
-      for (let i = 0; i < transactions.length; i++) {
-        const txid = transactions[i].txid
-        const transInfo = await getTxByHash(txid, 'musig')
-        transactions[i].bitcoinjsInfo = decodeRawTransactionBitcoinJS(transInfo.tx)
-        if (transactions[i].category === 'send') {
-          const ins = transactions[i].bitcoinjsInfo.ins
-          for (let j = 0; j < ins.length; j++) {
-            const address = transInfo.inputs[j].address
-            const value = transInfo.inputs[j].value
-            transactions[i].bitcoinjsInfo.ins[j].address = address
-            transactions[i].bitcoinjsInfo.ins[j].value = value
-          }
-        } else {
-          const ins = transactions[i].bitcoinjsInfo.ins
-          for (let j = 0; j < ins.length; j++) {
-            let address = transInfo.inputs[j].address
-            if (address === null) {
-              address = 'Address Info Unavailable'
-            }
-            transactions[i].bitcoinjsInfo.ins[j].address = address
-          }
-        }
-        const outs = transactions[i].bitcoinjsInfo.outs
-        for (let k = 0; k < outs.length; k++) {
-          const address = await addressFromScriptPub(outs[k].script)
-          transactions[i].bitcoinjsInfo.outs[k].address = address
-        }
-      }
-      return transactions
+      // for (let i = 0; i < transactions.length; i++) {
+      //   const txid = transactions[i].txid
+      //   const transInfo = await getTxByHash(txid, 'musig')
+      //   transactions[i].bitcoinjsInfo = decodeRawTransactionBitcoinJS(transInfo.tx)
+      //   if (transactions[i].category === 'send') {
+      //     const ins = transactions[i].bitcoinjsInfo.ins
+      //     for (let j = 0; j < ins.length; j++) {
+      //       const address = transInfo.inputs[j].address
+      //       const value = transInfo.inputs[j].value
+      //       transactions[i].bitcoinjsInfo.ins[j].address = address
+      //       transactions[i].bitcoinjsInfo.ins[j].value = value
+      //     }
+      //   } else {
+      //     const ins = transactions[i].bitcoinjsInfo.ins
+      //     for (let j = 0; j < ins.length; j++) {
+      //       let address = transInfo.inputs[j].address
+      //       if (address === null) {
+      //         address = 'Address Info Unavailable'
+      //       }
+      //       transactions[i].bitcoinjsInfo.ins[j].address = address
+      //     }
+      //   }
+      //   const outs = transactions[i].bitcoinjsInfo.outs
+      //   for (let k = 0; k < outs.length; k++) {
+      //     const address = await addressFromScriptPub(outs[k].script)
+      //     transactions[i].bitcoinjsInfo.outs[k].address = address
+      //   }
+      // }
+      // return transactions
     },
     // async setup () {
     //   const results = await getUTXO(walletName)
@@ -213,15 +213,6 @@ export default {
     }
   },
   created: async function () {
-    BigNumber.config({ EXPONENTIAL_AT: 10 })
-    const results = await getAccountTransactions(receiveAccount, walletName)
-    const sortByTime = R.sortBy(R.prop('blocktime'))
-    const sortedTransactions = sortByTime(results)
-    const updatedTransactions = await this.getInputandOutputInfo(sortedTransactions)
-    this.transactions = updatedTransactions
-    for (var i = 0; i < this.transactions.length; i++) {
-      this.panel.push(false)
-    }
   }
 }
 </script>
