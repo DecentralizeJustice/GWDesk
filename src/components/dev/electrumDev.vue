@@ -40,6 +40,13 @@
               Soft Stop Daemon
             </v-btn>
             <v-btn
+              color="teal darken-1"
+              v-on:click="broadcastTransaction(hex, rpcport, rpcuser, rpcpassword)"
+              class="mx-2 my-2"
+            >
+              Broadcast Transaction
+            </v-btn>
+            <v-btn
               color="dark pink"
               v-on:click="configDaemon(rpcport, rpcuser, rpcpassword, network)"
               class="mx-2 my-2"
@@ -92,7 +99,7 @@
             <v-btn
               color="light-blue darken-4"
               class="mx-2 my-2"
-              v-on:click="send(amount, destination, walletName, rpcport, rpcuser, rpcpassword, network)"
+              v-on:click="send(feeRate,amount, destination, walletName, rpcport, rpcuser, rpcpassword, network)"
             >
               Send
             </v-btn>
@@ -124,6 +131,27 @@
             >
               Get Wallet History
             </v-btn>
+            <v-btn
+              color="amber darken-4"
+              class="mx-2 my-2"
+              v-on:click="getFeeRate(withinBlock, rpcport, rpcuser, rpcpassword)"
+            >
+              Get Fee Rate
+            </v-btn>
+            <v-btn
+              color="lime darken-4"
+              class="mx-2 my-2"
+              v-on:click="getunusedaddress(walletName, network, rpcport, rpcuser, rpcpassword)"
+            >
+              Get Unused Address
+            </v-btn>
+            <v-btn
+              color="grey darken-3"
+              class="mx-2 my-2"
+              v-on:click="walletReady(walletName, network, rpcport, rpcuser, rpcpassword)"
+            >
+              Wallet Ready?
+            </v-btn>
           </div>
           </v-card>
     </v-flex>
@@ -135,34 +163,42 @@ import {
   unpackElectrum, startDeamon, configDaemon, deleteWallet,
   restoreWallet, loadWallet, hardStopDeamon, makeRpcRequest,
   getinfo, requestStopDeamon, listAddresses, listLoadedWallets,
-  listWalletsThatExist, getBalance, getWalletHistory, sendAll, send
+  listWalletsThatExist, getBalance, getWalletHistory, sendAll, send,
+  broadcastTransaction, getFeeRate, getunusedaddress, walletReady
 } from '@/assets/util/btc/electrum/general.js'
 export default {
   components: {
   },
   data: () => ({
-    amount: '.00001',
-    destination: 'mkHS9ne12qx9pS9VojpwU5xtRd4T7X7ZUt',
+    feeRate: 1.5,
+    withinBlock: '1',
+    amount: '0.00002',
+    destination: '2NGZrVvZG92qGYqzTLjCAewvPZ7JE8S8VxE',
     network: 'testnet',
     rpcport: '7777',
     rpcuser: 'user',
     rpcpassword: '1',
     walletName: 'no',
     recoveryInfo: 'vpub5YhwwGPiiVo9JpARL8kog2vhhTQvcM7vtAdVhz8DL9YLHAJVxDnaDCoecdUDBMm2Hd4qNBcwUqW61DSXW4mR5G7qkFSNUwL6B6XpotCZeyM',
-    psbt: '020000000106c91cf2b2b23a102fb5a9d7835aa92bf049ba7929be87be7209cdfa7997369c0000000000fdffffff02e8030000000000001976a914344a0f48ca150ec2b903817660b9b68b13a6702688ac28820100000000001600143a3a47786ccff9cf6b512c9cee3774fecda460cc23461a00'
+    hex: '02000000000101f5fa3ecbae0cbc84ebc5e527e479b118afbbdcb1192b9ee46d0549fc6f11bd730100000000fdffffff0235040000000000001600144838adc22e8c00b76737aed7d87a4c1a7e07529ed00700000000000017a914ffd0dbb44402d5f8f12d9ba5b484a2c1bb47da428702483045022100b3d5e2ae31521a78311a059ccb29dde42ac4864c01363f1b1e727bc34d924d710220688be7be8531fef33119580ed9d8fab50170b97973ebe441dbe9982dcc748337012103e7003a77c616c0099ea07777d7c20d06b374ed0e5a74348cb857fb94e1ba1fa61d471a00'
   }),
   methods: {
     get: async function () {
       try {
-        const yes = await makeRpcRequest('deserialize',
+        const yes = await makeRpcRequest('getfeerate',
           {
-            tx: this.psbt
+            fee_method: 'eta',
+            fee_level: 0.58
           },
           this.rpcport, this.rpcuser, this.rpcpassword)
         console.log(yes.data.result)
       } catch (error) {
         console.error(error)
       }
+    },
+    getunusedaddress: async function (walletName, network, rpcport, rpcuser, rpcpassword) {
+      const result = await getunusedaddress(walletName, network, rpcport, rpcuser, rpcpassword)
+      console.log(result.data.result)
     },
     unpackFile: async function () {
       const result = await unpackElectrum()
@@ -172,8 +208,16 @@ export default {
       const results = await listWalletsThatExist(network)
       console.log(results)
     },
+    walletReady: async function (walletName, network, rpcport, rpcuser, rpcpassword) {
+      const result = await walletReady(walletName, network, rpcport, rpcuser, rpcpassword)
+      console.log(result.data.result)
+    },
     loadWallet: async function (walletName, rpcport, rpcuser, rpcpassword, network) {
       const result = await loadWallet(walletName, rpcport, rpcuser, rpcpassword, network)
+      console.log(result.data.result)
+    },
+    getFeeRate: async function (withinBlock, rpcport, rpcuser, rpcpassword) {
+      const result = await getFeeRate(withinBlock, rpcport, rpcuser, rpcpassword)
       console.log(result.data.result)
     },
     listAddresses: async function (walletName, rpcport, rpcuser, rpcpassword, network) {
@@ -184,12 +228,16 @@ export default {
       const result = await sendAll(destination, walletName, rpcport, rpcuser, rpcpassword, network)
       console.log(result.data.result)
     },
-    send: async function (amount, destination, walletName, rpcport, rpcuser, rpcpassword, network) {
-      const result = await send(amount, destination, walletName, rpcport, rpcuser, rpcpassword, network)
+    send: async function (feerate, amount, destination, walletName, rpcport, rpcuser, rpcpassword, network) {
+      const result = await send(feerate, amount, destination, walletName, rpcport, rpcuser, rpcpassword, network)
       console.log(result.data.result)
     },
     getBalance: async function (walletName, rpcport, rpcuser, rpcpassword, network) {
       const result = await getBalance(walletName, rpcport, rpcuser, rpcpassword, network)
+      console.log(result.data.result)
+    },
+    broadcastTransaction: async function (hex, rpcport, rpcuser, rpcpassword) {
+      const result = await broadcastTransaction(hex, rpcport, rpcuser, rpcpassword)
       console.log(result.data.result)
     },
     getWalletHistory: async function (walletName, rpcport, rpcuser, rpcpassword, network) {
