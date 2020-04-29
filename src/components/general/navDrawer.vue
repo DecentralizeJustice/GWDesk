@@ -45,19 +45,19 @@ export default {
   data: () => ({
     publicPath: process.env.BASE_URL,
     devOptions: [
-      'Courses', 'Dev Pannel'//, 'BTC Multisig'
+      'Courses', 'BTC Single', 'Dev Pannel'
     ],
     prodOptions: [
-      'Courses'
+      'Courses', 'BTC Singlesig'
     ],
     icons: {
       Courses: 'book-open-page-variant',
-      'BTC Multisig': 'lock',
+      'BTC Single': 'lock',
       'Dev Pannel': 'hammer-wrench'
     },
     routerLinks: {
       Courses: 'edu',
-      'BTC Multisig': 'btcMusig',
+      'BTC Single': 'btcSinglesig',
       'Dev Pannel': 'devPannel'
     },
     open: false

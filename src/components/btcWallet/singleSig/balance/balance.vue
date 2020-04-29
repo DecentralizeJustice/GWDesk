@@ -18,23 +18,28 @@
     </v-container>
 </template>
 <script>
-// const R = require('ramda')
-// const BigNumber = require('bignumber.js')
+import { createNamespacedHelpers } from 'vuex'
+// const userConstants = createNamespacedHelpers('userConstants')
+const { mapState } = createNamespacedHelpers('userConstants')
 export default {
   components: {
   },
   data: () => ({
     transactions: [],
     currentBlock: 0,
-    balance: 0 // BigNumber(0)
+    balance: 0
   }),
   methods: {
     async getBalance () {
     },
     async setup () {
+      console.log(this.a)
     }
   },
   computed: {
+    ...mapState({
+      a: state => state.btcSingleSig
+    })
   },
   async mounted () {
     await this.setup()

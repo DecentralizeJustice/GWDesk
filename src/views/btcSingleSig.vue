@@ -3,7 +3,7 @@
     <v-flex xs11>
       <v-card class="text-xs-center no-gutters" style="" >
         <v-card-title class="headline justify-center">
-          Bitcoin Multisig
+          Bitcoin Single Sig
         </v-card-title>
             <v-divider></v-divider>
             <v-tabs background-color="">
@@ -12,35 +12,28 @@
                 Balance
               </v-tab>
               <v-tab>
-                <v-icon left>mdi-send-check</v-icon>
-                Send Money
-              </v-tab>
-              <v-tab>
                 <v-icon left>mdi-email-receive</v-icon>
                 Receive Money
+              </v-tab>
+              <v-tab>
+                <v-icon left>mdi-send-check</v-icon>
+                Send Money
               </v-tab>
               <v-tab>
                 <v-icon left>mdi-history</v-icon>
                 Transactions
               </v-tab>
-              <v-tab>
-                <v-icon left>mdi-cogs</v-icon>
-                Tools
-              </v-tab>
               <v-tab-item>
                 <balance/>
-              </v-tab-item>
-              <v-tab-item>
-                <!-- <sendMoney/> -->
               </v-tab-item>
               <v-tab-item>
                 <recieveMoney/>
               </v-tab-item>
               <v-tab-item>
-                <transactions/>
+                <!-- <sendMoney/> -->
               </v-tab-item>
               <v-tab-item>
-                Tools
+                <transactions/>
               </v-tab-item>
            </v-tabs>
           <v-divider/>
@@ -64,10 +57,10 @@
 </template>
 
 <script>
-import balance from '@/components/btcWallet/balance/balance.vue'
-// import sendMoney from '@/components/btcWallet/sendMoney/main.vue'
-import recieveMoney from '@/components/btcWallet/recMoney/mainCard.vue'
-import transactions from '@/components/btcWallet/transactions/mainCard.vue'
+import balance from '@/components/btcWallet/singleSig/balance/balance.vue'
+// import sendMoney from '@/components/btcWallet/singleSig/sendMoney/main.vue'
+import recieveMoney from '@/components/btcWallet/singleSig/recMoney/mainCard.vue'
+import transactions from '@/components/btcWallet/singleSig/transactions/mainCard.vue'
 export default {
   components: {
     balance,
