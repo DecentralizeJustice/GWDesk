@@ -18,12 +18,12 @@ const router = new Router({
     },
     {
       path: '/devPannel',
-      name: 'DevPannel',
+      name: 'devPannel',
       component: DevPannel
     },
     {
-      path: '/btcMusig',
-      name: 'btcMusig',
+      path: '/btcSinglesig',
+      name: 'btcSinglesig',
       component: BtcSingleSig
     }
   ]

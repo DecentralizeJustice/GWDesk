@@ -10,8 +10,8 @@
 <script>
 import whyCrypto from '@/assets/courseData/courses/intro/whyCrypto.js'
 import whichCrypto from '@/assets/courseData/courses/intro/whichCrypto.js'
-import landing from '@/components/general/landing.vue'
-import baseCourse from '@/components/general/baseCourse.vue'
+import landing from '@/components/edu/landing.vue'
+import baseCourse from '@/components/edu/baseCourse.vue'
 export default {
   data: () => ({
     lesson: '',

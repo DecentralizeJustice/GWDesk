@@ -74,9 +74,9 @@
   </v-card>
 </template>
 <script>
-import congrats from '@/components/general/congrats.vue'
-import vidComp from '@/components/general/vid&NotesComp.vue'
-import quiz from '@/components/general/quiz.vue'
+import congrats from '@/components/edu/congrats.vue'
+import vidComp from '@/components/edu/vid&NotesComp.vue'
+import quiz from '@/components/edu/quiz.vue'
 export default {
   props: ['courseInfo'],
   data: () => ({
