@@ -77,7 +77,7 @@ export default {
     channel: {},
     network: 'testnet',
     xpubpath: 'm/84h/1h/0h',
-    addressPath: 'm/84h/1h/0h/0/0',
+    addressPath: 'm/84h/1h/0h/0/1',
     psbt: 'cHNidP8BAHICAAAAAfX6PsuuDLyE68XlJ+R5sRivu9yxGSue5G0FSfxvEb1zAQAAAAD9////AjUEAAAAAAAAFgAUSDitwi6MALdnN67X2HpMGn4HUp7QBwAAAAAAABepFP/Q27REAtX48S2bpbSEosG7R9pChx1HGgAAAQEf2gwAAAAAAAAWABQ6Okd4bM/5z2tRLJzuN3T+zaRgzCIGA+cAOnfGFsAJnqB3d9fCDQazdO0OWnQ0jLhX+5Thuh+mGK6qJWRUAACAAQAAgAAAAIABAAAAAAAAAAAiAgOkieFQPL5thWHFvSIeXGeDCTE39GKLDHaiULYexuryKBiuqiVkVAAAgAEAAIAAAACAAQAAAAEAAAAAAA=='
 
   }),

@@ -13,6 +13,7 @@ async function genAddress (index, vpubArray, m, network) {
   })
   return info.address
 }
+
 async function addressFromScriptPub (scriptBuffer, network) {
   const address = bitcoin.address.fromOutputScript(scriptBuffer, network)
   return address

@@ -19,26 +19,26 @@
 </template>
 <script>
 import { createNamespacedHelpers } from 'vuex'
-// const userConstants = createNamespacedHelpers('userConstants')
-const { mapState } = createNamespacedHelpers('userConstants')
+import { getBalance } from '@/assets/util/btc/electrum/general.js'
+const { mapState } = createNamespacedHelpers('bitcoinInfo')
 export default {
   components: {
   },
   data: () => ({
-    transactions: [],
-    currentBlock: 0,
     balance: 0
   }),
   methods: {
-    async getBalance () {
-    },
     async setup () {
-      console.log(this.a)
+      const walletInfo = this.singleSigInfo
+      const balanceInfo = await
+      getBalance(walletInfo.electrumWalletName, walletInfo.rpcport, walletInfo.rpcuser,
+        walletInfo.rpcpassword, walletInfo.network)
+      this.balance = balanceInfo.data.result.confirmed
     }
   },
   computed: {
     ...mapState({
-      a: state => state.btcSingleSig
+      singleSigInfo: state => state.btcSingleSig
     })
   },
   async mounted () {
