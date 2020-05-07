@@ -1,0 +1,54 @@
+<template>
+  <v-card class="text-center flat" style="background-color: grey;">
+    <v-container>
+      <v-row justify="center">
+        <v-col cols="12">
+          <v-img
+            :src="walletPhoto"
+          ></v-img>
+        </v-col>
+        <v-col
+          cols="4"
+        >
+          <v-btn
+            color="purple darken-4"
+            v-on:click="walletReady()"
+          >
+            Continue
+          </v-btn>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-card>
+</template>
+
+<script>
+import image1 from '@/assets/photos/trezormodelt.jpeg'
+export default {
+  props: ['walletInfo'],
+  components: {
+  },
+  data: () => ({
+    dialog: false,
+    pingridUse: false
+  }),
+  methods: {
+    walletReady: function () {
+      this.$emit('walletReady', this.walletInfo)
+    }
+  },
+  computed: {
+    walletPhoto: function () {
+      return image1
+    },
+    model: function () {
+      return this.walletInfo.model
+    },
+    path: function () {
+      return this.walletInfo.path
+    }
+  },
+  mounted () {
+  }
+}
+</script>

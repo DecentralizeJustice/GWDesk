@@ -6,13 +6,7 @@ export const userConstants = {
     walletObjects: [],
     token: '',
     apiKey: 'hunter2',
-    m: 2,
-    btcSingleSig: {
-      rpcport: '7777',
-      rpcuser: 'user',
-      rpcpassword: '1',
-      walletName: 'no'
-    }
+    m: 2
   },
   mutations: {
     updateWalletObject (state, walletObject) {
