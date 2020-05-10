@@ -1,19 +1,19 @@
 <template>
-  <v-container class="">
+  <v-container class="" style="max-height: 70vh;overflow-y: auto;">
     <v-card
       class='light-blue darken-4 mt-2'
       :elevation="0"
       v-for="(item, index) in transactions" :key="index"
     >
 
-      <!-- <v-card-text class=" subtitle-1 white--text">
+      <v-card-text class=" subtitle-1 white--text">
         <v-icon
-        large v-bind:color="getColor(item.category)">
-        {{getArrow (item.category)}}</v-icon>
-        {{getType(item.category)}}
-        {{processAmount(item.amount)}} BTC
+        large v-bind:color="getColor(item.incoming)">
+        {{getArrow (item.incoming)}}</v-icon>
+        {{getType(item.incoming)}}
+        {{Math.abs(item.bc_value)}} BTC
         <br>
-        {{getDate (item.blocktime)}}
+        {{getDate (item.monotonic_timestamp)}}
 
         <v-row
             align="center"
@@ -28,10 +28,10 @@
       <div v-if="getPanelState(index)">
         <v-card-text class="subtitle-1">
           Confirmations: {{item.confirmations}}<br>
-          Block Height: {{item.blockheight}}<br>
+          Block Height: {{item.height}}<br>
           Transaction Id: {{item.txid}}
         </v-card-text>
-        <v-simple-table light >
+        <!-- <v-simple-table light >
           <template v-slot:default>
             <thead>
               <tr>
@@ -63,84 +63,40 @@
               </tr>
             </tbody>
           </template>
-        </v-simple-table>
-      </div> -->
+        </v-simple-table> -->
+      </div>
     </v-card>
   </v-container>
 </template>
-
 <script>
-// import { addressFromScriptPub } from '@/assets/util/addressUtil.js'
-// import { receiveAccount, walletName } from '@/assets/constants/genConstants.js'
-// import { getAccountTransactions, getTxByHash } from '@/assets/util/nodeUtil.js'
-// import { decodeRawTransactionBitcoinJS } from '@/assets/util/transactionUtil/transactionUtil.js'
+import {
+  getWalletHistory
+} from '@/assets/util/btc/electrum/general.js'
+import { createNamespacedHelpers } from 'vuex'
 const R = require('ramda')
-const BigNumber = require('bignumber.js')
+const { mapState } = createNamespacedHelpers('bitcoinInfo')
 export default {
   data: () => ({
     panel: [],
     transactions: []
   }),
   methods: {
-    processAmount (amount) {
-      const proccessedAmount = new BigNumber(amount).absoluteValue()
-      return proccessedAmount.toString()
+    async setup () {
+      const walletInfo = this.singleSigInfo
+      const result = await getWalletHistory(walletInfo.electrumWalletName, walletInfo.rpcport,
+        walletInfo.rpcuser, walletInfo.rpcpassword, walletInfo.network)
+      const sortByTimestamp = R.sortBy(R.prop('monotonic_timestamp'))
+      this.transactions = R.reverse(sortByTimestamp(result.data.result.transactions))
     },
-    satToBTC (amount) {
-      const sat = new BigNumber(amount)
-      const btc = sat.shiftedBy(-8)
-      return btc.toString()
-    },
-    async getInputandOutputInfo (transactions) {
-      // for (let i = 0; i < transactions.length; i++) {
-      //   const txid = transactions[i].txid
-      //   const transInfo = await getTxByHash(txid, 'musig')
-      //   transactions[i].bitcoinjsInfo = decodeRawTransactionBitcoinJS(transInfo.tx)
-      //   if (transactions[i].category === 'send') {
-      //     const ins = transactions[i].bitcoinjsInfo.ins
-      //     for (let j = 0; j < ins.length; j++) {
-      //       const address = transInfo.inputs[j].address
-      //       const value = transInfo.inputs[j].value
-      //       transactions[i].bitcoinjsInfo.ins[j].address = address
-      //       transactions[i].bitcoinjsInfo.ins[j].value = value
-      //     }
-      //   } else {
-      //     const ins = transactions[i].bitcoinjsInfo.ins
-      //     for (let j = 0; j < ins.length; j++) {
-      //       let address = transInfo.inputs[j].address
-      //       if (address === null) {
-      //         address = 'Address Info Unavailable'
-      //       }
-      //       transactions[i].bitcoinjsInfo.ins[j].address = address
-      //     }
-      //   }
-      //   const outs = transactions[i].bitcoinjsInfo.outs
-      //   for (let k = 0; k < outs.length; k++) {
-      //     const address = await addressFromScriptPub(outs[k].script)
-      //     transactions[i].bitcoinjsInfo.outs[k].address = address
-      //   }
-      // }
-      // return transactions
-    },
-    // async setup () {
-    //   const results = await getUTXO(walletName)
-    //   const sortByTime = R.sortBy(R.prop('blocktime'))
-    //   const sortedTransactions = sortByTime(results)
-    //   const currentBlock = await getNodeHeight()
-    //   this.currentBlock = currentBlock
-    //   const updatedTransactions = await this.getInputandOutputInfo(sortedTransactions)
-    //   this.transactions = updatedTransactions
-    //   this.loading = false
-    // },
     getType (type) {
-      if (type === 'send') {
+      if (type === false) {
         return 'Sent'
       } else {
         return 'Received'
       }
     },
     getArrow (type) {
-      if (type === 'send') {
+      if (type === false) {
         return 'mdi-arrow-top-left-thick'
       } else {
         return 'mdi-arrow-bottom-right-thick'
@@ -160,7 +116,7 @@ export default {
       return 'blue darken-4'
     },
     getColor (type) {
-      if (type === 'send') {
+      if (type === false) {
         return 'red darken-2'
       } else {
         return 'green darken-2'
@@ -209,10 +165,19 @@ export default {
     },
     getPanelState (index) {
       const state = this.panel[index]
+      if (state === undefined) {
+        return false
+      }
       return state
     }
   },
-  created: async function () {
+  computed: {
+    ...mapState({
+      singleSigInfo: state => state.btcSingleSig
+    })
+  },
+  mounted: async function () {
+    await this.setup()
   }
 }
 </script>
