@@ -7,15 +7,19 @@
           elevation="0"
         >
         <v-flex xs10 class="mx-auto mb-5">
-          <stepper v-bind:currentSection="currentSection"/>
+          <topStepper v-bind:currentSection="currentSection"/>
         </v-flex>
 
           <component
           v-bind:is="currentMain"
           v-bind:transaction="transaction"
-          v-on:updateTransaction="updateTransaction"/>
+          v-bind:singleSigInfo='singleSigInfo'
+          v-on:updateAddressArray="updateAddressArray"
+          v-on:updateIncompletePSBT='updateIncompletePSBT'
+          v-on:updateSignedPSBT='updateSignedPSBT'/>
 
           <bottomNav v-on:change="updateStep"
+            v-bind:transaction="transaction"
             v-bind:currentSection="currentSection"
             v-bind:continueDisabled='continueDisabled'
           />
@@ -26,18 +30,31 @@
 </template>
 
 <script>
-import stepper from '@/components/btcWallet/sendMoney/stepper.vue'
-import bottomNav from '@/components/btcWallet/sendMoney/bottomNav.vue'
+import topStepper from '@/components/btcWallet/singleSig/sendMoney/topStepper.vue'
+import bottomNav from '@/components/btcWallet/singleSig/sendMoney/bottomNav.vue'
+import sendToAddresses from '@/components/btcWallet/singleSig/sendMoney/sendToAddresses.vue'
+import amount from '@/components/btcWallet/singleSig/sendMoney/amount.vue'
+import confirm from '@/components/btcWallet/singleSig/sendMoney/confirm.vue'
+import sign from '@/components/btcWallet/singleSig/sendMoney/sign.vue'
+import { createNamespacedHelpers } from 'vuex'
+const { mapState } = createNamespacedHelpers('bitcoinInfo')
 export default {
   data: () => ({
-    componentList: ['sendToAddresses', 'amount', 'confirm', 'getSigs'],
+    componentList: [sendToAddresses, amount, confirm, sign],
     currentSection: 0,
     transaction: {
+      addressArray: [],
+      psbt: undefined,
+      signedPSBT: undefined
     }
   }),
   components: {
-    stepper,
-    bottomNav
+    topStepper,
+    bottomNav,
+    sendToAddresses,
+    amount,
+    confirm,
+    sign
   },
   computed: {
     continueDisabled () {
@@ -45,27 +62,24 @@ export default {
       const currentSection = this.currentSection
       switch (currentSection) {
         case 0:
-          if (trans.addressArray !== undefined) {
-            return false
+          if (trans.addressArray.length === 0) {
+            return true
           }
           break
         case 1:
-          if (trans.addressArrayAmount !== undefined) {
-            return false
-          }
-          break
-        case 2:
-          if (trans.addressArrayAmount !== undefined) {
-            return false
+          if (trans.psbt === undefined) {
+            return true
           }
           break
       }
-      return true
+      return false
     },
     currentMain () {
-      const componentName = this.componentList[this.currentSection]
-      return () => import('@/components/btcWallet/sendMoney/' + componentName + '.vue')
-    }
+      return this.componentList[this.currentSection]
+    },
+    ...mapState({
+      singleSigInfo: state => state.btcSingleSig
+    })
   },
   methods: {
     updateStep (stepUpdate) {
@@ -80,8 +94,14 @@ export default {
         }
       }
     },
-    updateTransaction (updateValue) {
-      this.transaction = updateValue
+    updateIncompletePSBT (newPSBT) {
+      this.transaction.psbt = newPSBT
+    },
+    updateSignedPSBT (newPSBT) {
+      this.transaction.signedPSBT = newPSBT
+    },
+    updateAddressArray (newArray) {
+      this.transaction.addressArray = newArray
     }
   }
 }

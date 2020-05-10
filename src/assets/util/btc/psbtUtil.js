@@ -151,7 +151,7 @@ export async function createPSBTfromTrans (bitcoinjsHex, wrongPsbt) {
   return psbt.toBase64()
 }
 
-export async function transactionFromPSBT (base64PSBT) {
+export async function validPSBTFromPSBT (base64PSBT) {
   const wrongPsbt = bitcoin.Psbt.fromBase64(base64PSBT)
   const buff = Buffer.from(base64PSBT, 'base64')
   const hex = buff.toString('hex')

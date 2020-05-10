@@ -30,7 +30,7 @@
                 <recieveMoney/>
               </v-tab-item>
               <v-tab-item>
-                <!-- <sendMoney/> -->
+                <sendMoney/>
               </v-tab-item>
               <v-tab-item>
                 <transactions/>
@@ -58,13 +58,13 @@
 
 <script>
 import balance from '@/components/btcWallet/singleSig/balance/balance.vue'
-// import sendMoney from '@/components/btcWallet/singleSig/sendMoney/main.vue'
+import sendMoney from '@/components/btcWallet/singleSig/sendMoney/main.vue'
 import recieveMoney from '@/components/btcWallet/singleSig/recMoney/mainCard.vue'
 import transactions from '@/components/btcWallet/singleSig/transactions/mainCard.vue'
 export default {
   components: {
     balance,
-    // sendMoney,
+    sendMoney,
     recieveMoney,
     transactions
   },

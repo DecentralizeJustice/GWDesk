@@ -10,12 +10,6 @@
         <v-col
           cols="4"
         >
-          <v-btn
-            color="purple darken-4"
-            v-on:click="walletReady()"
-          >
-            Continue
-          </v-btn>
         </v-col>
       </v-row>
     </v-container>
@@ -49,6 +43,7 @@ export default {
     }
   },
   mounted () {
+    this.walletReady()
   }
 }
 </script>

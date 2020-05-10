@@ -26,7 +26,7 @@
 
 <script>
 import {
-  finalizeTrans, transactionFromPSBT
+  finalizeTrans, validPSBTFromPSBT
 } from '@/assets/util/btc/psbtUtil.js'
 export default {
   components: {
@@ -43,7 +43,7 @@ export default {
       console.log(test)
     },
     transactionFromPSBT: async function () {
-      const test = await transactionFromPSBT(this.psbt1)
+      const test = await validPSBTFromPSBT(this.psbt1)
       console.log(test)
     }
   },

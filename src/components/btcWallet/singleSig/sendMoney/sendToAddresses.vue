@@ -71,14 +71,14 @@ export default {
   methods: {
     addToArray (address) {
       const newAddressArray = this.addressArray
-      newAddressArray.push('2NGZrVvZG92qGYqzTLjCAewvPZ7JE8S8VxE')
+      newAddressArray.push('mkHS9ne12qx9pS9VojpwU5xtRd4T7X7ZUt')
       this.proposedAddress = ''
-      this.$emit('updateTransaction', { addressArray: newAddressArray })
+      this.$emit('updateAddressArray', newAddressArray)
     },
     removeFromArray (index) {
       const newAddressArray = this.addressArray
       newAddressArray.splice(index, 1)
-      this.$emit('updateTransaction', { addressArray: newAddressArray })
+      this.$emit('updateAddressArray', newAddressArray)
     },
     addressIndex (index) {
       const ordinal = this.ordinalSuffixOf(index + 1)
@@ -102,11 +102,7 @@ export default {
   },
   computed: {
     addressArray: function () {
-      if (this.transaction.addressArray === undefined) {
-        return []
-      } else {
-        return this.transaction.addressArray
-      }
+      return this.transaction.addressArray
     }
   }
 }

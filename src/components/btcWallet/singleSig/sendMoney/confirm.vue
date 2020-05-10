@@ -3,7 +3,7 @@
       <v-flex xs12>
         <v-card-text>
           <h1 class="display-1">Transaction Overview</h1>
-          <v-row
+          <!-- <v-row
             no-gutters
             class="mb-5"
             v-for="(item,index) in addressArray" :key="index"
@@ -37,10 +37,9 @@
                 </v-col>
               </v-row>
             </v-col>
-          </v-row>
+          </v-row> -->
         </v-card-text>
         </v-flex>
-
 </template>
 
 <script>
@@ -49,19 +48,14 @@ export default {
   data: () => ({
   }),
   computed: {
-    addressArray: function () {
-      return this.transaction.addressArray
-    },
-    addressAmountArray: function () {
-      return this.transaction.addressArrayAmount
-    }
+    // addressArray: function () {
+    //   return this.transaction.addressArray
+    // },
+    // addressAmountArray: function () {
+    //   return this.transaction.addressArrayAmount
+    // }
   },
   methods: {
-    getAmount: function (index) {
-      const amount = this.addressAmountArray[index]
-      const exp = amount.dp(0).shiftedBy(-8).toFormat(8)
-      return exp
-    }
   },
   created () {
   }
