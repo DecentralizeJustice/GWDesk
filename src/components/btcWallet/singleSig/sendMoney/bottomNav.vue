@@ -27,8 +27,8 @@
           </v-btn>
           <v-btn
             color="green"
-            v-on:click="continueForward"
-            v-bind:disabled="finishReady"
+            v-on:click="finish"
+            v-bind:disabled="!finishReady"
             v-show='finishAvailable'
           >
             Finish
@@ -39,13 +39,16 @@
 
 <script>
 export default {
-  props: ['currentSection', 'continueDisabled', 'finishReady'],
+  props: ['currentSection', 'continueDisabled', 'transaction'],
   data: () => ({
 
   }),
   methods: {
     continueForward () {
       this.$emit('change', 'continue')
+    },
+    finish () {
+      this.$emit('finish')
     },
     goBack () {
       this.$emit('change', 'back')
@@ -78,6 +81,12 @@ export default {
         return false
       }
       return true
+    },
+    finishReady () {
+      if (this.transaction.signedPSBT !== undefined) {
+        return true
+      }
+      return false
     }
   }
 }
