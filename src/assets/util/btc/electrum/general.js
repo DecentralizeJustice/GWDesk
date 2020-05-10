@@ -148,19 +148,38 @@ export async function sendAll (destination, walletName, rpcport, rpcuser, rpcpas
   return request
 }
 
-export async function send (satPerByte, amount, destination, walletName, rpcport, rpcuser, rpcpassword, network) {
+export async function send (satPerByte, amountArray, destinationArray, walletName, rpcport, rpcuser, rpcpassword, network) {
   const pathAddition = getPathNetwork(network)
-  const request = await makeRpcRequest('payto',
-    {
-      wallet: `electrumFolder/${pathAddition}wallets/${walletName}`,
-      destination: destination,
-      unsigned: true,
-      rbf: true,
-      amount: amount,
-      feerate: satPerByte
-    },
-    rpcport, rpcuser, rpcpassword)
-  return request
+  if (amountArray.length === 1 && destinationArray.length === 1) {
+    const request = await makeRpcRequest('payto',
+      {
+        wallet: `electrumFolder/${pathAddition}wallets/${walletName}`,
+        destination: destinationArray[0],
+        unsigned: true,
+        rbf: true,
+        amount: amountArray[0],
+        feerate: satPerByte
+      },
+      rpcport, rpcuser, rpcpassword)
+    return request
+  }
+  if (amountArray.length > 1 && destinationArray.length > 1 &&
+      amountArray.length === destinationArray.length) {
+    const outputArray = []
+    for (var i = 0; i < amountArray.length; i++) {
+      outputArray.push(destinationArray[0], amountArray[0])
+    }
+    const request = await makeRpcRequest('paytomany',
+      {
+        wallet: `electrumFolder/${pathAddition}wallets/${walletName}`,
+        outputs: outputArray,
+        unsigned: true,
+        rbf: true,
+        feerate: satPerByte
+      },
+      rpcport, rpcuser, rpcpassword)
+    return request
+  }
 }
 
 export async function listAddresses (walletName, rpcport, rpcuser, rpcpassword, network) {

@@ -92,14 +92,14 @@
             <v-btn
               color="red darken-3"
               class="mx-2 my-2"
-              v-on:click="sendAll(destination, walletName, rpcport, rpcuser, rpcpassword, network)"
+              v-on:click="sendAll(destinationArray[0], walletName, rpcport, rpcuser, rpcpassword, network)"
             >
               Send All
             </v-btn>
             <v-btn
               color="light-blue darken-4"
               class="mx-2 my-2"
-              v-on:click="send(feeRate,amount, destination, walletName, rpcport, rpcuser, rpcpassword, network)"
+              v-on:click="send(feeRate,amountArray, destinationArray, walletName, rpcport, rpcuser, rpcpassword, network)"
             >
               Send
             </v-btn>
@@ -172,8 +172,8 @@ export default {
   data: () => ({
     feeRate: 1.5,
     withinBlock: '1',
-    amount: '0.00002',
-    destination: '2NGZrVvZG92qGYqzTLjCAewvPZ7JE8S8VxE',
+    amountArray: ['0.00002'],
+    destinationArray: ['2NGZrVvZG92qGYqzTLjCAewvPZ7JE8S8VxE'],
     network: 'testnet',
     rpcport: '7777',
     rpcuser: 'user',
@@ -227,8 +227,8 @@ export default {
       const result = await sendAll(destination, walletName, rpcport, rpcuser, rpcpassword, network)
       console.log(result.data.result)
     },
-    send: async function (feerate, amount, destination, walletName, rpcport, rpcuser, rpcpassword, network) {
-      const result = await send(feerate, amount, destination, walletName, rpcport, rpcuser, rpcpassword, network)
+    send: async function (feerate, amountArray, destinationArray, walletName, rpcport, rpcuser, rpcpassword, network) {
+      const result = await send(feerate, amountArray, destinationArray, walletName, rpcport, rpcuser, rpcpassword, network)
       console.log(result.data.result)
     },
     getBalance: async function (walletName, rpcport, rpcuser, rpcpassword, network) {
