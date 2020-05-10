@@ -185,10 +185,9 @@ export default {
   methods: {
     get: async function () {
       try {
-        const yes = await makeRpcRequest('getfeerate',
+        const yes = await makeRpcRequest('gettransaction',
           {
-            fee_method: 'eta',
-            fee_level: 0.58
+            txid: '4eba48267b58220a214fc61c2ff674e8620fd5efe8510dec686ca584ef608e07'
           },
           this.rpcport, this.rpcuser, this.rpcpassword)
         console.log(yes.data.result)
@@ -285,3 +284,6 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+</style>

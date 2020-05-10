@@ -1,11 +1,11 @@
 <template>
       <v-flex xs12>
-        <v-card-title primary-title class="justify-center">
+        <v-card-title  v-show="!addressReady" primary-title class="justify-center">
           <div>
             <h3 class="headline" >Enter The Last 4 Characters of Address:</h3>
           </div>
         </v-card-title>
-        <v-container>
+        <v-container v-show="!addressReady">
           <v-row>
             <v-col cols="12" sm="6">
               <v-text-field
@@ -30,7 +30,7 @@
           v-on:click="copyToClipboard()"
           v-show="addressReady"
         >
-          Copy
+          Copy Address
         </v-btn>
       </v-flex>
 </template>

@@ -13,6 +13,9 @@
           <div class="display-1 mt-5">
             {{balance}} BTC
           </div>
+          <div class="display-1 mt-5" v-if='unconfirmed != undefined'>
+            {{unconfirmed}} Unconfirmed BTC
+          </div>
         </v-col>
       </v-row>
     </v-container>
@@ -25,7 +28,8 @@ export default {
   components: {
   },
   data: () => ({
-    balance: 0
+    balance: 0,
+    unconfirmed: 0
   }),
   methods: {
     async setup () {
@@ -34,6 +38,7 @@ export default {
       getBalance(walletInfo.electrumWalletName, walletInfo.rpcport, walletInfo.rpcuser,
         walletInfo.rpcpassword, walletInfo.network)
       this.balance = balanceInfo.data.result.confirmed
+      this.unconfirmed = balanceInfo.data.result.unconfirmed
     }
   },
   computed: {
