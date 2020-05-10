@@ -1,7 +1,8 @@
 <template>
   <v-container class="" style="max-height: 70vh;overflow-y: auto;">
     <v-card
-      class='light-blue darken-4 mt-2'
+      class='mt-2'
+      v-bind:color="getpanelolor(item.confirmations)"
       :elevation="0"
       v-for="(item, index) in transactions" :key="index"
     >
@@ -104,10 +105,8 @@ export default {
     },
     getpanelolor (confs) {
       switch (confs) {
-        case -1:
-          return 'blue lighten-1'
         case 0:
-          return 'blue'
+          return 'blue lighten-1'
         case 1:
           return 'blue darken-2'
         case 2:

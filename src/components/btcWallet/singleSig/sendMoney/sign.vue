@@ -54,7 +54,8 @@ export default {
       this.$emit('updateSignedPSBT', psbt)
     }
   },
-  created () {
+  mounted () {
+    this.$emit('updateSignedPSBT', undefined)
   }
 }
 </script>

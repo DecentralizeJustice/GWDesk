@@ -19,6 +19,7 @@
           v-on:updateSignedPSBT='updateSignedPSBT'/>
 
           <bottomNav v-on:change="updateStep"
+            v-on:finish="finish"
             v-bind:transaction="transaction"
             v-bind:currentSection="currentSection"
             v-bind:continueDisabled='continueDisabled'
@@ -36,6 +37,12 @@ import sendToAddresses from '@/components/btcWallet/singleSig/sendMoney/sendToAd
 import amount from '@/components/btcWallet/singleSig/sendMoney/amount.vue'
 import confirm from '@/components/btcWallet/singleSig/sendMoney/confirm.vue'
 import sign from '@/components/btcWallet/singleSig/sendMoney/sign.vue'
+import {
+  finalizeTrans
+} from '@/assets/util/btc/psbtUtil.js'
+import {
+  broadcastTransaction
+} from '@/assets/util/btc/electrum/general.js'
 import { createNamespacedHelpers } from 'vuex'
 const { mapState } = createNamespacedHelpers('bitcoinInfo')
 export default {
@@ -82,6 +89,13 @@ export default {
     })
   },
   methods: {
+    async finish () {
+      const walletInfo = this.singleSigInfo
+      const finalHexTransaction = await finalizeTrans(this.transaction.signedPSBT)
+      const result = await broadcastTransaction(finalHexTransaction,
+        walletInfo.rpcport, walletInfo.rpcuser, walletInfo.rpcpassword)
+      console.log(result.data.result)
+    },
     updateStep (stepUpdate) {
       if (stepUpdate === 'continue') {
         this.currentSection += 1
