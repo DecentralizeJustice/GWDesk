@@ -106,9 +106,9 @@ export default {
     getpanelolor (confs) {
       switch (confs) {
         case 0:
-          return 'blue lighten-1'
+          return 'blue'
         case 1:
-          return 'blue darken-2'
+          return 'blue darken-1'
         case 2:
           return 'blue darken-3'
       }
