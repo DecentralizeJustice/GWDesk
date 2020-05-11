@@ -34,6 +34,8 @@ export default {
     }
   },
   async mounted () {
+    this.step = 0
+    console.log('ran')
   }
 }
 </script>

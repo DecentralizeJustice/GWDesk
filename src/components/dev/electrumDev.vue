@@ -241,7 +241,8 @@ export default {
     },
     getWalletHistory: async function (walletName, rpcport, rpcuser, rpcpassword, network) {
       const result = await getWalletHistory(walletName, rpcport, rpcuser, rpcpassword, network)
-      console.log(result.data.result)
+      console.log(result)
+      console.log(JSON.parse(result.data))
     },
     listLoadedWallets: async function (rpcport, rpcuser, rpcpassword) {
       const result = await listLoadedWallets(rpcport, rpcuser, rpcpassword)
