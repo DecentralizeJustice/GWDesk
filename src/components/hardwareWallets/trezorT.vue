@@ -2,14 +2,17 @@
   <v-card class="text-center flat" style="background-color: grey;">
     <v-container>
       <v-row justify="center">
-        <v-col cols="12">
+        <v-col cols="5">
           <v-img
             :src="walletPhoto"
           ></v-img>
         </v-col>
         <v-col
-          cols="4"
+          cols="12"
         >
+        <v-btn color="green" @click="walletReady">
+          Ready
+        </v-btn>
         </v-col>
       </v-row>
     </v-container>
@@ -43,7 +46,6 @@ export default {
     }
   },
   mounted () {
-    this.walletReady()
   }
 }
 </script>
