@@ -167,7 +167,7 @@ export async function send (satPerByte, amountArray, destinationArray, walletNam
       amountArray.length === destinationArray.length) {
     const outputArray = []
     for (var i = 0; i < amountArray.length; i++) {
-      outputArray.push(destinationArray[0], amountArray[0])
+      outputArray.push([destinationArray[i], amountArray[i]])
     }
     const request = await makeRpcRequest('paytomany',
       {
@@ -180,6 +180,7 @@ export async function send (satPerByte, amountArray, destinationArray, walletNam
       rpcport, rpcuser, rpcpassword)
     return request
   }
+  throw new Error('Wrong Inputs')
 }
 
 export async function listAddresses (walletName, rpcport, rpcuser, rpcpassword, network) {
