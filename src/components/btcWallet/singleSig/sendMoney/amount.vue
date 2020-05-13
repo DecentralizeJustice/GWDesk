@@ -104,7 +104,7 @@
           </v-btn>
           </v-btn-toggle>
           <v-card-text class="subtitle-1 white--text">
-            <h1 class="title">Fee Amount:</h1>
+            <h1 class="title">Fee Cost:</h1>
             {{feeAmount}} BTC
             <!-- <h1 class="title">Fee Ratio:</h1>
             {{feeRatio}}%  -->
@@ -149,9 +149,8 @@ export default {
       },
       speedSelectGroup: [
         '4 Hours', '1.5 Hours', '50 Min', '20 Min', '10 Min'
-
       ],
-      transAmountInfo: {},
+      transAmountInfoPSBT: {},
       pause: false,
       tooHigh: false,
       balance: 0,
@@ -181,17 +180,19 @@ export default {
     //   }
     //   return 'info'
     // },
+    feeArrayOptions: function () {
+      const feeInfo = this.feeInfo
+      return [feeInfo['20'], feeInfo['10'], feeInfo['5'],
+        feeInfo['2'], feeInfo['1']]
+    },
     changeAmount: function () {
-      return this.transAmountInfo.changeAmount
+      return this.transAmountInfoPSBT.changeAmount
     },
     feeAmount: function () {
-      return this.transAmountInfo.feeAmount
+      return this.transAmountInfoPSBT.feeAmount
     },
     chossenFeeRate: function () {
-      const feeInfo = this.feeInfo
-      const feeArrayOptions = [feeInfo['20'], feeInfo['10'], feeInfo['5'],
-        feeInfo['2'], feeInfo['1']]
-      return feeArrayOptions[this.newTransInfo.speed]
+      return this.feeArrayOptions[this.newTransInfo.speed]
     },
     addressArray: function () {
       return this.transaction.addressArray
@@ -234,7 +235,7 @@ export default {
         const trans = await send(feeRate, this.newTransInfo.amountArray, this.addressArray,
           singleSigInfo.electrumWalletName, singleSigInfo.rpcport, singleSigInfo.rpcuser,
           singleSigInfo.rpcpassword, singleSigInfo.network)
-        this.updateIncompletePSBT(trans.data.result)
+        this.updateTransInfo(trans.data.result)
       } catch (err) {
         this.pause = true
         this.tooHigh = true
@@ -250,12 +251,13 @@ export default {
         const trans = await send(feeRate, this.newTransInfo.amountArray, this.addressArray,
           singleSigInfo.electrumWalletName, singleSigInfo.rpcport, singleSigInfo.rpcuser,
           singleSigInfo.rpcpassword, singleSigInfo.network)
-        this.oldTransInfo.amountArray = R.clone(this.newTransInfo.amountArray)
-        this.updateIncompletePSBT(trans.data.result)
+        this.oldTransInfo = R.clone(this.newTransInfo)
+        console.log(trans.data.result)
+        this.updateTransInfo(trans.data.result)
         this.pause = false
       } catch (err) {
         this.triggerTooHigh()
-        this.newTransInfo.amountArray = R.clone(this.oldTransInfo.amountArray)
+        this.newTransInfo = R.clone(this.oldTransInfo)
       }
     },
     triggerTooHigh: async function () {
@@ -268,9 +270,13 @@ export default {
       this.tooHigh = false
       this.pause = false
     },
-    updateIncompletePSBT: async function (psbt) {
-      this.transAmountInfo = await decodeElectrumPsbt(psbt)
+    updateTransInfo: async function (psbt) {
+      this.transAmountInfoPSBT = await decodeElectrumPsbt(psbt)
+      this.$emit('updateFeeInfo', (this.chossenFeeRate / 1000))
       this.$emit('updateIncompletePSBT', psbt)
+      console.log(psbt)
+      this.$emit('updateBalance', Number(this.balance))
+      this.$emit('updateEstimatedTime', this.speedSelectGroup[this.newTransInfo.speed])
     },
     noChange: async function () {
     },

@@ -16,7 +16,10 @@
           v-bind:singleSigInfo='singleSigInfo'
           v-on:updateAddressArray="updateAddressArray"
           v-on:updateIncompletePSBT='updateIncompletePSBT'
-          v-on:updateSignedPSBT='updateSignedPSBT'/>
+          v-on:updateSignedPSBT='updateSignedPSBT'
+          v-on:updateFeeInfo='updateFeeInfo'
+          v-on:updateBalance='updateBalance'
+          v-on:updateEstimatedTime='updateEstimatedTime'/>
 
           <bottomNav v-on:change="updateStep"
             v-on:finish="finish"
@@ -50,9 +53,13 @@ export default {
     componentList: [sendToAddresses, amount, confirm, sign],
     currentSection: 0,
     transaction: {
+      feeInfo: 0,
       addressArray: [],
       psbt: undefined,
-      signedPSBT: undefined
+      signedPSBT: undefined,
+      balance: 0,
+      estimatedTime: '',
+      transactionId: ''
     }
   }),
   components: {
@@ -92,9 +99,10 @@ export default {
     async finish () {
       const walletInfo = this.singleSigInfo
       const finalHexTransaction = await finalizeTrans(this.transaction.signedPSBT)
+      console.log(finalHexTransaction)
       const result = await broadcastTransaction(finalHexTransaction,
         walletInfo.rpcport, walletInfo.rpcuser, walletInfo.rpcpassword)
-      console.log(result.data.result)
+      this.transactionId = result.data.result
     },
     updateStep (stepUpdate) {
       if (stepUpdate === 'continue') {
@@ -116,6 +124,15 @@ export default {
     },
     updateAddressArray (newArray) {
       this.transaction.addressArray = newArray
+    },
+    updateFeeInfo (amount) {
+      this.transaction.feeInfo = amount
+    },
+    updateBalance (amount) {
+      this.transaction.balance = amount
+    },
+    updateEstimatedTime (time) {
+      this.transaction.estimatedTime = time
     }
   }
 }

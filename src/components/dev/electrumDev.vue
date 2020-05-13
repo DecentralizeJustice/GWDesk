@@ -170,9 +170,9 @@ export default {
   components: {
   },
   data: () => ({
-    feeRate: 1.5,
+    feeRate: 1.8,
     withinBlock: '1',
-    amountArray: ['0.00002'],
+    amountArray: ['0.00001'],
     destinationArray: ['2NGZrVvZG92qGYqzTLjCAewvPZ7JE8S8VxE'],
     network: 'testnet',
     rpcport: '7777',
