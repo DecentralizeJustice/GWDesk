@@ -1,7 +1,7 @@
 <template>
 
       <v-flex xs12>
-        <div v-show="!walletReady01">
+        <div v-show="walletReady01">
         <v-card-title primary-title class="justify-center">
           <div>
             <h3 class="headline" >Unlock 'My Trezor' Hardware Wallet</h3>
@@ -10,9 +10,14 @@
         <walletTool
         v-on:walletReady='walletReady'/>
       </div>
-      <v-card-title primary-title class="justify-center" v-show="walletReady01">
+      <v-card-title primary-title class="justify-center" v-show="confirm">
         <div>
           <h3 class="headline" >Confirm Transaction on Hardware Wallet</h3>
+        </div>
+      </v-card-title>
+      <v-card-title primary-title class="justify-center" v-show="done">
+        <div>
+          <h3 class="headline" >Transaction Complete</h3>
         </div>
       </v-card-title>
       </v-flex>
@@ -33,14 +38,20 @@ export default {
   },
   props: ['transaction'],
   data: () => ({
-    walletReady01: false,
+    walletReady01: true,
+    confirm: false,
+    done: false,
     walletInfo: {}
   }),
   computed: {
+    transId: function () {
+      return this.transaction.transactionId
+    }
   },
   methods: {
     walletReady: function (walletInfo) {
-      this.walletReady01 = true
+      this.walletReady01 = false
+      this.confirm = true
       this.walletInfo = walletInfo
       this.sign()
     },
@@ -48,6 +59,8 @@ export default {
       const validPSBT = await validPSBTFromPSBT(this.transaction.psbt)
       const result = await signTrans(this.walletInfo.model, this.walletInfo.path,
         'testnet', validPSBT)
+      this.confirm = false
+      this.done = true
       this.updateSignedPSBT(result.psbt)
     },
     updateSignedPSBT: function (psbt) {
