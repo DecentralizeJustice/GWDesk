@@ -53,7 +53,7 @@
         </v-col>
         <v-col cols="3" align-self='center'>
         <v-text-field
-          :readonly='tooHigh'
+          :readonly='pause'
           v-model='newTransInfo.amountArray[index]'
           :rules="[rules.required, rules.counter, rules.hasToExist]"
           label="BTC"
@@ -69,22 +69,20 @@
       <v-col cols="12" class="mx-auto">
         <v-row align-content='center' justify='space-around'>
           <v-col
-            cols="3"
+            cols="4"
             align-self='center'
           >
           <v-card
             class='indigo lighten-1'
           >
           <v-card-text class="subtitle-1 white--text">
-            <h1 class="title">Balance:</h1>
-            {{balance}} BTC
-
-          </v-card-text>
-          <!-- <v-card-text class="subtitle-1 white--text">
             <h1 class="title">Change:</h1>
-            ((insert change)) BTC
-
-          </v-card-text> -->
+            {{changeAmount}} BTC
+          </v-card-text>
+          <v-card-text class="subtitle-1 white--text">
+            <h1 class="title">Available Balance:</h1>
+            {{balance}} BTC
+          </v-card-text>
           <!-- <v-btn v-if="addressArray.length === 1" color="red lighten-1" class="mb-2" @click="send">
             No Change
           </v-btn> -->
@@ -94,33 +92,25 @@
             <v-card
               class='deep-purple lighten-1'
             >
-            <v-card-text class="subtitle-1 white--text">
-              <!-- <h1 class="title">Fee Amount:</h1>
-              {{feeAmountBTC}} BTC
-              <h1 class="title">Fee Ratio:</h1>
-              {{feeRatio}}% -->
-            </v-card-text>
-            <h1 class="title mb-3">Transaction Time:</h1>
+            <h1 class="title py-2">Transaction Time:</h1>
           <v-btn-toggle
             v-model="newTransInfo.speed"
             class="mb-2"
             mandatory
           >
           <v-btn v-for="(item,index) in speedSelectGroup" :key="index"
-            :disabled='tooHigh'>
+            :disabled='pause'>
             <span>{{item}}</span>
           </v-btn>
           </v-btn-toggle>
+          <v-card-text class="subtitle-1 white--text">
+            <h1 class="title">Fee Amount:</h1>
+            {{feeAmount}} BTC
+            <!-- <h1 class="title">Fee Ratio:</h1>
+            {{feeRatio}}%  -->
+          </v-card-text>
           <!-- <v-col cols="12" justify-self='center' align-self='center'
             style="background-color: #263238;">
-          <v-text-field
-            :value='feeRatioInput'
-            label="Fee sat/byte"
-            type='number'
-            @input="setCustomFee"
-            :rules="[rules.feePrecise(feeRatioInput), rules.feeExist(feeRatioInput),
-              rules.feeNotZero(feeRatioInput), rules.feeNotLessThan1(feeRatioInput)]"
-          ></v-text-field>
         </v-col>
           <v-alert tile v-if='feeRatio>10' :type='feeWarningRatio' >
             High Fee Amount
@@ -139,6 +129,9 @@
 import {
   send, getBalance // sendAll
 } from '@/assets/util/btc/electrum/general.js'
+import {
+  decodeElectrumPsbt
+} from '@/assets/util/btc/psbtUtil.js'
 import { getAllFeeRates } from '@/assets/views/btcSingleSig/send.js'
 const BigNumber = require('bignumber.js')
 const R = require('ramda')
@@ -158,6 +151,8 @@ export default {
         '4 Hours', '1.5 Hours', '50 Min', '20 Min', '10 Min'
 
       ],
+      transAmountInfo: {},
+      pause: false,
       tooHigh: false,
       balance: 0,
       feeInfo: {},
@@ -186,6 +181,12 @@ export default {
     //   }
     //   return 'info'
     // },
+    changeAmount: function () {
+      return this.transAmountInfo.changeAmount
+    },
+    feeAmount: function () {
+      return this.transAmountInfo.feeAmount
+    },
     chossenFeeRate: function () {
       const feeInfo = this.feeInfo
       const feeArrayOptions = [feeInfo['20'], feeInfo['10'], feeInfo['5'],
@@ -219,23 +220,39 @@ export default {
     newTransInfo: {
       handler (newval) {
         if (!R.equals(newval, this.oldTransInfo)) {
-          this.send(newval)
+          this.send()
         }
       },
       deep: true
     }
   },
   methods: {
-    send: async function (newval) {
+    firstSend: async function () {
       try {
         const singleSigInfo = this.singleSigInfo
         const feeRate = this.chossenFeeRate / 1000
         const trans = await send(feeRate, this.newTransInfo.amountArray, this.addressArray,
           singleSigInfo.electrumWalletName, singleSigInfo.rpcport, singleSigInfo.rpcuser,
           singleSigInfo.rpcpassword, singleSigInfo.network)
-        this.tooHigh = false
+        this.updateIncompletePSBT(trans.data.result)
+      } catch (err) {
+        this.pause = true
+        this.tooHigh = true
+        console.log('Major Issue')
+        console.log(err)
+      }
+    },
+    send: async function () {
+      try {
+        this.pause = true
+        const singleSigInfo = this.singleSigInfo
+        const feeRate = this.chossenFeeRate / 1000
+        const trans = await send(feeRate, this.newTransInfo.amountArray, this.addressArray,
+          singleSigInfo.electrumWalletName, singleSigInfo.rpcport, singleSigInfo.rpcuser,
+          singleSigInfo.rpcpassword, singleSigInfo.network)
         this.oldTransInfo.amountArray = R.clone(this.newTransInfo.amountArray)
         this.updateIncompletePSBT(trans.data.result)
+        this.pause = false
       } catch (err) {
         this.triggerTooHigh()
         this.newTransInfo.amountArray = R.clone(this.oldTransInfo.amountArray)
@@ -246,10 +263,13 @@ export default {
         return new Promise(resolve => setTimeout(resolve, ms))
       }
       this.tooHigh = true
+      this.pause = true
       await sleep(4000)
       this.tooHigh = false
+      this.pause = false
     },
-    updateIncompletePSBT: function (psbt) {
+    updateIncompletePSBT: async function (psbt) {
+      this.transAmountInfo = await decodeElectrumPsbt(psbt)
       this.$emit('updateIncompletePSBT', psbt)
     },
     noChange: async function () {
@@ -281,6 +301,7 @@ export default {
     await this.setupFeeInfo()
     await this.setBalance()
     await this.fillinAmounts()
+    await this.firstSend()
   }
 }
 </script>

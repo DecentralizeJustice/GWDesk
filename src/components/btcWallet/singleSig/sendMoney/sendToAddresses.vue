@@ -63,6 +63,8 @@
   </v-flex>
 </template>
 <script>
+import validate from 'bitcoin-address-validation'
+const R = require('ramda')
 export default {
   props: ['transaction'],
   data: () => ({
@@ -70,8 +72,14 @@ export default {
   }),
   methods: {
     addToArray (address) {
+      address = 'mkHS9ne12qx9pS9VojpwU5xtRd4T7X7ZUt'
+      const address0 = '2NGZrVvZG92qGYqzTLjCAewvPZ7JE8S8VxE'
       const newAddressArray = this.addressArray
-      newAddressArray.push('mkHS9ne12qx9pS9VojpwU5xtRd4T7X7ZUt')
+      if (R.includes(address, this.addressArray) || !validate(address)) {
+        this.proposedAddress = ''
+        return
+      }
+      newAddressArray.push(address, address0)
       this.proposedAddress = ''
       this.$emit('updateAddressArray', newAddressArray)
     },
@@ -104,6 +112,9 @@ export default {
     addressArray: function () {
       return this.transaction.addressArray
     }
+  },
+  mounted: function () {
+    // this.addToArray()
   }
 }
 </script>

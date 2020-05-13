@@ -158,9 +158,30 @@ export async function validPSBTFromPSBT (base64PSBT) {
   const transHex = psbtTools.decodePsbt({ psbt: hex })
   const bitcoinJSTrans = bitcoin.Transaction.fromHex(transHex.unsigned_transaction)
   const finalPSBT64 = await createPSBTfromTrans(bitcoinJSTrans, wrongPsbt)
-  // const buff1 = Buffer.from(finalPSBT64, 'base64')
-  // const hex1 = buff1.toString('hex')
-  // console.log('ran')
-  // console.log(psbtTools.decodePsbt({ psbt: hex1 }))
   return finalPSBT64
+}
+export async function decodeElectrumPsbt (base64PSBT) {
+  await validPSBTFromPSBT(base64PSBT)
+  const transObject = {}
+  transObject.inputSum = 0
+  transObject.changeAmount = 0
+  transObject.feeAmount = 0
+  transObject.totalOutputs = 0
+  const wrongPsbt = bitcoin.Psbt.fromBase64(base64PSBT)
+  const buff = Buffer.from(base64PSBT, 'base64')
+  const hex = buff.toString('hex')
+  const transHex = psbtTools.decodePsbt({ psbt: hex })
+  const bitcoinJSTrans = bitcoin.Transaction.fromHex(transHex.unsigned_transaction)
+  for (let i = 0; i < wrongPsbt.data.inputs.length; i++) {
+    const inputValue = wrongPsbt.data.inputs[i].witnessUtxo.value / 100000000
+    transObject.inputSum = inputValue + transObject.inputSum
+  }
+  for (let i = 0; i < wrongPsbt.data.outputs.length; i++) {
+    transObject.totalOutputs += (bitcoinJSTrans.outs[i].value / 100000000)
+    if (wrongPsbt.data.outputs[i].bip32Derivation !== undefined) {
+      transObject.changeAmount += (bitcoinJSTrans.outs[i].value / 100000000)
+    }
+  }
+  transObject.feeAmount = (transObject.inputSum - transObject.totalOutputs).toFixed(8)
+  return transObject
 }
