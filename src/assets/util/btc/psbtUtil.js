@@ -107,7 +107,7 @@ function addInputInfo (psbt, bitcoinjsHex, wrongPsbt) {
     }
     psbt.addInput(input)
     const bip32info = wrongPsbt.data.inputs[i].bip32Derivation[0]
-    const path = "m/84'/1'/0'/" + bip32info.path.substr(-3)
+    const path = "m/84'/1'/0'/" + bip32info.path.slice(2)
     const updateData = { bip32Derivation: [{}] }
     updateData.bip32Derivation[0].masterFingerprint = Buffer.from('aeaa2564', 'hex')
     updateData.bip32Derivation[0].path = path
@@ -130,7 +130,7 @@ function addOutputInfo (psbt, bitcoinjsHex, wrongPsbt) {
     const bip32InfoAll = wrongPsbt.data.outputs[i].bip32Derivation
     if (bip32InfoAll !== undefined) {
       const bip32info = bip32InfoAll[0]
-      const path = "m/84'/1'/0'/" + bip32info.path.substr(-3)
+      const path = "m/84'/1'/0'/" + bip32info.path.slice(2)
       const updateData = { bip32Derivation: [{}] }
       updateData.bip32Derivation[0].masterFingerprint = Buffer.from('aeaa2564', 'hex')
       updateData.bip32Derivation[0].path = path

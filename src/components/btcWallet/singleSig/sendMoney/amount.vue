@@ -252,7 +252,6 @@ export default {
           singleSigInfo.electrumWalletName, singleSigInfo.rpcport, singleSigInfo.rpcuser,
           singleSigInfo.rpcpassword, singleSigInfo.network)
         this.oldTransInfo = R.clone(this.newTransInfo)
-        console.log(trans.data.result)
         this.updateTransInfo(trans.data.result)
         this.pause = false
       } catch (err) {
@@ -274,7 +273,6 @@ export default {
       this.transAmountInfoPSBT = await decodeElectrumPsbt(psbt)
       this.$emit('updateFeeInfo', (this.chossenFeeRate / 1000))
       this.$emit('updateIncompletePSBT', psbt)
-      console.log(psbt)
       this.$emit('updateBalance', Number(this.balance))
       this.$emit('updateEstimatedTime', this.speedSelectGroup[this.newTransInfo.speed])
     },
