@@ -12,11 +12,25 @@
               Unpack Main Binary
             </v-btn>
             <v-btn
+              color="red"
+              v-on:click="unpackPhotos()"
+              class="mx-2 my-2"
+            >
+              Unpack Photos
+            </v-btn>
+            <v-btn
               color="purple darken-4"
               class="mx-2 my-2"
               v-on:click="changeName()"
             >
               Change Name
+            </v-btn>
+            <v-btn
+              color="blue darken-4"
+              class="mx-2 my-2"
+              v-on:click="changePhoto()"
+            >
+              Change Photo
             </v-btn>
             </div>
           </v-card>
@@ -26,13 +40,14 @@
 
 <script>
 import {
-  unpackMainBinary, changeName
+  unpackMainBinary, unpackPhotos, changeName, changePhoto
 } from '@/assets/util/trezorCli/general.js'
 export default {
   components: {
   },
   data: () => ({
-    walletName: 'Dirty Dgoon',
+    walletName: 'Turing',
+    photoName: 'turing',
     channel: {}
   }),
   methods: {
@@ -40,8 +55,16 @@ export default {
       const test = await unpackMainBinary()
       console.log(test)
     },
+    unpackPhotos: async function () {
+      const result = await unpackPhotos()
+      console.log(result)
+    },
     changeName: async function () {
       this.channel = changeName(this.walletName)
+      this.addListeners(this.channel)
+    },
+    changePhoto: async function () {
+      this.channel = changePhoto(this.photoName)
       this.addListeners(this.channel)
     },
     addListeners: function (stream) {
