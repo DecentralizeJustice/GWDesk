@@ -9,7 +9,6 @@ const zlib = require('zlib')
 const tar = require('tar-fs')
 const binaryFolder = '/binaries/'
 const os = require('os')
-
 export async function unpackMainBinary () {
   const destination = app.getPath('userData') + '/binaries'
   let tarName
@@ -31,6 +30,21 @@ export async function unpackMainBinary () {
   })
   return true
 }
+export async function unpackPhotos () {
+  const destination = app.getPath('userData') + '/binaries'
+  const tarName = 'roboPhotos.tar.gz'
+
+  // eslint-disable-next-line
+  const source = path.join(__static, binaryFolder + tarName)
+  await new Promise((resolve, reject) => {
+    fs.createReadStream(source)
+      .on('error', err => reject(err))
+      .pipe(zlib.Unzip())
+      .pipe(tar.extract(destination))
+      .on('finish', resolve)
+  })
+  return true
+}
 
 export function changeName (name) {
   const binaryFolder = app.getPath('userData') + '/binaries/macTrezorCliTool'
@@ -39,7 +53,13 @@ export function changeName (name) {
     { cwd: binaryFolder })
   return command
 }
-
+export function changePhoto (photo) {
+  const binaryFolder = app.getPath('userData') + '/binaries/macTrezorCliTool'
+  const commands = ['set-homescreen', '-f', `../roboPhotos/${photo}.toif`]
+  const command = spawn('./macTrezorCliTool', commands,
+    { cwd: binaryFolder })
+  return command
+}
 export async function listDevices () {
   const binary = app.getPath('userData') + '/binaries/hwi'
   const { stdout } = await exec(`"${binary}" enumerate`)
