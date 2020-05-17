@@ -62,8 +62,8 @@ export default {
     dialog: false,
     lessons: [
       { title: 'Introduction', icon: 'atom-variant', unlocked: true },
-      // { title: 'Monero', icon: 'eye-off', unlocked: 'false' },
       { title: 'Bitcoin', icon: 'lock', unlocked: false },
+      { title: 'Monero', icon: 'eye-off', unlocked: false },
       // { title: 'Dai', icon: 'lock', unlocked: 'false' },
       // { title: 'Pool Together', icon: 'lock', unlocked: 'false' },
       // { title: 'Ethereum', icon: 'lock', unlocked: 'false' },
