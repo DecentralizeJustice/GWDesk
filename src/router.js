@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Education from './views/edu.vue'
 import DevPannel from './views/dev.vue'
+import Settings from './views/settings.vue'
 import BtcSingleSig from './views/btcSingleSig.vue'
 
 Vue.use(Router)
@@ -25,6 +26,11 @@ const router = new Router({
       path: '/btcSinglesig',
       name: 'btcSinglesig',
       component: BtcSingleSig
+    },
+    {
+      path: '/settings',
+      name: 'settings',
+      component: Settings
     }
   ]
 })

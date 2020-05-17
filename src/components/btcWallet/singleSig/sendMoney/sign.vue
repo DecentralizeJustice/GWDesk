@@ -2,24 +2,22 @@
 
       <v-flex xs12>
         <div v-show="walletReady01">
-        <v-card-title primary-title class="justify-center">
+        <v-card-text primary-title class="justify-center">
           <div>
             <h3 class="headline" >Unlock 'My Trezor' Hardware Wallet</h3>
           </div>
-        </v-card-title>
+        </v-card-text>
         <walletTool
         v-on:walletReady='walletReady'/>
       </div>
-      <v-card-title primary-title class="justify-center" v-show="confirm">
-        <div>
+      <v-card-text primary-title class="justify-center" v-show="confirm">
           <h3 class="headline" >Confirm Transaction on Hardware Wallet</h3>
-        </div>
-      </v-card-title>
-      <v-card-title primary-title class="justify-center" v-show="done">
-        <div>
-          <h3 class="headline" >Transaction Complete</h3>
-        </div>
-      </v-card-title>
+      </v-card-text>
+      <v-card-text class="justify-center" v-show="done">
+          <h2 class="headline" >Transaction Complete</h2>
+          <h2 class="title pt-3" >Transaction Id:</h2>
+          {{transaction.transactionId}}
+      </v-card-text>
       </v-flex>
 
 </template>

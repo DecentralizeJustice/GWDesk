@@ -17,6 +17,9 @@
       <v-tab>
         General
       </v-tab>
+      <v-tab>
+        Trezor Cli
+      </v-tab>
       <v-tab-item>
         <hwi />
       </v-tab-item>
@@ -25,6 +28,9 @@
       </v-tab-item>
       <v-tab-item>
         <general/>
+      </v-tab-item>
+      <v-tab-item>
+        <trezorCli/>
       </v-tab-item>
     </v-tabs>
   </v-card>
@@ -36,11 +42,13 @@
 import hwi from '@/components/dev/hwiDev.vue'
 import electrum from '@/components/dev/electrumDev.vue'
 import general from '@/components/dev/generalDev.vue'
+import trezorCli from '@/components/dev/trezorCliDev.vue'
 export default {
   components: {
     hwi,
     electrum,
-    general
+    general,
+    trezorCli
   },
   data: () => ({
   }),

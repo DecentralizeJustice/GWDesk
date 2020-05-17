@@ -101,8 +101,7 @@ export default {
       const finalHexTransaction = await finalizeTrans(this.transaction.signedPSBT)
       const result = await broadcastTransaction(finalHexTransaction,
         walletInfo.rpcport, walletInfo.rpcuser, walletInfo.rpcpassword)
-      this.transactionId = result.data.result
-      console.log(this.transactionId)
+      this.transaction.transactionId = result.data.result
     },
     updateStep (stepUpdate) {
       if (stepUpdate === 'continue') {
