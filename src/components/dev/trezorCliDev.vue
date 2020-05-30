@@ -32,6 +32,20 @@
             >
               Change Photo
             </v-btn>
+            <v-btn
+              color="pink darken-4"
+              class="mx-2 my-2"
+              v-on:click="getInfo()"
+            >
+              Get Info
+            </v-btn>
+            <v-btn
+              color="green darken-4"
+              class="mx-2 my-2"
+              v-on:click="getNode()"
+            >
+              Get Node
+            </v-btn>
             </div>
           </v-card>
     </v-flex>
@@ -40,12 +54,14 @@
 
 <script>
 import {
-  unpackMainBinary, unpackPhotos, changeName, changePhoto
+  unpackMainBinary, unpackPhotos, changeName, changePhoto,
+  getInfo, getNode
 } from '@/assets/util/trezorCli/general.js'
 export default {
   components: {
   },
   data: () => ({
+    node: "m/44'/0'/0'",
     walletName: 'Turing',
     photoName: 'turing',
     channel: {}
@@ -65,6 +81,14 @@ export default {
     },
     changePhoto: async function () {
       this.channel = changePhoto(this.photoName)
+      this.addListeners(this.channel)
+    },
+    getInfo: async function () {
+      this.channel = getInfo()
+      this.addListeners(this.channel)
+    },
+    getNode: async function () {
+      this.channel = getNode(this.node)
       this.addListeners(this.channel)
     },
     addListeners: function (stream) {

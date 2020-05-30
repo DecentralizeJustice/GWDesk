@@ -53,6 +53,20 @@ export function changeName (name) {
     { cwd: binaryFolder })
   return command
 }
+export function getInfo () {
+  const binaryFolder = app.getPath('userData') + '/binaries/macTrezorCliTool'
+  const commands = ['get-features']
+  const command = spawn('./macTrezorCliTool', commands,
+    { cwd: binaryFolder })
+  return command
+}
+export function getNode (node) {
+  const binaryFolder = app.getPath('userData') + '/binaries/macTrezorCliTool'
+  const commands = ['get-public-node', '-n', node]
+  const command = spawn('./macTrezorCliTool', commands,
+    { cwd: binaryFolder })
+  return command
+}
 export function changePhoto (photo) {
   const binaryFolder = app.getPath('userData') + '/binaries/macTrezorCliTool'
   const commands = ['set-homescreen', '-f', `../roboPhotos/${photo}.toif`]

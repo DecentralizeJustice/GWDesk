@@ -16,14 +16,11 @@ function pubToVpub (pub) {
   return bs58check.encode(data)
 }
 
-// async function createXFP (pub, network) {
-//   const xpub = pubToTpub(pub)
-//   const node = await bip32.fromBase58(xpub, network)
-//   const pubBase58 = pubToTpub(node.neutered().toBase58())
-//   const decoded = bs58check.decode(pubBase58)
-//   const xfp = decoded.toString('hex').substring(10, 10 + 8).toUpperCase()
-//   return xfp
-// }
+export async function getXFP (pub) {
+  const decoded = bs58check.decode(pub)
+  const xfp = decoded.toString('hex').substring(10, 10 + 8).toUpperCase()
+  return xfp
+}
 //
 // async function createRandomXPub (network) {
 //   const mnemonic = bip39.generateMnemonic()
