@@ -22,7 +22,17 @@ module.exports = {
       builderOptions: {
         buildDependenciesFromSource: false,
         nodeGypRebuild: false,
-        npmRebuild: false
+        npmRebuild: false,
+        mac: {
+          hardenedRuntime: true,
+          entitlements: './buildInfo/entitlements.mac.inherit.plist',
+          entitlementsInherit: './buildInfo/entitlements.mac.inherit.plist',
+          gatekeeperAssess: false,
+          target: ['dmg', 'zip']
+        },
+        dmg: {
+          sign: false
+        }
       },
       nodeIntegration: true,
       chainWebpackRendererProcess: config => {
