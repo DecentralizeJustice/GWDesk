@@ -16,6 +16,13 @@
       <v-tab>
         Bitcoin
       </v-tab>
+      <v-tab-item>
+      </v-tab-item>
+      <v-tab-item>
+          <hardwareWallet/>
+      </v-tab-item>
+      <v-tab-item>
+      </v-tab-item>
     </v-tabs>
   </v-card>
 </v-flex>
@@ -23,8 +30,10 @@
 </template>
 
 <script>
+import hardwareWallet from '@/components/settings/main.vue'
 export default {
   components: {
+    hardwareWallet
   },
   data: () => ({
   }),

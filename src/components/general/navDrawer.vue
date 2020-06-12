@@ -11,7 +11,7 @@
         class="px-2"
         >
               <v-list-item-avatar>
-                <v-img :src="`${publicPath}icon.png`"></v-img>
+                <img src="/../../icon.png">
               </v-list-item-avatar>
             <v-list-item-title class="headline">Guiding Wallet</v-list-item-title>
         </v-list-item>
@@ -39,16 +39,12 @@
 
 <script>
 export default {
-  name: 'App',
-  components: {
-  },
   data: () => ({
-    publicPath: process.env.BASE_URL,
     devOptions: [
       'Courses', 'BTC Single', 'Settings', 'Dev Pannel'
     ],
     prodOptions: [
-      'Courses', 'BTC Singlesig', 'Settings'
+      'Courses'// , 'BTC Singlesig', 'Settings'
     ],
     icons: {
       Courses: 'book-open-page-variant',
@@ -84,6 +80,7 @@ export default {
       return this.prodOptions
     }
   }
+
   // async mounted () {
   // }
 }
