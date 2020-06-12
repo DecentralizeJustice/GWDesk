@@ -25,7 +25,6 @@ jobs:
         architecture: 'x64'
     - run: yarn install
     - run: yarn run build
-      env:
   # - uses: actions/upload-artifact@v1
     #   with:
     #     name: Mac App Zip
