@@ -28,7 +28,7 @@ jobs:
     - run: yarn run build
       env:
           CSC_KEY_PASSWORD: ${{ secrets.MAC_CERTS_PASSWORD }}
-          CSC_LINK: 'https://raw.githubusercontent.com/DecentralizeJustice/GWDesk/master/devKey.p12'
+          CSC_LINK: ${{ secrets.MAC_CERTS }}
   # - uses: actions/upload-artifact@v1
     #   with:
     #     name: Mac App Zip
