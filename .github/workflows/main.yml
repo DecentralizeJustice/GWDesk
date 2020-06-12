@@ -27,7 +27,7 @@ jobs:
     - run: yarn run build
       env:
         CSC_KEY_PASSWORD: ${{ secrets.MAC_CERTS_PASSWORD }}
-        CSC_LINK: ${{ secrets.MAC_CERTS }}
+        CSC_LINK: 'devKey.p12'
   # - uses: actions/upload-artifact@v1
     #   with:
     #     name: Mac App Zip
