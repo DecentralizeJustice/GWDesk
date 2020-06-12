@@ -29,7 +29,6 @@ jobs:
         CSC_KEY_PASSWORD: ${{ secrets.MAC_CERTS_PASSWORD }}
         CSC_LINK: ${{ secrets.MAC_CERTS }}
   # - uses: actions/upload-artifact@v1
-    #
     #   with:
     #     name: Mac App Zip
     #     path: dist_electron/GuidingWallet-0.1.0-mac.zip
