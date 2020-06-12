@@ -17,7 +17,6 @@ jobs:
         lfs: 'true'
     - uses: actions/setup-node@master
       with:
-        
         # fix till https://github.com/actions/setup-node/issues/121 is solved
         node-version: 12.16.1
     - uses: actions/setup-python@v1
@@ -26,6 +25,9 @@ jobs:
         architecture: 'x64'
     - run: yarn install
     - run: yarn run build
+      env:
+          CSC_KEY_PASSWORD: ${{ secrets.MAC_CERTS_PASSWORD }}
+          CSC_LINK: ${{ secrets.MAC_CERTS }}
   # - uses: actions/upload-artifact@v1
     #   with:
     #     name: Mac App Zip
