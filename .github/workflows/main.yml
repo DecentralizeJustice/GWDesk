@@ -27,7 +27,7 @@ jobs:
     - run: yarn install
     - run: yarn run build
       env:
-          CSC_KEY_PASSWORD: ${{ secrets.MAC_CERTS_PASSWORD }}
+          CSC_KEY_PASSWORD: './devkey.p12'
           CSC_LINK: ${{ secrets.MAC_CERTS }}
   # - uses: actions/upload-artifact@v1
     #   with:
