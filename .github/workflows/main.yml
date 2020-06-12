@@ -23,10 +23,10 @@ jobs:
       with:
         python-version: '3.7'
         architecture: 'x64'
-    uses: apple-actions/import-codesign-certs@v1
-    with:
-      p12-file-base64: ${{ secrets.MAC_CERTS }}
-      p12-password: ${{ secrets.MAC_CERTS_PASSWORD }}
+    - uses: apple-actions/import-codesign-certs@v1
+      with:
+        p12-file-base64: ${{ secrets.MAC_CERTS }}
+        p12-password: ${{ secrets.MAC_CERTS_PASSWORD }}
     - run: yarn install
     - run: yarn run build
   # - uses: actions/upload-artifact@v1
