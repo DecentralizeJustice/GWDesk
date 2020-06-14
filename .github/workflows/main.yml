@@ -17,6 +17,7 @@ jobs:
         lfs: 'true'
     - uses: actions/setup-node@master
       with:
+        # test
         # fix till https://github.com/actions/setup-node/issues/121 is solved
         node-version: 12.16.1
     - uses: actions/setup-python@v1
