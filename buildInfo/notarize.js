@@ -10,7 +10,7 @@ exports.default = async function notarizing (context) {
   const appName = context.packager.appInfo.productFilename
 
   return notarize({
-    appBundleId: 'com.yourcompany.yourAppId',
+    appBundleId: 'com.decentralizejustice.guidingwalletdesktop',
     appPath: `${appOutDir}/${appName}.app`,
     appleId: process.env.APPLEID,
     appleIdPassword: process.env.APPLEIDPASS

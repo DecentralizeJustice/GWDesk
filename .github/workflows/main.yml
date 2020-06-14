@@ -29,6 +29,8 @@ jobs:
       env:
           CSC_KEY_PASSWORD: ${{ secrets.MAC_CERTS_PASSWORD }}
           CSC_LINK: ${{ secrets.MAC_CERTS }}
+          APPLEID: ${{ secrets.APPLEID }}
+          APPLEIDPASS: ${{ secrets.APPLEIDPASS }}
   # - uses: actions/upload-artifact@v1
     #   with:
     #     name: Mac App Zip
