@@ -8,8 +8,7 @@ exports.default = async function notarizing (context) {
   }
 
   const appName = context.packager.appInfo.productFilename
-  console.log(`${appOutDir}/${appName}.app`)
-  return notarize({
+  return await notarize({ // eslint-disable-line
     appBundleId: 'com.decentralizejustice.guidingwalletdesktop',
     appPath: `${appOutDir}/${appName}.app`,
     appleId: process.env.APPLEID,
