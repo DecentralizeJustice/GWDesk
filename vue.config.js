@@ -30,6 +30,9 @@ module.exports = {
           gatekeeperAssess: false,
           target: ['dmg', 'zip']
         },
+        win: {
+          target: 'nsis'
+        },
         afterSign: 'buildInfo/notarize.js',
         dmg: {
           sign: false
