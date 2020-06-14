@@ -1,5 +1,5 @@
 
-name: BuildMasterRelease
+name: BuildRelease
 
 on:
   push:
@@ -9,7 +9,50 @@ on:
   #   types: [closed]
 
 jobs:
-  buildRelease:
+  buildWindowsRelease:
+    runs-on: windows-2019
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        lfs: 'true'
+    - uses: actions/setup-node@master
+      with:
+        # fix till https://github.com/actions/setup-node/issues/121 is solved
+        node-version: 12.16.1
+    - uses: actions/setup-python@v1
+      with:
+        python-version: '3.7'
+        architecture: 'x64'
+    - run: yarn install
+    - run: yarn run build
+      env:
+          CSC_KEY_PASSWORD: ${{ secrets.MAC_CERTS_PASSWORD }}
+          CSC_LINK: ${{ secrets.MAC_CERTS }}
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@latest
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+      with:
+        tag_name: ${{github.sha}}
+        release_name: Demo Build Windows v0.1.0
+        body: |
+          Add Release Notes
+          Built From Master Commit ${{github.sha}}
+        draft: true
+        prerelease: true
+    - name: Upload Release Asset
+      id: upload-release-asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+        asset_path: ./dist_electron/GuidingWallet Setup 0.1.0.exe
+        asset_name: GuidingWallet.exe
+        asset_content_type: application/octet-stream
+
+  buildMacRelease:
     runs-on: macos-10.15
     steps:
     - uses: actions/checkout@v2
@@ -17,7 +60,6 @@ jobs:
         lfs: 'true'
     - uses: actions/setup-node@master
       with:
-        # test
         # fix till https://github.com/actions/setup-node/issues/121 is solved
         node-version: 12.16.1
     - uses: actions/setup-python@v1
