@@ -31,6 +31,7 @@ module.exports = {
           target: ['dmg', 'zip']
         },
         win: {
+          publisherName: 'Click Here Digital Ltd',
           target: 'nsis'
         },
         afterSign: 'buildInfo/notarize.js',
