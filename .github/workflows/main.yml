@@ -29,11 +29,12 @@ jobs:
       # env:
       #     CSC_KEY_PASSWORD: ${{ secrets.Windows_CERTS_PASSWORD }}
       #     CSC_LINK: ${{ secrets.Windows_CERTS }}
+
     - name: Upload Windows Installer
-        uses: actions/upload-artifact@v1
-        with:
-          name: GuidingWallet.exe
-          path: ./dist_electron/GuidingWallet Setup 0.1.0.exe
+      uses: actions/upload-artifact@v1
+      with:
+        name: GuidingWallet.exe
+        path: ./dist_electron/GuidingWallet Setup 0.1.0.exe
 
   buildMacRelease:
     needs: buildWindowsRelease
@@ -58,6 +59,7 @@ jobs:
           CSC_LINK: ${{ secrets.MAC_CERTS }}
           APPLEID: ${{ secrets.APPLEID }}
           APPLEIDPASS: ${{ secrets.APPLEIDPASS }}
+
     - name: Create Release
       id: create_release
       uses: actions/create-release@latest
@@ -71,10 +73,12 @@ jobs:
           Built From Master Commit ${{github.sha}}
         draft: true
         prerelease: true
+
     - name: Download Windows Installer
-        uses: actions/download-artifact@v1
-        with:
-          name: GuidingWallet.exe
+      uses: actions/download-artifact@v1
+      with:
+        name: GuidingWallet.exe
+
     - name: Upload Mac Release Asset
       id: upload-release-asset
       uses: actions/upload-release-asset@v1
@@ -85,6 +89,7 @@ jobs:
         asset_path: ./dist_electron/GuidingWallet-0.1.0.dmg
         asset_name: Mac-Demo-GuidingWallet.dmg
         asset_content_type: application/octet-stream
+
     - name: Upload Release Windows Asset
       id: upload-release-asset
       uses: actions/upload-release-asset@v1
