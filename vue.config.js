@@ -39,7 +39,6 @@ module.exports = {
           sign: false
         },
         nsis: {
-          warningsAsErrors: false
         }
       },
       nodeIntegration: true,
