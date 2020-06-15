@@ -69,8 +69,8 @@ jobs:
 
 
   createRelease:
-    needs: [buildWindowsRelease, buildMacRelease]
     runs-on: ubuntu-latest
+    needs: [buildWindowsRelease, buildMacRelease]
     - name: Create Release
       id: create_release
       uses: actions/create-release@latest
