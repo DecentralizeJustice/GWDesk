@@ -7,11 +7,14 @@ import {
   installVueDevtools // eslint-disable-line
 } from 'vue-cli-plugin-electron-builder/lib'
 const isDevelopment = process.env.NODE_ENV !== 'production'
-
+const { autoUpdater } = require('electron-updater');
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win
-
+autoUpdater.checkForUpdates();
+autoUpdater.on('checking-for-update', () => {
+  console.log("Checking for updates !!");
+});
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([{ scheme: 'app', privileges: { secure: true, standard: true } }])
 
