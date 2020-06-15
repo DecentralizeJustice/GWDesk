@@ -9,6 +9,8 @@ on:
   #   types: [closed]
 
 jobs:
+
+
   buildWindowsRelease:
     runs-on: windows-2019
     steps:
@@ -36,30 +38,39 @@ jobs:
         name: GuidingWallet.exe
         path: ./dist_electron/GuidingWallet Setup 0.1.0.exe
 
+
   buildMacRelease:
-    needs: buildWindowsRelease
     runs-on: macos-10.15
     steps:
-    # - uses: actions/checkout@v2
-    #   with:
-    #     lfs: 'true'
-    # - uses: actions/setup-node@master
-    #   with:
-    #     #
-    #     # fix till https://github.com/actions/setup-node/issues/121 is solved
-    #     node-version: 12.16.1
-    # - uses: actions/setup-python@v1
-    #   with:
-    #     python-version: '3.7'
-    #     architecture: 'x64'
-    # - run: yarn install
-    # - run: yarn run build
-    #   env:
-    #       CSC_KEY_PASSWORD: ${{ secrets.MAC_CERTS_PASSWORD }}
-    #       CSC_LINK: ${{ secrets.MAC_CERTS }}
-    #       APPLEID: ${{ secrets.APPLEID }}
-    #       APPLEIDPASS: ${{ secrets.APPLEIDPASS }}
+    - uses: actions/checkout@v2
+      with:
+        lfs: 'true'
+    - uses: actions/setup-node@master
+      with:
+        #
+        # fix till https://github.com/actions/setup-node/issues/121 is solved
+        node-version: 12.16.1
+    - uses: actions/setup-python@v1
+      with:
+        python-version: '3.7'
+        architecture: 'x64'
+    - run: yarn install
+    - run: yarn run build
+      env:
+          CSC_KEY_PASSWORD: ${{ secrets.MAC_CERTS_PASSWORD }}
+          CSC_LINK: ${{ secrets.MAC_CERTS }}
+          APPLEID: ${{ secrets.APPLEID }}
+          APPLEIDPASS: ${{ secrets.APPLEIDPASS }}
+    - name: Upload Mac Installer
+      uses: actions/upload-artifact@v2
+      with:
+        name: GuidingWallet.dmg
+        path: ./dist_electron/GuidingWallet-0.1.0.dmg
 
+
+  createRelease:
+    needs: [buildWindowsRelease, buildMacRelease]
+    runs-on: ubuntu-latest
     - name: Create Release
       id: create_release
       uses: actions/create-release@latest
@@ -78,18 +89,23 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: GuidingWallet.exe
-        path: ./
-    # - name: Upload Mac Release Asset
-    #   id: upload-release-asset-mac
-    #   uses: actions/upload-release-asset@v1
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    #   with:
-    #     upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-    #     asset_path: ./dist_electron/GuidingWallet-0.1.0.dmg
-    #     asset_name: Mac-Demo-GuidingWallet.dmg
-    #     asset_content_type: application/octet-stream
-    - run: ls -la
+
+    - name: Download Mac Installer
+      uses: actions/download-artifact@v2
+      with:
+        name: GuidingWallet.dmg
+
+    - name: Upload Mac Release Asset
+      id: upload-release-asset-mac
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+        asset_path: GuidingWallet-0.1.0.dmg
+        asset_name: Mac-GuidingWallet.dmg
+        asset_content_type: application/octet-stream
+
     - name: Upload Release Windows Asset
       id: upload-release-asset-win
       uses: actions/upload-release-asset@v1
@@ -98,5 +114,5 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
         asset_path: GuidingWallet Setup 0.1.0.exe
-        asset_name: GuidingWallet.exe
+        asset_name: Windows-GuidingWallet.exe
         asset_content_type: application/octet-stream
