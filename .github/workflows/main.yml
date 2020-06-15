@@ -81,7 +81,7 @@ jobs:
           Add Release Notes
           Built From Master Commit ${{github.sha}}
         draft: true
-        prerelease: true
+        prerelease: false
 
     - name: Download Windows Installer
       uses: actions/download-artifact@v2
