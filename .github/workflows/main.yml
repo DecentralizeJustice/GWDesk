@@ -89,7 +89,7 @@ jobs:
     #     asset_path: ./dist_electron/GuidingWallet-0.1.0.dmg
     #     asset_name: Mac-Demo-GuidingWallet.dmg
     #     asset_content_type: application/octet-stream
-    run: ls
+    - run: ls -la
     - name: Upload Release Windows Asset
       id: upload-release-asset-win
       uses: actions/upload-release-asset@v1
