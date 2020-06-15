@@ -26,9 +26,9 @@ jobs:
         architecture: 'x64'
     - run: yarn install
     - run: yarn run build
-      env:
-          CSC_KEY_PASSWORD: ${{ secrets.Windows_CERTS_PASSWORD }}
-          CSC_LINK: ${{ secrets.Windows_CERTS }}
+      # env:
+      #     CSC_KEY_PASSWORD: ${{ secrets.Windows_CERTS_PASSWORD }}
+      #     CSC_LINK: ${{ secrets.Windows_CERTS }}
     - name: Create Release
       id: create_release
       uses: actions/create-release@latest
