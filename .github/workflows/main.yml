@@ -68,7 +68,7 @@ jobs:
 
   createRelease:
     needs: [buildWindowsRelease, buildMacRelease]
-    runs-on: macos-10.15
+    runs-on: ubuntu-latest
     steps:
     - name: Create Release
       id: create_release
