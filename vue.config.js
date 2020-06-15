@@ -37,6 +37,9 @@ module.exports = {
         afterSign: 'buildInfo/notarize.js',
         dmg: {
           sign: false
+        },
+        nsis: {
+          warningsAsErrors: false
         }
       },
       nodeIntegration: true,
