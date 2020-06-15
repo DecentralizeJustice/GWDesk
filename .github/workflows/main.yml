@@ -10,7 +10,6 @@ on:
 
 jobs:
 
-
   buildWindowsRelease:
     runs-on: windows-2019
     steps:
@@ -67,8 +66,8 @@ jobs:
         name: GuidingWallet.dmg
         path: ./dist_electron/GuidingWallet-0.1.0.dmg
 
-
   createRelease:
+    needs: [buildWindowsRelease, buildMacRelease]
     runs-on: ubuntu-latest
     - name: Create Release
       id: create_release
