@@ -43,7 +43,6 @@ jobs:
   buildMacRelease:
     runs-on: macos-10.15
     steps:
-    - run: ls
     - uses: actions/checkout@v2
       with:
         lfs: 'true'
@@ -56,6 +55,7 @@ jobs:
       with:
         python-version: '3.7'
         architecture: 'x64'
+    - run: echo process.env.npm_package_version
     - run: yarn install
     - run: yarn run build
       env:
@@ -67,7 +67,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: GuidingWallet.dmg
-        path: ./dist_electron/GuidingWallet-${{ steps.package-version.outputs.current-version}}.dmg
+        path: ./dist_electron/GuidingWallet-0.1.0.dmg
 
   createRelease:
     needs: [buildMacRelease]
@@ -104,7 +104,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-        asset_path: GuidingWallet-${{ steps.package-version.outputs.current-version}}.dmg
+        asset_path: GuidingWallet-0.1.0.dmg
         asset_name: Mac-GuidingWallet.dmg
         asset_content_type: application/octet-stream
 
