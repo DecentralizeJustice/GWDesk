@@ -11,7 +11,7 @@
 
 <script>
 import navDrawer from '@/components/general/navDrawer.vue'
-import { version as currentAppVersion } from 'package.json'
+// import { version as currentAppVersion } from 'package.json'
 const CHECK_FOR_UPDATE_PENDING = 'CHECK_FOR_UPDATE_PENDING'
 const CHECK_FOR_UPDATE_SUCCESS = 'CHECK_FOR_UPDATE_SUCCESS'
 const CHECK_FOR_UPDATE_FAILURE = 'CHECK_FOR_UPDATE_FAILURE'
@@ -44,15 +44,16 @@ export default {
   async mounted () {
     ipcRenderer.send(CHECK_FOR_UPDATE_PENDING)
     ipcRenderer.on(CHECK_FOR_UPDATE_SUCCESS, (event, updateInfo) => {
-      const version = updateInfo && updateInfo.version
-      if (version && version !== currentAppVersion) {
-        // ipcRenderer.send(DOWNLOAD_UPDATE_PENDING)
-        // Update your updateCheckLevel to DOWNLOAD in your state.
-        console.log(' download pending')
-        console.log(updateInfo)
-      } else {
-        console.log('no updates found')
-      }
+      // const version = updateInfo && updateInfo.version
+      console.log(updateInfo)
+      // if (version && version !== currentAppVersion) {
+      //   // ipcRenderer.send(DOWNLOAD_UPDATE_PENDING)
+      //   // Update your updateCheckLevel to DOWNLOAD in your state.
+      //   console.log(' download pending')
+      //   console.log(updateInfo)
+      // } else {
+      //   console.log('no updates found')
+      // }
     })
     ipcRenderer.on(CHECK_FOR_UPDATE_FAILURE, () => {
       console.log('failed update')
