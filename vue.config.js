@@ -31,7 +31,6 @@ module.exports = {
           target: ['dmg', 'zip']
         },
         win: {
-          publisherName: 'Sectigo Limited',
           target: 'nsis'
         },
         afterSign: 'buildInfo/notarize.js',
@@ -39,7 +38,14 @@ module.exports = {
           sign: false
         },
         nsis: {
-        }
+        },
+        publish: [
+          {
+            provider: 'generic',
+            url: 'https://github.com/DecentralizeJustice/GWDesk/releases/latest/download/',
+            channel: 'latest'
+          }
+        ]
       },
       nodeIntegration: true,
       chainWebpackRendererProcess: config => {
