@@ -33,7 +33,7 @@ module.exports = {
         win: {
           target: 'nsis'
         },
-        afterSign: 'buildInfo/notarize.js',
+        // afterSign: 'buildInfo/notarize.js',
         dmg: {
           sign: false
         },
