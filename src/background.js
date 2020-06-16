@@ -7,7 +7,7 @@ import {
 } from 'vue-cli-plugin-electron-builder/lib'
 const isDevelopment = process.env.NODE_ENV !== 'production'
 const { autoUpdater } = require('electron-updater')
-const ipcMain = require('ipc-main')
+const { ipcMain } = require('electron')
 const CHECK_FOR_UPDATE_PENDING = 'CHECK_FOR_UPDATE_PENDING'
 const CHECK_FOR_UPDATE_SUCCESS = 'CHECK_FOR_UPDATE_SUCCESS'
 const CHECK_FOR_UPDATE_FAILURE = 'CHECK_FOR_UPDATE_FAILURE'

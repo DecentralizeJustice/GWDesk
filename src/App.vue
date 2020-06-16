@@ -43,23 +43,27 @@ export default {
     //
   }),
   async mounted () {
-    ipcRenderer.send(CHECK_FOR_UPDATE_PENDING)
-    ipcRenderer.on(CHECK_FOR_UPDATE_SUCCESS, (event, updateInfo) => {
-      // const version = updateInfo && updateInfo.version
-      console.log(updateInfo)
+    if (process.env.NODE_ENV === 'development') {
+    } else {
+      ipcRenderer.send(CHECK_FOR_UPDATE_PENDING)
       console.log(appVersion)
-      // if (version && version !== currentAppVersion) {
-      //   // ipcRenderer.send(DOWNLOAD_UPDATE_PENDING)
-      //   // Update your updateCheckLevel to DOWNLOAD in your state.
-      //   console.log(' download pending')
-      //   console.log(updateInfo)
-      // } else {
-      //   console.log('no updates found')
-      // }
-    })
-    ipcRenderer.on(CHECK_FOR_UPDATE_FAILURE, () => {
-      console.log('failed update')
-    })
+      ipcRenderer.on(CHECK_FOR_UPDATE_SUCCESS, (event, updateInfo) => {
+        // const version = updateInfo && updateInfo.version
+        console.log(updateInfo)
+
+        // if (version && version !== currentAppVersion) {
+        //   // ipcRenderer.send(DOWNLOAD_UPDATE_PENDING)
+        //   // Update your updateCheckLevel to DOWNLOAD in your state.
+        //   console.log(' download pending')
+        //   console.log(updateInfo)
+        // } else {
+        //   console.log('no updates found')
+        // }
+      })
+      ipcRenderer.on(CHECK_FOR_UPDATE_FAILURE, () => {
+        console.log('failed update')
+      })
+    }
     this.start()
   }
 }
