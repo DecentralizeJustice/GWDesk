@@ -72,8 +72,8 @@ jobs:
     - name: Upload Mac Installer
       uses: actions/upload-artifact@v2
       with:
-        name: GuidingWallet.dmg
-        path: ./dist_electron/
+        name: GuidingWallet
+        path: /dist_electron/
 
   createRelease:
     needs: [buildMacRelease]
