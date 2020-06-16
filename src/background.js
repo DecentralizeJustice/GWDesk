@@ -1,22 +1,22 @@
 'use strict'
 import path from 'path'
-/* eslint-disable */
 import { app, protocol, BrowserWindow } from 'electron'
 import {
   createProtocol,
   installVueDevtools // eslint-disable-line
 } from 'vue-cli-plugin-electron-builder/lib'
 const isDevelopment = process.env.NODE_ENV !== 'production'
-const {autoUpdater} = require("electron-updater")
-const CHECK_FOR_UPDATE_PENDING = 'CHECK_FOR_UPDATE_PENDING';
-const CHECK_FOR_UPDATE_SUCCESS = 'CHECK_FOR_UPDATE_SUCCESS';
-const CHECK_FOR_UPDATE_FAILURE = 'CHECK_FOR_UPDATE_FAILURE';
+const { autoUpdater } = require('electron-updater')
+const ipcMain = require('ipc-main')
+const CHECK_FOR_UPDATE_PENDING = 'CHECK_FOR_UPDATE_PENDING'
+const CHECK_FOR_UPDATE_SUCCESS = 'CHECK_FOR_UPDATE_SUCCESS'
+const CHECK_FOR_UPDATE_FAILURE = 'CHECK_FOR_UPDATE_FAILURE'
 
-const DOWNLOAD_UPDATE_PENDING = 'DOWNLOAD_UPDATE_PENDING';
-const DOWNLOAD_UPDATE_SUCCESS = 'DOWNLOAD_UPDATE_SUCCESS';
-const DOWNLOAD_UPDATE_FAILURE = 'DOWNLOAD_UPDATE_FAILURE';
+// const DOWNLOAD_UPDATE_PENDING = 'DOWNLOAD_UPDATE_PENDING'
+// const DOWNLOAD_UPDATE_SUCCESS = 'DOWNLOAD_UPDATE_SUCCESS'
+// const DOWNLOAD_UPDATE_FAILURE = 'DOWNLOAD_UPDATE_FAILURE'
 
-const QUIT_AND_INSTALL_UPDATE = 'QUIT_AND_INSTALL_UPDATE';
+// const QUIT_AND_INSTALL_UPDATE = 'QUIT_AND_INSTALL_UPDATE'
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -26,13 +26,16 @@ protocol.registerSchemesAsPrivileged([{ scheme: 'app', privileges: { secure: tru
 
 function createWindow () {
   // Create the browser window.
-  win = new BrowserWindow({ width: 1500,
-    height: 1000,
-    icon: path.join(__static, 'icon.png'),
-    webPreferences: {
-      nodeIntegration: true,
-      webSecurity: false
-    } })
+  win = new BrowserWindow(
+    {
+      width: 1500,
+      height: 1000,
+      icon: path.join(__static, 'icon.png'), // eslint-disable-line
+      webPreferences: {
+        nodeIntegration: true,
+        webSecurity: false
+      }
+    })
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
@@ -47,10 +50,10 @@ function createWindow () {
   win.on('closed', () => {
     win = null
   })
-  win.webContents.on("will-navigate", function(event, url) {
+  win.webContents.on('will-navigate', function (event, url) {
     console.log('no navigation Allowed')
   })
-  win.webContents.on("new-window", function(event, url) {
+  win.webContents.on('new-window', function (event, url) {
     console.log('no new Windows Allowed')
     event.preventDefault()
   })
@@ -90,29 +93,28 @@ app.on('ready', async () => {
     } catch (e) {
       console.error('Vue Devtools failed to install:', e.toString())
     }
-
   }
   createWindow()
 })
 ipcMain.on(CHECK_FOR_UPDATE_PENDING, event => {
-  const { sender } = event;
+  const { sender } = event
 
   // Automatically invoke success on development environment.
   if (process.env.NODE_ENV === 'development') {
     // sender.send(CHECK_FOR_UPDATE_SUCCESS);
   } else {
-    const result = autoUpdater.checkForUpdates();
+    const result = autoUpdater.checkForUpdates()
 
     result
       .then((checkResult) => {
-        const { updateInfo } = checkResult;
-        sender.send(CHECK_FOR_UPDATE_SUCCESS, updateInfo);
+        const { updateInfo } = checkResult
+        sender.send(CHECK_FOR_UPDATE_SUCCESS, updateInfo)
       })
       .catch(() => {
-        sender.send(CHECK_FOR_UPDATE_FAILURE);
-      });
+        sender.send(CHECK_FOR_UPDATE_FAILURE)
+      })
   }
-});
+})
 // Exit cleanly on request from parent process in development mode.
 if (isDevelopment) {
   if (process.platform === 'win32') {
