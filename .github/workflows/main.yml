@@ -55,7 +55,7 @@ jobs:
       with:
         python-version: '3.7'
         architecture: 'x64'
-    - run: echo process.env.npm_package_version
+    - run: ls
     - run: yarn install
     - run: yarn run build
       env:
