@@ -46,19 +46,18 @@ export default {
     if (process.env.NODE_ENV === 'development') {
     } else {
       ipcRenderer.send(CHECK_FOR_UPDATE_PENDING)
-      console.log(appVersion)
       ipcRenderer.on(CHECK_FOR_UPDATE_SUCCESS, (event, updateInfo) => {
-        // const version = updateInfo && updateInfo.version
+        const version = updateInfo.version
+        console.log(appVersion)
         console.log(updateInfo)
-
-        // if (version && version !== currentAppVersion) {
-        //   // ipcRenderer.send(DOWNLOAD_UPDATE_PENDING)
-        //   // Update your updateCheckLevel to DOWNLOAD in your state.
-        //   console.log(' download pending')
-        //   console.log(updateInfo)
-        // } else {
-        //   console.log('no updates found')
-        // }
+        console.log(version)
+        if (version && version !== appVersion) {
+          // ipcRenderer.send(DOWNLOAD_UPDATE_PENDING)
+          // Update your updateCheckLevel to DOWNLOAD in your state.
+          console.log(' download pending')
+        } else {
+          console.log('no updates found')
+        }
       })
       ipcRenderer.on(CHECK_FOR_UPDATE_FAILURE, () => {
         console.log('failed update')
