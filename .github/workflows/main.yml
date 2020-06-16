@@ -57,7 +57,7 @@ jobs:
         architecture: 'x64'
     - run: node -p "require('./package').version" > text.txt
     - uses: pCYSl5EDgo/cat@master
-      id: hello
+      id: getVersion
       with:
         path: text.txt
         trim: true
@@ -69,12 +69,30 @@ jobs:
           CSC_LINK: ${{ secrets.MAC_CERTS }}
           APPLEID: ${{ secrets.APPLEID }}
           APPLEIDPASS: ${{ secrets.APPLEIDPASS }}
-    - run: ls ./dist_electron
-    - name: Upload Mac Installer
+
+    - name: Upload latest-mac.yml
       uses: actions/upload-artifact@v2
       with:
         name: latest-mac.yml
         path: dist_electron/latest-mac.yml
+
+    - name: Upload mac.zip
+      uses: actions/upload-artifact@v2
+      with:
+        name: GuidingWallet-${{ steps.hello.outputs.text }}-mac.zip
+        path: dist_electron/GuidingWallet-${{ steps.getVersion.outputs.text }}-mac.zip
+
+    - name: Upload mac.dmg
+      uses: actions/upload-artifact@v2
+      with:
+        name: GuidingWallet-${{ steps.hello.outputs.text }}.dmg
+        path: dist_electron/GuidingWallet-${{ steps.getVersion.outputs.text }}.dmg
+
+    - name: Upload dmg.blockmap
+      uses: actions/upload-artifact@v2
+      with:
+        name: GuidingWallet-${{ steps.hello.outputs.text }}.dmg.blockmap
+        path: dist_electron/GuidingWallet-${{ steps.getVersion.outputs.text }}.dmg.blockmap
 
   createRelease:
     needs: [buildMacRelease]
