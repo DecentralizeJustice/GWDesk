@@ -73,7 +73,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: MacDistJsonFiles
-        path: ./dist_electron/*.json
+        path: ./dist_electron/**.json
 
   createRelease:
     needs: [buildMacRelease]
