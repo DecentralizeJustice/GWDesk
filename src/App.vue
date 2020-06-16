@@ -17,11 +17,18 @@ const CHECK_FOR_UPDATE_PENDING = 'CHECK_FOR_UPDATE_PENDING'
 const CHECK_FOR_UPDATE_SUCCESS = 'CHECK_FOR_UPDATE_SUCCESS'
 const CHECK_FOR_UPDATE_FAILURE = 'CHECK_FOR_UPDATE_FAILURE'
 
-// const DOWNLOAD_UPDATE_PENDING = 'DOWNLOAD_UPDATE_PENDING'
-// const DOWNLOAD_UPDATE_SUCCESS = 'DOWNLOAD_UPDATE_SUCCESS'
-// const DOWNLOAD_UPDATE_FAILURE = 'DOWNLOAD_UPDATE_FAILURE'
+const DOWNLOAD_UPDATE_PENDING = 'DOWNLOAD_UPDATE_PENDING'
+const DOWNLOAD_UPDATE_SUCCESS = 'DOWNLOAD_UPDATE_SUCCESS'
+const DOWNLOAD_UPDATE_FAILURE = 'DOWNLOAD_UPDATE_FAILURE'
 //
-// const QUIT_AND_INSTALL_UPDATE = 'QUIT_AND_INSTALL_UPDATE'
+const QUIT_AND_INSTALL_UPDATE = 'QUIT_AND_INSTALL_UPDATE'
+const delay = (function () {
+  var timer = 0
+  return function (callback, ms) {
+    clearTimeout(timer)
+    timer = setTimeout(callback, ms)
+  }
+})()
 const electron = window.require('electron')
 const ipcRenderer = electron.ipcRenderer
 export default {
@@ -52,8 +59,7 @@ export default {
         console.log(updateInfo)
         console.log(version)
         if (version && version !== appVersion) {
-          // ipcRenderer.send(DOWNLOAD_UPDATE_PENDING)
-          // Update your updateCheckLevel to DOWNLOAD in your state.
+          ipcRenderer.send(DOWNLOAD_UPDATE_PENDING)
           console.log(' download pending')
         } else {
           console.log('no updates found')
@@ -61,6 +67,15 @@ export default {
       })
       ipcRenderer.on(CHECK_FOR_UPDATE_FAILURE, () => {
         console.log('failed update')
+      })
+      ipcRenderer.on(DOWNLOAD_UPDATE_SUCCESS, () => {
+        console.log('downlaod ready')
+        delay(function () {
+          ipcRenderer.send(QUIT_AND_INSTALL_UPDATE)
+        }, 5000)
+      })
+      ipcRenderer.on(DOWNLOAD_UPDATE_FAILURE, () => {
+        console.log('download failed')
       })
     }
     this.start()
