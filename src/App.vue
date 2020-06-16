@@ -11,7 +11,6 @@
 
 <script>
 import navDrawer from '@/components/general/navDrawer.vue'
-// import { version as currentAppVersion } from 'package.json'
 const appVersion = require('../package.json').version
 const CHECK_FOR_UPDATE_PENDING = 'CHECK_FOR_UPDATE_PENDING'
 const CHECK_FOR_UPDATE_SUCCESS = 'CHECK_FOR_UPDATE_SUCCESS'

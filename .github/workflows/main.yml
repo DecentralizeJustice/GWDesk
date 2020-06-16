@@ -63,6 +63,7 @@ jobs:
         trim: true
 
     - run: yarn install
+    - run: yarn run checkStyle
     - run: yarn run build
       env:
           CSC_KEY_PASSWORD: ${{ secrets.MAC_CERTS_PASSWORD }}
