@@ -73,8 +73,8 @@ jobs:
     - name: Upload Mac Installer
       uses: actions/upload-artifact@v2
       with:
-        name: package.json
-        path: dist_electron/package.json
+        name: latest-mac.yml
+        path: dist_electron/latest-mac.yml
 
   createRelease:
     needs: [buildMacRelease]
@@ -111,7 +111,7 @@ jobs:
     - name: Download Mac Json Files
       uses: actions/download-artifact@v2
       with:
-        name: package.json
+        name: latest-mac.yml
     - run: ls
     # - name: Upload Mac Release Asset
     #   id: upload-release-asset-mac
