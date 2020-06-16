@@ -43,9 +43,7 @@ jobs:
   buildMacRelease:
     runs-on: macos-10.15
     steps:
-    - name: get-npm-version
-      id: package-version
-      uses: martinbeentjes/npm-get-version-action@master
+    - run: ls
     - uses: actions/checkout@v2
       with:
         lfs: 'true'
@@ -75,9 +73,6 @@ jobs:
     needs: [buildMacRelease]
     runs-on: ubuntu-latest
     steps:
-    - name: get-npm-version
-      id: package-version
-      uses: martinbeentjes/npm-get-version-action@master
     - name: Create Release
       id: create_release
       uses: actions/create-release@latest
