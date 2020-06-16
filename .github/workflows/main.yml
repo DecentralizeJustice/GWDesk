@@ -79,6 +79,9 @@ jobs:
     needs: [buildMacRelease]
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v2
+      with:
+        lfs: 'false'
     - run: node -p "require('./package').version" > text.txt
     - uses: pCYSl5EDgo/cat@master
       id: hello
