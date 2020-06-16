@@ -21,14 +21,7 @@ const DOWNLOAD_UPDATE_PENDING = 'DOWNLOAD_UPDATE_PENDING'
 const DOWNLOAD_UPDATE_SUCCESS = 'DOWNLOAD_UPDATE_SUCCESS'
 const DOWNLOAD_UPDATE_FAILURE = 'DOWNLOAD_UPDATE_FAILURE'
 //
-const QUIT_AND_INSTALL_UPDATE = 'QUIT_AND_INSTALL_UPDATE'
-const delay = (function () {
-  var timer = 0
-  return function (callback, ms) {
-    clearTimeout(timer)
-    timer = setTimeout(callback, ms)
-  }
-})()
+// const QUIT_AND_INSTALL_UPDATE = 'QUIT_AND_INSTALL_UPDATE'
 const electron = window.require('electron')
 const ipcRenderer = electron.ipcRenderer
 export default {
