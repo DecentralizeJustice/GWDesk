@@ -55,11 +55,11 @@ jobs:
       with:
         python-version: '3.7'
         architecture: 'x64'
-    - run: node -p "require('./package').version" > text.txt
+    - run: node -p "require('./package').version" > get_Version.txt
     - uses: pCYSl5EDgo/cat@master
       id: getVersion
       with:
-        path: text.txt
+        path: get_Version.txt
         trim: true
 
     - run: yarn install
@@ -101,11 +101,11 @@ jobs:
     - uses: actions/checkout@v2
       with:
         lfs: 'false'
-    - run: node -p "require('./package').version" > text.txt
+    - run: node -p "require('./package').version" > get_Version.txt
     - uses: pCYSl5EDgo/cat@master
       id: getVersion
       with:
-        path: text.txt
+        path: get_Version.txt
         trim: true
 
     - name: Create Release
