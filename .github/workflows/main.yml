@@ -69,12 +69,12 @@ jobs:
           CSC_LINK: ${{ secrets.MAC_CERTS }}
           APPLEID: ${{ secrets.APPLEID }}
           APPLEIDPASS: ${{ secrets.APPLEIDPASS }}
-    - run: ls
+    - run: ls /dist_electron
     - name: Upload Mac Installer
       uses: actions/upload-artifact@v2
       with:
         name: package.json
-        path: ./dist_electron/package.json
+        path: /dist_electron/package.json
 
   createRelease:
     needs: [buildMacRelease]
