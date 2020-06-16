@@ -56,15 +56,11 @@ jobs:
         python-version: '3.7'
         architecture: 'x64'
     - run: node -p "require('./package').version" > text.txt
-
     - uses: pCYSl5EDgo/cat@master
       id: hello
       with:
         path: text.txt
         trim: true
-    - run: echo GuidingWallet-$TEXT.dmg
-      env:
-        TEXT: ${{ steps.hello.outputs.text }}
 
     - run: yarn install
     - run: yarn run build
@@ -77,12 +73,18 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: GuidingWallet.dmg
-        path: ./dist_electron/GuidingWallet-0.1.0.dmg
+        path: ./dist_electron/GuidingWallet-${{ steps.hello.outputs.text }}.dmg
 
   createRelease:
     needs: [buildMacRelease]
     runs-on: ubuntu-latest
     steps:
+    - run: node -p "require('./package').version" > text.txt
+    - uses: pCYSl5EDgo/cat@master
+      id: hello
+      with:
+        path: text.txt
+        trim: true
     - name: Create Release
       id: create_release
       uses: actions/create-release@latest
@@ -97,10 +99,10 @@ jobs:
         draft: true
         prerelease: false
 
-    - name: Download Windows Installer
-      uses: actions/download-artifact@v2
-      with:
-        name: GuidingWallet.exe
+    # - name: Download Windows Installer
+    #   uses: actions/download-artifact@v2
+    #   with:
+    #     name: GuidingWallet.exe
 
     - name: Download Mac Installer
       uses: actions/download-artifact@v2
@@ -114,17 +116,17 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-        asset_path: GuidingWallet-0.1.0.dmg
+        asset_path: GuidingWallet-${{ steps.hello.outputs.text }}.dmg
         asset_name: Mac-GuidingWallet.dmg
         asset_content_type: application/octet-stream
 
-    - name: Upload Release Windows Asset
-      id: upload-release-asset-win
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-        asset_path: GuidingWallet Setup 0.1.0.exe
-        asset_name: Windows-GuidingWallet.exe
-        asset_content_type: application/octet-stream
+    # - name: Upload Release Windows Asset
+    #   id: upload-release-asset-win
+    #   uses: actions/upload-release-asset@v1
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #   with:
+    #     upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+    #     asset_path: GuidingWallet Setup 0.1.0.exe
+    #     asset_name: Windows-GuidingWallet.exe
+    #     asset_content_type: application/octet-stream
