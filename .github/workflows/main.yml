@@ -107,19 +107,20 @@ jobs:
       with:
         path: text.txt
         trim: true
-    # - name: Create Release
-    #   id: create_release
-    #   uses: actions/create-release@latest
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-    #   with:
-    #     tag_name: ${{github.sha}}
-    #     release_name: Demo Build v0.1.0
-    #     body: |
-    #       Add Release Notes
-    #       Built From Master Commit ${{github.sha}}
-    #     draft: true
-    #     prerelease: false
+        
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@latest
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.getVersion.outputs.text }}
+        release_name: Release ${{ steps.getVersion.outputs.text }}
+        body: |
+          Add Release Notes
+          Built From Master Commit ${{github.sha}}
+        draft: true
+        prerelease: false
 
     # - name: Download Windows Installer
     #   uses: actions/download-artifact@v2
@@ -147,16 +148,44 @@ jobs:
         name: GuidingWallet-${{ steps.getVersion.outputs.text }}.dmg.blockmap
 
     - run: ls
-    # - name: Upload Mac Release Asset
-    #   id: upload-release-asset-mac
-    #   uses: actions/upload-release-asset@v1
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    #   with:
-    #     upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-    #     asset_path: GuidingWallet-${{ steps.hello.outputs.text }}.dmg
-    #     asset_name: Mac-GuidingWallet.dmg
-    #     asset_content_type: application/octet-stream
+    - name: Upload Mac latest-mac.yml
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: latest-mac.yml
+        asset_name: latest-mac.yml
+        asset_content_type: application/octet-stream
+
+    - name: Upload Mac dmg
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: GuidingWallet-${{ steps.getVersion.outputs.text }}.dmg
+        asset_name: GuidingWallet-${{ steps.getVersion.outputs.text }}.dmg
+        asset_content_type: application/octet-stream
+
+    - name: Upload mac.zip
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: GuidingWallet-${{ steps.getVersion.outputs.text }}-mac.zip
+        asset_name: GuidingWallet-${{ steps.getVersion.outputs.text }}-mac.zip
+        asset_content_type: application/octet-stream
+
+    - name: Upload dmg.blockmap
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_name: GuidingWallet-${{ steps.getVersion.outputs.text }}.dmg.blockmap
+        asset_content_type: application/octet-stream
 
     # - name: Upload Release Windows Asset
     #   id: upload-release-asset-win
@@ -164,7 +193,7 @@ jobs:
     #   env:
     #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     #   with:
-    #     upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+    #     upload_url: ${{ steps.create_release.outputs.upload_url }}
     #     asset_path: GuidingWallet Setup 0.1.0.exe
     #     asset_name: Windows-GuidingWallet.exe
     #     asset_content_type: application/octet-stream
