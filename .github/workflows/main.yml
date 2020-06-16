@@ -55,7 +55,7 @@ jobs:
       with:
         python-version: '3.7'
         architecture: 'x64'
-    - run: enode -p "require('./package').version" > text.txt
+    - run: node -p "require('./package').version" > text.txt
 
     - uses: pCYSl5EDgo/cat@master
       id: hello
@@ -64,7 +64,7 @@ jobs:
     - run: echo $TEXT
       env:
         TEXT: ${{ steps.hello.outputs.text }}
-        
+
     - run: yarn install
     - run: yarn run build
       env:
