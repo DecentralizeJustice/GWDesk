@@ -61,7 +61,7 @@ jobs:
       id: hello
       with:
         path: text.txt
-    - run: echo $TEXT
+    - run: echo GuidingWallet-$TEXT.dmg
       env:
         TEXT: ${{ steps.hello.outputs.text }}
 
