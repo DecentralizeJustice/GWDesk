@@ -66,6 +66,9 @@ export default {
       ipcRenderer.on(DOWNLOAD_UPDATE_FAILURE, () => {
         console.log('download failed')
       })
+      ipcRenderer.on('testmessage', (progressObj) => {
+        console.log(progressObj)
+      })
     }
     this.start()
   }
