@@ -11,6 +11,7 @@
 
 <script>
 import navDrawer from '@/components/general/navDrawer.vue'
+const { autoUpdater } = require('electron-updater')
 export default {
   name: 'App',
   components: {
@@ -30,6 +31,10 @@ export default {
     //
   }),
   async mounted () {
+    autoUpdater.checkForUpdates()
+    autoUpdater.on('checking-for-update', () => {
+      console.log('Checking for updates !!')
+    })
     this.start()
   }
 }
