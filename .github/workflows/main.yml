@@ -10,39 +10,42 @@ on:
 
 jobs:
 
-  buildWindowsRelease:
-    runs-on: windows-2019
-    steps:
-    - name: get-npm-version
-      id: package-version
-      uses: martinbeentjes/npm-get-version-action@master
-    - uses: actions/checkout@v2
-      with:
-        lfs: 'true'
-    - uses: actions/setup-node@master
-      with:
-        # fix till https://github.com/actions/setup-node/issues/121 is solved
-        node-version: 12.16.1
-    - uses: actions/setup-python@v1
-      with:
-        python-version: '3.7'
-        architecture: 'x64'
-    - run: yarn install
-    - run: yarn run build
-      env:
-          CSC_KEY_PASSWORD: ${{ secrets.Windows_CERTS_PASSWORD }}
-          CSC_LINK: ${{ secrets.Windows_CERTS }}
-    - run: ls /dist_electron/
-    - name: Upload Windows Installer
-      uses: actions/upload-artifact@v2
-      with:
-        name: GuidingWallet.exe
-        path: ./dist_electron/GuidingWallet Setup 0.1.0.exe
+  # buildWindowsRelease:
+  #   runs-on: windows-2019
+  #   steps:
+  #   - name: get-npm-version
+  #     id: package-version
+  #     uses: martinbeentjes/npm-get-version-action@master
+  #   - uses: actions/checkout@v2
+  #     with:
+  #       lfs: 'true'
+  #   - uses: actions/setup-node@master
+  #     with:
+  #       # fix till https://github.com/actions/setup-node/issues/121 is solved
+  #       node-version: 12.16.1
+  #   - uses: actions/setup-python@v1
+  #     with:
+  #       python-version: '3.7'
+  #       architecture: 'x64'
+  #   - run: yarn install
+  #   - run: yarn run build
+  #     env:
+  #         CSC_KEY_PASSWORD: ${{ secrets.Windows_CERTS_PASSWORD }}
+  #         CSC_LINK: ${{ secrets.Windows_CERTS }}
+  #   - run: ls /dist_electron/
+  #   - name: Upload Windows Installer
+  #     uses: actions/upload-artifact@v2
+  #     with:
+  #       name: GuidingWallet.exe
+  #       path: ./dist_electron/GuidingWallet Setup 0.1.0.exe
 
 
   buildMacRelease:
     runs-on: macos-10.15
     steps:
+    - name: get-npm-version
+      id: package-version
+      uses: martinbeentjes/npm-get-version-action@master
     - uses: actions/checkout@v2
       with:
         lfs: 'true'
@@ -66,12 +69,15 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: GuidingWallet.dmg
-        path: ./dist_electron/GuidingWallet-0.1.0.dmg
+        path: ./dist_electron/GuidingWallet-${{ steps.package-version.outputs.current-version}}.dmg
 
   createRelease:
-    needs: [buildWindowsRelease, buildMacRelease]
+    needs: [buildMacRelease]
     runs-on: ubuntu-latest
     steps:
+    - name: get-npm-version
+      id: package-version
+      uses: martinbeentjes/npm-get-version-action@master
     - name: Create Release
       id: create_release
       uses: actions/create-release@latest
@@ -103,7 +109,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-        asset_path: GuidingWallet-0.1.0.dmg
+        asset_path: GuidingWallet-${{ steps.package-version.outputs.current-version}}.dmg
         asset_name: Mac-GuidingWallet.dmg
         asset_content_type: application/octet-stream
 
