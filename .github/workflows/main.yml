@@ -72,8 +72,8 @@ jobs:
     - name: Upload Mac Installer
       uses: actions/upload-artifact@v2
       with:
-        name: MacDistJsonFile
-        path: package.json
+        name: package.json
+        path: ./package.json
 
   createRelease:
     needs: [buildMacRelease]
@@ -110,7 +110,7 @@ jobs:
     - name: Download Mac Json Files
       uses: actions/download-artifact@v2
       with:
-        name: MacDistJsonFiles
+        name: package.json
     - run: ls
     # - name: Upload Mac Release Asset
     #   id: upload-release-asset-mac
