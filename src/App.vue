@@ -55,12 +55,9 @@ export default {
       ipcRenderer.send(CHECK_FOR_UPDATE_PENDING)
       ipcRenderer.on(CHECK_FOR_UPDATE_SUCCESS, (event, updateInfo) => {
         const version = updateInfo.version
-        console.log(appVersion)
-        console.log(updateInfo)
-        console.log(version)
         if (version && version !== appVersion) {
           ipcRenderer.send(DOWNLOAD_UPDATE_PENDING)
-          console.log(' download pending')
+          console.log('download pending')
         } else {
           console.log('no updates found')
         }
@@ -70,9 +67,9 @@ export default {
       })
       ipcRenderer.on(DOWNLOAD_UPDATE_SUCCESS, () => {
         console.log('downlaod ready')
-        delay(function () {
-          ipcRenderer.send(QUIT_AND_INSTALL_UPDATE)
-        }, 5000)
+        // delay(function () {
+        //   ipcRenderer.send(QUIT_AND_INSTALL_UPDATE)
+        // }, 5000)
       })
       ipcRenderer.on(DOWNLOAD_UPDATE_FAILURE, () => {
         console.log('download failed')
