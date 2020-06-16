@@ -35,6 +35,9 @@ export default {
     autoUpdater.on('checking-for-update', () => {
       console.log('Checking for updates !!')
     })
+    autoUpdater.on('update-available', () => {
+      console.log('checked')
+    })
     this.start()
   }
 }
