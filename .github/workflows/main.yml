@@ -4,41 +4,55 @@ name: BuildRelease
 on:
   push:
     branches: [ master ]
-  # pull_request:
-  #   branches: [ master ]
-  #   types: [closed]
 
 jobs:
 
-  # buildWindowsRelease:
-  #   runs-on: windows-2019
-  #   steps:
-  #   - name: get-npm-version
-  #     id: package-version
-  #     uses: martinbeentjes/npm-get-version-action@master
-  #   - uses: actions/checkout@v2
-  #     with:
-  #       lfs: 'true'
-  #   - uses: actions/setup-node@master
-  #     with:
-  #       # fix till https://github.com/actions/setup-node/issues/121 is solved
-  #       node-version: 12.16.1
-  #   - uses: actions/setup-python@v1
-  #     with:
-  #       python-version: '3.7'
-  #       architecture: 'x64'
-  #   - run: yarn install
-  #   - run: yarn run build
-  #     env:
-  #         CSC_KEY_PASSWORD: ${{ secrets.Windows_CERTS_PASSWORD }}
-  #         CSC_LINK: ${{ secrets.Windows_CERTS }}
-  #   - run: ls /dist_electron/
-  #   - name: Upload Windows Installer
-  #     uses: actions/upload-artifact@v2
-  #     with:
-  #       name: GuidingWallet.exe
-  #       path: ./dist_electron/GuidingWallet Setup 0.1.0.exe
+  buildWindowsRelease:
+    runs-on: windows-2019
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        lfs: 'true'
+    - uses: actions/setup-node@master
+      with:
+        # fix till https://github.com/actions/setup-node/issues/121 is solved
+        node-version: 12.16.1
+    - uses: actions/setup-python@v1
+      with:
+        python-version: '3.7'
+        architecture: 'x64'
 
+    - run: node -p "require('./package').version" > get_Version.txt
+    - uses: pCYSl5EDgo/cat@master
+      id: getVersion
+      with:
+        path: get_Version.txt
+        trim: true
+
+    - run: yarn install
+    - run: yarn run checkStyle
+    - run: yarn run build
+      env:
+          CSC_KEY_PASSWORD: ${{ secrets.Windows_CERTS_PASSWORD }}
+          CSC_LINK: ${{ secrets.Windows_CERTS }}
+
+    - name: Upload latest-mac.yml
+      uses: actions/upload-artifact@v2
+      with:
+        name: latest.yml
+        path: dist_electron/latest.yml
+
+    - name: Upload exe
+      uses: actions/upload-artifact@v2
+      with:
+        name: GuidingWallet ${{ steps.getVersion.outputs.text }}.exe
+        path: dist_electron/GuidingWallet ${{ steps.getVersion.outputs.text }}.exe
+
+    - name: Upload exe.blockmap
+      uses: actions/upload-artifact@v2
+      with:
+        name: GuidingWallet ${{ steps.getVersion.outputs.text }}.exe.blockmap
+        path: dist_electron/GuidingWallet ${{ steps.getVersion.outputs.text }}.exe.blockmap
 
   buildMacRelease:
     runs-on: macos-10.15
@@ -122,15 +136,24 @@ jobs:
         draft: true
         prerelease: false
 
-    # - name: Download Windows Installer
-    #   uses: actions/download-artifact@v2
-    #   with:
-    #     name: GuidingWallet.exe
-
+    - name: Download latest.yml
+      uses: actions/download-artifact@v2
+      with:
+        name: latest.yml
     - name: Download latest-mac.yml
       uses: actions/download-artifact@v2
       with:
         name: latest-mac.yml
+
+    - name: Download exe
+      uses: actions/download-artifact@v2
+      with:
+        name: GuidingWallet ${{ steps.getVersion.outputs.text }}.exe
+
+    - name: Download exe.blockmap
+      uses: actions/download-artifact@v2
+      with:
+        name: GuidingWallet ${{ steps.getVersion.outputs.text }}.exe.blockmap
 
     - name: Download mac.zip
       uses: actions/download-artifact@v2
@@ -148,6 +171,36 @@ jobs:
         name: GuidingWallet-${{ steps.getVersion.outputs.text }}.dmg.blockmap
 
     - run: ls
+
+    - name: Upload latest.yml
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: latest.yml
+        asset_name: latest.yml
+        asset_content_type: application/octet-stream
+
+    - name: Upload exe
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: GuidingWallet ${{ steps.getVersion.outputs.text }}.exe
+        asset_name: GuidingWallet ${{ steps.getVersion.outputs.text }}.exe
+
+    - name: Upload exe.blockmap
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: GuidingWallet ${{ steps.getVersion.outputs.text }}.exe.blockmap
+        asset_name: GuidingWallet ${{ steps.getVersion.outputs.text }}.exe.blockmap
+        asset_content_type: application/octet-stream
+
     - name: Upload Mac latest-mac.yml
       uses: actions/upload-release-asset@v1
       env:
