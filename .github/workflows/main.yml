@@ -110,7 +110,7 @@ jobs:
         path: dist_electron/GuidingWallet-${{ steps.getVersion.outputs.text }}.dmg.blockmap
 
   createRelease:
-    needs: [buildMacRelease]
+    needs: [buildMacRelease, buildWindowsRelease]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
