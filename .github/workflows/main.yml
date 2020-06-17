@@ -45,14 +45,14 @@ jobs:
     - name: Upload exe
       uses: actions/upload-artifact@v2
       with:
-        name: GuidingWallet ${{ steps.getVersion.outputs.text }}.exe
-        path: dist_electron/GuidingWallet ${{ steps.getVersion.outputs.text }}.exe
+        name: GuidingWallet Setup ${{ steps.getVersion.outputs.text }}.exe
+        path: dist_electron/GuidingWallet Setup ${{ steps.getVersion.outputs.text }}.exe
 
     - name: Upload exe.blockmap
       uses: actions/upload-artifact@v2
       with:
-        name: GuidingWallet ${{ steps.getVersion.outputs.text }}.exe.blockmap
-        path: dist_electron/GuidingWallet ${{ steps.getVersion.outputs.text }}.exe.blockmap
+        name: GuidingWallet Setup ${{ steps.getVersion.outputs.text }}.exe.blockmap
+        path: dist_electron/GuidingWallet Setup ${{ steps.getVersion.outputs.text }}.exe.blockmap
 
   buildMacRelease:
     runs-on: macos-10.15
@@ -148,12 +148,12 @@ jobs:
     - name: Download exe
       uses: actions/download-artifact@v2
       with:
-        name: GuidingWallet ${{ steps.getVersion.outputs.text }}.exe
+        name: GuidingWallet Setup ${{ steps.getVersion.outputs.text }}.exe
 
     - name: Download exe.blockmap
       uses: actions/download-artifact@v2
       with:
-        name: GuidingWallet ${{ steps.getVersion.outputs.text }}.exe.blockmap
+        name: GuidingWallet Setup ${{ steps.getVersion.outputs.text }}.exe.blockmap
 
     - name: Download mac.zip
       uses: actions/download-artifact@v2
@@ -188,8 +188,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: GuidingWallet ${{ steps.getVersion.outputs.text }}.exe
-        asset_name: GuidingWallet ${{ steps.getVersion.outputs.text }}.exe
+        asset_path: GuidingWallet Setup ${{ steps.getVersion.outputs.text }}.exe
+        asset_name: GuidingWallet Setup ${{ steps.getVersion.outputs.text }}.exe
 
     - name: Upload exe.blockmap
       uses: actions/upload-release-asset@v1
@@ -197,8 +197,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: GuidingWallet ${{ steps.getVersion.outputs.text }}.exe.blockmap
-        asset_name: GuidingWallet ${{ steps.getVersion.outputs.text }}.exe.blockmap
+        asset_path: GuidingWallet Setup ${{ steps.getVersion.outputs.text }}.exe.blockmap
+        asset_name: GuidingWallet Setup ${{ steps.getVersion.outputs.text }}.exe.blockmap
         asset_content_type: application/octet-stream
 
     - name: Upload Mac latest-mac.yml
