@@ -57,9 +57,6 @@ function createWindow () {
     console.log('no new Windows Allowed')
     event.preventDefault()
   })
-  autoUpdater.on('download-progress', (progressObj) => {
-    win.webContents.send('testmessage', progressObj)
-  })
 }
 app.on('will-quit', () => {
 })
