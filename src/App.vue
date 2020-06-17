@@ -49,6 +49,7 @@ export default {
     readyToShutdown: false
   }),
   async mounted () {
+    console.log(appVersion)
     if (process.env.NODE_ENV === 'development') {
     } else {
       ipcRenderer.send('CHECK_FOR_UPDATE_PENDING')
