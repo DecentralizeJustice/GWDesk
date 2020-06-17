@@ -39,6 +39,7 @@ export default {
       }
     },
     async shutdownAndInstall () {
+      console.log('shutdown sent')
       ipcRenderer.send('QUIT_AND_INSTALL_UPDATE')
     }
   },
