@@ -190,6 +190,7 @@ jobs:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: GuidingWallet Setup ${{ steps.getVersion.outputs.text }}.exe
         asset_name: GuidingWallet Setup ${{ steps.getVersion.outputs.text }}.exe
+        asset_content_type: application/octet-stream
 
     - name: Upload exe.blockmap
       uses: actions/upload-release-asset@v1
@@ -240,14 +241,3 @@ jobs:
         asset_path: GuidingWallet-${{ steps.getVersion.outputs.text }}.dmg.blockmap
         asset_name: GuidingWallet-${{ steps.getVersion.outputs.text }}.dmg.blockmap
         asset_content_type: application/octet-stream
-
-    # - name: Upload Release Windows Asset
-    #   id: upload-release-asset-win
-    #   uses: actions/upload-release-asset@v1
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    #   with:
-    #     upload_url: ${{ steps.create_release.outputs.upload_url }}
-    #     asset_path: GuidingWallet Setup 0.1.0.exe
-    #     asset_name: Windows-GuidingWallet.exe
-    #     asset_content_type: application/octet-stream
