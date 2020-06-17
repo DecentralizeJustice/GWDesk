@@ -66,10 +66,12 @@ export default {
       })
       ipcRenderer.on('DOWNLOAD_UPDATE_SUCCESS', () => {
         this.readyToShutdown = true
+        console.log('donwload-sucess')
       })
-      ipcRenderer.on('DOWNLOAD_UPDATE_FAILURE', (err) => {
+      ipcRenderer.on('DOWNLOAD_UPDATE_FAILURE', (sender, err) => {
         console.log('download failed')
         console.log(err)
+        console.log(sender)
       })
     }
     this.start()
