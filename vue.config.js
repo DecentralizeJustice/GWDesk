@@ -31,7 +31,8 @@ module.exports = {
           target: ['dmg', 'zip']
         },
         win: {
-          target: 'nsis'
+          target: 'nsis',
+          artifactName: ${productName}.Setup.${version}.${ext}
         },
         afterSign: 'buildInfo/notarize.js',
         dmg: {
