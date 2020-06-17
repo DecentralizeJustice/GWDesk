@@ -115,9 +115,9 @@ ipcMain.on('DOWNLOAD_UPDATE_PENDING', event => {
     .then(() => {
       sender.send('DOWNLOAD_UPDATE_SUCCESS')
     })
-    .catch(err) {
+    .catch((err) => {
       sender.send('DOWNLOAD_UPDATE_FAILURE', err)
-    }
+    })
 })
 
 ipcMain.on('QUIT_AND_INSTALL_UPDATE', () => {
