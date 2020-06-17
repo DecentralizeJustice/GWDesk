@@ -121,7 +121,7 @@ ipcMain.on('DOWNLOAD_UPDATE_PENDING', event => {
 })
 
 ipcMain.on('QUIT_AND_INSTALL_UPDATE', () => {
-  autoUpdater.quitAndInstall(true, true)
+  autoUpdater.quitAndInstall(false, true)
 })
 // Exit cleanly on request from parent process in development mode.
 if (isDevelopment) {
