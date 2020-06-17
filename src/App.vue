@@ -65,8 +65,9 @@ export default {
       ipcRenderer.on('DOWNLOAD_UPDATE_SUCCESS', () => {
         this.readyToShutdown = true
       })
-      ipcRenderer.on('DOWNLOAD_UPDATE_FAILURE', () => {
+      ipcRenderer.on('DOWNLOAD_UPDATE_FAILURE', (err) => {
         console.log('download failed')
+        console.log(err)
       })
     }
     this.start()

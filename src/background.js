@@ -101,8 +101,8 @@ ipcMain.on('CHECK_FOR_UPDATE_PENDING', event => {
         const { updateInfo } = checkResult
         sender.send('CHECK_FOR_UPDATE_SUCCESS', updateInfo)
       })
-      .catch(() => {
-        sender.send('CHECK_FOR_UPDATE_FAILURE')
+      .catch((err) => {
+        sender.send('CHECK_FOR_UPDATE_FAILURE', err)
       })
   }
 })
