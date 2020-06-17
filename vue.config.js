@@ -32,7 +32,7 @@ module.exports = {
         },
         win: {
           target: 'nsis',
-          artifactName: '${productName}.Setup.${version}.${ext}'
+          artifactName: '${productName}-Setup-${version}.${ext}' /* eslint-disable-line */
         },
         afterSign: 'buildInfo/notarize.js',
         dmg: {
