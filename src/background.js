@@ -114,6 +114,10 @@ ipcMain.on('DOWNLOAD_UPDATE_PENDING', event => {
   result
     .then(() => {
       sender.send('DOWNLOAD_UPDATE_SUCCESS')
+      autoUpdater.quitAndInstall(
+        true, // isSilent
+        true // isForceRunAfter, restart app after update is installed
+      )
     })
     .catch((err) => {
       sender.send('DOWNLOAD_UPDATE_FAILURE', err)
@@ -121,7 +125,7 @@ ipcMain.on('DOWNLOAD_UPDATE_PENDING', event => {
 })
 
 ipcMain.on('QUIT_AND_INSTALL_UPDATE', () => {
-  autoUpdater.quitAndInstall(false, true)
+  autoUpdater.quitAndInstall(false, false)
 })
 // Exit cleanly on request from parent process in development mode.
 if (isDevelopment) {
