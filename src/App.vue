@@ -40,7 +40,7 @@ export default {
     },
     async shutdownAndInstall () {
       console.log('shutdown sent')
-      ipcRenderer.send('QUIT_AND_INSTALL_UPDATE')
+      ipcRenderer.send('DOWNLOAD_UPDATE_PENDING')
     }
   },
   computed: {
@@ -57,17 +57,17 @@ export default {
       ipcRenderer.on('CHECK_FOR_UPDATE_SUCCESS', (event, updateInfo) => {
         const version = updateInfo.version
         if (version && version !== appVersion) {
-          ipcRenderer.send('DOWNLOAD_UPDATE_PENDING')
           this.updateAvailable = true
+          this.readyToShutdown = true
         }
       })
       ipcRenderer.on('CHECK_FOR_UPDATE_FAILURE', () => {
         console.log('failed update')
       })
-      ipcRenderer.on('DOWNLOAD_UPDATE_SUCCESS', () => {
-        this.readyToShutdown = true
-        console.log('donwload-sucess')
-      })
+      // ipcRenderer.on('DOWNLOAD_UPDATE_SUCCESS', () => {
+      //   this.readyToShutdown = true
+      //   console.log('donwload-sucess')
+      // })
       ipcRenderer.on('DOWNLOAD_UPDATE_FAILURE', (sender, err) => {
         console.log('download failed')
         console.log(err)
