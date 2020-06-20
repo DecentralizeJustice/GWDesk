@@ -28,11 +28,12 @@ module.exports = {
           entitlements: './buildInfo/entitlements.mac.inherit.plist',
           entitlementsInherit: './buildInfo/entitlements.mac.inherit.plist',
           gatekeeperAssess: false,
+          artifactName: '${productName}.${ext}' /* eslint-disable-line */,
           target: ['dmg', 'zip']
         },
         win: {
           target: 'nsis',
-          artifactName: '${productName}-Setup-${version}.${ext}' /* eslint-disable-line */
+          artifactName: '${productName}-Setup.${ext}' /* eslint-disable-line */
         },
         afterSign: 'buildInfo/notarize.js',
         dmg: {
