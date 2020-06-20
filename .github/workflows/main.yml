@@ -45,14 +45,14 @@ jobs:
     - name: Upload exe
       uses: actions/upload-artifact@v2
       with:
-        name: GuidingWallet-Setup-${{ steps.getVersion.outputs.text }}.exe
-        path: dist_electron/GuidingWallet-Setup-${{ steps.getVersion.outputs.text }}.exe
+        name: GuidingWallet-Setup.exe
+        path: dist_electron/GuidingWallet-Setup.exe
 
     - name: Upload exe.blockmap
       uses: actions/upload-artifact@v2
       with:
-        name: GuidingWallet-Setup-${{ steps.getVersion.outputs.text }}.exe.blockmap
-        path: dist_electron/GuidingWallet-Setup-${{ steps.getVersion.outputs.text }}.exe.blockmap
+        name: GuidingWallet-Setup.exe.blockmap
+        path: dist_electron/GuidingWallet-Setup.exe.blockmap
 
   buildMacRelease:
     runs-on: macos-10.15
@@ -93,20 +93,20 @@ jobs:
     - name: Upload mac.zip
       uses: actions/upload-artifact@v2
       with:
-        name: GuidingWallet-${{ steps.getVersion.outputs.text }}-mac.zip
-        path: dist_electron/GuidingWallet-${{ steps.getVersion.outputs.text }}-mac.zip
+        name: GuidingWallet.zip
+        path: dist_electron/GuidingWallet.zip
 
     - name: Upload mac dmg
       uses: actions/upload-artifact@v2
       with:
-        name: GuidingWallet-${{ steps.getVersion.outputs.text }}.dmg
-        path: dist_electron/GuidingWallet-${{ steps.getVersion.outputs.text }}.dmg
+        name: GuidingWallet.dmg
+        path: dist_electron/GuidingWallet.dmg
 
     - name: Upload dmg.blockmap
       uses: actions/upload-artifact@v2
       with:
-        name: GuidingWallet-${{ steps.getVersion.outputs.text }}.dmg.blockmap
-        path: dist_electron/GuidingWallet-${{ steps.getVersion.outputs.text }}.dmg.blockmap
+        name: GuidingWallet.dmg.blockmap
+        path: dist_electron/GuidingWallet.dmg.blockmap
 
   createRelease:
     needs: [buildMacRelease, buildWindowsRelease]
@@ -147,27 +147,27 @@ jobs:
     - name: Download exe
       uses: actions/download-artifact@v2
       with:
-        name: GuidingWallet-Setup-${{ steps.getVersion.outputs.text }}.exe
+        name: GuidingWallet-Setup.exe
 
     - name: Download exe.blockmap
       uses: actions/download-artifact@v2
       with:
-        name: GuidingWallet-Setup-${{ steps.getVersion.outputs.text }}.exe.blockmap
+        name: GuidingWallet-Setup.exe.blockmap
 
     - name: Download mac.zip
       uses: actions/download-artifact@v2
       with:
-        name: GuidingWallet-${{ steps.getVersion.outputs.text }}-mac.zip
+        name: GuidingWallet.zip
 
     - name: Download mac dmg
       uses: actions/download-artifact@v2
       with:
-        name: GuidingWallet-${{ steps.getVersion.outputs.text }}.dmg
+        name: GuidingWallet.dmg
 
     - name: Download dmg.blockmap
       uses: actions/download-artifact@v2
       with:
-        name: GuidingWallet-${{ steps.getVersion.outputs.text }}.dmg.blockmap
+        name: GuidingWallet.dmg.blockmap
 
     - run: ls
 
@@ -187,8 +187,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: GuidingWallet-Setup-${{ steps.getVersion.outputs.text }}.exe
-        asset_name: GuidingWallet-Setup-${{ steps.getVersion.outputs.text }}.exe
+        asset_path: GuidingWallet-Setup.exe
+        asset_name: GuidingWallet-Setup.exe
         asset_content_type: application/octet-stream
 
     - name: Upload exe.blockmap
@@ -197,8 +197,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: GuidingWallet-Setup-${{ steps.getVersion.outputs.text }}.exe.blockmap
-        asset_name: GuidingWallet-Setup-${{ steps.getVersion.outputs.text }}.exe.blockmap
+        asset_path: GuidingWallet-Setup.exe.blockmap
+        asset_name: GuidingWallet-Setup.exe.blockmap
         asset_content_type: application/octet-stream
 
     - name: Upload Mac latest-mac.yml
@@ -217,8 +217,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: GuidingWallet-${{ steps.getVersion.outputs.text }}.dmg
-        asset_name: GuidingWallet-${{ steps.getVersion.outputs.text }}.dmg
+        asset_path: GuidingWallet.dmg
+        asset_name: GuidingWallet.dmg
         asset_content_type: application/octet-stream
 
     - name: Upload mac.zip
@@ -227,8 +227,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: GuidingWallet-${{ steps.getVersion.outputs.text }}-mac.zip
-        asset_name: GuidingWallet-${{ steps.getVersion.outputs.text }}-mac.zip
+        asset_path: GuidingWallet.zip
+        asset_name: GuidingWallet.zip
         asset_content_type: application/octet-stream
 
     - name: Upload dmg.blockmap
@@ -237,6 +237,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: GuidingWallet-${{ steps.getVersion.outputs.text }}.dmg.blockmap
-        asset_name: GuidingWallet-${{ steps.getVersion.outputs.text }}.dmg.blockmap
+        asset_path: GuidingWallet.dmg.blockmap
+        asset_name: GuidingWallet.dmg.blockmap
         asset_content_type: application/octet-stream
