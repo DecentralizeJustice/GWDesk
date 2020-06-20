@@ -14,13 +14,12 @@ export default {
   name: 'videoPlayer',
   components: {
   },
-  props: ['url'],
+  props: ['vidUrl', 'desiredHash'],
   data () {
     return {
       hashPassed: false,
       bloburl: '',
-      vidHash: '',
-      desiredHash: 'L9TQLBJH0Q8i2GePQn2e54fOYJP0JY0utNqBRpgMZRTAlDOPABV2rOdtwzwSYjy1r8MyLmOXV6EXiXOitet0ng=='
+      vidHash: ''
     }
   },
   methods: {
@@ -28,7 +27,7 @@ export default {
   computed: {
   },
   async beforeMount () {
-    const url = this.url
+    const url = this.vidUrl
     const response = await axios({
       method: 'get',
       url: url,
@@ -45,8 +44,9 @@ export default {
       const testingHash = await hash.digest('base64')
       if (this.desiredHash === testingHash) {
         this.hashPassed = true
-        console.log('right hash')
+        // console.log('right hash')
       } else {
+        console.log(testingHash)
         console.log('wrong hash')
       }
     }.bind(this))

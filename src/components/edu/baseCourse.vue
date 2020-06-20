@@ -2,7 +2,7 @@
   <v-card>
     <v-card-title class="headline justify-center">{{title}}</v-card-title>
     <v-divider/>
-    <v-row align="center">
+    <v-row align="center" v-if='!justVid'>
      <v-col cols='10' offset='1'>
        <v-progress-linear
          :value='progress'
@@ -15,8 +15,12 @@
        </v-progress-linear>
      </v-col>
     </v-row>
-
-    <div v-if='currentComponent === "mainQuiz"'>
+    <div v-if='justVid'>
+      <justVidComp
+      v-bind:vidUrl="vidURL"
+      v-bind:vidHash="vidHash"/>
+    </div>
+    <div v-if='!justVid && currentComponent === "mainQuiz"'>
       <vidComp
       v-on:startQuiz='startQuiz()'
       v-bind:vidUrl="vidFileName"
@@ -32,7 +36,7 @@
      :key="234"
      />
   </div>
-  <div v-if='currentComponent === "bonus"'>
+  <div v-if='!justVid && currentComponent === "bonus"'>
     <vidComp
     :html='html'
     v-on:startQuiz='startQuiz()'
@@ -51,7 +55,7 @@
   <congrats
   v-bind:vidUrl="vidFileName"
   v-bind:nextLessonavAilable='nextLessonavAilable'
-  v-if='currentComponent === "congrats"'
+  v-if='!justVid && currentComponent === "congrats"'
   v-on:quizDone='partDone'
   v-on:nextLesson='nextLesson()'/>
     <v-divider/>
@@ -74,6 +78,7 @@
   </v-card>
 </template>
 <script>
+import justVidComp from '@/components/edu/vidComp.vue'
 import congrats from '@/components/edu/congrats.vue'
 import vidComp from '@/components/edu/vid&NotesComp.vue'
 import quiz from '@/components/edu/quiz.vue'
@@ -86,9 +91,19 @@ export default {
   components: {
     quiz,
     vidComp,
-    congrats
+    congrats,
+    justVidComp
   },
   computed: {
+    justVid: function () {
+      return this.courseInfo.justVideo
+    },
+    vidHash: function () {
+      return this.courseInfo.hash
+    },
+    vidURL: function () {
+      return this.courseInfo.url
+    },
     html: function () {
       return this.courseInfo.notes[this.part]
     },
