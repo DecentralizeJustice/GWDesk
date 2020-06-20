@@ -8,6 +8,7 @@
   v-on:changeLesson="changeLesson"/>
 </template>
 <script>
+import welcome from '@/assets/courseData/courses/intro/welcome.js'
 import whyCrypto from '@/assets/courseData/courses/intro/whyCrypto.js'
 import whichCrypto from '@/assets/courseData/courses/intro/whichCrypto.js'
 import landing from '@/components/edu/landing.vue'
@@ -18,8 +19,9 @@ export default {
     landingInfo: {
       title: 'Intro To Cryptocurrency',
       lessons: [
-        { title: 'What is Cryptocurrency?', icon: 'atom-variant', comp: 'whyCrypto', unlocked: true },
-        { title: 'Which Cryptocurrency is Best For Me?', icon: 'account-question', comp: 'whichCrypto', unlocked: false }
+        { title: 'Welcome to GW!', icon: 'cake', comp: 'welcome', unlocked: true },
+        { title: 'What is Cryptocurrency?', icon: 'atom-variant', comp: 'whyCrypto', unlocked: false },
+        { title: 'Which Cryptocurrency is Best?', icon: 'account-question', comp: 'whichCrypto', unlocked: false }
         // { title: 'Pick Your First Cryptocurrency', icon: 'account-cash', unlocked: 'false' }
       ]
     }
@@ -32,6 +34,9 @@ export default {
       }
       if (this.lesson === 'whyCrypto') {
         return whyCrypto
+      }
+      if (this.lesson === 'welcome') {
+        return welcome
       }
       return true
     },

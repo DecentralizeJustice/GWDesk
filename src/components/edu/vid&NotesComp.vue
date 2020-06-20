@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import videoPlayer from '@/components/general/localVideo.vue'
+import videoPlayer from '@/components/general/hashCheckVid.vue'
 export default {
   name: 'vidComp',
   components: {
