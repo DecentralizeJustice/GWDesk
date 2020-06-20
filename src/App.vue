@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <navDrawer app/>
-    <v-content>
+    <v-main>
       <transition name="fade">
         <router-view/>
       </transition>
@@ -15,7 +15,7 @@
             <updateWindow @shutdown="shutdownAndInstall"
             v-bind:readyToShutdown="readyToShutdown"/>
           </v-dialog>
-    </v-content>
+    </v-main>
   </v-app>
 </template>
 
@@ -39,7 +39,6 @@ export default {
       }
     },
     async shutdownAndInstall () {
-      console.log('shutdown sent')
       ipcRenderer.send('DOWNLOAD_UPDATE_PENDING')
     }
   },
@@ -50,7 +49,6 @@ export default {
     readyToShutdown: false
   }),
   async mounted () {
-    console.log(appVersion)
     if (process.env.NODE_ENV === 'development') {
     } else {
       ipcRenderer.send('CHECK_FOR_UPDATE_PENDING')
