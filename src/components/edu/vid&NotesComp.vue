@@ -8,6 +8,7 @@
    <v-col cols='5'>
      <videoPlayer
      v-bind:vidUrl="vidUrl"
+     v-bind:desiredHash="vidHash"
      />
    </v-col>
    <v-col id=md cols='5' v-if='notes' class="text-center pa-5">
@@ -15,12 +16,12 @@
    </v-col>
    <v-col class="text-center" cols="12">
      <v-btn
-       color="primary lighten-1"
+       color="primary darken-1"
        @click="skip()"
        v-if='bonus'
        class="mr-6"
      >
-       Skip
+       Finish
      </v-btn>
      <v-btn
       v-if='!notes && !bonus'
@@ -41,6 +42,7 @@
      <v-btn
        color="success darken-2"
        @click="startQuiz()"
+       v-if='!bonus'
      >
        Take Quiz
      </v-btn>
@@ -55,7 +57,7 @@ export default {
   components: {
     videoPlayer
   },
-  props: ['vidUrl', 'bonus', 'html'],
+  props: ['vidUrl', 'bonus', 'html', 'vidHash'],
   data () {
     return {
       notes: false

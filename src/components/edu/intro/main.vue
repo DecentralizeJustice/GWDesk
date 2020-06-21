@@ -20,7 +20,7 @@ export default {
       title: 'Intro To Cryptocurrency',
       lessons: [
         { title: 'Welcome to GW!', icon: 'cake', comp: 'welcome', unlocked: true },
-        { title: 'What is Cryptocurrency?', icon: 'atom-variant', comp: 'whyCrypto', unlocked: false },
+        { title: 'What is Cryptocurrency?', icon: 'atom-variant', comp: 'whyCrypto', unlocked: true },
         { title: 'Which Cryptocurrency is Best?', icon: 'account-question', comp: 'whichCrypto', unlocked: false }
         // { title: 'Pick Your First Cryptocurrency', icon: 'account-cash', unlocked: 'false' }
       ]
