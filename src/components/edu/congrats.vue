@@ -7,7 +7,8 @@
     </v-col>
    <v-col cols='4'>
      <videoPlayer
-      v-bind:vidUrl="vidUrl"
+     v-bind:vidUrl="vidUrl"
+     v-bind:desiredHash="vidHash"
      />
    </v-col>
    <v-col class="text-center" cols="12">
@@ -30,13 +31,13 @@
 </template>
 
 <script>
-import videoPlayer from '@/components/general/localVideo.vue'
+import videoPlayer from '@/components/general/hashCheckVid.vue'
 export default {
   name: 'congrats',
   components: {
     videoPlayer
   },
-  props: ['vidUrl', 'nextLessonavAilable'],
+  props: ['vidUrl', 'nextLessonavAilable', 'vidHash'],
   data () {
     return {
     }
