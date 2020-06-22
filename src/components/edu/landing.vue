@@ -2,7 +2,7 @@
   <v-card>
     <v-card-title class="headline justify-center">{{landingInfo.title}}</v-card-title>
     <v-divider/>
-    <v-row no-gutters justify='space-around'>
+    <v-row no-gutters>
        <v-col :key="item.title" v-for="(item) in landingInfo.lessons" cols='4'>
          <v-card
            class="ma-3" :color="cardColor(item.unlocked)"
