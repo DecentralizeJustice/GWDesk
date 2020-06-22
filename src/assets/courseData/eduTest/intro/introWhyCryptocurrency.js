@@ -2,14 +2,6 @@ const questions = {
   part1:
   [
     {
-      q: 'Cryptocurrencies are quick ways to make a lot of money.',
-      opt: [
-        'True',
-        'False'
-      ],
-      ans: 1
-    },
-    {
       q: 'Cryptocurrencies are special becuase they are:',
       opt: [
         'new technology.',
@@ -80,6 +72,15 @@ const questions = {
         'understand computer science.'
       ],
       ans: 0
+    },
+    {
+      q: 'Guiding Wallet teaches you:',
+      opt: [
+        'where to invest your money.',
+        'the possibilites of crypto.',
+        'the investments that yeild the most profit.'
+      ],
+      ans: 1
     },
     {
       q: 'A cryptocurrency key is similar to a password.',
