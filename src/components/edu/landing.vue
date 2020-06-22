@@ -7,7 +7,7 @@
          <v-card
            class="ma-3" :color="cardColor(item.unlocked)"
          >
-         <v-card-title class="headline justify-center">
+         <v-card-title class="headline justify-center text-center" style="word-break: normal;">
            {{item.title}}
          </v-card-title>
 
