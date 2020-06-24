@@ -49,15 +49,18 @@
       persistent
       overlay-opacity='1'
     >
-    <component
-    v-bind:is="currentMain"
+    <lesson
     v-on:exit="dialog = false"/>
     </v-dialog>
     </v-layout>
 </template>
 
 <script>
+import lesson from '@/components/edu/intro/main.vue'
 export default {
+  components: {
+    lesson
+  },
   data: () => ({
     dialog: false,
     lessons: [
@@ -92,12 +95,6 @@ export default {
         return 'indigo darken-4'
       }
       return 'white'
-    }
-  },
-  computed: {
-    currentMain () {
-      // const componentName = 'main'
-      return () => import('@/components/edu/intro/main.vue')
     }
   }
 }
