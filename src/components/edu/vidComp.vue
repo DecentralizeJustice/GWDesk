@@ -1,6 +1,6 @@
 <template>
   <v-row align="center" justify='center'>
-   <v-col cols='8'>
+   <v-col cols='12'>
      <audioPlayer
      v-bind:vidUrl="vidUrl"
      v-bind:desiredHash="vidHash"

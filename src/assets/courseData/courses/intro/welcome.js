@@ -16,7 +16,7 @@ const welcome = {
     slide5
   ],
   breakpoints: [
-    0, 10, 41, 75, 133, Infinity
+    0, 10, 41, 75, 133
   ],
   audio: [
     'audio/welcome/Welcome.mp3'
