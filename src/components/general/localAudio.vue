@@ -1,10 +1,16 @@
 <template>
-  <div justify-content='center'>
-    <v-img :src='slide'></v-img>
-      <audio controls @timeupdate="updateTime" ref="player">
-        <source :src="processedUrl" type="audio/mpeg">
-      </audio>
-  </div>
+    <v-layout row wrap justify-center>
+      <v-flex xs9>
+        <v-img :src='slide' contain></v-img>
+      </v-flex>
+      <v-flex xs12>
+        <v-layout row wrap justify-center>
+          <audio controls @timeupdate="updateTime" ref="player" class="mt-4">
+          <source :src="processedUrl" type="audio/mpeg">
+        </audio>
+        </v-layout>
+      </v-flex>
+    </v-layout>
 </template>
 
 <script>
@@ -28,7 +34,9 @@ export default {
       const breakpoints = courseInfo.breakpoints
       const time = this.player.currentTime
       for (var i = 0; i < breakpoints.length; i++) {
-        if (time > breakpoints[i] && time < breakpoints[i + 1]) {
+        const lastSlide = (breakpoints[i + 1] === undefined)
+        const correctSlide = (time > breakpoints[i] && time < breakpoints[i + 1])
+        if (lastSlide || correctSlide) {
           this.currentSlide = i
           break
         }
