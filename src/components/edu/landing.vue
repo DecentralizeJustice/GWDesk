@@ -2,12 +2,12 @@
   <v-card>
     <v-card-title class="headline justify-center">{{landingInfo.title}}</v-card-title>
     <v-divider/>
-    <v-row no-gutters justify='space-around'>
+    <v-row no-gutters>
        <v-col :key="item.title" v-for="(item) in landingInfo.lessons" cols='4'>
          <v-card
            class="ma-3" :color="cardColor(item.unlocked)"
          >
-         <v-card-title class="headline justify-center">
+         <v-card-title class="headline justify-center text-center" style="word-break: normal;">
            {{item.title}}
          </v-card-title>
 
@@ -40,7 +40,6 @@
       </v-btn> -->
       <v-btn
         color="red darken-1"
-        text
         @click="exit()"
       >
         Exit

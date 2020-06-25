@@ -9,3 +9,4 @@ coldCardExe filter=lfs diff=lfs merge=lfs -text
 *.jpeg filter=lfs diff=lfs merge=lfs -text
 public/binaries/** filter=lfs diff=lfs merge=lfs -text
 public/binaries/macElectrum filter=lfs diff=lfs merge=lfs -text
+*.mp3 filter=lfs diff=lfs merge=lfs -text

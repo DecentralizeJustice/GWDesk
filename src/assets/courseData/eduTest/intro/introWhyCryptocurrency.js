@@ -2,20 +2,12 @@ const questions = {
   part1:
   [
     {
-      q: 'Cryptocurrencies are quick ways to make a lot of money.',
-      opt: [
-        'True',
-        'False'
-      ],
-      ans: 1
-    },
-    {
       q: 'Cryptocurrencies are special becuase they are:',
       opt: [
         'new technology.',
         'online reward points.',
         'a cool thing to invest in.',
-        'money that you can control.'
+        'money that gives you choices.'
       ],
       ans: 3
     },
@@ -50,7 +42,7 @@ const questions = {
       ans: 0
     },
     {
-      q: 'Crypto is about giving you financial:',
+      q: 'Cryptos give you financial:',
       opt: [
         'laws.',
         'promises.',
@@ -59,6 +51,14 @@ const questions = {
         'guidelines.'
       ],
       ans: 3
+    },
+    {
+      q: "Cryptos can only be used for 'serious' financial purposes.",
+      opt: [
+        'True',
+        'False'
+      ],
+      ans: 1
     }
   ],
   part2:
@@ -66,26 +66,27 @@ const questions = {
     {
       q: 'Cryptocurrencies require you to:',
       opt: [
-        'protect yours keys.',
+        'educate yourself on whats best for you.',
         'study cryptogrophy deeply.',
-        'be able to program in atleast one programming language.',
+        'be able to program in at least one programming language.',
         'understand computer science.'
       ],
       ans: 0
+    },
+    {
+      q: 'Guiding Wallet teaches you:',
+      opt: [
+        'where to invest your money.',
+        'the possibilites of crypto.',
+        'the investments that yeild the most profit.'
+      ],
+      ans: 1
     },
     {
       q: 'A cryptocurrency key is similar to a password.',
       opt: [
         'True',
         'False'
-      ],
-      ans: 0
-    },
-    {
-      q: 'If someone steals your id and social security card, is your crypto still secure?',
-      opt: [
-        'Yes',
-        'No'
       ],
       ans: 0
     },
