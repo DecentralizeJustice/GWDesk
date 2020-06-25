@@ -1,7 +1,7 @@
 <template>
   <v-row align="center" justify='center'>
-   <v-col cols='8'>
-     <videoPlayer
+   <v-col cols='12'>
+     <audioPlayer
      v-bind:vidUrl="vidUrl"
      v-bind:desiredHash="vidHash"
      />
@@ -10,11 +10,11 @@
 </template>
 
 <script>
-import videoPlayer from '@/components/general/hashCheckVid.vue'
+import audioPlayer from '@/components/general/localAudio.vue'
 export default {
   name: 'vidComp',
   components: {
-    videoPlayer
+    audioPlayer
   },
   props: ['vidUrl', 'vidHash'],
   data () {

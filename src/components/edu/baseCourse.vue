@@ -23,7 +23,8 @@
     <div v-if='!justVid && currentComponent === "mainQuiz"'>
       <vidComp
       v-on:startQuiz='startQuiz()'
-      v-bind:vidUrl="vidFileName"
+      v-bind:vidUrl="vidURL"
+      v-bind:vidHash="vidHash"
       v-bind:bonus="false"
       v-if='vid'
       :html='html'/>
@@ -40,20 +41,23 @@
     <vidComp
     :html='html'
     v-on:startQuiz='startQuiz()'
-    v-bind:vidUrl="vidFileName"
+    v-on:quizDone='partDone'
+    v-bind:vidUrl="vidURL"
+    v-bind:vidHash="vidHash"
     v-bind:bonus="true"
     v-if='vid'/>
-   <quiz
-   v-bind:questions="test"
-   v-on:backToVideo='backToVideo()'
-   v-on:quizDone='partDone'
-   v-if='!vid'
-   v-bind:bonus="true"
-   :key="12"
-   />
- </div>
+    <quiz
+    v-bind:questions="test"
+    v-on:backToVideo='backToVideo()'
+    v-on:quizDone='partDone'
+    v-if='!vid'
+    v-bind:bonus="true"
+    :key="12"
+    />
+  </div>
   <congrats
-  v-bind:vidUrl="vidFileName"
+  v-bind:vidUrl="vidURL"
+  v-bind:vidHash="vidHash"
   v-bind:nextLessonavAilable='nextLessonavAilable'
   v-if='!justVid && currentComponent === "congrats"'
   v-on:quizDone='partDone'
@@ -128,9 +132,6 @@ export default {
         const part = 'part' + (c + 1).toString()
         return q[part]
       }
-    },
-    vidFileName: function () {
-      return 'video.mp4'
     },
     progress: function () {
       const numberOfQuestions = Object.keys(this.courseInfo.questions.questions).length
