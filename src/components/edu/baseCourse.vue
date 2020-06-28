@@ -22,8 +22,7 @@
     <div v-if='!justVid && currentComponent === "mainQuiz"'>
       <vidComp
       v-on:startQuiz='startQuiz()'
-      v-bind:vidUrl="vidURL"
-      v-bind:vidHash="vidHash"
+      v-bind:courseInfo="correctLesson"
       v-bind:bonus="false"
       v-if='vid'
       :html='html'/>
@@ -97,14 +96,11 @@ export default {
     justVidComp
   },
   computed: {
+    correctLesson: function () {
+      return this.courseInfo
+    },
     justVid: function () {
       return this.courseInfo.justVideo
-    },
-    vidHash: function () {
-      return this.courseInfo.hash
-    },
-    vidURL: function () {
-      return this.courseInfo.url
     },
     html: function () {
       return this.courseInfo.notes[this.part]
