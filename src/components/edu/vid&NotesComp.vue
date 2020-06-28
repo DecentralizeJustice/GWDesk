@@ -7,8 +7,7 @@
     </v-col>
    <v-col cols='5'>
      <videoPlayer
-     v-bind:vidUrl="vidUrl"
-     v-bind:desiredHash="vidHash"
+     v-bind:courseInfo="courseInfo"
      />
    </v-col>
    <v-col id=md cols='5' v-if='notes' class="text-center pa-5">
@@ -57,7 +56,7 @@ export default {
   components: {
     videoPlayer
   },
-  props: ['vidUrl', 'bonus', 'html', 'vidHash'],
+  props: ['courseInfo'],
   data () {
     return {
       notes: false
