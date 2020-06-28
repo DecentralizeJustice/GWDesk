@@ -17,8 +17,7 @@
     </v-row>
     <div v-if='justVid'>
       <justVidComp
-      v-bind:vidUrl="vidURL"
-      v-bind:vidHash="vidHash"/>
+      v-bind:courseInfo="courseInfo"/>
     </div>
     <div v-if='!justVid && currentComponent === "mainQuiz"'>
       <vidComp
@@ -72,7 +71,6 @@
       </v-btn> -->
     <v-btn
       color="red darken-1"
-      text
       @click="exit()"
     >
       Exit
@@ -82,7 +80,7 @@
   </v-card>
 </template>
 <script>
-import justVidComp from '@/components/edu/vidComp.vue'
+import justVidComp from '@/components/general/localAudio.vue'
 import congrats from '@/components/edu/congrats.vue'
 import vidComp from '@/components/edu/vid&NotesComp.vue'
 import quiz from '@/components/edu/quiz.vue'
