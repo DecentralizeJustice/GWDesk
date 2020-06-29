@@ -7,7 +7,7 @@
        <v-progress-linear
          :value='progress'
          color="blue-grey"
-         height="25"
+         height="18"
        >
          <template v-slot="{ value }">
            <strong>{{ Math.ceil(value) }}%</strong>
@@ -15,10 +15,9 @@
        </v-progress-linear>
      </v-col>
     </v-row>
-    <div v-if='justVid'>
       <justVidComp
+      v-if='justVid'
       v-bind:courseInfo="courseInfo"/>
-    </div>
     <div v-if='!justVid && currentComponent === "mainQuiz"'>
       <vidComp
       v-on:startQuiz='startQuiz()'
