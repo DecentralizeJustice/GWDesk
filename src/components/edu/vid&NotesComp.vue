@@ -1,16 +1,32 @@
 <template>
   <v-row align="center" justify='space-around'>
     <v-col cols='12' class="text-center" offset='0'>
-      <v-alert type="info" v-if='bonus' style="width:30%;margin: auto;">
+      <!-- <v-alert type="info" v-if='bonus' style="width:30%;margin: auto;">
         Bonus Question
-      </v-alert>
+      </v-alert> -->
     </v-col>
-   <v-col cols='5'>
+     <v-row justify="center">
+    <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
+      <v-card>
+        <v-toolbar dark color="primary">
+          <v-btn icon dark @click="dialog = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+          <v-toolbar-title>Close</v-toolbar-title>
+          <v-spacer></v-spacer>
+        </v-toolbar>
+        <videoPlayer class="mt-5"
+        v-bind:courseInfo="courseInfo"
+        />
+      </v-card>
+    </v-dialog>
+  </v-row>
+   <v-col cols='6'>
      <videoPlayer
      v-bind:courseInfo="courseInfo"
      />
    </v-col>
-   <v-col id=md cols='5' v-if='notes' class="text-center pa-5">
+   <v-col id=md cols='6' v-if='notes' class="text-center">
       <div v-html="html" ></div>
    </v-col>
    <v-col class="text-center" cols="12">
@@ -21,6 +37,14 @@
        class="mr-6"
      >
        Finish
+     </v-btn>
+     <v-btn
+       color="primary"
+       dark
+       class="mr-6"
+       @click.stop="dialog = true"
+     >
+       Expand Video
      </v-btn>
      <v-btn
       v-if='!notes && !bonus'
@@ -59,7 +83,8 @@ export default {
   props: ['courseInfo', 'bonus', 'html'],
   data () {
     return {
-      notes: false
+      notes: false,
+      dialog: false
     }
   },
   methods: {

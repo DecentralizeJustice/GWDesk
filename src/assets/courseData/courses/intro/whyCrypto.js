@@ -33,7 +33,7 @@ import questions from '@/assets/courseData/eduTest/intro/introWhyCryptocurrency.
 import notes1 from '@/assets/courseData/courseNotes/intro/whyCrypto/part1.html'
 import notes2 from '@/assets/courseData/courseNotes/intro/whyCrypto/part2.html'
 const why = {
-  title: 'Why Crypto Is Great?',
+  title: 'What is Crypto?',
   slides: [
     [
       slide1,

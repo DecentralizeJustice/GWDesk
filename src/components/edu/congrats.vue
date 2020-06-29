@@ -1,11 +1,11 @@
 <template>
   <v-row align="center" justify='center'>
     <v-col cols='12' class="text-center">
-      <v-alert type="success" style="margin:auto;width:50%;">
+      <!-- <v-alert type="success" style="margin:auto;width:50%;">
         Congratulations !!!
-      </v-alert>
+      </v-alert> -->
     </v-col>
-   <v-col cols='8'>
+   <v-col cols='12'>
      <videoPlayer
      v-bind:courseInfo="courseInfo"
      />
