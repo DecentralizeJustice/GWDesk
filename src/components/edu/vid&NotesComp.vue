@@ -50,13 +50,13 @@
 </template>
 
 <script>
-import videoPlayer from '@/components/general/hashCheckVid.vue'
+import videoPlayer from '@/components/general/localAudio.vue'
 export default {
   name: 'vidComp',
   components: {
     videoPlayer
   },
-  props: ['courseInfo'],
+  props: ['courseInfo', 'bonus', 'html'],
   data () {
     return {
       notes: false

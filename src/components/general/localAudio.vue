@@ -48,9 +48,8 @@ export default {
     }
   },
   async mounted () {
-    // console.log(this.vidUrl)
     this.player = this.$refs.player
-    const url = this.courseInfo.audio[0]
+    const url = this.courseInfo.audio
     // eslint-disable-next-line
     const fileLocation = path.join(__static, url)
     const fileContents = fs.readFileSync(fileLocation)

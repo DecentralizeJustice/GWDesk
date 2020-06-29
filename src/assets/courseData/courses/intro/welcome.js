@@ -16,8 +16,6 @@ const welcome = {
   breakpoints: [
     0, 10, 41, 75, 133
   ],
-  audio: [
-    'audio/welcome/Welcome.mp3'
-  ]
+  audio: 'audio/welcome/Welcome.mp3'
 }
 export default welcome
