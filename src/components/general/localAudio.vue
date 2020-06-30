@@ -20,7 +20,7 @@ export default {
   name: 'videoPlayer',
   components: {
   },
-  props: ['courseInfo'],
+  props: ['courseInfo', 'pause', 'time'],
   data () {
     return {
       processedUrl: '',
@@ -40,6 +40,17 @@ export default {
           break
         }
       }
+    }
+  },
+  watch: {
+    pause: function () {
+      if (this.pause === true) {
+        this.player.pause()
+        this.$emit('paused', this.player.currentTime)
+      }
+    },
+    time: function () {
+      this.player.currentTime = this.time
     }
   },
   computed: {
