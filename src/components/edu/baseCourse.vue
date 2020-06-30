@@ -7,7 +7,7 @@
        <v-progress-linear
          :value='progress'
          color="blue-grey"
-         height="25"
+         height="18"
        >
          <template v-slot="{ value }">
            <strong>{{ Math.ceil(value) }}%</strong>
@@ -15,19 +15,16 @@
        </v-progress-linear>
      </v-col>
     </v-row>
-    <div v-if='justVid'>
       <justVidComp
-      v-bind:vidUrl="vidURL"
-      v-bind:vidHash="vidHash"/>
-    </div>
+      v-if='justVid'
+      v-bind:courseInfo="courseInfo"/>
     <div v-if='!justVid && currentComponent === "mainQuiz"'>
       <vidComp
       v-on:startQuiz='startQuiz()'
-      v-bind:vidUrl="vidURL"
-      v-bind:vidHash="vidHash"
+      v-bind:courseInfo="correctLessonInfo"
       v-bind:bonus="false"
-      v-if='vid'
-      :html='html'/>
+      :html='html'
+      v-if='vid'/>
      <quiz
      v-bind:questions="test"
      v-on:backToVideo='backToVideo()'
@@ -37,13 +34,12 @@
      :key="234"
      />
   </div>
-  <div v-if='!justVid && currentComponent === "bonus"'>
+  <!-- <div v-if='!justVid && currentComponent === "bonus"'>
     <vidComp
     :html='html'
     v-on:startQuiz='startQuiz()'
     v-on:quizDone='partDone'
-    v-bind:vidUrl="vidURL"
-    v-bind:vidHash="vidHash"
+    v-bind:courseInfo="correctLessonInfo"
     v-bind:bonus="true"
     v-if='vid'/>
     <quiz
@@ -54,10 +50,9 @@
     v-bind:bonus="true"
     :key="12"
     />
-  </div>
+  </div> -->
   <congrats
-  v-bind:vidUrl="vidURL"
-  v-bind:vidHash="vidHash"
+  v-bind:courseInfo="correctLessonInfo"
   v-bind:nextLessonavAilable='nextLessonavAilable'
   v-if='!justVid && currentComponent === "congrats"'
   v-on:quizDone='partDone'
@@ -72,7 +67,6 @@
       </v-btn> -->
     <v-btn
       color="red darken-1"
-      text
       @click="exit()"
     >
       Exit
@@ -82,7 +76,7 @@
   </v-card>
 </template>
 <script>
-import justVidComp from '@/components/edu/vidComp.vue'
+import justVidComp from '@/components/general/localAudio.vue'
 import congrats from '@/components/edu/congrats.vue'
 import vidComp from '@/components/edu/vid&NotesComp.vue'
 import quiz from '@/components/edu/quiz.vue'
@@ -99,14 +93,16 @@ export default {
     justVidComp
   },
   computed: {
+    correctLessonInfo: function () {
+      const info = {
+        slides: this.courseInfo.slides[this.part],
+        breakpoints: this.courseInfo.breakpoints[this.part],
+        audio: this.courseInfo.audio[this.part]
+      }
+      return info
+    },
     justVid: function () {
       return this.courseInfo.justVideo
-    },
-    vidHash: function () {
-      return this.courseInfo.hash
-    },
-    vidURL: function () {
-      return this.courseInfo.url
     },
     html: function () {
       return this.courseInfo.notes[this.part]
@@ -124,27 +120,20 @@ export default {
       return true
     },
     test: function () {
-      if (this.currentComponent === 'bonus') {
-        return this.courseInfo.questions.questions.bonus
-      } else {
-        const q = this.courseInfo.questions.questions
-        const c = this.part
-        const part = 'part' + (c + 1).toString()
-        return q[part]
-      }
+      return this.courseInfo.questions[this.part]
     },
     progress: function () {
-      const numberOfQuestions = Object.keys(this.courseInfo.questions.questions).length
+      const numberOfQuestions = this.courseInfo.questions.length
       return (this.part / numberOfQuestions) * 100
     },
     currentComponent: function () {
-      const numberOfQuestions = Object.keys(this.courseInfo.questions.questions).length
-      if (this.part < numberOfQuestions - 1) {
+      const numberOfQuestions = this.courseInfo.questions.length
+      if (this.part < numberOfQuestions) {
         return 'mainQuiz'
       }
-      if (this.part === numberOfQuestions - 1) {
-        return 'bonus'
-      }
+      // if (this.part === numberOfQuestions - 1) {
+      //   return 'bonus'
+      // }
       if (this.part === numberOfQuestions) {
         return 'congrats'
       }
@@ -171,9 +160,7 @@ export default {
         return
       }
       this.part += 1
-      if (this.currentComponent !== 'bonus') {
-        this.backToVideo()
-      }
+      this.backToVideo()
     }
   }
 }

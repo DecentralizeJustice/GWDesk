@@ -14,14 +14,13 @@
 </template>
 
 <script>
-import courseInfo from '@/assets/courseData/courses/intro/welcome.js'
 const fs = require('fs-extra')
 const path = require('path')
 export default {
   name: 'videoPlayer',
   components: {
   },
-  props: ['vidUrl'],
+  props: ['courseInfo', 'pause', 'time'],
   data () {
     return {
       processedUrl: '',
@@ -31,7 +30,7 @@ export default {
   },
   methods: {
     updateTime () {
-      const breakpoints = courseInfo.breakpoints
+      const breakpoints = this.courseInfo.breakpoints
       const time = this.player.currentTime
       for (var i = 0; i < breakpoints.length; i++) {
         const lastSlide = (breakpoints[i + 1] === undefined)
@@ -43,15 +42,25 @@ export default {
       }
     }
   },
+  watch: {
+    pause: function () {
+      if (this.pause === true) {
+        this.player.pause()
+        this.$emit('paused', this.player.currentTime)
+      }
+    },
+    time: function () {
+      this.player.currentTime = this.time
+    }
+  },
   computed: {
     slide: function () {
-      return courseInfo.slides[this.currentSlide]
+      return this.courseInfo.slides[this.currentSlide]
     }
   },
   async mounted () {
-    // console.log(this.vidUrl)
     this.player = this.$refs.player
-    const url = courseInfo.audio[0]
+    const url = this.courseInfo.audio
     // eslint-disable-next-line
     const fileLocation = path.join(__static, url)
     const fileContents = fs.readFileSync(fileLocation)

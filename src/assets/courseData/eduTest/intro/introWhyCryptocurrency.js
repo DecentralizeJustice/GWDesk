@@ -1,5 +1,4 @@
-const questions = {
-  part1:
+const questions = [
   [
     {
       q: 'Cryptocurrencies are special becuase they are:',
@@ -61,7 +60,6 @@ const questions = {
       ans: 1
     }
   ],
-  part2:
   [
     {
       q: 'Cryptocurrencies require you to:',
@@ -122,7 +120,7 @@ const questions = {
     //   ],
     //   ans: 1
     // },
-  ],
+  ]
   // part3: [
   //   {
   //     q: 'What is the most important thing a cryptocurrency must do?',
@@ -188,22 +186,19 @@ const questions = {
   //     ans: 3
   //   }
   // ],
-  bonus:
-  [
-    {
-      q: 'Select the fake cryptocurrency (as of 2019)',
-      opt: [
-        'Buycoin',
-        'Hydrocoin',
-        'Dentacoin',
-        'Bananacoin',
-        'Useless Ethereum Token'
-      ],
-      ans: 0
-    }
-  ]
-}
+  // [
+  //   {
+  //     q: 'Select the fake cryptocurrency (as of 2019)',
+  //     opt: [
+  //       'Buycoin',
+  //       'Hydrocoin',
+  //       'Dentacoin',
+  //       'Bananacoin',
+  //       'Useless Ethereum Token'
+  //     ],
+  //     ans: 0
+  //   }
+  // ]
+]
 
-export default {
-  questions
-}
+export default questions
