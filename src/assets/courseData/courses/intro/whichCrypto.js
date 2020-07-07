@@ -20,8 +20,8 @@ import slide19 from '@/assets/slides/whichCrypto/slide19.jpg'
 import slide20 from '@/assets/slides/whichCrypto/slide20.jpg'
 import slide21 from '@/assets/slides/whichCrypto/slide21.jpg'
 import questions from '@/assets/courseData/eduTest/intro/introWhichCryptocurrency.js'
-import notes1 from '@/assets/courseData/courseNotes/intro/whyCrypto/part1.html'
-import notes2 from '@/assets/courseData/courseNotes/intro/whyCrypto/part2.html'
+import notes1 from '@/assets/courseData/courseNotes/intro/whichCrypto/part1.html'
+import notes2 from '@/assets/courseData/courseNotes/intro/whichCrypto/part2.html'
 const whichCrypto = {
   title: 'Which Crypto Is Best?',
   slides: [

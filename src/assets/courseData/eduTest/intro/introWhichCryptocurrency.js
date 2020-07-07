@@ -57,6 +57,16 @@ const questions = [
       ans: 1
     },
     {
+      q: "____, don't Specualte",
+      opt: [
+        'Overestimate',
+        'Educate',
+        'Differentiate',
+        'Rehabilitate'
+      ],
+      ans: 1
+    },
+    {
       q: 'Guide Wallet helps you find the best crypto by:',
       opt: [
         'Telling you which coins will make you the most money.',
@@ -64,13 +74,23 @@ const questions = [
         'Showing you coins that the US Government approves of.',
         'Holding your money and making investments for you.'
       ],
+      ans: 2
+    },
+    {
+      q: 'Bitconnect was a crypto that:',
+      opt: [
+        'was a governemnt supported savings account.',
+        'a classic ponzi scheme.',
+        'paved the way for bitcoin.',
+        'a trustworthy community supported project.'
+      ],
       ans: 1
     },
     {
       q: 'Pool Together is a crypto that:',
       opt: [
         'The governemnt uses for lotteries.',
-        'A lottery where you can still access your initial investment.',
+        'A lottery where you never lose your initial investment.',
         'Allows people to pool thier money and invest in real estate.'
       ],
       ans: 1
