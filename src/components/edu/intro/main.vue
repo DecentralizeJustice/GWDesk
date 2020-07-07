@@ -21,7 +21,7 @@ export default {
       lessons: [
         { title: 'Welcome to GW!', icon: 'cake', comp: 'welcome', unlocked: true, first: true },
         { title: 'What is Cryptocurrency?', icon: 'atom-variant', comp: 'whyCrypto', unlocked: true },
-        { title: 'Which Crypto is Best?', icon: 'account-question', comp: 'whichCrypto', unlocked: false },
+        { title: 'Which Crypto is Best?', icon: 'account-question', comp: 'whichCrypto', unlocked: true },
         { title: 'How to store Crypto', icon: 'calculator', unlocked: false },
         { title: 'How To Buy Crypto', icon: 'account-cash', unlocked: false }
       ]
