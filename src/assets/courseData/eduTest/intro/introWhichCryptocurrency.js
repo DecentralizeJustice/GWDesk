@@ -1,5 +1,4 @@
-const questions = {
-  part1:
+const questions = [
   [
     {
       q: 'The best cryptocurrency is:',
@@ -48,7 +47,6 @@ const questions = {
       ans: 1
     }
   ],
-  part2:
   [
     {
       q: 'Studying crypto projects that I think are bad is a waste of time.',
@@ -77,23 +75,21 @@ const questions = {
       ],
       ans: 1
     }
-  ],
-  bonus:
-  [
-    {
-      q: 'Bitconnect highest price was ____ per coin.',
-      opt: [
-        '11 USD',
-        '45 USD',
-        '167 USD',
-        '463 USD',
-        '634 USD'
-      ],
-      ans: 3
-    }
   ]
-}
+  // bonus:
+  // [
+  //   {
+  //     q: 'Bitconnect highest price was ____ per coin.',
+  //     opt: [
+  //       '11 USD',
+  //       '45 USD',
+  //       '167 USD',
+  //       '463 USD',
+  //       '634 USD'
+  //     ],
+  //     ans: 3
+  //   }
+  // ]
+]
 
-export default {
-  questions
-}
+export default questions
