@@ -24,7 +24,7 @@
              :disabled='!item.unlocked'
              @click="startLesson (item.comp)"
            >
-             Start
+             {{buttonText(item.first)}}
            </v-btn>
          </v-card-actions>
          </v-card>
@@ -69,6 +69,12 @@ export default {
         return 'indigo darken-4'
       }
       return 'white'
+    },
+    buttonText (first) {
+      if (first) {
+        return 'Start Here'
+      }
+      return 'Take Lesson'
     },
     exit () {
       this.$emit('exit')

@@ -1,5 +1,4 @@
-const questions = {
-  part1:
+const questions = [
   [
     {
       q: 'The best cryptocurrency is:',
@@ -48,13 +47,22 @@ const questions = {
       ans: 1
     }
   ],
-  part2:
   [
     {
       q: 'Studying crypto projects that I think are bad is a waste of time.',
       opt: [
         'True',
         'False'
+      ],
+      ans: 1
+    },
+    {
+      q: "____, don't Specualte",
+      opt: [
+        'Overestimate',
+        'Educate',
+        'Differentiate',
+        'Rehabilitate'
       ],
       ans: 1
     },
@@ -66,34 +74,42 @@ const questions = {
         'Showing you coins that the US Government approves of.',
         'Holding your money and making investments for you.'
       ],
+      ans: 2
+    },
+    {
+      q: 'Bitconnect was a crypto that:',
+      opt: [
+        'was a governemnt supported savings account.',
+        'a classic ponzi scheme.',
+        'paved the way for bitcoin.',
+        'a trustworthy community supported project.'
+      ],
       ans: 1
     },
     {
       q: 'Pool Together is a crypto that:',
       opt: [
         'The governemnt uses for lotteries.',
-        'A lottery where you can still access your initial investment.',
+        'A lottery where you never lose your initial investment.',
         'Allows people to pool thier money and invest in real estate.'
       ],
       ans: 1
     }
-  ],
-  bonus:
-  [
-    {
-      q: 'Bitconnect highest price was ____ per coin.',
-      opt: [
-        '11 USD',
-        '45 USD',
-        '167 USD',
-        '463 USD',
-        '634 USD'
-      ],
-      ans: 3
-    }
   ]
-}
+  // bonus:
+  // [
+  //   {
+  //     q: 'Bitconnect highest price was ____ per coin.',
+  //     opt: [
+  //       '11 USD',
+  //       '45 USD',
+  //       '167 USD',
+  //       '463 USD',
+  //       '634 USD'
+  //     ],
+  //     ans: 3
+  //   }
+  // ]
+]
 
-export default {
-  questions
-}
+export default questions
