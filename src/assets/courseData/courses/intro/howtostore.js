@@ -11,9 +11,8 @@ import slide10 from '@/assets/slides/howtoStore/slide10.jpg'
 import slide11 from '@/assets/slides/howtoStore/slide11.jpg'
 import slide12 from '@/assets/slides/howtoStore/slide12.jpg'
 import slide13 from '@/assets/slides/howtoStore/slide13.jpg'
-import questions from '@/assets/courseData/eduTest/intro/introWhyCryptocurrency.js'
-import notes1 from '@/assets/courseData/courseNotes/intro/whyCrypto/part1.html'
-import notes2 from '@/assets/courseData/courseNotes/intro/whyCrypto/part2.html'
+import questions from '@/assets/courseData/eduTest/intro/howtostore.js'
+import notes1 from '@/assets/courseData/courseNotes/intro/howtoStore.html'
 const howtoStore = {
   title: 'How to Store Crypto?',
   slides: [
@@ -49,8 +48,7 @@ const howtoStore = {
   ],
   questions: questions,
   notes: [
-    notes1,
-    notes2
+    notes1
   ]
 }
 export default howtoStore
