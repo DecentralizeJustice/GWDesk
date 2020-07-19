@@ -11,6 +11,8 @@
 import welcome from '@/assets/courseData/courses/intro/welcome.js'
 import whyCrypto from '@/assets/courseData/courses/intro/whyCrypto.js'
 import whichCrypto from '@/assets/courseData/courses/intro/whichCrypto.js'
+import howtoStore from '@/assets/courseData/courses/intro/howtoStore.js'
+import howtoBuy from '@/assets/courseData/courses/intro/howtoBuy.js'
 import landing from '@/components/edu/landing.vue'
 import baseCourse from '@/components/edu/baseCourse.vue'
 export default {
@@ -22,8 +24,8 @@ export default {
         { title: 'Welcome to GW!', icon: 'cake', comp: 'welcome', unlocked: true, first: true },
         { title: 'What is Cryptocurrency?', icon: 'atom-variant', comp: 'whyCrypto', unlocked: true },
         { title: 'Which Crypto is Best?', icon: 'account-question', comp: 'whichCrypto', unlocked: true },
-        { title: 'How to store Crypto', icon: 'calculator', unlocked: false },
-        { title: 'How To Buy Crypto', icon: 'account-cash', unlocked: false }
+        { title: 'How to store Crypto', icon: 'calculator', comp: 'howtoStore', unlocked: true },
+        { title: 'How To Buy Crypto', icon: 'account-cash', comp: 'howtoBuy', unlocked: true }
       ]
     }
 
@@ -38,6 +40,12 @@ export default {
       }
       if (this.lesson === 'welcome') {
         return welcome
+      }
+      if (this.lesson === 'howtoStore') {
+        return howtoStore
+      }
+      if (this.lesson === 'howtoBuy') {
+        return howtoBuy
       }
       return true
     },
