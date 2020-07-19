@@ -24,8 +24,8 @@ export default {
         { title: 'Welcome to GW!', icon: 'cake', comp: 'welcome', unlocked: true, first: true },
         { title: 'What is Cryptocurrency?', icon: 'atom-variant', comp: 'whyCrypto', unlocked: true },
         { title: 'Which Crypto is Best?', icon: 'account-question', comp: 'whichCrypto', unlocked: true },
-        { title: 'How to Store Crypto', icon: 'calculator', comp: 'howtoStore', unlocked: true },
-        { title: 'How To Buy Crypto', icon: 'account-cash', comp: 'howtoBuy', unlocked: true }
+        { title: 'How to Store Crypto?', icon: 'calculator', comp: 'howtoStore', unlocked: true },
+        { title: 'How To Buy Crypto?', icon: 'account-cash', comp: 'howtoBuy', unlocked: true }
       ]
     }
 
