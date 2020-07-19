@@ -2,7 +2,7 @@
   <v-card>
     <v-card-title class="headline justify-center">{{title}}</v-card-title>
     <v-divider/>
-    <v-row align="center" v-if='!justVid'>
+    <v-row align="center" v-if='!justVid && currentComponent && currentComponent !== "congrats"'>
      <v-col cols='10' offset='1'>
        <v-progress-linear
          :value='progress'
@@ -51,7 +51,7 @@
     :key="12"
     />
   </div> -->
-  <congrats
+  <justVidComp
   v-bind:courseInfo="correctLessonInfo"
   v-bind:nextLessonavAilable='nextLessonavAilable'
   v-if='!justVid && currentComponent === "congrats"'
@@ -77,7 +77,7 @@
 </template>
 <script>
 import justVidComp from '@/components/general/localAudio.vue'
-import congrats from '@/components/edu/congrats.vue'
+// import congrats from '@/components/edu/congrats.vue'
 import vidComp from '@/components/edu/vid&NotesComp.vue'
 import quiz from '@/components/edu/quiz.vue'
 export default {
@@ -89,7 +89,6 @@ export default {
   components: {
     quiz,
     vidComp,
-    congrats,
     justVidComp
   },
   computed: {
