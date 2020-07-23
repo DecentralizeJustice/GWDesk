@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Education from './views/edu.vue'
+import Feedback from './views/feedback.vue'
 import DevPannel from './views/dev.vue'
 import Settings from './views/settings.vue'
 import BtcSingleSig from './views/btcSingleSig.vue'
@@ -16,6 +17,11 @@ const router = new Router({
       path: '/edu',
       name: 'edu',
       component: Education
+    },
+    {
+      path: '/feedback',
+      name: 'feedback',
+      component: Feedback
     },
     {
       path: '/devPannel',
