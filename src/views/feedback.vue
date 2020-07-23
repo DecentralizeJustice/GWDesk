@@ -5,22 +5,54 @@
         <v-card-title class="headline justify-center">
           Questions and Feedback
         </v-card-title>
-            <v-divider></v-divider>
-            <v-container fluid>
+    <v-divider></v-divider>
+    <v-container fluid v-if='error'>
+    There Was an Error. Please Try Again Later.
+    </v-container>
+    <v-container fluid v-if='submitted && !error'>
+      <v-row align="center">
+        <v-col class="text-center " cols="8" offset='2'>
+          <p class="display-2" >
+            Thank You For {{thanksMessage}}.
+          </p>
+        </v-col>
+        </v-row>
+    </v-container>
+    <v-container fluid v-if='!submitted && !error'>
     <v-row align="center">
-      <v-col class="d-flex" cols="12" sm="6">
+      <v-col class="d-flex" cols="4" offset='4'>
         <v-select
           :items="items"
-          label="Type"
+          label="Select Type"
+          v-model="subject"
+          solo
+          background-color="grey darken-3"
         ></v-select>
       </v-col>
-      <v-col cols="12" md="6">
+      </v-row>
+      <v-row align="center">
+      <v-col cols="8" class="text-center" offset='2'>
+        <div class="">
         <v-textarea
+          v-model="body"
           solo
-          name="input-7-4"
-          label="Leave Feedback"
+          :disabled='bodyDisabled'
+          background-color="grey darken-3"
+          :label="textareaTitle"
         ></v-textarea>
+        </div>
       </v-col>
+      </v-row>
+      <v-row align="center">
+      <v-col class="text-center" cols="12">
+      <div class="">
+        <v-btn :disabled='submitDisabled'
+          v-on:click="submitFeedback(subject, body)"
+          color="primary">
+          Submit
+        </v-btn>
+      </div>
+    </v-col>
     </v-row>
   </v-container>
           </v-card>
@@ -35,7 +67,11 @@ export default {
   components: {
   },
   data: () => ({
+    submitted: true,
+    error: false,
     items: ['Feedback', 'Question'],
+    body: '',
+    subject: '',
     feedbackLink: 'https://us-central1-app-feedback-283918.cloudfunctions.net/feedback'
   }),
   methods: {
@@ -51,23 +87,38 @@ export default {
           'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
         }
       })
-      console.log(result)
-    },
-    cardColor (state) {
-      if (state) {
-        return 'blue'
+      if (result.data.status === 'Success') {
+        this.submitted = true
       }
-      return 'grey darken-3'
-    },
-    iconColor (state) {
-      if (state) {
-        return 'indigo darken-4'
-      }
-      return 'white'
+      this.error = true
     }
   },
-  mounted () {
-    // this.openDialog()
+  computed: {
+    // a computed getter
+    thanksMessage: function () {
+      if (this.subject === 'Question') {
+        return 'Asking A Question'
+      }
+      return 'Submitting Feedback'
+    },
+    textareaTitle: function () {
+      if (this.subject === 'Question') {
+        return 'Ask Question'
+      }
+      return 'Submit Feedback'
+    },
+    bodyDisabled: function () {
+      if (this.subject === '') {
+        return true
+      }
+      return false
+    },
+    submitDisabled: function () {
+      if (this.body === '') {
+        return true
+      }
+      return false
+    }
   }
 }
 </script>

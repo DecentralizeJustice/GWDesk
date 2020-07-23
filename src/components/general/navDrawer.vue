@@ -47,7 +47,7 @@ export default {
       'Courses', 'Feedback'// , 'BTC Singlesig', 'Settings'
     ],
     icons: {
-      Feedback: 'settings',
+      Feedback: 'comment-quote',
       Courses: 'book-open-page-variant',
       'BTC Single': 'lock',
       'Dev Pannel': 'hammer-wrench',
