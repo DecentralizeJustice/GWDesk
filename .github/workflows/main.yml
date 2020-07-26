@@ -60,7 +60,7 @@ jobs:
     - uses: actions/checkout@v2
       with:
         lfs: 'true'
-    - uses: actions/setup-node@master
+    - uses: actions/setup-node@main
       with:
         # fix till https://github.com/actions/setup-node/issues/121 is solved
         node-version: 12.16.1
