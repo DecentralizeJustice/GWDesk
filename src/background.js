@@ -8,7 +8,8 @@ import {
 const isDevelopment = process.env.NODE_ENV !== 'production'
 const { autoUpdater } = require('electron-updater')
 const { ipcMain } = require('electron')
-
+autoUpdater.autoDownload = false
+autoUpdater.autoInstallOnAppQuit = true
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win
@@ -87,6 +88,10 @@ app.on('ready', async () => {
   }
   createWindow()
 })
+autoUpdater.on('update-downloaded', (ev, info) => {
+  autoUpdater.quitAndInstall(true, true)
+})
+
 ipcMain.on('CHECK_FOR_UPDATE_PENDING', event => {
   const { sender } = event
 
@@ -94,8 +99,8 @@ ipcMain.on('CHECK_FOR_UPDATE_PENDING', event => {
   if (process.env.NODE_ENV === 'development') {
     // sender.send(CHECK_FOR_UPDATE_SUCCESS);
   } else {
+    autoUpdater.autoDownload = false
     const result = autoUpdater.checkForUpdates()
-
     result
       .then((checkResult) => {
         const { updateInfo } = checkResult
@@ -108,25 +113,22 @@ ipcMain.on('CHECK_FOR_UPDATE_PENDING', event => {
 })
 
 ipcMain.on('DOWNLOAD_UPDATE_PENDING', event => {
+  autoUpdater.autoDownload = false
   const result = autoUpdater.downloadUpdate()
   const { sender } = event
-
   result
     .then(() => {
       sender.send('DOWNLOAD_UPDATE_SUCCESS')
-      autoUpdater.quitAndInstall(
-        true, // isSilent
-        true // isForceRunAfter, restart app after update is installed
-      )
     })
     .catch((err) => {
       sender.send('DOWNLOAD_UPDATE_FAILURE', err)
     })
 })
 
-ipcMain.on('QUIT_AND_INSTALL_UPDATE', () => {
-  autoUpdater.quitAndInstall(false, false)
-})
+// ipcMain.on('QUIT_AND_INSTALL_UPDATE', () => {
+//   autoUpdater.quitAndInstall()
+//   // app.quit()
+// })
 // Exit cleanly on request from parent process in development mode.
 if (isDevelopment) {
   if (process.platform === 'win32') {

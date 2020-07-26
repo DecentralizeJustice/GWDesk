@@ -67,7 +67,7 @@ export default {
   components: {
   },
   data: () => ({
-    submitted: true,
+    submitted: false,
     error: false,
     items: ['Feedback', 'Question'],
     body: '',

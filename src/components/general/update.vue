@@ -17,10 +17,11 @@
       <v-spacer></v-spacer>
       <v-btn
         color="primary"
-        v-on:click="shutdownAndInstall()"
-        v-if='readyToShutdown'
+        :disabled='updateStarted'
+        v-on:click="downloadUpdate()"
+        v-if='updateAvailable'
       >
-        Finish Update
+        Start Update Process
       </v-btn>
     </v-card-actions>
   </v-card>
@@ -29,12 +30,13 @@
 <script>
 export default {
   name: 'App',
-  props: ['readyToShutdown'],
+  props: ['readyToShutdown', 'updateAvailable', 'updateStarted'],
   components: {
   },
   methods: {
-    async shutdownAndInstall () {
-      this.$emit('shutdown')
+    async downloadUpdate () {
+      console.log('download update requested')
+      this.$emit('downloadUpdate')
     }
   }
 }

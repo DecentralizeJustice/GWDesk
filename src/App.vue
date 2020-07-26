@@ -12,8 +12,10 @@
             overlay-opacity='90'
             class="text-center"
           >
-            <updateWindow @shutdown="shutdownAndInstall"
-            v-bind:readyToShutdown="readyToShutdown"/>
+            <updateWindow @downloadUpdate="downloadUpdate"
+            v-bind:readyToShutdown="readyToShutdown"
+            v-bind:updateAvailable="updateAvailable"
+            v-bind:updateStarted='updateStarted'/>
           </v-dialog>
     </v-main>
   </v-app>
@@ -33,30 +35,36 @@ export default {
   },
   methods: {
     async start () {
-      try {
-        await this.$router.push({ path: 'edu' })
-      } catch (err) {
-      }
+      await this.$router.push({ path: 'edu' })
     },
-    async shutdownAndInstall () {
+    async downloadUpdate () {
+      console.log('update download started')
       ipcRenderer.send('DOWNLOAD_UPDATE_PENDING')
+      this.updateStarted = true
+      ipcRenderer.on('DOWNLOAD_UPDATE_SUCCESS', () => {
+        console.log('update Downloaded')
+      })
+      ipcRenderer.on('DOWNLOAD_UPDATE_FAILURE', (err) => {
+        console.log('update download failed')
+        console.log(err)
+      })
     }
   },
   computed: {
   },
   data: () => ({
     updateAvailable: false,
-    readyToShutdown: false
+    readyToShutdown: false,
+    updateStarted: false
   }),
   async mounted () {
-    if (process.env.NODE_ENV === 'development') {
-    } else {
+    this.start()
+    if (process.env.NODE_ENV !== 'development') {
       ipcRenderer.send('CHECK_FOR_UPDATE_PENDING')
       ipcRenderer.on('CHECK_FOR_UPDATE_SUCCESS', (event, updateInfo) => {
         const version = updateInfo.version
         if (version && version !== appVersion) {
           this.updateAvailable = true
-          this.readyToShutdown = true
         }
       })
       ipcRenderer.on('CHECK_FOR_UPDATE_FAILURE', () => {
@@ -66,13 +74,11 @@ export default {
       //   this.readyToShutdown = true
       //   console.log('donwload-sucess')
       // })
-      ipcRenderer.on('DOWNLOAD_UPDATE_FAILURE', (sender, err) => {
+      ipcRenderer.on('DOWNLOAD_UPDATE_FAILURE', (event, err) => {
         console.log('download failed')
         console.log(err)
-        console.log(sender)
       })
     }
-    this.start()
   }
 }
 </script>
