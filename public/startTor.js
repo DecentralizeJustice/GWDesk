@@ -8,6 +8,9 @@ tor.on('ready', function () {
   tor.getInfo('net/listeners/socks', (err, result) => {
     const port = parseInt(result.split('"').join('').split(':')[1])
     console.log(`TorSocks listening on ${port}!`)
+    if (process.send) {
+      process.send('Hello')
+    }
   })
 })
 
