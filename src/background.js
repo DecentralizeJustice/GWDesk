@@ -13,11 +13,13 @@ const options = {
   stdio: ['pipe', 'pipe', 'pipe', 'ipc']
 }
 let port
+function setPort (portNumber) {
+  // win.webContents.session.setProxy({ proxyRules: 'socks5://127.0.0.1:' + portNumber })
+}
 // eslint-disable-next-line
 const child = fork(path.join(__static, '../public/startTor.js'), [], options)
 child.on('message', message => {
-  const port1 = message.port
-  win.webContents.session.setProxy({ proxyRules: 'socks5://127.0.0.1:' + port1 })
+  setPort(message.port)
 })
 autoUpdater.autoDownload = false
 // Keep a global reference of the window object, if you don't, the window will
@@ -39,7 +41,7 @@ function createWindow () {
       }
     })
   if (port) {
-    win.webContents.session.setProxy({ proxyRules: 'socks5://127.0.0.1:' + port })
+    setPort(port)
   }
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
