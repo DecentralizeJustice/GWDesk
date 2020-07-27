@@ -76,21 +76,29 @@ export default {
   }),
   methods: {
     submitFeedback: async function (subject, body) {
-      const result = await axios({
-        method: 'post',
-        url: this.feedbackLink,
-        data: qs.stringify({
-          subject: subject,
-          body: body
-        }),
-        headers: {
-          'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
+      try {
+        const result = await axios({
+          method: 'post',
+          url: this.feedbackLink,
+          data: qs.stringify({
+            subject: subject,
+            body: body
+          }),
+          headers: {
+            'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
+          }
+        })
+        if (result.data.status === 'Success') {
+          this.submitted = true
+          console.log(result)
+          return
         }
-      })
-      if (result.data.status === 'Success') {
-        this.submitted = true
+        this.error = true
+        console.log(result)
+      } catch (e) {
+        console.log(e)
+        this.error = true
       }
-      this.error = true
     }
   },
   computed: {

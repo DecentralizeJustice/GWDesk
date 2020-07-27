@@ -1,5 +1,6 @@
 'use strict'
 import path from 'path'
+import { fork } from 'child_process'
 import { app, protocol, BrowserWindow } from 'electron'
 import {
   createProtocol,
@@ -8,6 +9,16 @@ import {
 const isDevelopment = process.env.NODE_ENV !== 'production'
 const { autoUpdater } = require('electron-updater')
 const { ipcMain } = require('electron')
+const options = {
+  stdio: ['pipe', 'pipe', 'pipe', 'ipc']
+}
+let port
+// eslint-disable-next-line
+const child = fork(path.join(__static, '../public/startTor.js'), [], options)
+child.on('message', message => {
+  const port1 = message.port
+  win.webContents.session.setProxy({ proxyRules: 'socks5://127.0.0.1:' + port1 })
+})
 autoUpdater.autoDownload = false
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -27,7 +38,9 @@ function createWindow () {
         webSecurity: false
       }
     })
-
+  if (port) {
+    win.webContents.session.setProxy({ proxyRules: 'socks5://127.0.0.1:' + port })
+  }
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
     win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)

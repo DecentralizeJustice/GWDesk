@@ -24,8 +24,6 @@
 <script>
 import navDrawer from '@/components/general/navDrawer.vue'
 import updateWindow from '@/components/general/update.vue'
-import { fork } from 'child_process'
-import path from 'path'
 const appVersion = require('../package.json').version
 const electron = window.require('electron')
 const ipcRenderer = electron.ipcRenderer
@@ -41,17 +39,6 @@ export default {
         await this.$router.push({ path: 'edu' })
       } catch (err) {
       }
-    },
-    async startTor () {
-      const parameters = []
-      const options = {
-        stdio: ['pipe', 'pipe', 'pipe', 'ipc']
-      }
-      // eslint-disable-next-line
-      const child = fork(path.join(__static, 'startTor.js'), parameters, options)
-      child.on('message', message => {
-        console.log('message from child:', message)
-      })
     },
     async downloadUpdate () {
       console.log('update download started')
@@ -74,7 +61,6 @@ export default {
     updateStarted: false
   }),
   async mounted () {
-    this.startTor()
     this.start()
     if (process.env.NODE_ENV !== 'development') {
       ipcRenderer.send('CHECK_FOR_UPDATE_PENDING')
