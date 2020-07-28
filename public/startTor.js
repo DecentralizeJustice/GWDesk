@@ -17,13 +17,28 @@ tor.on('error', function (err) {
     process.send({ error: err })
   }
 })
-
-tor.on('getInfo', function () {
-  if (!process.send) { return }
-  tor.getInfo('status/circuit-established', (err, result) => {
-    process.send({ getInfo: result })
+process.on('message', (m) => {
+  if (m.dormant) {
+    dormant()
+    return
+  }
+  if (m.circuitEstablished) {
+    circuitEstablished()
+  }
+})
+function dormant () {
+  tor.getInfo('dormant', (err, result) => {
+    process.send({ dormant: result })
     if (err) {
       process.send({ error: err })
     }
   })
-})
+}
+function circuitEstablished () {
+  tor.getInfo('status/circuit-established', (err, result) => {
+    process.send({ circuitEstablished: result })
+    if (err) {
+      process.send({ error: err })
+    }
+  })
+}
