@@ -13,13 +13,29 @@ const options = {
   stdio: ['pipe', 'pipe', 'pipe', 'ipc']
 }
 let port
+let sender
 function setPort (portNumber) {
-  // win.webContents.session.setProxy({ proxyRules: 'socks5://127.0.0.1:' + portNumber })
+  win.webContents.session.setProxy({ proxyRules: 'socks5://127.0.0.1:' + portNumber })
 }
 // eslint-disable-next-line
 const child = fork(path.join(__static, '../public/startTor.js'), [], options)
 child.on('message', message => {
-  setPort(message.port)
+  console.log(message)
+  if (message.port) {
+    setPort(message.port)
+  }
+  if (message.circuitEstablished) {
+    console.log('circuitEstablished', message.circuitEstablished)
+  }
+  if (message.dormant) {
+    console.log('dormant', message.dormant)
+  }
+})
+ipcMain.on('dormant', event => {
+  child.send({ dormant: true })
+})
+ipcMain.on('circuitEstablished', event => {
+  child.send({ circuitEstablished: true })
 })
 autoUpdater.autoDownload = false
 // Keep a global reference of the window object, if you don't, the window will
@@ -105,9 +121,8 @@ app.on('ready', async () => {
 autoUpdater.on('update-downloaded', (ev, info) => {
   autoUpdater.quitAndInstall(true, true)
 })
-
 ipcMain.on('CHECK_FOR_UPDATE_PENDING', event => {
-  const { sender } = event
+  sender = event.sender
 
   // Automatically invoke success on development environment.
   if (process.env.NODE_ENV === 'development') {
