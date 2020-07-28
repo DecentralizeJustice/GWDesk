@@ -24,17 +24,19 @@ child.on('message', message => {
   if (message.port) {
     setPort(message.port)
   }
-  if (message.circuitEstablished) {
-    console.log('circuitEstablished', message.circuitEstablished)
-  }
   if (message.dormant) {
-    console.log('dormant', message.dormant)
+    sender.send('dormant', message.dormant)
+  }
+  if (message.circuitEstablished) {
+    sender.send('circuitEstablished', message.circuitEstablished)
   }
 })
 ipcMain.on('dormant', event => {
+  sender = event.sender
   child.send({ dormant: true })
 })
-ipcMain.on('circuitEstablished', event => {
+ipcMain.on('circuitEstablished', (event, message) => {
+  sender = event.sender
   child.send({ circuitEstablished: true })
 })
 autoUpdater.autoDownload = false

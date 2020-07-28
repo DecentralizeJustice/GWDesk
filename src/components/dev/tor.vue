@@ -29,6 +29,8 @@
 
 <script>
 import { dormant, circuitEstablished } from '@/assets/util/tor.js'
+const electron = window.require('electron')
+const ipcRenderer = electron.ipcRenderer
 export default {
   components: {
   },
@@ -36,9 +38,15 @@ export default {
   }),
   methods: {
     dormantb: function () {
+      ipcRenderer.on('dormant', (event, message) => {
+        console.log(message)
+      })
       dormant()
     },
     circuitEstablishedb: function () {
+      ipcRenderer.on('circuitEstablished', (event, message) => {
+        console.log(message)
+      })
       circuitEstablished()
     }
   },
