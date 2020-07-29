@@ -20,7 +20,6 @@ function setPort (portNumber) {
 // eslint-disable-next-line
 const child = fork(path.join(__static, '../public/startTor.js'), [], options)
 child.on('message', message => {
-  console.log(message)
   if (message.port) {
     setPort(message.port)
   }
