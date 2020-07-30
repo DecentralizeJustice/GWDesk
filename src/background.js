@@ -57,6 +57,8 @@ function createWindow () {
         webSecurity: false
       }
     })
+  const ses = win.webContents.session
+  console.log(ses.getUserAgent())
   if (port) {
     setPort(port)
   }

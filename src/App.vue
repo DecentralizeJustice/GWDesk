@@ -6,7 +6,7 @@
         <router-view/>
       </transition>
           <v-dialog
-            v-model="updateAvailable"
+            v-model="showDialog"
             width="800"
             persistent
             overlay-opacity='90'
@@ -15,7 +15,8 @@
             <updateWindow @downloadUpdate='downloadUpdate'
             v-bind:readyToShutdown="readyToShutdown"
             v-bind:updateAvailable="updateAvailable"
-            v-bind:updateStarted='updateStarted'/>
+            v-bind:updateStarted='updateStarted'
+            v-bind:torReady='torReady'/>
           </v-dialog>
     </v-main>
   </v-app>
@@ -38,9 +39,7 @@ export default {
     loop: async function () {
       if (this.torDormant || this.torCircuitReady) {
         this.torReady = true
-        console.log('ready to go')
       } else {
-        console.log('ran again')
         this.dormantb()
         this.circuitEstablishedb()
         await this.sleep(this.waitTime * 1000)
@@ -86,9 +85,12 @@ export default {
     }
   },
   computed: {
+    showDialog: function () {
+      return !this.torReady || this.updateAvailable
+    }
   },
   data: () => ({
-    waitTime: 10,
+    waitTime: 15,
     torReady: false,
     torDormant: false,
     torCircuitReady: false,
