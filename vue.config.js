@@ -19,7 +19,9 @@ module.exports = {
   },
   pluginOptions: {
     electronBuilder: {
+      externals: ['@deadcanaries/granax'],
       builderOptions: {
+        extraResources: ['./public/startTor.js'],
         buildDependenciesFromSource: false,
         nodeGypRebuild: false,
         npmRebuild: false,
@@ -49,12 +51,12 @@ module.exports = {
           }
         ]
       },
-      nodeIntegration: true,
-      chainWebpackRendererProcess: config => {
-        if (process.env.NODE_ENV === 'development') {
-          config.plugins.delete('prefetch')
-        }
-      }
+      nodeIntegration: true
+      // chainWebpackRendererProcess: config => {
+      //   if (process.env.NODE_ENV === 'development') {
+      //     config.plugins.delete('prefetch')
+      //   }
+      // }
     }
   }
 }
