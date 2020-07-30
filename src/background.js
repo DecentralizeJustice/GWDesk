@@ -1,5 +1,6 @@
 'use strict'
 import path from 'path'
+import { fork } from 'child_process'
 import { app, protocol, BrowserWindow } from 'electron'
 import {
   createProtocol,
@@ -8,8 +9,36 @@ import {
 const isDevelopment = process.env.NODE_ENV !== 'production'
 const { autoUpdater } = require('electron-updater')
 const { ipcMain } = require('electron')
+const options = {
+  stdio: ['pipe', 'pipe', 'pipe', 'ipc']
+}
+let port
+let sender
+function setPort (portNumber) {
+  win.webContents.session.setProxy({ proxyRules: 'socks5://127.0.0.1:' + portNumber })
+}
+// eslint-disable-next-line
+const child = fork(path.join(__static, '../public/startTor.js'), [], options)
+child.on('message', message => {
+  if (message.port) {
+    setPort(message.port)
+  }
+  if (message.dormant) {
+    sender.send('dormant', message.dormant)
+  }
+  if (message.circuitEstablished) {
+    sender.send('circuitEstablished', message.circuitEstablished)
+  }
+})
+ipcMain.on('dormant', event => {
+  sender = event.sender
+  child.send({ dormant: true })
+})
+ipcMain.on('circuitEstablished', (event, message) => {
+  sender = event.sender
+  child.send({ circuitEstablished: true })
+})
 autoUpdater.autoDownload = false
-autoUpdater.autoInstallOnAppQuit = true
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win
@@ -28,7 +57,11 @@ function createWindow () {
         webSecurity: false
       }
     })
-
+  const ses = win.webContents.session
+  console.log(ses.getUserAgent())
+  if (port) {
+    setPort(port)
+  }
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
     win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
@@ -91,9 +124,8 @@ app.on('ready', async () => {
 autoUpdater.on('update-downloaded', (ev, info) => {
   autoUpdater.quitAndInstall(true, true)
 })
-
 ipcMain.on('CHECK_FOR_UPDATE_PENDING', event => {
-  const { sender } = event
+  sender = event.sender
 
   // Automatically invoke success on development environment.
   if (process.env.NODE_ENV === 'development') {

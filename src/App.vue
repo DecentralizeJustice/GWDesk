@@ -6,16 +6,17 @@
         <router-view/>
       </transition>
           <v-dialog
-            v-model="updateAvailable"
+            v-model="showDialog"
             width="800"
             persistent
             overlay-opacity='90'
             class="text-center"
           >
-            <updateWindow @downloadUpdate="downloadUpdate"
+            <updateWindow @downloadUpdate='downloadUpdate'
             v-bind:readyToShutdown="readyToShutdown"
             v-bind:updateAvailable="updateAvailable"
-            v-bind:updateStarted='updateStarted'/>
+            v-bind:updateStarted='updateStarted'
+            v-bind:torReady='torReady'/>
           </v-dialog>
     </v-main>
   </v-app>
@@ -24,6 +25,7 @@
 <script>
 import navDrawer from '@/components/general/navDrawer.vue'
 import updateWindow from '@/components/general/update.vue'
+import { dormant, circuitEstablished } from '@/assets/util/tor.js'
 const appVersion = require('../package.json').version
 const electron = window.require('electron')
 const ipcRenderer = electron.ipcRenderer
@@ -34,8 +36,40 @@ export default {
     updateWindow
   },
   methods: {
+    loop: async function () {
+      if (this.torDormant || this.torCircuitReady) {
+        this.torReady = true
+      } else {
+        this.dormantb()
+        this.circuitEstablishedb()
+        await this.sleep(this.waitTime * 1000)
+        this.loop()
+      }
+    },
+    dormantb: function () {
+      ipcRenderer.on('dormant', (event, message) => {
+        if (message === '1\n') {
+          this.torDormant = true
+        }
+      })
+      dormant()
+    },
+    circuitEstablishedb: function () {
+      ipcRenderer.on('circuitEstablished', (event, message) => {
+        if (message === '1\n') {
+          this.torCircuitReady = true
+        }
+      })
+      circuitEstablished()
+    },
+    sleep: function (ms) {
+      return new Promise(resolve => setTimeout(resolve, ms))
+    },
     async start () {
-      await this.$router.push({ path: 'edu' })
+      try {
+        await this.$router.push({ path: 'edu' })
+      } catch (err) {
+      }
     },
     async downloadUpdate () {
       console.log('update download started')
@@ -51,14 +85,22 @@ export default {
     }
   },
   computed: {
+    showDialog: function () {
+      return !this.torReady || this.updateAvailable
+    }
   },
   data: () => ({
+    waitTime: 15,
+    torReady: false,
+    torDormant: false,
+    torCircuitReady: false,
     updateAvailable: false,
     readyToShutdown: false,
     updateStarted: false
   }),
   async mounted () {
     this.start()
+    this.loop()
     if (process.env.NODE_ENV !== 'development') {
       ipcRenderer.send('CHECK_FOR_UPDATE_PENDING')
       ipcRenderer.on('CHECK_FOR_UPDATE_SUCCESS', (event, updateInfo) => {
@@ -70,10 +112,6 @@ export default {
       ipcRenderer.on('CHECK_FOR_UPDATE_FAILURE', () => {
         console.log('failed update')
       })
-      // ipcRenderer.on('DOWNLOAD_UPDATE_SUCCESS', () => {
-      //   this.readyToShutdown = true
-      //   console.log('donwload-sucess')
-      // })
       ipcRenderer.on('DOWNLOAD_UPDATE_FAILURE', (event, err) => {
         console.log('download failed')
         console.log(err)
