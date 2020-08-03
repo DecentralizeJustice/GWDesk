@@ -29,6 +29,7 @@ import { dormant, circuitEstablished } from '@/assets/util/tor.js'
 const appVersion = require('../package.json').version
 const electron = window.require('electron')
 const ipcRenderer = electron.ipcRenderer
+const isDevelopment = process.env.NODE_ENV !== 'production'
 export default {
   name: 'App',
   components: {
@@ -37,7 +38,7 @@ export default {
   },
   methods: {
     loop: async function () {
-      if (this.torDormant || this.torCircuitReady) {
+      if (isDevelopment || this.torDormant || this.torCircuitReady) {
         this.torReady = true
       } else {
         this.dormantb()

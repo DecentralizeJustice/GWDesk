@@ -15,7 +15,9 @@ const options = {
 let port
 let sender
 function setPort (portNumber) {
-  win.webContents.session.setProxy({ proxyRules: 'socks5://127.0.0.1:' + portNumber })
+  if (!isDevelopment) {
+    win.webContents.session.setProxy({ proxyRules: 'socks5://127.0.0.1:' + portNumber })
+  }
 }
 // eslint-disable-next-line
 const child = fork(path.join(__static, '../public/startTor.js'), [], options)
@@ -57,8 +59,6 @@ function createWindow () {
         webSecurity: false
       }
     })
-  const ses = win.webContents.session
-  console.log(ses.getUserAgent())
   if (port) {
     setPort(port)
   }
