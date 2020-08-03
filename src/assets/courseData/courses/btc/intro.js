@@ -57,16 +57,16 @@ const intro = {
       '0:00', '0:39', '0:54', '1:02', '1:36', '3:13', '4:24', '5:39', '6:28', '6:36'
     ],
     [
-      '0:00', '0:37', 80, 123, 198, 258, 299, 331
+      '0:00', '0:20', '1:03', '1:32', '2:43', '2:48'
     ],
     [
-      0
+      '0:00'
     ]
   ],
   audio: [
-    'audio/howtoBuy/part1Final.mp3',
-    'audio/howtoBuy/part2Final.mp3',
-    'audio/howtoBuy/congratsFinal.mp3'
+    'audio/btc/intro/part1Final.mp3',
+    'audio/btc/intro/part2Final.mp3',
+    'audio/btc/intro/congratsFinal.mp3'
   ],
   questions: questions,
   notes: [
