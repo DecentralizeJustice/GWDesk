@@ -3,7 +3,7 @@
     <v-card-title class="headline justify-center">{{landingInfo.title}}</v-card-title>
     <v-divider/>
     <v-row no-gutters>
-       <v-col :key="item.title" v-for="(item) in landingInfo.lessons" cols='4'>
+       <v-col :key="item.title" v-for="(item, index) in landingInfo.lessons" cols='4'>
          <v-card
            class="ma-3" :color="cardColor(item.unlocked)"
          >
@@ -22,7 +22,7 @@
            <v-btn
              :color="iconColor(true)"
              :disabled='!item.unlocked'
-             @click="startLesson (item.comp)"
+             @click="startLesson (index)"
            >
              {{buttonText(item.first)}}
            </v-btn>
@@ -79,8 +79,8 @@ export default {
     exit () {
       this.$emit('exit')
     },
-    startLesson (lesson) {
-      this.$emit('changeLesson', lesson)
+    startLesson (index) {
+      this.$emit('changeLesson', index)
     }
   }
 }
