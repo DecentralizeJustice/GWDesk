@@ -94,23 +94,23 @@ export default {
   computed: {
     correctLessonInfo: function () {
       const info = {
-        slides: this.courseInfo.slides[this.part],
-        breakpoints: this.courseInfo.breakpoints[this.part],
-        audio: this.courseInfo.audio[this.part]
+        slides: this.courseInfo.comp.slides[this.part],
+        breakpoints: this.courseInfo.comp.breakpoints[this.part],
+        audio: this.courseInfo.comp.audio[this.part]
       }
       return info
     },
     justVid: function () {
-      return this.courseInfo.justVideo
+      return this.courseInfo.comp.justVideo
     },
     html: function () {
-      return this.courseInfo.notes[this.part]
+      return this.courseInfo.comp.notes[this.part]
     },
     title: function () {
-      return this.courseInfo.title
+      return this.courseInfo.comp.title
     },
     nextLessonTitle: function () {
-      return this.courseInfo.nextLesson
+      return this.courseInfo.comp.nextLesson
     },
     nextLessonavAilable: function () {
       if (this.nextLessonTitle === undefined) {
@@ -119,14 +119,17 @@ export default {
       return true
     },
     test: function () {
-      return this.courseInfo.questions[this.part]
+      return this.questions[this.part]
     },
     progress: function () {
-      const numberOfQuestions = this.courseInfo.questions.length
+      const numberOfQuestions = this.questions.length
       return (this.part / numberOfQuestions) * 100
     },
+    questions: function () {
+      return this.courseInfo.comp.questions
+    },
     currentComponent: function () {
-      const numberOfQuestions = this.courseInfo.questions.length
+      const numberOfQuestions = this.questions.length
       if (this.part < numberOfQuestions) {
         return 'mainQuiz'
       }

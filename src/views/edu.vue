@@ -49,20 +49,26 @@
       persistent
       overlay-opacity='1'
     >
-    <lesson
+    <subjectHome
+    v-bind:landingInfo="landingInfoPicker"
     v-on:exit="dialog = false"/>
     </v-dialog>
     </v-layout>
 </template>
 
 <script>
-import lesson from '@/components/edu/intro/main.vue'
+import subjectHome from '@/components/edu/subjectHome.vue'
+import introLandingInfo from '@/assets/landingInfo/intro.js'
 export default {
   components: {
-    lesson
+    subjectHome
   },
   data: () => ({
     dialog: false,
+    currentLesson: '',
+    lessonMapping: {
+      Introduction: introLandingInfo
+    },
     lessons: [
       { title: 'Introduction', icon: 'atom-variant', unlocked: true },
       { title: 'Bitcoin', icon: 'lock', unlocked: false },
@@ -82,6 +88,7 @@ export default {
   }),
   methods: {
     openDialog: function (section) {
+      this.currentLesson = section
       this.dialog = true
     },
     cardColor (state) {
@@ -95,6 +102,11 @@ export default {
         return 'indigo darken-4'
       }
       return 'white'
+    }
+  },
+  computed: {
+    landingInfoPicker () {
+      return this.lessonMapping[this.currentLesson]
     }
   }
 }
