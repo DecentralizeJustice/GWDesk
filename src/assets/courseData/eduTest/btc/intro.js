@@ -1,62 +1,50 @@
 const questions = [
   [
     {
-      q: 'If an exchange is popular I should trust it.',
+      q: 'The Founder of Bitcoin was:',
       opt: [
-        'True',
-        'False'
+        'Edward Snowden',
+        'Satoshi Nakamota',
+        'Vitalik Buterin'
       ],
       ans: 1
     },
     {
-      q: 'In order to use an exchange I might have to show them my:',
-      opt: [
-        'Driver License.',
-        'Social Security Number.',
-        'Proof of Residency.',
-        'All of the Above'
-      ],
-      ans: 3
-    },
-    {
-      q: 'I should treat exchanges like ____',
-      opt: [
-        'safes.',
-        'banks.',
-        'highways.',
-        'atm.'
-      ],
-      ans: 2
-    },
-    {
-      q: 'Centralized exchanges are the only option for buying crypto.',
+      q: 'Satoshi Nakamota identitiy is unknown.',
       opt: [
         'True',
         'False'
+      ],
+      ans: 0
+    },
+    {
+      q: 'Bitcoin was created as a response to:',
+      opt: [
+        '2008 Housing Crisis',
+        'Expedia Software Hacks',
+        "President Obama's Election"
+      ],
+      ans: 0
+    },
+    {
+      q: 'Bitcoin is money without:',
+      opt: [
+        'Rules',
+        'Rulers',
+        'Reliability'
       ],
       ans: 1
     }
   ],
   [
     {
-      q: 'One reason selling crypto for cash is dangerous is:',
+      q: 'Bitcoin is like a:',
       opt: [
-        'Not many places will allow you to sale crypto.',
-        'Your money can be seized by the governemnt.',
-        'The exchange rates are usually too high.'
+        'Stock Option',
+        'Checking Account',
+        'Savings Account'
       ],
-      ans: 1
-    },
-    {
-      q: 'Which companies accpet crypto as payments?',
-      opt: [
-        'AT&T',
-        'New Egg',
-        'Overstock',
-        'KFC Canada',
-        'All of the Above'
-      ],
-      ans: 4
+      ans: 2
     }
   ]
 ]

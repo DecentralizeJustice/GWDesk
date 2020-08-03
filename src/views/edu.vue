@@ -59,6 +59,7 @@
 <script>
 import subjectHome from '@/components/edu/subjectHome.vue'
 import introLandingInfo from '@/assets/landingInfo/intro.js'
+import btcLandingInfo from '@/assets/landingInfo/btc.js'
 export default {
   components: {
     subjectHome
@@ -67,11 +68,12 @@ export default {
     dialog: false,
     currentLesson: '',
     lessonMapping: {
-      Introduction: introLandingInfo
+      Introduction: introLandingInfo,
+      Bitcoin: btcLandingInfo
     },
     lessons: [
       { title: 'Introduction', icon: 'atom-variant', unlocked: true },
-      { title: 'Bitcoin', icon: 'lock', unlocked: false },
+      { title: 'Bitcoin', icon: 'lock', unlocked: true },
       { title: 'Monero', icon: 'eye-off', unlocked: false },
       // { title: 'Dai', icon: 'lock', unlocked: 'false' },
       // { title: 'Pool Together', icon: 'lock', unlocked: 'false' },
