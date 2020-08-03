@@ -34,12 +34,23 @@ export default {
       const time = this.player.currentTime
       for (var i = 0; i < breakpoints.length; i++) {
         const lastSlide = (breakpoints[i + 1] === undefined)
-        const correctSlide = (time > breakpoints[i] && time < breakpoints[i + 1])
+        const correctSlide = (
+          time > this.getSeconds(breakpoints[i]) &&
+          time < this.getSeconds(breakpoints[i + 1]))
         if (lastSlide || correctSlide) {
           this.currentSlide = i
           break
         }
       }
+    },
+    getSeconds (timeString) {
+      const times = timeString.split(':')
+      times[0] = parseInt(times[0], 10)
+      times[1] = parseInt(times[1], 10)
+      let timeSeconds = 0
+      timeSeconds += (times[0] * 60)
+      timeSeconds += times[1]
+      return timeSeconds
     }
   },
   watch: {

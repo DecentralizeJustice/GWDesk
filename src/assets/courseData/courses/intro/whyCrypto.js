@@ -75,20 +75,21 @@ const why = {
   ],
   breakpoints: [
     [
-      0, 10, 44, 52, 69, 107, 149, 219,
-      281, 343, 386, 447, 494, 542, 560
+      '0:00', '0:10', '0:44', '0:52', '1:09', '1:47', '2:29', '3:39',
+      '4:41', '5:43', '6:26', '7:27', '8:14', '9:02', '9:20'
     ],
     [
-      0, 23, 48, 71, 137, 177, 217, 279, 335, 376, 430, 450, 470, 516, 543
+      '0:00', '0:23', '0:48', '1:11', '2:17', '2:57', '3:37', '4:39', '5:35',
+      '6:16', '7:10', '7:30', '7:50', '8:36', '9:03'
     ],
     [
-      0
+      '0:00'
     ]
   ],
   audio: [
-    'audio/whatIsCrypto/part1FinalAudio.mp3',
-    'audio/whatIsCrypto/part2Final.mp3',
-    'audio/whatIsCrypto/congratsFinal.mp3'
+    'audio/intro/whatIsCrypto/part1FinalAudio.mp3',
+    'audio/intro/whatIsCrypto/part2Final.mp3',
+    'audio/intro/whatIsCrypto/congratsFinal.mp3'
   ],
   questions: questions,
   notes: [

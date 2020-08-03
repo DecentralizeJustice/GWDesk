@@ -36,15 +36,16 @@ const howtoStore = {
   ],
   breakpoints: [
     [
-      0, 30, 57, 104, 144, 170, 258, 369, 489, 611, 649, 706
+      '0:00', '0:30', '0:57', '1:44', '2:24', '2:50', '4:18', '6:09', '8:09',
+      '10:11', '10:49', '11:46'
     ],
     [
-      0
+      '0:00'
     ]
   ],
   audio: [
-    'audio/howtoStore/part1Final.mp3',
-    'audio/howtoStore/congratsFinal.mp3'
+    'audio/intro/howtoStore/part1Final.mp3',
+    'audio/intro/howtoStore/congratsFinal.mp3'
   ],
   questions: questions,
   notes: [
