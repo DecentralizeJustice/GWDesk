@@ -1,34 +1,34 @@
-import slide1 from '@/assets/slides/whycrypto/slide1.jpg'
-import slide2 from '@/assets/slides/whycrypto/slide2.jpg'
-import slide3 from '@/assets/slides/whycrypto/slide3.jpg'
-import slide4 from '@/assets/slides/whycrypto/slide4.jpg'
-import slide5 from '@/assets/slides/whycrypto/slide5.jpg'
-import slide6 from '@/assets/slides/whycrypto/slide6.jpg'
-import slide7 from '@/assets/slides/whycrypto/slide7.jpg'
-import slide8 from '@/assets/slides/whycrypto/slide8.jpg'
-import slide9 from '@/assets/slides/whycrypto/slide9.jpg'
-import slide10 from '@/assets/slides/whycrypto/slide10.jpg'
-import slide11 from '@/assets/slides/whycrypto/slide11.jpg'
-import slide12 from '@/assets/slides/whycrypto/slide12.jpg'
-import slide13 from '@/assets/slides/whycrypto/slide13.jpg'
-import slide14 from '@/assets/slides/whycrypto/slide14.jpg'
-import slide15 from '@/assets/slides/whycrypto/slide15.jpg'
-import slide16 from '@/assets/slides/whycrypto/slide16.jpg'
-import slide17 from '@/assets/slides/whycrypto/slide17.jpg'
-import slide18 from '@/assets/slides/whycrypto/slide18.jpg'
-import slide19 from '@/assets/slides/whycrypto/slide19.jpg'
-import slide20 from '@/assets/slides/whycrypto/slide20.jpg'
-import slide21 from '@/assets/slides/whycrypto/slide21.jpg'
-import slide22 from '@/assets/slides/whycrypto/slide22.jpg'
-import slide23 from '@/assets/slides/whycrypto/slide23.jpg'
-import slide24 from '@/assets/slides/whycrypto/slide24.jpg'
-import slide25 from '@/assets/slides/whycrypto/slide25.jpg'
-import slide26 from '@/assets/slides/whycrypto/slide26.jpg'
-import slide27 from '@/assets/slides/whycrypto/slide27.jpg'
-import slide28 from '@/assets/slides/whycrypto/slide28.jpg'
-import slide29 from '@/assets/slides/whycrypto/slide29.jpg'
-import slide30 from '@/assets/slides/whycrypto/slide30.jpg'
-import slide31 from '@/assets/slides/whycrypto/slide31.jpg'
+import slide1 from '@/assets/courseData/slides/intro/whycrypto/slide1.jpg'
+import slide2 from '@/assets/courseData/slides/intro/whycrypto/slide2.jpg'
+import slide3 from '@/assets/courseData/slides/intro/whycrypto/slide3.jpg'
+import slide4 from '@/assets/courseData/slides/intro/whycrypto/slide4.jpg'
+import slide5 from '@/assets/courseData/slides/intro/whycrypto/slide5.jpg'
+import slide6 from '@/assets/courseData/slides/intro/whycrypto/slide6.jpg'
+import slide7 from '@/assets/courseData/slides/intro/whycrypto/slide7.jpg'
+import slide8 from '@/assets/courseData/slides/intro/whycrypto/slide8.jpg'
+import slide9 from '@/assets/courseData/slides/intro/whycrypto/slide9.jpg'
+import slide10 from '@/assets/courseData/slides/intro/whycrypto/slide10.jpg'
+import slide11 from '@/assets/courseData/slides/intro/whycrypto/slide11.jpg'
+import slide12 from '@/assets/courseData/slides/intro/whycrypto/slide12.jpg'
+import slide13 from '@/assets/courseData/slides/intro/whycrypto/slide13.jpg'
+import slide14 from '@/assets/courseData/slides/intro/whycrypto/slide14.jpg'
+import slide15 from '@/assets/courseData/slides/intro/whycrypto/slide15.jpg'
+import slide16 from '@/assets/courseData/slides/intro/whycrypto/slide16.jpg'
+import slide17 from '@/assets/courseData/slides/intro/whycrypto/slide17.jpg'
+import slide18 from '@/assets/courseData/slides/intro/whycrypto/slide18.jpg'
+import slide19 from '@/assets/courseData/slides/intro/whycrypto/slide19.jpg'
+import slide20 from '@/assets/courseData/slides/intro/whycrypto/slide20.jpg'
+import slide21 from '@/assets/courseData/slides/intro/whycrypto/slide21.jpg'
+import slide22 from '@/assets/courseData/slides/intro/whycrypto/slide22.jpg'
+import slide23 from '@/assets/courseData/slides/intro/whycrypto/slide23.jpg'
+import slide24 from '@/assets/courseData/slides/intro/whycrypto/slide24.jpg'
+import slide25 from '@/assets/courseData/slides/intro/whycrypto/slide25.jpg'
+import slide26 from '@/assets/courseData/slides/intro/whycrypto/slide26.jpg'
+import slide27 from '@/assets/courseData/slides/intro/whycrypto/slide27.jpg'
+import slide28 from '@/assets/courseData/slides/intro/whycrypto/slide28.jpg'
+import slide29 from '@/assets/courseData/slides/intro/whycrypto/slide29.jpg'
+import slide30 from '@/assets/courseData/slides/intro/whycrypto/slide30.jpg'
+import slide31 from '@/assets/courseData/slides/intro/whycrypto/slide31.jpg'
 import questions from '@/assets/courseData/eduTest/intro/introWhyCryptocurrency.js'
 import notes1 from '@/assets/courseData/courseNotes/intro/whyCrypto/part1.html'
 import notes2 from '@/assets/courseData/courseNotes/intro/whyCrypto/part2.html'
@@ -75,20 +75,21 @@ const why = {
   ],
   breakpoints: [
     [
-      0, 10, 44, 52, 69, 107, 149, 219,
-      281, 343, 386, 447, 494, 542, 560
+      '0:00', '0:10', '0:44', '0:52', '1:09', '1:47', '2:29', '3:39',
+      '4:41', '5:43', '6:26', '7:27', '8:14', '9:02', '9:20'
     ],
     [
-      0, 23, 48, 71, 137, 177, 217, 279, 335, 376, 430, 450, 470, 516, 543
+      '0:00', '0:23', '0:48', '1:11', '2:17', '2:57', '3:37', '4:39', '5:35',
+      '6:16', '7:10', '7:30', '7:50', '8:36', '9:03'
     ],
     [
-      0
+      '0:00'
     ]
   ],
   audio: [
-    'audio/whatIsCrypto/part1FinalAudio.mp3',
-    'audio/whatIsCrypto/part2Final.mp3',
-    'audio/whatIsCrypto/congratsFinal.mp3'
+    'audio/intro/whatIsCrypto/part1FinalAudio.mp3',
+    'audio/intro/whatIsCrypto/part2Final.mp3',
+    'audio/intro/whatIsCrypto/congratsFinal.mp3'
   ],
   questions: questions,
   notes: [
