@@ -14,8 +14,8 @@ const welcome = {
     slide5
   ],
   breakpoints: [
-    0, 10, 41, 75, 133
+    '0:00', '0:10', '0:41', '1:15', '2:13'
   ],
-  audio: 'audio/welcome/Welcome.mp3'
+  audio: 'audio/intro/welcome/Welcome.mp3'
 }
 export default welcome

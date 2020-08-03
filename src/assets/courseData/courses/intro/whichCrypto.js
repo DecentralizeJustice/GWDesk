@@ -55,19 +55,20 @@ const whichCrypto = {
   ],
   breakpoints: [
     [
-      0, 9, 32, 39, 75, 103, 141, 220, 270, 357, 441
+      '0:00', '0:09', '0:32', '0:39', '1:15', '1:43', '2:21', '3:40', '4:30',
+      '5:57', '7:21'
     ],
     [
-      0, 23, 160, 283, 329, 452, 485, 627, 688
+      '0:00', '0:23', '2:40', '4:43', '5:29', '7:32', '8:05', '10:27', '11:28'
     ],
     [
-      0
+      '0:00'
     ]
   ],
   audio: [
-    'audio/bestCrypto/part1Final.mp3',
-    'audio/bestCrypto/part2Final.mp3',
-    'audio/bestCrypto/congratsFinal.mp3'
+    'audio/intro/bestCrypto/part1Final.mp3',
+    'audio/intro/bestCrypto/part2Final.mp3',
+    'audio/intro/bestCrypto/congratsFinal.mp3'
   ],
   questions: questions,
   notes: [

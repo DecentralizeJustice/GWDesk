@@ -49,19 +49,19 @@ const howtoBuy = {
   ],
   breakpoints: [
     [
-      0, 35, 50, 59, 105, 208, 261, 331, 350
+      '0:00', '0:35', '0:50', '0:59', '1:45', '3:28', '4:21', '5:31', '5:50'
     ],
     [
-      0, 37, 80, 123, 198, 258, 299, 331
+      '0:00', '0:37', '1:02', '2:03', '3:18', '4:18', '4:59', '5:31'
     ],
     [
-      0
+      '0:00'
     ]
   ],
   audio: [
-    'audio/howtoBuy/part1Final.mp3',
-    'audio/howtoBuy/part2Final.mp3',
-    'audio/howtoBuy/congratsFinal.mp3'
+    'audio/intro/howtoBuy/part1Final.mp3',
+    'audio/intro/howtoBuy/part2Final.mp3',
+    'audio/intro/howtoBuy/congratsFinal.mp3'
   ],
   questions: questions,
   notes: [
