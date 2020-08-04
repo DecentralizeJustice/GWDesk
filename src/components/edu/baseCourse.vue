@@ -17,7 +17,7 @@
     </v-row>
       <justVidComp
       v-if='justVid'
-      v-bind:courseInfo="courseInfo"/>
+      v-bind:courseInfo="courseInfo.comp"/>
     <div v-if='!justVid && currentComponent === "mainQuiz"'>
       <vidComp
       v-on:startQuiz='startQuiz()'
@@ -164,6 +164,9 @@ export default {
       this.part += 1
       this.backToVideo()
     }
+  },
+  mounted () {
+    // console.log(this.courseInfo)
   }
 }
 </script>
