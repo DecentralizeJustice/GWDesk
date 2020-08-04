@@ -1,5 +1,6 @@
 <template>
   <component
+  style='overflow-x: hidden !important;'
   :key='lesson'
   v-bind:is="currentMain"
   v-bind:courseInfo="courseInfo"
