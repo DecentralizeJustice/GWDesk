@@ -1,6 +1,7 @@
 'use strict'
-
-const granax = require('@deadcanaries/granax')
+const granaxLocation = process.argv[2]
+// eslint-disable-next-line
+const granax = require(granaxLocation)
 const tor = granax()
 tor.on('ready', function () {
   // eslint-disable-next-line
