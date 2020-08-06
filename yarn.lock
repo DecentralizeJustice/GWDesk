@@ -4720,6 +4720,11 @@ electron-icon-builder@^1.0.2:
     icon-gen "^2.0.0"
     jimp "^0.9.3"
 
+electron-log@^4.2.2:
+  version "4.2.2"
+  resolved "https://registry.yarnpkg.com/electron-log/-/electron-log-4.2.2.tgz#b358dc6d1e4772465609ee3d8ad9f594d9e742c8"
+  integrity sha512-lBpLh1Q8qayrTxFIrTPcNjSHsosvUfOYyZ8glhiLcx7zCNPDGuj8+nXlEaaSS6LRiQQbLgLG+wKpuvztNzBIrA==
+
 electron-notarize@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/electron-notarize/-/electron-notarize-1.0.0.tgz#bc925b1ccc3f79e58e029e8c4706572b01a9fd8f"
