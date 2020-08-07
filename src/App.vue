@@ -40,11 +40,12 @@ export default {
     loop: async function () {
       if (isDevelopment || this.torDormant || this.torCircuitReady) {
         this.torReady = true
+        return true
       } else {
         this.dormantb()
         this.circuitEstablishedb()
         await this.sleep(this.waitTime * 1000)
-        this.loop()
+        await this.loop()
       }
     },
     dormantb: function () {
@@ -101,7 +102,7 @@ export default {
   }),
   async mounted () {
     this.start()
-    this.loop()
+    await this.loop()
     if (process.env.NODE_ENV !== 'development') {
       ipcRenderer.send('CHECK_FOR_UPDATE_PENDING')
       ipcRenderer.on('CHECK_FOR_UPDATE_SUCCESS', (event, updateInfo) => {
