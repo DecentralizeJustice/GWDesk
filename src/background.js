@@ -1,46 +1,82 @@
 'use strict'
+// '/Applications/GuidingWallet.app/Contents/Resources/node_modules/@deadcanaries/granax'
 import path from 'path'
 import { fork } from 'child_process'
 import { app, protocol, BrowserWindow } from 'electron'
 import {
   createProtocol,
-  installVueDevtools // eslint-disable-line
+  installVueDevtools
 } from 'vue-cli-plugin-electron-builder/lib'
+const log = require('electron-log')
+// const fs = require('fs-extra')
 const isDevelopment = process.env.NODE_ENV !== 'production'
 const { autoUpdater } = require('electron-updater')
+autoUpdater.autoDownload = false
 const { ipcMain } = require('electron')
 const options = {
   stdio: ['pipe', 'pipe', 'pipe', 'ipc']
 }
+// eslint-disable-line
 let port
 let sender
 function setPort (portNumber) {
+  log.warn('portSet', portNumber)
   if (!isDevelopment) {
     win.webContents.session.setProxy({ proxyRules: 'socks5://127.0.0.1:' + portNumber })
   }
 }
-// eslint-disable-next-line
-const child = fork(path.join(__static, '../public/startTor.js'), [], options)
-child.on('message', message => {
-  if (message.port) {
-    setPort(message.port)
-  }
-  if (message.dormant) {
-    sender.send('dormant', message.dormant)
-  }
-  if (message.circuitEstablished) {
-    sender.send('circuitEstablished', message.circuitEstablished)
-  }
+const resourcePath = app.getAppPath().slice(0, -9)
+log.warn(app.getAppPath())
+let granaxLocation = resourcePath + '/node_modules/@deadcanaries/granax'
+let manageTorPath = path.join(resourcePath, '/public/manageTor.js')
+if (isDevelopment) {
+  manageTorPath = './public/manageTor.js'
+  granaxLocation = '@deadcanaries/granax'
+}
+const child = fork(manageTorPath, [granaxLocation, resourcePath], options)
+child.stderr.on('data', function (data) {
+  log.warn('stdout: ' + data)
 })
+child.on('error', (err) => {
+  log.error(err)
+})
+child.on('exit', () => {
+  log.error('Exiting Process')
+})
+child.on('close', () => {
+  log.error('Closing')
+})
+try {
+  child.on('message', message => {
+    if (message.port) {
+      setPort(message.port)
+    }
+    if (message.dormant) {
+      sender.send('dormant', message.dormant)
+    }
+    if (message.circuitEstablished) {
+      sender.send('circuitEstablished', message.circuitEstablished)
+    }
+  })
+} catch (e) {
+  log.error(e)
+}
 ipcMain.on('dormant', event => {
-  sender = event.sender
-  child.send({ dormant: true })
+  try {
+    sender = event.sender
+    child.send({ dormant: true })
+  } catch (e) {
+    // log.error(e)
+  }
 })
 ipcMain.on('circuitEstablished', (event, message) => {
-  sender = event.sender
-  child.send({ circuitEstablished: true })
+  try {
+    sender = event.sender
+    child.send({ circuitEstablished: true })
+  } catch (e) {
+    // log.error(e)
+  }
 })
-autoUpdater.autoDownload = false
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win
