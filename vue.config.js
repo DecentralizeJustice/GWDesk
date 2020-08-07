@@ -7,7 +7,7 @@ const extraResourcess =
     'mv', 'mkdirp', 'minimist', 'merge', 'latest-torbrowser-version', 'semver',
     'follow-redirects', 'cheerio', 'parse5', 'types/node', 'lodash', 'htmlparser2',
     'readable-stream', 'util-deprecate', 'string_decoder', 'safe-buffer', 'domhandler',
-    'css-select', 'nth-check', 'boolbase', 'css-what', 'async']
+    'css-select', 'nth-check', 'boolbase', 'css-what', 'async', 'electron-log']
 function addnode () {
   for (var i = 0; i < extraResourcess.length; i++) {
     extraResourcess[i] = './node_modules/' + extraResourcess[i]
@@ -38,7 +38,7 @@ module.exports = {
     electronBuilder: {
       externals: ['@deadcanaries/granax'],
       builderOptions: {
-        extraResources: extraResourcess,
+        extraResources: extraResourcess, // ['./node_modules/', './public/manageTor.js'],
         buildDependenciesFromSource: false,
         nodeGypRebuild: false,
         npmRebuild: false,

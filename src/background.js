@@ -20,18 +20,20 @@ const options = {
 let port
 let sender
 function setPort (portNumber) {
+  log.warn('portSet', portNumber)
   if (!isDevelopment) {
     win.webContents.session.setProxy({ proxyRules: 'socks5://127.0.0.1:' + portNumber })
   }
 }
 const resourcePath = app.getAppPath().slice(0, -9)
+log.warn(app.getAppPath())
 let granaxLocation = resourcePath + '/node_modules/@deadcanaries/granax'
 let manageTorPath = path.join(resourcePath, '/public/manageTor.js')
 if (isDevelopment) {
   manageTorPath = './public/manageTor.js'
   granaxLocation = '@deadcanaries/granax'
 }
-const child = fork(manageTorPath, [granaxLocation], options)
+const child = fork(manageTorPath, [granaxLocation, resourcePath], options)
 child.stderr.on('data', function (data) {
   log.warn('stdout: ' + data)
 })
