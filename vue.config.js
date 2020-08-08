@@ -1,20 +1,3 @@
-const extraResourcess =
-  [
-    '@deadcanaries/granax', 'merge', 'mkdirp', 'rimraf', 'glob',
-    'entities', 'domutils', 'domelementtype', 'dom-serializer',
-    'ncp', '7zip', 'path-is-absolute', 'once', 'wrappy', 'minimatch', 'brace-expansion',
-    'concat-map', 'balanced-match', 'inherits', 'inflight', 'fs.realpath', 'progress',
-    'mv', 'mkdirp', 'minimist', 'merge', 'latest-torbrowser-version', 'semver',
-    'follow-redirects', 'cheerio', 'parse5', 'types/node', 'lodash', 'htmlparser2',
-    'readable-stream', 'util-deprecate', 'string_decoder', 'safe-buffer', 'domhandler',
-    'css-select', 'nth-check', 'boolbase', 'css-what', 'async', 'electron-log']
-function addnode () {
-  for (var i = 0; i < extraResourcess.length; i++) {
-    extraResourcess[i] = './node_modules/' + extraResourcess[i]
-  }
-}
-addnode()
-extraResourcess.push('./public/manageTor.js')
 module.exports = {
   configureWebpack: {
     module: {
@@ -36,9 +19,10 @@ module.exports = {
   },
   pluginOptions: {
     electronBuilder: {
+      nodeIntegration: true,
       externals: ['@deadcanaries/granax'],
       builderOptions: {
-        extraResources: extraResourcess, // ['./node_modules/', './public/manageTor.js'],
+        asar: false,
         buildDependenciesFromSource: false,
         nodeGypRebuild: false,
         npmRebuild: false,
@@ -67,8 +51,7 @@ module.exports = {
             channel: 'latest'
           }
         ]
-      },
-      nodeIntegration: true
+      }
       // chainWebpackRendererProcess: config => {
       //   if (process.env.NODE_ENV === 'development') {
       //     config.plugins.delete('prefetch')
