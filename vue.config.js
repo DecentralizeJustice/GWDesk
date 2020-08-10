@@ -38,7 +38,7 @@ module.exports = {
           target: 'nsis',
           artifactName: '${productName}-Setup.${ext}' /* eslint-disable-line */
         },
-        // afterSign: 'buildInfo/notarize.js',
+        afterSign: 'buildInfo/notarize.js',
         dmg: {
           sign: false
         },
