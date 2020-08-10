@@ -1,6 +1,6 @@
 {
   "name": "GuidingWallet",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "private": true,
   "description": "A Guiding Wallet for the Decentralized World",
   "author": "Decentralize Justice",
@@ -16,9 +16,6 @@
     "electron:generate-icons": "electron-icon-builder --input=./public/icon.png --output=build --flatten",
     "electron:serve": "vue-cli-service electron:serve",
     "postinstall": ""
-  },
-  "resolutions": {
-    "vue-cli-plugin-electron-builder/electron-builder": ">=22.7.0"
   },
   "main": "background.js",
   "dependencies": {
@@ -46,9 +43,11 @@
     "vue-router": "^3.0.3",
     "vuetify": "^2.2.13",
     "vuex": "^3.0.1",
-    "vuex-persist": "^2.1.0"
+    "vuex-persist": "^2.1.0",
+    "electron": "^9.0.3"
   },
   "devDependencies": {
+    "electron": "^9.0.3",
     "@vue/cli-plugin-babel": "~4.2.2",
     "@vue/cli-plugin-e2e-cypress": "~4.2.2",
     "@vue/cli-plugin-eslint": "~4.2.2",
@@ -58,7 +57,6 @@
     "@vue/test-utils": "1.0.0-beta.31",
     "babel-eslint": "^10.0.1",
     "chai": "^4.1.2",
-    "electron": "6.1.11",
     "electron-icon-builder": "^1.0.2",
     "electron-notarize": "^1.0.0",
     "eslint": "^6.8.0",
@@ -73,7 +71,7 @@
     "pre-commit": "^1.2.2",
     "sass": "^1.17.4",
     "sass-loader": "^8.0.2",
-    "vue-cli-plugin-electron-builder": "~1.4.5",
+    "vue-cli-plugin-electron-builder": "^2.0.0-rc.4",
     "vue-cli-plugin-vuetify": "~2.0.5",
     "vue-template-compiler": "^2.6.10",
     "vuetify-loader": "^1.2.2",
