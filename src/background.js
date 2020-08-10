@@ -1,80 +1,101 @@
 'use strict'
-// '/Applications/GuidingWallet.app/Contents/Resources/node_modules/@deadcanaries/granax'
 import path from 'path'
-import { fork } from 'child_process'
 import { app, protocol, BrowserWindow } from 'electron'
 import {
   createProtocol,
   installVueDevtools
 } from 'vue-cli-plugin-electron-builder/lib'
 const log = require('electron-log')
-// const fs = require('fs-extra')
 const isDevelopment = process.env.NODE_ENV !== 'production'
 const { autoUpdater } = require('electron-updater')
 autoUpdater.autoDownload = false
 const { ipcMain } = require('electron')
-const options = {
-  stdio: ['pipe', 'pipe', 'pipe', 'ipc']
-}
-// eslint-disable-line
 let port
-let sender
+// let sender
 function setPort (portNumber) {
   log.warn('portSet', portNumber)
   if (!isDevelopment) {
     win.webContents.session.setProxy({ proxyRules: 'socks5://127.0.0.1:' + portNumber })
   }
 }
-const resourcePath = app.getAppPath().slice(0, -9)
-log.warn(app.getAppPath())
-let granaxLocation = resourcePath + '/node_modules/@deadcanaries/granax'
-let manageTorPath = path.join(resourcePath, '/public/manageTor.js')
-if (isDevelopment) {
-  manageTorPath = './public/manageTor.js'
-  granaxLocation = '@deadcanaries/granax'
-}
-const child = fork(manageTorPath, [granaxLocation, resourcePath], options)
-child.stderr.on('data', function (data) {
-  log.warn('stdout: ' + data)
-})
-child.on('error', (err) => {
-  log.error(err)
-})
-child.on('exit', () => {
-  log.error('Exiting Process')
-})
-child.on('close', () => {
-  log.error('Closing')
-})
-try {
-  child.on('message', message => {
-    if (message.port) {
-      setPort(message.port)
-    }
-    if (message.dormant) {
-      sender.send('dormant', message.dormant)
-    }
-    if (message.circuitEstablished) {
-      sender.send('circuitEstablished', message.circuitEstablished)
+
+const granax = require('@deadcanaries/granax')
+const tor = granax()
+
+tor.on('ready', function () {
+  tor.getInfo('net/listeners/socks', (err, result) => {
+    const port = parseInt(result.split('"').join('').split(':')[1])
+    setPort(port)
+    log.warn('port set:', port)
+    if (err) {
+      errorRan()
+      log.warn(err)
     }
   })
-} catch (e) {
-  log.error(e)
+})
+
+tor.on('error', function (err) {
+  errorRan()
+  log.warn(err)
+})
+// function dormant () {
+//   tor.getInfo('dormant', (err, result) => {
+//     log.warn({ dormant: result })
+//     if (err) {
+//       log.warn({ error: err })
+//     }
+//   })
+// }
+// function circuitEstablished () {
+//   tor.getInfo('status/circuit-established', (err, result) => {
+//     log.warn({ circuitEstablished: result })
+//     sender.send({ circuitEstablished: result })
+//     if (err) {
+//       log.warn({ circuitEstablished: err })
+//     }
+//   })
+// }
+
+// ipcMain.on('dormant', event => {
+//   try {
+//     sender = event.sender
+//     dormant()
+//   } catch (e) {
+//     // log.error(e)
+//   }
+// })
+function errorRan () {
+  log.error('Error Fun Triggered')
+  setTimeout(() => {
+    app.relaunch()
+    app.exit()
+  }, 20000)
 }
-ipcMain.on('dormant', event => {
+ipcMain.on('circuitEstablished34', event => {
   try {
-    sender = event.sender
-    child.send({ dormant: true })
+    tor.getInfo('status/circuit-established', (err, result) => {
+      win.webContents.send('circuitEstablished34', { circuitEstablished: result })
+      if (err) {
+        throw (err)
+      }
+    })
   } catch (e) {
-    // log.error(e)
+    errorRan()
+    log.error(e)
   }
 })
-ipcMain.on('circuitEstablished', (event, message) => {
+ipcMain.on('dormant34', event => {
+  // event.reply({ circuitEstablished: false })
   try {
-    sender = event.sender
-    child.send({ circuitEstablished: true })
+    tor.getInfo('dormant', (err, result) => {
+      win.webContents.send('dormant34', { dormant: result })
+      if (err) {
+        throw (err)
+      }
+    })
   } catch (e) {
-    // log.error(e)
+    errorRan()
+    log.error(e)
   }
 })
 // Keep a global reference of the window object, if you don't, the window will
@@ -91,7 +112,8 @@ function createWindow () {
       height: 1000,
       icon: path.join(__static, 'icon.png'), // eslint-disable-line
       webPreferences: {
-        nodeIntegration: true,
+        enableRemoteModule: true,
+        nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
         webSecurity: false
       }
     })
@@ -161,7 +183,7 @@ autoUpdater.on('update-downloaded', (ev, info) => {
   autoUpdater.quitAndInstall(true, true)
 })
 ipcMain.on('CHECK_FOR_UPDATE_PENDING', event => {
-  sender = event.sender
+  const { sender } = event
 
   // Automatically invoke success on development environment.
   if (process.env.NODE_ENV === 'development') {
@@ -181,7 +203,6 @@ ipcMain.on('CHECK_FOR_UPDATE_PENDING', event => {
 })
 
 ipcMain.on('DOWNLOAD_UPDATE_PENDING', event => {
-  autoUpdater.autoDownload = false
   const result = autoUpdater.downloadUpdate()
   const { sender } = event
   result
