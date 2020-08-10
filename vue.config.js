@@ -22,7 +22,7 @@ module.exports = {
       nodeIntegration: true,
       externals: ['@deadcanaries/granax'],
       builderOptions: {
-        asar: true,
+        asar: false,
         buildDependenciesFromSource: false,
         nodeGypRebuild: false,
         npmRebuild: false,
