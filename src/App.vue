@@ -110,6 +110,7 @@ export default {
       ipcRenderer.send('CHECK_FOR_UPDATE_PENDING')
       ipcRenderer.on('CHECK_FOR_UPDATE_SUCCESS', (event, updateInfo) => {
         const version = updateInfo.version
+        console.log(version, appVersion)
         if (version && version !== appVersion) {
           this.updateAvailable = true
         }
