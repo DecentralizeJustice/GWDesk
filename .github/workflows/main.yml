@@ -36,7 +36,7 @@ jobs:
           CSC_KEY_PASSWORD: ${{ secrets.Windows_CERTS_PASSWORD }}
           CSC_LINK: ${{ secrets.Windows_CERTS }}
 
-    - name: Upload latest-mac.yml
+    - name: Upload latest.yml
       uses: actions/upload-artifact@v2
       with:
         name: latest.yml
