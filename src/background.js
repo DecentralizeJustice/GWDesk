@@ -28,12 +28,14 @@ tor.on('ready', function () {
     setPort(port)
     log.warn('port set:', port)
     if (err) {
+      errorRan()
       log.warn(err)
     }
   })
 })
 
 tor.on('error', function (err) {
+  errorRan()
   log.warn(err)
 })
 // function dormant () {
@@ -62,8 +64,14 @@ tor.on('error', function (err) {
 //     // log.error(e)
 //   }
 // })
+function errorRan () {
+  log.error('Error Fun Triggered')
+  setTimeout(() => {
+    app.relaunch()
+    app.exit()
+  }, 20000)
+}
 ipcMain.on('circuitEstablished34', event => {
-  // event.reply({ circuitEstablished: false })
   try {
     tor.getInfo('status/circuit-established', (err, result) => {
       win.webContents.send('circuitEstablished34', { circuitEstablished: result })
@@ -72,6 +80,7 @@ ipcMain.on('circuitEstablished34', event => {
       }
     })
   } catch (e) {
+    errorRan()
     log.error(e)
   }
 })
@@ -85,19 +94,7 @@ ipcMain.on('dormant34', event => {
       }
     })
   } catch (e) {
-    log.error(e)
-  }
-})
-ipcMain.on('circuitEstablished34', event => {
-  // event.reply({ circuitEstablished: false })
-  try {
-    tor.getInfo('status/circuit-established', (err, result) => {
-      win.webContents.send('circuitEstablished34', { circuitEstablished: result })
-      if (err) {
-        throw (err)
-      }
-    })
-  } catch (e) {
+    errorRan()
     log.error(e)
   }
 })
