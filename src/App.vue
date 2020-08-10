@@ -51,7 +51,6 @@ export default {
     dormantb: function () {
       ipcRenderer.on('dormant34', (event, message) => {
         const status = message.dormant
-        console.log(status)
         if (status === '1\n') {
           this.torDormant = true
         }
@@ -61,7 +60,6 @@ export default {
     circuitEstablishedb: function () {
       ipcRenderer.on('circuitEstablished34', (event, message) => {
         const status = message.circuitEstablished
-        console.log(status)
         if (status === '1\n') {
           console.log('circuit ready')
           this.torCircuitReady = true
