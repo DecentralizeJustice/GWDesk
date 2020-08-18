@@ -72,7 +72,10 @@ export default {
     },
     async start () {
       try {
-        await this.$router.push({ path: 'edu' })
+        await this.$router.push(
+          {
+            name: 'edu'
+          })
       } catch (err) {
       }
     },
