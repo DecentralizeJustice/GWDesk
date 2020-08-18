@@ -30,6 +30,7 @@ const appVersion = require('../package.json').version
 const electron = window.require('electron')
 const ipcRenderer = electron.ipcRenderer
 const isDevelopment = process.env.NODE_ENV !== 'production'
+const R = require('ramda')
 export default {
   name: 'App',
   components: {
@@ -40,7 +41,7 @@ export default {
     shouldUpdate: function (downloadVersion, currentVersion) {
       const downloadVersionArray = downloadVersion.split('.').map(e => parseInt(e))
       const currentVersionArray = currentVersion.split('.').map(e => parseInt(e))
-      if (downloadVersionArray === currentVersionArray) {
+      if (R.equals(downloadVersionArray, currentVersionArray)) {
         return false
       }
       for (var i = 0; i < downloadVersionArray.length; i++) {
@@ -114,7 +115,7 @@ export default {
     }
   },
   data: () => ({
-    waitTime: 15,
+    waitTime: 10,
     torReady: false,
     torDormant: false,
     torCircuitReady: false,
