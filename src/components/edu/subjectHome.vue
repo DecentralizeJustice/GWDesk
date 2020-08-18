@@ -12,10 +12,22 @@
 import landing from '@/components/edu/landing.vue'
 import baseCourse from '@/components/edu/baseCourse.vue'
 export default {
-  props: ['landingInfo'],
+  props: ['landingInfo', 'setLesson'],
   data: () => ({
     lesson: ''
   }),
+  mounted () {
+    if (this.setLesson) {
+      this.changeLesson(this.setLesson)
+    }
+  },
+  watch: {
+    setLesson: function (val) {
+      if (this.setLesson) {
+        this.changeLesson(this.setLesson)
+      }
+    }
+  },
   computed: {
     currentMain () {
       if (this.lesson === '') {

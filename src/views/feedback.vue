@@ -75,6 +75,12 @@ export default {
     feedbackLink: 'https://us-central1-app-feedback-283918.cloudfunctions.net/feedback'
   }),
   methods: {
+    async start () {
+      try {
+      } catch (err) {
+        console.log(err)
+      }
+    },
     submitFeedback: async function (subject, body) {
       try {
         const result = await axios({
@@ -127,6 +133,9 @@ export default {
       }
       return false
     }
+  },
+  async mounted () {
+    this.start()
   }
 }
 </script>

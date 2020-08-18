@@ -51,6 +51,7 @@
     >
     <subjectHome
     v-bind:landingInfo="landingInfoPicker"
+    v-bind:setLesson="this.routeInfo.lesson"
     v-on:exit="dialog = false"/>
     </v-dialog>
     </v-layout>
@@ -61,9 +62,15 @@ import subjectHome from '@/components/edu/subjectHome.vue'
 import introLandingInfo from '@/assets/landingInfo/intro.js'
 import btcLandingInfo from '@/assets/landingInfo/btc.js'
 export default {
+  mounted () {
+    if (this.routeInfo.course) {
+      this.openDialog(this.routeInfo.course)
+    }
+  },
   components: {
     subjectHome
   },
+  props: ['routeInfo'],
   data: () => ({
     dialog: false,
     currentLesson: '',
@@ -88,6 +95,13 @@ export default {
       { title: 'About Guide Wallet', icon: 'information-outline', unlocked: false }
     ]
   }),
+  watch: {
+    routeInfo: function (val) {
+      if (this.routeInfo.course) {
+        this.openDialog(this.routeInfo.course)
+      }
+    }
+  },
   methods: {
     openDialog: function (section) {
       this.currentLesson = section
