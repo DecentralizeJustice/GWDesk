@@ -77,11 +77,6 @@ export default {
   methods: {
     async start () {
       try {
-        await this.$router.push(
-          {
-            name: 'edu'
-            // params: { course: 'Introduction', lesson: 2 }
-          })
       } catch (err) {
         console.log(err)
       }
