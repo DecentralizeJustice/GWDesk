@@ -37,6 +37,22 @@ export default {
     updateWindow
   },
   methods: {
+    shouldUpdate: function (downloadVersion, currentVersion) {
+      const downloadVersionArray = downloadVersion.split('.').map(e => parseInt(e))
+      const currentVersionArray = currentVersion.split('.').map(e => parseInt(e))
+      if (downloadVersionArray === currentVersionArray) {
+        return false
+      }
+      for (var i = 0; i < downloadVersionArray.length; i++) {
+        if (downloadVersionArray[i] > currentVersionArray[i]) {
+          return true
+        }
+        if (downloadVersionArray[i] < currentVersionArray[i]) {
+          return false
+        }
+      }
+      return true
+    },
     loop: async function () {
       if (isDevelopment || this.torDormant || this.torCircuitReady) {
         this.torReady = true
@@ -113,7 +129,8 @@ export default {
       ipcRenderer.send('CHECK_FOR_UPDATE_PENDING')
       ipcRenderer.on('CHECK_FOR_UPDATE_SUCCESS', (event, updateInfo) => {
         const version = updateInfo.version
-        if (version && version !== appVersion) {
+        const updateReady = this.shouldUpdate(version, appVersion)
+        if (version && updateReady) {
           this.updateAvailable = true
         }
       })
