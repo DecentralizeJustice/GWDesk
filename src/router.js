@@ -16,7 +16,9 @@ const router = new Router({
     {
       path: '/edu',
       name: 'edu',
-      component: Education
+      component: Education,
+      props: (route) => (
+        { routeInfo: route.params })
     },
     {
       path: '/feedback',
