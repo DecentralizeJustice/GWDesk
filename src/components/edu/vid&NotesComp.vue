@@ -7,7 +7,7 @@
     </v-col>
      <v-row justify="center">
     <v-dialog v-model="dialogOpen" fullscreen hide-overlay transition="dialog-bottom-transition">
-      <v-card>
+      <v-card style='overflow-x: hidden;'>
         <v-toolbar dark color="primary">
           <v-btn icon dark @click="closeLargeVid()">
             <v-icon>mdi-close</v-icon>
