@@ -1,22 +1,21 @@
 {
   "name": "GuidingWallet",
   "version": "0.0.15",
-  "homepage": "https://guidingwallet.app/",
   "private": true,
   "description": "A Guiding Wallet for the Decentralized World",
   "author": "Decentralize Justice",
   "scripts": {
     "serve": "vue-cli-service electron:serve",
     "build": "npm-run-all electron:generate-icons electron:build",
-    "test:unit": "vue-cli-service test:unit",
-    "test:e2e": "vue-cli-service test:e2e",
-    "test": "yarn run checkStyle",
+    "test:mocha": "mocha 'tests/test.spec.js' --require @babel/register --exit",
     "lint": "vue-cli-service lint",
     "checkStyle": "yarn run lint --no-fix",
-    "electron:build": "vue-cli-service electron:build --publish=never",
+    "electron:build": "vue-cli-service electron:build",
     "electron:generate-icons": "electron-icon-builder --input=./public/icon.png --output=build --flatten",
     "electron:serve": "vue-cli-service electron:serve",
-    "postinstall": ""
+    "postinstall": "electron-builder install-app-deps",
+    "postuninstall": "electron-builder install-app-deps",
+    "test": "npm-run-all checkStyle test:mocha"
   },
   "main": "background.js",
   "dependencies": {
@@ -48,6 +47,10 @@
     "vuex-persist": "^2.1.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.11.1",
+    "@babel/preset-env": "^7.11.0",
+    "@babel/register": "^7.10.5",
+    "@vue/cli": "^4.5.4",
     "@vue/cli-plugin-babel": "~4.2.2",
     "@vue/cli-plugin-e2e-cypress": "~4.2.2",
     "@vue/cli-plugin-eslint": "~4.2.2",
@@ -73,10 +76,12 @@
     "pre-commit": "^1.2.2",
     "sass": "^1.17.4",
     "sass-loader": "^8.0.2",
-    "vue-cli-plugin-electron-builder": "^2.0.0-rc.4",
+    "spectron": "^11.1.0",
+    "vue-cli-plugin-electron-builder": "~2.0.0-rc.4",
     "vue-cli-plugin-vuetify": "~2.0.5",
     "vue-template-compiler": "^2.6.10",
     "vuetify-loader": "^1.2.2",
     "webpack": "^4.41.6"
-  }
+  },
+  "homepage": "https://guidingwallet.app/"
 }

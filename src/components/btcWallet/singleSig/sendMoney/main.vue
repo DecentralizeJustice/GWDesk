@@ -75,16 +75,16 @@ export default {
       const trans = this.transaction
       const currentSection = this.currentSection
       switch (currentSection) {
-        case 0:
-          if (trans.addressArray.length === 0) {
-            return true
-          }
-          break
-        case 1:
-          if (trans.psbt === undefined) {
-            return true
-          }
-          break
+      case 0:
+        if (trans.addressArray.length === 0) {
+          return true
+        }
+        break
+      case 1:
+        if (trans.psbt === undefined) {
+          return true
+        }
+        break
       }
       return false
     },
