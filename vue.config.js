@@ -51,12 +51,13 @@ module.exports = {
             channel: 'latest'
           }
         ]
+      },
+      chainWebpackRendererProcess (config) {
+        config.plugin('define').tap(args => {
+          delete args[0]['process.env'].BASE_URL
+          return args
+        })
       }
-      // chainWebpackRendererProcess: config => {
-      //   if (process.env.NODE_ENV === 'development') {
-      //     config.plugins.delete('prefetch')
-      //   }
-      // }
     }
   }
 }
