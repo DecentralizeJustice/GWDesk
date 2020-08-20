@@ -1,11 +1,10 @@
-import testWithSpectron from 'vue-cli-plugin-electron-builder/lib/testWithSpectron'
-import chai from 'chai'
-import chaiAsPromised from 'chai-as-promised'
-// eslint-disable-next-line no-undef
+const chai = require('chai')
+const testWithSpectron = require('vue-cli-plugin-electron-builder/lib/testWithSpectron')
+const chaiAsPromised = require('chai-as-promised')
 const spectron = require('spectron')
 
-chai.should()
 chai.use(chaiAsPromised)
+chai.should()
 
 describe('Application launch', function () {
   this.timeout(100000)
@@ -26,14 +25,18 @@ describe('Application launch', function () {
       return this.stopServe()
     }
   })
-  after(function () {
-    // eslint-disable-next-line no-undef
-  })
 
-  it('opens a window', function (done) {
+  it('opens a window', function () {
     return this.app.client
       .getWindowCount()
       .should.eventually.have.at.least(1)
-      .notify(done)
+      .browserWindow.isMinimized()
+      .should.eventually.be.false.browserWindow.isVisible()
+      .should.eventually.be.true.browserWindow.getBounds()
+      .should.eventually.have.property('width')
+      .and.be.above(0)
+      .browserWindow.getBounds()
+      .should.eventually.have.property('height')
+      .and.be.above(0)
   })
 })
