@@ -34,6 +34,10 @@ import notes1 from '@/assets/courseData/courseNotes/intro/whyCrypto/part1.html'
 import notes2 from '@/assets/courseData/courseNotes/intro/whyCrypto/part2.html'
 const why = {
   title: 'What is Crypto?',
+  nextLesson: {
+    lesson: 2,
+    course: 'Introduction'
+  },
   slides: [
     [
       slide1,

@@ -63,7 +63,7 @@ import introLandingInfo from '@/assets/landingInfo/intro.js'
 import btcLandingInfo from '@/assets/landingInfo/btc.js'
 export default {
   mounted () {
-    if (this.routeInfo.course) {
+    if (typeof this.routeInfo.course !== 'undefined') {
       this.openDialog(this.routeInfo.course)
     }
   },
@@ -95,13 +95,6 @@ export default {
       { title: 'About Guide Wallet', icon: 'information-outline', unlocked: false }
     ]
   }),
-  watch: {
-    routeInfo: function (val) {
-      if (this.routeInfo.course) {
-        this.openDialog(this.routeInfo.course)
-      }
-    }
-  },
   methods: {
     openDialog: function (section) {
       this.currentLesson = section

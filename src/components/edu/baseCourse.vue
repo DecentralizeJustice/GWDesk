@@ -53,10 +53,8 @@
   </div> -->
   <justVidComp
   v-bind:courseInfo="correctLessonInfo"
-  v-bind:nextLessonavAilable='nextLessonavAilable'
   v-if='!justVid && currentComponent === "congrats"'
-  v-on:quizDone='partDone'
-  v-on:nextLesson='nextLesson()'/>
+  v-on:quizDone='partDone'/>
     <v-divider/>
     <v-card-actions>
       <!-- <v-btn
@@ -93,10 +91,16 @@ export default {
   },
   computed: {
     correctLessonInfo: function () {
+      let nextLesson
+      const numberOfQuestions = this.questions.length
+      if (this.part === numberOfQuestions) {
+        nextLesson = this.courseInfo.comp.nextLesson
+      }
       const info = {
         slides: this.courseInfo.comp.slides[this.part],
         breakpoints: this.courseInfo.comp.breakpoints[this.part],
-        audio: this.courseInfo.comp.audio[this.part]
+        audio: this.courseInfo.comp.audio[this.part],
+        nextLesson: nextLesson
       }
       return info
     },
@@ -108,15 +112,6 @@ export default {
     },
     title: function () {
       return this.courseInfo.comp.title
-    },
-    nextLessonTitle: function () {
-      return this.courseInfo.comp.nextLesson
-    },
-    nextLessonavAilable: function () {
-      if (this.nextLessonTitle === undefined) {
-        return false
-      }
-      return true
     },
     test: function () {
       return this.questions[this.part]
@@ -144,9 +139,6 @@ export default {
     }
   },
   methods: {
-    nextLesson () {
-      this.$emit('changeLesson', this.nextLessonTitle)
-    },
     exit () {
       this.$emit('changeLesson', '')
     },

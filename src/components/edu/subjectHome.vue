@@ -17,15 +17,8 @@ export default {
     lesson: ''
   }),
   mounted () {
-    if (this.setLesson) {
+    if (typeof this.setLesson !== 'undefined') {
       this.changeLesson(this.setLesson)
-    }
-  },
-  watch: {
-    setLesson: function (val) {
-      if (this.setLesson) {
-        this.changeLesson(this.setLesson)
-      }
     }
   },
   computed: {
