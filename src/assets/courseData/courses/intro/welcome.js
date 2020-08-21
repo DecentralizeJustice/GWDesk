@@ -16,6 +16,10 @@ const welcome = {
   breakpoints: [
     '0:00', '0:10', '0:41', '1:15', '2:13'
   ],
-  audio: 'audio/intro/welcome/Welcome.mp3'
+  audio: 'audio/intro/welcome/Welcome.mp3',
+  nextLesson: {
+    lesson: 1,
+    course: 'Introduction'
+  }
 }
 export default welcome
