@@ -15,6 +15,10 @@ import questions from '@/assets/courseData/eduTest/intro/howtostore.js'
 import notes1 from '@/assets/courseData/courseNotes/intro/howtoStore.html'
 const howtoStore = {
   title: 'How to Store Crypto?',
+  nextLesson: {
+    lesson: 4,
+    course: 'Introduction'
+  },
   slides: [
     [
       slide1,

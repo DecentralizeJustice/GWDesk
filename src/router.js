@@ -5,6 +5,7 @@ import Feedback from './views/feedback.vue'
 import DevPannel from './views/dev.vue'
 import Settings from './views/settings.vue'
 import BtcSingleSig from './views/btcSingleSig.vue'
+import Dummy from './views/dummy.vue'
 
 Vue.use(Router)
 
@@ -17,6 +18,13 @@ const router = new Router({
       path: '/edu',
       name: 'edu',
       component: Education,
+      props: (route) => (
+        { routeInfo: route.params })
+    },
+    {
+      path: '/dummy',
+      name: 'dummy',
+      component: Dummy,
       props: (route) => (
         { routeInfo: route.params })
     },

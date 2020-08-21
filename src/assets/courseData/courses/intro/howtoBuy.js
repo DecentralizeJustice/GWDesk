@@ -21,6 +21,10 @@ import notes1 from '@/assets/courseData/courseNotes/intro/howtoBuy/part1.html'
 import notes2 from '@/assets/courseData/courseNotes/intro/howtoBuy/part2.html'
 const howtoBuy = {
   title: 'How to Buy Crypto?',
+  nextLesson: {
+    lesson: 0,
+    course: 'Bitcoin'
+  },
   slides: [
     [
       slide1,

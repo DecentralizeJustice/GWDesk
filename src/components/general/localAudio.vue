@@ -5,10 +5,12 @@
       </v-flex>
       <v-flex xs12>
         <v-layout row wrap justify-center>
-          <audio controls @timeupdate="updateTime" ref="player" class="mt-4" :src="processedUrl" type="audio/mp3" @error='hu'>
+          <audio controls @timeupdate="updateTime" ref="player" class="mt-4" :src="processedUrl" type="audio/mp3" @error='audioError'>
         </audio>
         </v-layout>
       </v-flex>
+      <v-btn color='primary' class='mt-3' @click='goToNextLesson'
+      v-if='nextLessonAvailable'>Next Lesson</v-btn>
     </v-layout>
 </template>
 
@@ -28,20 +30,44 @@ export default {
     }
   },
   methods: {
-    hu (e) {
+    audioError (e) {
       console.log(e.srcElement.error)
+    },
+    goToNextLesson () {
+      this.$router.push(
+        {
+          name: 'dummy',
+          params: {
+            lesson: this.courseInfo.nextLesson.lesson,
+            course: this.courseInfo.nextLesson.course
+          }
+        })
     },
     updateTime () {
       const breakpoints = this.courseInfo.breakpoints
       const time = this.player.currentTime
       for (var i = 0; i < breakpoints.length; i++) {
-        const lastSlide = (breakpoints[i + 1] === undefined)
-        const correctSlide = (time > breakpoints[i] && time < breakpoints[i + 1])
+        const lowseconds = this.getSeconds(breakpoints[i])
+        const highseconds = this.getSeconds(breakpoints[i + 1])
+        const lastSlide = (highseconds === undefined)
+        const correctSlide = (time >= lowseconds && time < highseconds)
         if (lastSlide || correctSlide) {
           this.currentSlide = i
           break
         }
       }
+    },
+    getSeconds (timeString) {
+      if (typeof timeString === 'undefined') {
+        return undefined
+      }
+      const times = timeString.split(':')
+      times[0] = parseInt(times[0], 10)
+      times[1] = parseInt(times[1], 10)
+      let timeSeconds = 0
+      timeSeconds += (times[0] * 60)
+      timeSeconds += times[1]
+      return timeSeconds
     }
   },
   watch: {
@@ -58,6 +84,12 @@ export default {
   computed: {
     slide: function () {
       return this.courseInfo.slides[this.currentSlide]
+    },
+    nextLessonAvailable: function () {
+      if (this.courseInfo.nextLesson) {
+        return true
+      }
+      return false
     }
   },
   async mounted () {
