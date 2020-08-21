@@ -64,9 +64,9 @@ function getInputData (transInfo) {
   const mixin2 = {}
   const redeemType = 'p2wsh'
   switch (redeemType) {
-    case 'p2wsh':
-      mixin2.witnessScript = witnessScript
-      break
+  case 'p2wsh':
+    mixin2.witnessScript = witnessScript
+    break
   }
   return {
     hash: hash,

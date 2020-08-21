@@ -24,6 +24,10 @@ import notes1 from '@/assets/courseData/courseNotes/intro/whichCrypto/part1.html
 import notes2 from '@/assets/courseData/courseNotes/intro/whichCrypto/part2.html'
 const whichCrypto = {
   title: 'Which Crypto Is Best?',
+  nextLesson: {
+    lesson: 3,
+    course: 'Introduction'
+  },
   slides: [
     [
       slide1,
