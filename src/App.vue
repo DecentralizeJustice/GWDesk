@@ -37,6 +37,15 @@ export default {
     navDrawer,
     updateWindow
   },
+  data: () => ({
+    waitTime: 5,
+    torReady: false,
+    torDormant: false,
+    torCircuitReady: false,
+    updateAvailable: false,
+    readyToShutdown: false,
+    updateStarted: false
+  }),
   methods: {
     shouldUpdate: function (downloadVersion, currentVersion) {
       const downloadVersionArray = downloadVersion.split('.').map(e => parseInt(e))
@@ -114,15 +123,6 @@ export default {
       return !this.torReady || this.updateAvailable
     }
   },
-  data: () => ({
-    waitTime: 10,
-    torReady: false,
-    torDormant: false,
-    torCircuitReady: false,
-    updateAvailable: false,
-    readyToShutdown: false,
-    updateStarted: false
-  }),
   async mounted () {
     this.start()
     await this.loop()
