@@ -1,6 +1,7 @@
 {
   "name": "GuidingWallet",
-  "version": "0.0.15",
+  "version": "0.0.16",
+  "homepage": "https://guidingwallet.app/",
   "private": true,
   "description": "A Guiding Wallet for the Decentralized World",
   "author": "Decentralize Justice",
