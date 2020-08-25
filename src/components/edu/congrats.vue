@@ -36,7 +36,7 @@ export default {
   components: {
     videoPlayer
   },
-  props: ['courseInfo', 'nextLessonavAilable'],
+  props: ['courseInfo'],
   data () {
     return {
     }
@@ -50,8 +50,16 @@ export default {
     }
   },
   computed: {
+    nextLessonAvailable: function () {
+      if (this.courseInfo.nextLesson) {
+        return true
+      }
+      return false
+    }
   },
   async mounted () {
+    console.log('ran')
+    console.log(this.courseInfo)
   }
 }
 </script>
