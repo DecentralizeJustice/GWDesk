@@ -1,2 +1,2 @@
-# Distributed Keys Desktop App
-This Repo is for the Desktop App of Distributed Keys.
+# Guiding Wallet Desktop App
+This Repo is for the Desktop App of Guiding Wallet. 
