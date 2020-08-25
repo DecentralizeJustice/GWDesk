@@ -1,15 +1,16 @@
-import testWithSpectron from 'vue-cli-plugin-electron-builder/lib/testWithSpectron'
-import chai from 'chai'
-import chaiAsPromised from 'chai-as-promised'
+const chai = require('chai')
+const testWithSpectron = require('vue-cli-plugin-electron-builder/lib/testWithSpectron')
+const chaiAsPromised = require('chai-as-promised')
+const spectron = require('spectron')
 
-chai.should()
 chai.use(chaiAsPromised)
+chai.should()
 
 describe('Application launch', function () {
-  this.timeout(30000)
+  this.timeout(100000)
 
   beforeEach(function () {
-    return testWithSpectron().then(instance => {
+    return testWithSpectron(spectron).then(instance => {
       this.app = instance.app
       this.stopServe = instance.stopServe
     })
