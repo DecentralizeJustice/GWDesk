@@ -7,7 +7,7 @@
   "scripts": {
     "serve": "vue-cli-service electron:serve",
     "build": "npm-run-all electron:generate-icons electron:build",
-    "test:mocha": "mocha 'tests/e2e/*.js' --exit ",
+    "test:mocha": "mocha 'tests/e2e/*.js' --exit --parallel ",
     "lint": "vue-cli-service lint",
     "checkStyle": "yarn run lint --no-fix",
     "electron:build": "vue-cli-service electron:build",
@@ -81,7 +81,8 @@
     "vue-cli-plugin-vuetify": "~2.0.5",
     "vue-template-compiler": "^2.6.10",
     "vuetify-loader": "^1.2.2",
-    "webpack": "^4.41.6"
+    "webpack": "^4.41.6",
+    "spectron": "11.0.0"
   },
   "homepage": "https://guidingwallet.app/"
 }
