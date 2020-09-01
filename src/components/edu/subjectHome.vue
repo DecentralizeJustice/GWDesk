@@ -10,7 +10,8 @@
 </template>
 <script>
 import landing from '@/components/edu/landing.vue'
-import baseCourse from '@/components/edu/baseCourse.vue'
+import baseLesson from '@/components/edu/baseLesson.vue'
+import baseTutorial from '@/components/edu/baseTutorial.vue'
 export default {
   props: ['landingInfo', 'setLesson'],
   data: () => ({
@@ -26,7 +27,10 @@ export default {
       if (this.lesson === '') {
         return landing
       }
-      return baseCourse
+      if (this.landingInfo.lessons[this.lesson].comp.tutorial) {
+        return baseTutorial
+      }
+      return baseLesson
     },
     courseInfo () {
       return this.landingInfo.lessons[this.lesson]
