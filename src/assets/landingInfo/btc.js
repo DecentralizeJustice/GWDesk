@@ -1,5 +1,5 @@
 import intro from '@/assets/courseData/courses/btc/intro.js'
-import exodusIntro from '@/assets/tutorialData/exodus/intro.js'
+import exodusIntro from '@/assets/tutorialData/exodus/setup.js'
 const btcLandingInfo = {
   title: 'Bitcoin',
   lessons: [

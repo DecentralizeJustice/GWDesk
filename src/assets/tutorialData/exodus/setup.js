@@ -1,4 +1,4 @@
-import slide0 from '@/assets/courseData/slides/btc/intro/slide0.jpg'
+import slide0 from '@/assets/tutorialData/exodus/slides/setup/test.jpg'
 import slide1 from '@/assets/courseData/slides/btc/intro/slide1.jpg'
 import slide2 from '@/assets/courseData/slides/btc/intro/slide2.jpg'
 import slide3 from '@/assets/courseData/slides/btc/intro/slide3.jpg'

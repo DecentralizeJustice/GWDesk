@@ -2,7 +2,7 @@
   <v-card>
     <v-card-title class="headline justify-center">{{title}}</v-card-title>
     <v-divider/>
-    <v-row align="center" v-if='!justVid && currentComponent && currentComponent !== "congrats"'>
+    <v-row align="center">
      <v-col cols='10' offset='1'>
        <v-progress-linear
          :value='progress'
@@ -16,11 +16,12 @@
      </v-col>
     </v-row>
       <vidComp
-      v-on:startQuiz='startQuiz()'
+      v-on:back='back()'
+      v-on:next='next()'
       v-bind:courseInfo="correctLessonInfo"
-      v-bind:bonus="false"
-      :html='html'
-      v-if='vid'/>
+      v-bind:part='part'
+      v-bind:done='done'
+      :html='html'/>
     <v-divider/>
     <v-card-actions>
       <!-- <v-btn
@@ -40,11 +41,10 @@
   </v-card>
 </template>
 <script>
-import vidComp from '@/components/edu/vid&NotesComp.vue'
+import vidComp from '@/components/edu/vid&NotesCompNoQuiz.vue'
 export default {
   props: ['courseInfo'],
   data: () => ({
-    vid: true,
     part: 0
   }),
   components: {
@@ -53,8 +53,8 @@ export default {
   computed: {
     correctLessonInfo: function () {
       let nextLesson
-      const numberOfQuestions = this.questions.length
-      if (this.part === numberOfQuestions) {
+      const numberOfSlides = this.courseInfo.comp.slides.length
+      if (this.part === numberOfSlides) {
         nextLesson = this.courseInfo.comp.nextLesson
       }
       const info = {
@@ -65,57 +65,36 @@ export default {
       }
       return info
     },
-    justVid: function () {
-      return this.courseInfo.comp.justVideo
-    },
     html: function () {
       return this.courseInfo.comp.notes[this.part]
     },
     title: function () {
       return this.courseInfo.comp.title
     },
-    test: function () {
-      return this.questions[this.part]
-    },
     progress: function () {
-      const numberOfQuestions = this.questions.length
-      return (this.part / numberOfQuestions) * 100
+      const numberOfSlides = this.courseInfo.comp.slides.length
+      return ((this.part + 1) / numberOfSlides) * 100
     },
-    questions: function () {
-      return this.courseInfo.comp.questions
-    },
-    currentComponent: function () {
-      const numberOfQuestions = this.questions.length
-      if (this.part < numberOfQuestions) {
-        return 'mainQuiz'
+    done: function () {
+      const numberOfSlides = this.courseInfo.comp.slides.length
+      if (numberOfSlides === this.part + 1) {
+        return true
       }
-      // if (this.part === numberOfQuestions - 1) {
-      //   return 'bonus'
-      // }
-      if (this.part === numberOfQuestions) {
-        return 'congrats'
-      }
-      // edge case that should never be reached
-      return true
+      return false
     }
   },
   methods: {
     exit () {
       this.$emit('changeLesson', '')
     },
-    startQuiz () {
-      this.vid = false
+    next () {
+      this.part = this.part + 1
+    },
+    back () {
+      this.part = this.part - 1
     },
     backToVideo () {
       this.vid = true
-    },
-    partDone () {
-      if (this.currentComponent === 'congrats') {
-        this.exit()
-        return
-      }
-      this.part += 1
-      this.backToVideo()
     }
   },
   mounted () {
