@@ -1,3 +1,4 @@
+import 'regenerator-runtime/runtime'
 import '@mdi/font/css/materialdesignicons.css'
 // import 'typeface-roboto/index.css'
 import Vue from 'vue'

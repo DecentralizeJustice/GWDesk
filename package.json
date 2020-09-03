@@ -77,13 +77,11 @@
     "pre-commit": "^1.2.2",
     "sass": "^1.17.4",
     "sass-loader": "^8.0.2",
-    "spectron": "^11.1.0",
+    "spectron": "11.0.0",
     "vue-cli-plugin-electron-builder": "~2.0.0-rc.4",
     "vue-cli-plugin-vuetify": "~2.0.5",
     "vue-template-compiler": "^2.6.10",
     "vuetify-loader": "^1.2.2",
-    "webpack": "^4.41.6",
-    "spectron": "11.0.0"
-  },
-  "homepage": "https://guidingwallet.app/"
+    "webpack": "^4.41.6"
+  }
 }
