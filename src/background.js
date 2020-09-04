@@ -24,7 +24,7 @@ let tor
 try {
   tor = granax()
 } catch (err) {
-  log.warn(err)
+  log.error(err)
 }
 
 try {
@@ -40,12 +40,12 @@ try {
     })
   })
 } catch (err) {
-  log.warn(err)
+  log.error(err)
 }
 
 tor.on('error', function (err) {
   errorRan()
-  log.warn(err)
+  log.error(err)
 })
 // function dormant () {
 //   tor.getInfo('dormant', (err, result) => {
@@ -74,7 +74,7 @@ tor.on('error', function (err) {
 //   }
 // })
 function errorRan () {
-  console.log('here')
+  // console.log('here')
 }
 ipcMain.on('circuitEstablished34', event => {
   try {
