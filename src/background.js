@@ -109,7 +109,7 @@ function createWindow () {
       icon: path.join(__static, 'icon.png'), // eslint-disable-line
       webPreferences: {
         enableRemoteModule: true,
-        nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
+        nodeIntegration: true, // process.env.ELECTRON_NODE_INTEGRATION,
         webSecurity: false
       }
     })
