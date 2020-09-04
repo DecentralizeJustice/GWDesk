@@ -82,7 +82,7 @@ ipcMain.on('circuitEstablished34', event => {
     })
   } catch (e) {
     errorRan()
-    log.error(e)
+    // log.error(e)
   }
 })
 ipcMain.on('dormant34', event => {
@@ -96,7 +96,7 @@ ipcMain.on('dormant34', event => {
     })
   } catch (e) {
     errorRan()
-    log.error(e)
+    // log.error(e)
   }
 })
 // Keep a global reference of the window object, if you don't, the window will
