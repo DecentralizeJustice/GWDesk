@@ -27,17 +27,21 @@ try {
   log.warn(err)
 }
 
-tor.on('ready', function () {
-  tor.getInfo('net/listeners/socks', (err, result) => {
-    const port = parseInt(result.split('"').join('').split(':')[1])
-    setPort(port)
-    log.warn('port set:', port)
-    if (err) {
-      errorRan()
-      log.warn(err)
-    }
+try {
+  tor.on('ready', function () {
+    tor.getInfo('net/listeners/socks', (err, result) => {
+      const port = parseInt(result.split('"').join('').split(':')[1])
+      setPort(port)
+      log.warn('port set:', port)
+      if (err) {
+        errorRan()
+        log.warn(err)
+      }
+    })
   })
-})
+} catch (err) {
+  log.warn(err)
+}
 
 tor.on('error', function (err) {
   errorRan()
