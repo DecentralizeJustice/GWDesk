@@ -65,11 +65,7 @@ tor.on('error', function (err) {
 //   }
 // })
 function errorRan () {
-  log.error('Error Fun Triggered')
-  setTimeout(() => {
-    app.relaunch()
-    app.exit()
-  }, 20000)
+  console.log('here')
 }
 ipcMain.on('circuitEstablished34', event => {
   try {
