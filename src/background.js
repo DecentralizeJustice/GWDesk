@@ -20,7 +20,12 @@ function setPort (portNumber) {
 }
 
 const granax = require('@deadcanaries/granax')
-const tor = granax()
+let tor
+try {
+  tor = granax()
+} catch (err) {
+  log.warn(err)
+}
 
 tor.on('ready', function () {
   tor.getInfo('net/listeners/socks', (err, result) => {
