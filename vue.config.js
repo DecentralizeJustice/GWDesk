@@ -32,7 +32,9 @@ module.exports = {
           entitlementsInherit: './buildInfo/entitlements.mac.inherit.plist',
           gatekeeperAssess: false,
           artifactName: '${productName}.${ext}' /* eslint-disable-line */,
-          target: ['dmg', 'zip']
+          target: ['dmg', 'zip'],
+          binaries: ['./node_modules/@deadcanaries/granax/bin/Tor/tor.real',
+            './node_modules/@deadcanaries/granax/bin/Tor/libevent-2.1.7.dylib']
         },
         win: {
           target: 'nsis',

@@ -7,10 +7,11 @@
   "author": "Decentralize Justice",
   "scripts": {
     "serve": "vue-cli-service electron:serve",
-    "build": "npm-run-all electron:generate-icons electron:build",
+    "build": "npm-run-all resign electron:generate-icons electron:build",
     "test:mocha": "mocha 'tests/e2e/*.js' --exit --parallel ",
     "lint": "vue-cli-service lint",
     "checkStyle": "yarn run lint --no-fix",
+    "resign": "codesign --force --deep --options runtime --verbose=4 --entitlements \"./buildInfo/binentitlements.mac.inherit.plist\" --sign \"Developer ID Application: Decentralize Justice LLC\" ./node_modules/@deadcanaries/granax/bin/Tor/tor.real",
     "electron:build": "vue-cli-service electron:build",
     "electron:generate-icons": "electron-icon-builder --input=./public/icon.png --output=build --flatten",
     "electron:serve": "vue-cli-service electron:serve",
@@ -77,13 +78,11 @@
     "pre-commit": "^1.2.2",
     "sass": "^1.17.4",
     "sass-loader": "^8.0.2",
-    "spectron": "^11.1.0",
+    "spectron": "11.0.0",
     "vue-cli-plugin-electron-builder": "~2.0.0-rc.4",
     "vue-cli-plugin-vuetify": "~2.0.5",
     "vue-template-compiler": "^2.6.10",
     "vuetify-loader": "^1.2.2",
-    "webpack": "^4.41.6",
-    "spectron": "11.0.0"
-  },
-  "homepage": "https://guidingwallet.app/"
+    "webpack": "^4.41.6"
+  }
 }
