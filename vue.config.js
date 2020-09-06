@@ -41,7 +41,6 @@ module.exports = {
           artifactName: '${productName}-Setup.${ext}' /* eslint-disable-line */
         },
         afterSign: 'buildInfo/notarize.js',
-        // afterPack: 'buildInfo/unsign.js',
         dmg: {
           sign: false
         },
