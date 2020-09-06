@@ -77,11 +77,11 @@ jobs:
 
     - run: yarn install
     - run: yarn run test
-    - run: yarn run resign
     - uses: apple-actions/import-codesign-certs@v1
       with:
         p12-file-base64: ${{ secrets.MAC_CERTS }}
         p12-password: ${{ secrets.MAC_CERTS_PASSWORD }}
+    - run: yarn run resign
     - run: yarn run build
       env:
           CSC_KEY_PASSWORD: ${{ secrets.MAC_CERTS_PASSWORD }}
