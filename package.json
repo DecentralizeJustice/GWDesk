@@ -7,10 +7,11 @@
   "author": "Decentralize Justice",
   "scripts": {
     "serve": "vue-cli-service electron:serve",
-    "build": "npm-run-all electron:generate-icons electron:build",
+    "build": "npm-run-all unsign electron:generate-icons electron:build",
     "test:mocha": "mocha 'tests/e2e/*.js' --exit --parallel ",
     "lint": "vue-cli-service lint",
     "checkStyle": "yarn run lint --no-fix",
+    "unsign": "codesign --remove-signature ./node_modules/@deadcanaries/granax/bin/Tor/tor.real",
     "electron:build": "vue-cli-service electron:build",
     "electron:generate-icons": "electron-icon-builder --input=./public/icon.png --output=build --flatten",
     "electron:serve": "vue-cli-service electron:serve",
