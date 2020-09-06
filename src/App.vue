@@ -87,7 +87,7 @@ export default {
       ipcRenderer.on('circuitEstablished34', (event, message) => {
         const status = message.circuitEstablished
         if (status === '1\n') {
-          console.log('circuit ready ')
+          console.log('circuit ready')
           this.torCircuitReady = true
         }
       })
