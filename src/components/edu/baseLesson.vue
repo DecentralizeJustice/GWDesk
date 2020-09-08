@@ -15,16 +15,35 @@
        </v-progress-linear>
      </v-col>
     </v-row>
-      <justVidComp
-      v-if='justVid'
-      v-bind:courseInfo="courseInfo.comp"/>
+    <v-container>
+        <v-row
+          no-gutters
+          justify='center'
+        >
+          <v-col cols='8'>
+            <justVidComp
+            v-if='justVid'
+            v-bind:courseInfo="courseInfo.comp"/>
+           </v-col>
+        </v-row>
+      </v-container>
+
     <div v-if='!justVid && currentComponent === "mainQuiz"'>
-      <vidComp
-      v-on:startQuiz='startQuiz()'
-      v-bind:courseInfo="correctLessonInfo"
-      v-bind:bonus="false"
-      :html='html'
-      v-if='vid'/>
+      <v-container>
+          <v-row
+            no-gutters
+            justify='center'
+          >
+            <v-col cols='12'>
+              <vidComp
+              v-on:startQuiz='startQuiz()'
+              v-bind:courseInfo="correctLessonInfo"
+              v-bind:bonus="false"
+              :html='html'
+              v-if='vid'/>
+             </v-col>
+          </v-row>
+        </v-container>
      <quiz
      v-bind:questions="test"
      v-on:backToVideo='backToVideo()'
@@ -51,10 +70,19 @@
     :key="12"
     />
   </div> -->
-  <justVidComp
-  v-bind:courseInfo="correctLessonInfo"
-  v-if='!justVid && currentComponent === "congrats"'
-  v-on:quizDone='partDone'/>
+  <v-container>
+      <v-row
+        no-gutters
+        justify='center'
+      >
+        <v-col cols='8'>
+          <justVidComp
+          v-bind:courseInfo="correctLessonInfo"
+          v-if='!justVid && currentComponent === "congrats"'
+          v-on:quizDone='partDone'/>
+         </v-col>
+      </v-row>
+    </v-container>
     <v-divider/>
     <v-card-actions>
       <!-- <v-btn
