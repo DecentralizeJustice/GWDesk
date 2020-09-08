@@ -1,6 +1,6 @@
 <template>
     <v-layout row wrap justify-center>
-      <v-flex xs8>
+      <v-flex xs12>
         <v-img :src='slide' contain></v-img>
       </v-flex>
       <v-flex xs12>
@@ -30,6 +30,16 @@ export default {
     }
   },
   methods: {
+    async setup () {
+      this.player = this.$refs.player
+      const url = this.courseInfo.audio
+      // eslint-disable-next-line
+      const fileLocation = path.join(__static, url)
+      const fileContents = fs.readFileSync(fileLocation)
+      const blob = new window.Blob([fileContents], { type: 'audio/mp3' })
+      const urlb = URL.createObjectURL(blob)
+      this.processedUrl = urlb
+    },
     audioError (e) {
       console.log(e.srcElement.error)
     },
@@ -71,6 +81,9 @@ export default {
     }
   },
   watch: {
+    courseInfo: async function () {
+      await this.setup()
+    },
     pause: function () {
       if (this.pause === true) {
         this.player.pause()
@@ -92,15 +105,10 @@ export default {
       return false
     }
   },
+  updated () {
+  },
   async mounted () {
-    this.player = this.$refs.player
-    const url = this.courseInfo.audio
-    // eslint-disable-next-line
-    const fileLocation = path.join(__static, url)
-    const fileContents = fs.readFileSync(fileLocation)
-    const blob = new window.Blob([fileContents], { type: 'audio/mp3' })
-    const urlb = URL.createObjectURL(blob)
-    this.processedUrl = urlb
+    await this.setup()
   }
 }
 </script>

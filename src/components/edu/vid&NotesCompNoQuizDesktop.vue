@@ -1,9 +1,6 @@
 <template>
   <v-row align="center" justify='space-around'>
     <v-col cols='12' class="text-center" offset='0'>
-      <!-- <v-alert type="info" v-if='bonus' style="width:30%;margin: auto;">
-        Bonus Question
-      </v-alert> -->
     </v-col>
      <v-row justify="center">
     <v-dialog v-model="dialogOpen" fullscreen hide-overlay transition="dialog-bottom-transition">
@@ -15,24 +12,59 @@
           <v-toolbar-title>Close</v-toolbar-title>
           <v-spacer></v-spacer>
         </v-toolbar>
+
         <v-container>
             <v-row
               no-gutters
               justify='center'
             >
-              <v-col cols='12'>
-                <videoPlayer class="mt-5"
-                v-bind:courseInfo="courseInfo"
-                v-bind:pause="!dialogOpen"
-                @paused="vidPaused"
-                v-bind:time='time'
-                />
+              <v-col lg='12' md='12' sm='12' xl='12'>
+               <videoPlayer class=""
+               v-bind:courseInfo="courseInfo"
+               v-bind:pause="!dialogOpen"
+               @paused="vidPaused"
+               v-bind:time='time'
+               />
                </v-col>
             </v-row>
           </v-container>
       </v-card>
     </v-dialog>
   </v-row>
+  <v-col cols="2">
+    <v-container fill-height fluid>
+  <v-row align="center"
+      justify="center" >
+      <v-col cols='12' class="text-center">
+        <v-btn
+          color="success darken-2"
+          @click="next()"
+          v-if='!done'
+        >
+          Next
+        </v-btn>
+      </v-col>
+      <v-col cols='12' class="text-center" >
+        <v-btn
+          color="red darken-1"
+          @click="back()"
+          v-if='part !== 0'
+        >
+          Back
+        </v-btn>
+      </v-col>
+      <v-col cols='12' class="text-center">
+        <v-btn
+          color="primary"
+          dark
+          @click.stop="openLargeVid()"
+        >
+          Expand Video
+        </v-btn>
+      </v-col>
+  </v-row>
+</v-container>
+  </v-col>
    <v-col cols='6'>
      <videoPlayer
      v-bind:courseInfo="courseInfo"
@@ -41,49 +73,8 @@
      @paused="vidPaused"
      />
    </v-col>
-   <v-col id=md cols='5' v-if='notesOpen' class="text-center">
+   <v-col id=md cols='3' v-if='html' class="text-center">
       <div v-html="html" ></div>
-   </v-col>
-   <v-col class="text-center" cols="12">
-     <v-btn
-       color="primary darken-1"
-       @click="skip()"
-       v-if='bonus'
-       class="mr-6"
-     >
-       Finish
-     </v-btn>
-     <v-btn
-       color="primary"
-       dark
-       class="mr-6"
-       @click.stop="openLargeVid()"
-     >
-       Expand Video
-     </v-btn>
-     <v-btn
-      v-if='!notesOpen && !bonus'
-      color="primary darken-2"
-       @click="viewNotes()"
-       class="mr-6"
-     >
-       Show Notes
-     </v-btn>
-     <v-btn
-      v-if='notesOpen'
-      color="primary darken-2"
-       @click="hideNotes()"
-       class="mr-6"
-     >
-       Hide Notes
-     </v-btn>
-     <v-btn
-       color="success darken-2"
-       @click="startQuiz()"
-       v-if='!bonus'
-     >
-       Take Quiz
-     </v-btn>
    </v-col>
   </v-row>
 </template>
@@ -95,26 +86,19 @@ export default {
   components: {
     videoPlayer
   },
-  props: ['courseInfo', 'bonus', 'html'],
+  props: ['courseInfo', 'html', 'part', 'done'],
   data () {
     return {
-      notesOpen: false,
       dialogOpen: false,
       time: 0
     }
   },
   methods: {
-    startQuiz () {
-      this.$emit('startQuiz')
+    next () {
+      this.$emit('next')
     },
-    skip () {
-      this.$emit('quizDone')
-    },
-    viewNotes () {
-      this.notesOpen = true
-    },
-    hideNotes () {
-      this.notesOpen = false
+    back () {
+      this.$emit('back')
     },
     openLargeVid () {
       this.dialogOpen = true
