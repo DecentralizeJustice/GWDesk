@@ -1,4 +1,4 @@
-import slide0 from '@/assets/tutorialData/exodus/slides/setup/test.jpg'
+// import slide0 from '@/assets/tutorialData/exodus/slides/setup/desk.jpg'
 import slide1 from '@/assets/courseData/slides/btc/intro/slide1.jpg'
 import slide2 from '@/assets/courseData/slides/btc/intro/slide2.jpg'
 import slide3 from '@/assets/courseData/slides/btc/intro/slide3.jpg'
@@ -20,10 +20,11 @@ import notes1 from '@/assets/courseData/courseNotes/btc/intro/part1.html'
 import notes2 from '@/assets/courseData/courseNotes/btc/intro/part2.html'
 const intro = {
   tutorial: true,
+  desktop: true,
   title: 'Exodus Mobile Wallet Setup',
   slides: [
     [
-      slide0,
+      // slide0,
       slide1,
       slide2,
       slide3,
