@@ -16,6 +16,15 @@
      </v-col>
     </v-row>
       <vidComp
+      v-if="mobile"
+      v-on:back='back()'
+      v-on:next='next()'
+      v-bind:courseInfo="correctLessonInfo"
+      v-bind:part='part'
+      v-bind:done='done'
+      :html='html'/>
+      <vidCompDesktop
+      v-if="desktop"
       v-on:back='back()'
       v-on:next='next()'
       v-bind:courseInfo="correctLessonInfo"
@@ -41,14 +50,16 @@
   </v-card>
 </template>
 <script>
-import vidComp from '@/components/edu/vid&NotesCompNoQuiz.vue'
+import vidComp from '@/components/edu/vid&NotesCompNoQuizMobile.vue'
+import vidCompDesktop from '@/components/edu/vid&NotesCompNoQuizDesktop.vue'
 export default {
   props: ['courseInfo'],
   data: () => ({
     part: 0
   }),
   components: {
-    vidComp
+    vidComp,
+    vidCompDesktop
   },
   computed: {
     correctLessonInfo: function () {
@@ -81,6 +92,12 @@ export default {
         return true
       }
       return false
+    },
+    mobile: function () {
+      return this.courseInfo.comp.mobile
+    },
+    desktop: function () {
+      return this.courseInfo.comp.desktop
     }
   },
   methods: {
@@ -98,7 +115,7 @@ export default {
     }
   },
   mounted () {
-    // console.log(this.courseInfo)
+    console.log(this.courseInfo.comp.mobile)
   }
 }
 </script>
