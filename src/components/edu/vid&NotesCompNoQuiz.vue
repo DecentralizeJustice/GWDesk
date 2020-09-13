@@ -55,6 +55,13 @@
     >
       Next
     </v-btn>
+    <v-btn
+      color="success darken-2"
+      @click="next()"
+      v-if='done'
+    >
+      Finish
+    </v-btn>
   </v-col>
    <v-col cols='3'>
      <videoPlayer
@@ -99,6 +106,9 @@ export default {
     },
     vidPaused (time) {
       this.time = time
+    },
+    exit () {
+      this.$emit('back')
     }
   },
   computed: {
