@@ -18,6 +18,7 @@
       <vidComp
       v-on:back='back()'
       v-on:next='next()'
+      @click="exit()"
       v-bind:courseInfo="correctLessonInfo"
       v-bind:part='part'
       v-bind:done='done'
@@ -98,7 +99,6 @@ export default {
     }
   },
   mounted () {
-    // console.log(this.courseInfo)
   }
 }
 </script>
