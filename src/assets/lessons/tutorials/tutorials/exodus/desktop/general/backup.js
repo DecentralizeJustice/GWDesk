@@ -1,11 +1,11 @@
-import slide0 from '@/assets/tutorialData/exodus/slides/desktop/general/backup/0.jpg'
-import slide1 from '@/assets/tutorialData/exodus/slides/desktop/general/backup/1.jpg'
-import slide2 from '@/assets/tutorialData/exodus/slides/desktop/general/backup/2.jpg'
-import slide3 from '@/assets/tutorialData/exodus/slides/desktop/general/backup/3.jpg'
-import slide4 from '@/assets/tutorialData/exodus/slides/desktop/general/backup/4.jpg'
-import slide5 from '@/assets/tutorialData/exodus/slides/desktop/general/backup/5.jpg'
-import slide6 from '@/assets/tutorialData/exodus/slides/desktop/general/backup/6.jpg'
-import notes1 from '@/assets/tutorialData/courseNotes/exodus/desktop/general/backup.html'
+import slide0 from '@/assets/lessons/tutorials/slides/exodus/desktop/general/backup/0.jpg'
+import slide1 from '@/assets/lessons/tutorials/slides/exodus/desktop/general/backup/1.jpg'
+import slide2 from '@/assets/lessons/tutorials/slides/exodus/desktop/general/backup/2.jpg'
+import slide3 from '@/assets/lessons/tutorials/slides/exodus/desktop/general/backup/3.jpg'
+import slide4 from '@/assets/lessons/tutorials/slides/exodus/desktop/general/backup/4.jpg'
+import slide5 from '@/assets/lessons/tutorials/slides/exodus/desktop/general/backup/5.jpg'
+import slide6 from '@/assets/lessons/tutorials/slides/exodus/desktop/general/backup/6.jpg'
+import notes1 from '@/assets/lessons/tutorials/courseNotes/exodus/desktop/general/backup.html'
 const backup = {
   tutorial: true,
   desktop: true,
