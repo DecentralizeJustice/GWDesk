@@ -1,8 +1,8 @@
-import slide1 from '@/assets/courseData/slides/intro/welcome/Welcome1.jpg'
-import slide2 from '@/assets/courseData/slides/intro/welcome/Welcome2.jpg'
-import slide3 from '@/assets/courseData/slides/intro/welcome/Welcome3.jpg'
-import slide4 from '@/assets/courseData/slides/intro/welcome/Welcome4.jpg'
-import slide5 from '@/assets/courseData/slides/intro/welcome/Welcome5.jpg'
+import slide1 from '@/assets/lessons/educational/lessonData/slides/intro/welcome/Welcome1.jpg'
+import slide2 from '@/assets/lessons/educational/lessonData/slides/intro/welcome/Welcome2.jpg'
+import slide3 from '@/assets/lessons/educational/lessonData/slides/intro/welcome/Welcome3.jpg'
+import slide4 from '@/assets/lessons/educational/lessonData/slides/intro/welcome/Welcome4.jpg'
+import slide5 from '@/assets/lessons/educational/lessonData/slides/intro/welcome/Welcome5.jpg'
 const welcome = {
   justVideo: true,
   title: 'Welcome To Guiding Wallet',
