@@ -18,7 +18,7 @@
               no-gutters
               justify='center'
             >
-              <v-col lg='5' md='7' sm='7' xl='5'>
+              <v-col lg='12' md='9' sm='9' xl='12'>
                <videoPlayer class=""
                v-bind:courseInfo="courseInfo"
                v-bind:pause="!dialogOpen"
@@ -31,7 +31,7 @@
       </v-card>
     </v-dialog>
   </v-row>
-  <v-col class="text-center" cols="3">
+  <v-col class="text-center" cols="2">
     <v-btn
       color="red darken-1"
       @click="back()"
@@ -57,13 +57,13 @@
     </v-btn>
     <v-btn
       color="success darken-2"
-      @click="next()"
+      @click="exit()"
       v-if='done'
     >
       Finish
     </v-btn>
   </v-col>
-   <v-col cols='3'>
+   <v-col cols='6'>
      <videoPlayer
      v-bind:courseInfo="courseInfo"
      v-bind:pause="dialogOpen"
@@ -108,7 +108,7 @@ export default {
       this.time = time
     },
     exit () {
-      this.$emit('back')
+      this.$emit('exit')
     }
   },
   computed: {

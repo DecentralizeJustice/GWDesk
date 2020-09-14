@@ -2,8 +2,8 @@
   <v-card>
     <v-card-title class="headline justify-center">{{title}}</v-card-title>
     <v-divider/>
-    <v-row align="center" v-if='!justVid && currentComponent && currentComponent !== "congrats"'>
-     <v-col cols='10' offset='1'>
+    <v-row align="center" justify='space-around' v-if='!justVid && currentComponent && currentComponent !== "congrats"'>
+     <v-col cols='10'>
        <v-progress-linear
          :value='progress'
          color="blue-grey"
@@ -15,9 +15,12 @@
        </v-progress-linear>
      </v-col>
     </v-row>
+    <v-row align="center" justify='space-around' v-if='justVid'>
+    <v-col cols='7'>
       <justVidComp
-      v-if='justVid'
       v-bind:courseInfo="courseInfo.comp"/>
+    </v-col>
+    </v-row>
     <div v-if='!justVid && currentComponent === "mainQuiz"'>
       <vidComp
       v-on:startQuiz='startQuiz()'
@@ -34,35 +37,15 @@
      :key="234"
      />
   </div>
-  <!-- <div v-if='!justVid && currentComponent === "bonus"'>
-    <vidComp
-    :html='html'
-    v-on:startQuiz='startQuiz()'
-    v-on:quizDone='partDone'
-    v-bind:courseInfo="correctLessonInfo"
-    v-bind:bonus="true"
-    v-if='vid'/>
-    <quiz
-    v-bind:questions="test"
-    v-on:backToVideo='backToVideo()'
-    v-on:quizDone='partDone'
-    v-if='!vid'
-    v-bind:bonus="true"
-    :key="12"
-    />
-  </div> -->
+  <v-row align="center" justify='space-around'   v-if='!justVid && currentComponent === "congrats"'>
+  <v-col cols='7'>
   <justVidComp
   v-bind:courseInfo="correctLessonInfo"
-  v-if='!justVid && currentComponent === "congrats"'
   v-on:quizDone='partDone'/>
+</v-col>
+</v-row>
     <v-divider/>
     <v-card-actions>
-      <!-- <v-btn
-        color="orange"
-        text
-      >
-        <v-icon>mdi-help</v-icon>
-      </v-btn> -->
     <v-btn
       color="red darken-1"
       @click="exit()"
