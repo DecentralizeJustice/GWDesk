@@ -1,6 +1,6 @@
 <template>
     <v-layout row wrap justify-center>
-      <v-flex xs8>
+      <v-flex xs12>
         <v-img :src='slide' contain></v-img>
       </v-flex>
       <v-flex xs12>

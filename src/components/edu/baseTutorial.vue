@@ -18,6 +18,7 @@
       <vidComp
       v-on:back='back()'
       v-on:next='next()'
+      v-on:exit='exit()'
       @click="exit()"
       v-bind:courseInfo="correctLessonInfo"
       v-bind:part='part'
@@ -86,6 +87,7 @@ export default {
   },
   methods: {
     exit () {
+      console.log('ran')
       this.$emit('changeLesson', '')
     },
     next () {

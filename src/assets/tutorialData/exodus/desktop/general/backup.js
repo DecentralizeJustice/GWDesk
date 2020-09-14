@@ -5,7 +5,7 @@ import slide3 from '@/assets/tutorialData/exodus/slides/desktop/general/backup/3
 import slide4 from '@/assets/tutorialData/exodus/slides/desktop/general/backup/4.jpg'
 import slide5 from '@/assets/tutorialData/exodus/slides/desktop/general/backup/5.jpg'
 import slide6 from '@/assets/tutorialData/exodus/slides/desktop/general/backup/6.jpg'
-import notes1 from '@/assets/courseData/courseNotes/btc/intro/part1.html'
+import notes1 from '@/assets/tutorialData/courseNotes/exodus/desktop/general/backup.html'
 const backup = {
   tutorial: true,
   desktop: true,
