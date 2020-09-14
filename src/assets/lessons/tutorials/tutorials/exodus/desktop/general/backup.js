@@ -27,7 +27,7 @@ const backup = {
     ]
   ],
   audio: [
-    'audio/exodus/backup/backupFinal.mp3'
+    'audio/exodus/general/backup/backupFinal.mp3'
   ],
   notes: [
     notes1
