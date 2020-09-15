@@ -3,33 +3,14 @@
     <v-col cols='12' class="text-center" offset='0'>
     </v-col>
      <v-row justify="center">
-    <v-dialog v-model="dialogOpen" fullscreen hide-overlay transition="dialog-bottom-transition">
-      <v-card style='overflow-x: hidden;'>
-        <v-toolbar dark color="red">
-          <v-btn icon dark @click="closeLargeVid()">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-          <v-toolbar-title>Close</v-toolbar-title>
-          <v-spacer></v-spacer>
-        </v-toolbar>
-
-        <v-container>
-            <v-row
-              no-gutters
-              justify='center'
-            >
-              <v-col lg='12' md='9' sm='9' xl='12'>
-               <videoPlayer class=""
-               v-bind:courseInfo="courseInfo"
-               v-bind:pause="!dialogOpen"
-               @paused="vidPaused"
-               v-bind:time='time'
-               />
-               </v-col>
-            </v-row>
-          </v-container>
-      </v-card>
-    </v-dialog>
+    <fullscreen ref="fullscreenComp" @change="fullscreenChange">
+      <fullscreenVid
+        v-if='fullscreen'
+        v-bind:courseInfo="courseInfo"
+        v-bind:time='time'
+        @paused="vidPaused"
+        @toggle="toggle"/>
+    </fullscreen>
   </v-row>
   <v-col class="text-center" cols="2">
     <v-btn
@@ -44,7 +25,7 @@
       color="primary"
       dark
       class="ma-3"
-      @click.stop="openLargeVid()"
+      @click="toggle"
     >
       Expand Video
     </v-btn>
@@ -66,7 +47,7 @@
    <v-col cols='6'>
      <videoPlayer
      v-bind:courseInfo="courseInfo"
-     v-bind:pause="dialogOpen"
+     v-bind:shouldPause="fullscreen"
      v-bind:time='time'
      @paused="vidPaused"
      />
@@ -79,30 +60,36 @@
 
 <script>
 import videoPlayer from '@/components/general/localAudio.vue'
+import fullscreenVid from '@/components/general/fullscreenVid.vue'
+import fullscreen from 'vue-fullscreen'
+import Vue from 'vue'
+Vue.use(fullscreen)
 export default {
   name: 'vidComp',
   components: {
-    videoPlayer
+    videoPlayer,
+    fullscreenVid
   },
   props: ['courseInfo', 'html', 'part', 'done'],
   data () {
     return {
-      dialogOpen: false,
-      time: 0
+      time: 0,
+      fullscreen: false
     }
   },
   methods: {
+    toggle () {
+      // eslint-disable-next-line
+      this.$refs['fullscreenComp'].toggle()
+    },
+    fullscreenChange (fullscreen) {
+      this.fullscreen = fullscreen
+    },
     next () {
       this.$emit('next')
     },
     back () {
       this.$emit('back')
-    },
-    openLargeVid () {
-      this.dialogOpen = true
-    },
-    closeLargeVid () {
-      this.dialogOpen = false
     },
     vidPaused (time) {
       this.time = time

@@ -1,33 +1,21 @@
 <template>
   <v-row align="center" justify='space-around'>
-    <v-col cols='12' class="text-center" offset='0'>
-      <!-- <v-alert type="info" v-if='bonus' style="width:30%;margin: auto;">
-        Bonus Question
-      </v-alert> -->
+    <v-col cols='12' class="text-center">
     </v-col>
      <v-row justify="center">
-    <v-dialog v-model="dialogOpen" fullscreen hide-overlay transition="dialog-bottom-transition">
-      <v-card style='overflow-x: hidden;'>
-        <v-toolbar dark color="red">
-          <v-btn icon dark @click="closeLargeVid()">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-          <v-toolbar-title>Close</v-toolbar-title>
-          <v-spacer></v-spacer>
-        </v-toolbar>
-        <videoPlayer class="mt-5"
-        v-bind:courseInfo="courseInfo"
-        v-bind:pause="!dialogOpen"
-        @paused="vidPaused"
-        v-bind:time='time'
-        />
-      </v-card>
-    </v-dialog>
+       <fullscreen ref="fullscreenComp" @change="fullscreenChange">
+         <fullscreenVid
+           v-if='fullscreen'
+           v-bind:courseInfo="courseInfo"
+           v-bind:time='time'
+           @paused="vidPaused"
+           @toggle="toggle"/>
+       </fullscreen>
   </v-row>
    <v-col cols='6'>
      <videoPlayer
      v-bind:courseInfo="courseInfo"
-     v-bind:pause="dialogOpen"
+     v-bind:shouldPause="fullscreen"
      v-bind:time='time'
      @paused="vidPaused"
      />
@@ -48,7 +36,7 @@
        color="primary"
        dark
        class="mr-6"
-       @click.stop="openLargeVid()"
+       @click="toggle"
      >
        Expand Video
      </v-btn>
@@ -81,16 +69,21 @@
 
 <script>
 import videoPlayer from '@/components/general/localAudio.vue'
+import fullscreen from 'vue-fullscreen'
+import fullscreenVid from '@/components/general/fullscreenVid.vue'
+import Vue from 'vue'
+Vue.use(fullscreen)
 export default {
   name: 'vidComp',
   components: {
-    videoPlayer
+    videoPlayer,
+    fullscreenVid
   },
   props: ['courseInfo', 'bonus', 'html'],
   data () {
     return {
       notesOpen: false,
-      dialogOpen: false,
+      fullscreen: false,
       time: 0
     }
   },
@@ -107,11 +100,12 @@ export default {
     hideNotes () {
       this.notesOpen = false
     },
-    openLargeVid () {
-      this.dialogOpen = true
+    toggle () {
+      // eslint-disable-next-line
+      this.$refs['fullscreenComp'].toggle()
     },
-    closeLargeVid () {
-      this.dialogOpen = false
+    fullscreenChange (fullscreen) {
+      this.fullscreen = fullscreen
     },
     vidPaused (time) {
       this.time = time

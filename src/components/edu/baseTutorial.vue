@@ -87,7 +87,6 @@ export default {
   },
   methods: {
     exit () {
-      console.log('ran')
       this.$emit('changeLesson', '')
     },
     next () {
