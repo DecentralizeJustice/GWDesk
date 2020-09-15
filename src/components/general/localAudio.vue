@@ -95,6 +95,9 @@ export default {
     },
     time: function () {
       this.player.currentTime = this.time
+    },
+    courseInfo: function () {
+      this.setup()
     }
   },
   computed: {
@@ -111,14 +114,7 @@ export default {
   updated () {
   },
   async mounted () {
-    this.player = this.$refs.player
-    const url = this.courseInfo.audio
-    // eslint-disable-next-line
-    const fileLocation = path.join(__static, url)
-    const fileContents = fs.readFileSync(fileLocation)
-    const blob = new window.Blob([fileContents], { type: 'audio/mp3' })
-    const urlb = URL.createObjectURL(blob)
-    this.processedUrl = urlb
+    this.setup()
   },
   async beforeDestroy () {
     this.player.pause()
