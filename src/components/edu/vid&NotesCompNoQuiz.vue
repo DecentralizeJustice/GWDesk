@@ -27,14 +27,6 @@
      <v-row justify="center">
        <v-col class="text-center" cols="12">
          <v-btn
-           color="red darken-1"
-           @click="back()"
-           class="ma-3"
-           v-if='part !== 0'
-         >
-           Back
-         </v-btn>
-         <v-btn
            color="primary"
            dark
            class="ma-3"
@@ -48,6 +40,14 @@
            v-if='!done'
          >
            Next
+         </v-btn>
+         <v-btn
+           color="red darken-1"
+           @click="back()"
+           class="ma-3"
+           v-if='part !== 0'
+         >
+           Back
          </v-btn>
          <v-btn
            color="success darken-2"
