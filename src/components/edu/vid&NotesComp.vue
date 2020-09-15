@@ -1,17 +1,15 @@
 <template>
   <v-row align="center" justify='space-around'>
     <v-col cols='12' class="text-center">
+      <fullscreen ref="fullscreenComp" @change="fullscreenChange">
+        <fullscreenVid
+          v-if='fullscreen'
+          v-bind:courseInfo="courseInfo"
+          v-bind:time='time'
+          @paused="vidPaused"
+          @toggle="toggle"/>
+      </fullscreen>
     </v-col>
-     <v-row justify="center">
-       <fullscreen ref="fullscreenComp" @change="fullscreenChange">
-         <fullscreenVid
-           v-if='fullscreen'
-           v-bind:courseInfo="courseInfo"
-           v-bind:time='time'
-           @paused="vidPaused"
-           @toggle="toggle"/>
-       </fullscreen>
-  </v-row>
    <v-col cols='6'>
      <videoPlayer
      v-bind:courseInfo="courseInfo"
@@ -20,7 +18,7 @@
      @paused="vidPaused"
      />
    </v-col>
-   <v-col id=md cols='6' v-if='notesOpen' class="text-center">
+   <v-col id=md cols='5' v-if='notesOpen' class="text-center">
       <div v-html="html" ></div>
    </v-col>
    <v-col class="text-center" cols="12">

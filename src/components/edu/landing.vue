@@ -42,7 +42,7 @@
         color="red darken-1"
         @click="exit()"
       >
-        Exit
+        Back
       </v-btn>
       <v-spacer></v-spacer>
     </v-card-actions>
