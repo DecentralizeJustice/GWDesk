@@ -1,6 +1,6 @@
 <template>
   <v-row align="center" justify='space-around'>
-    <v-col cols='12' class="text-center">
+    <v-col cols='12'>
       <fullscreen ref="fullscreenComp" @change="fullscreenChange">
         <fullscreenVid
           v-if='fullscreen'
@@ -10,7 +10,7 @@
           @toggle="toggle"/>
       </fullscreen>
     </v-col>
-   <v-col cols='6'>
+   <v-col cols='8'>
      <videoPlayer
      v-bind:courseInfo="courseInfo"
      v-bind:shouldPause="fullscreen"
@@ -18,57 +18,54 @@
      @paused="vidPaused"
      />
    </v-col>
-   <v-col id=md cols='5' v-if='notesOpen' class="text-center">
-      <div v-html="html" ></div>
-   </v-col>
-   <v-col class="text-center" cols="12">
-     <v-btn
-       color="primary darken-1"
-       @click="skip()"
-       v-if='bonus'
-       class="mr-6"
-     >
-       Finish
-     </v-btn>
-     <v-btn
-       color="primary"
-       dark
-       class="mr-6"
-       @click="toggle"
-     >
-       Expand Video
-     </v-btn>
-     <v-btn
-      v-if='!notesOpen && !bonus'
-      color="primary darken-2"
-       @click="viewNotes()"
-       class="mr-6"
-     >
-       Show Notes
-     </v-btn>
-     <v-btn
-      v-if='notesOpen'
-      color="primary darken-2"
-       @click="hideNotes()"
-       class="mr-6"
-     >
-       Hide Notes
-     </v-btn>
-     <v-btn
-       color="success darken-2"
-       @click="startQuiz()"
-       v-if='!bonus'
-     >
-       Take Quiz
-     </v-btn>
+   <v-col cols='3'>
+     <v-row justify="center">
+       <v-col id=md cols='12' v-if='html' class="text-center">
+          <div v-html="html" ></div>
+       </v-col>
+      </v-row>
+     <v-row justify="center">
+       <v-col class="text-center" cols="12">
+         <v-btn
+           color="red darken-1"
+           @click="back()"
+           class="ma-3"
+           v-if='part !== 0'
+         >
+           Back
+         </v-btn>
+         <v-btn
+           color="primary"
+           dark
+           class="ma-3"
+           @click="toggle"
+         >
+           Expand Video
+         </v-btn>
+         <v-btn
+           color="success darken-2"
+           @click="next()"
+           v-if='!done'
+         >
+           Next
+         </v-btn>
+         <v-btn
+           color="success darken-2"
+           @click="exit()"
+           v-if='done'
+         >
+           Finish
+         </v-btn>
+       </v-col>
+     </v-row>
    </v-col>
   </v-row>
 </template>
 
 <script>
 import videoPlayer from '@/components/general/localAudio.vue'
-import fullscreen from 'vue-fullscreen'
 import fullscreenVid from '@/components/general/fullscreenVid.vue'
+import fullscreen from 'vue-fullscreen'
 import Vue from 'vue'
 Vue.use(fullscreen)
 export default {
@@ -77,27 +74,14 @@ export default {
     videoPlayer,
     fullscreenVid
   },
-  props: ['courseInfo', 'bonus', 'html'],
+  props: ['courseInfo', 'html', 'part', 'done'],
   data () {
     return {
-      notesOpen: false,
-      fullscreen: false,
-      time: 0
+      time: 0,
+      fullscreen: false
     }
   },
   methods: {
-    startQuiz () {
-      this.$emit('startQuiz')
-    },
-    skip () {
-      this.$emit('quizDone')
-    },
-    viewNotes () {
-      this.notesOpen = true
-    },
-    hideNotes () {
-      this.notesOpen = false
-    },
     toggle () {
       // eslint-disable-next-line
       this.$refs['fullscreenComp'].toggle()
@@ -105,8 +89,17 @@ export default {
     fullscreenChange (fullscreen) {
       this.fullscreen = fullscreen
     },
+    next () {
+      this.$emit('next')
+    },
+    back () {
+      this.$emit('back')
+    },
     vidPaused (time) {
       this.time = time
+    },
+    exit () {
+      this.$emit('exit')
     }
   },
   computed: {

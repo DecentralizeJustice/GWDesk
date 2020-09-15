@@ -1,8 +1,8 @@
-import welcome from '@/assets/courseData/courses/intro/welcome.js'
-import whyCrypto from '@/assets/courseData/courses/intro/whyCrypto.js'
-import whichCrypto from '@/assets/courseData/courses/intro/whichCrypto.js'
-import howtoStore from '@/assets/courseData/courses/intro/howtostore.js'
-import howtoBuy from '@/assets/courseData/courses/intro/howtoBuy.js'
+import welcome from '@/assets/lessons/educational/lessons/intro/welcome.js'
+import whyCrypto from '@/assets/lessons/educational/lessons/intro/whyCrypto.js'
+import whichCrypto from '@/assets/lessons/educational/lessons/intro/whichCrypto.js'
+import howtoStore from '@/assets/lessons/educational/lessons/intro/howtostore.js'
+import howtoBuy from '@/assets/lessons/educational/lessons/intro/howtoBuy.js'
 
 const introLandingInfo = {
   title: 'Intro To Cryptocurrency',
