@@ -1,0 +1,84 @@
+
+name: BuildReleaseCandidate
+
+on:
+  push:
+    branches: [ releaseCandidate ]
+
+jobs:
+
+  buildWindowsRelease:
+    runs-on: windows-2019
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        lfs: 'true'
+    - uses: actions/setup-node@main
+      with:
+        # fix till https://github.com/actions/setup-node/issues/121 is solved
+        node-version: 12.16.1
+    - uses: actions/setup-python@v1
+      with:
+        python-version: '3.7'
+        architecture: 'x64'
+
+    - run: node -p "require('./package').version" > get_Version.txt
+    - uses: pCYSl5EDgo/cat@master
+      id: getVersion
+      with:
+        path: get_Version.txt
+        trim: true
+
+    - run: yarn install
+    - run: yarn run test
+    - run: yarn run build
+      env:
+          CSC_KEY_PASSWORD: ${{ secrets.Windows_CERTS_PASSWORD }}
+          CSC_LINK: ${{ secrets.Windows_CERTS }}
+
+    - name: Upload exe
+      uses: actions/upload-artifact@v2
+      with:
+        name: GuidingWallet-Setup.exe
+        path: dist_electron/GuidingWallet-Setup.exe
+
+  buildMacRelease:
+    runs-on: macos-10.15
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        lfs: 'true'
+    - uses: actions/setup-node@main
+      with:
+        # fix till https://github.com/actions/setup-node/issues/121 is solved
+        node-version: 12.16.1
+    - uses: actions/setup-python@v1
+      with:
+        python-version: '3.7'
+        architecture: 'x64'
+    - run: node -p "require('./package').version" > get_Version.txt
+    - uses: pCYSl5EDgo/cat@master
+      id: getVersion
+      with:
+        path: get_Version.txt
+        trim: true
+
+    - run: yarn install
+    - run: yarn run test
+    - uses: apple-actions/import-codesign-certs@v1
+      with:
+        p12-file-base64: ${{ secrets.MAC_CERTS }}
+        p12-password: ${{ secrets.MAC_CERTS_PASSWORD }}
+    - run: yarn run resign
+    - run: yarn run build
+      env:
+          CSC_KEY_PASSWORD: ${{ secrets.MAC_CERTS_PASSWORD }}
+          CSC_LINK: ${{ secrets.MAC_CERTS }}
+          APPLEID: ${{ secrets.APPLEID }}
+          APPLEIDPASS: ${{ secrets.APPLEIDPASS }}
+
+    - name: Upload mac dmg
+      uses: actions/upload-artifact@v2
+      with:
+        name: GuidingWallet.dmg
+        path: dist_electron/GuidingWallet.dmg
