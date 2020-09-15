@@ -5,7 +5,9 @@
       </v-flex>
       <v-flex xs12>
         <v-layout row wrap justify-center>
-          <audio controls @timeupdate="updateTime" ref="player" class="mt-4" :src="processedUrl" type="audio/mp3" @error='audioError'>
+          <audio controls @timeupdate="updateTime" ref="player" class="mt-4"
+          :src="processedUrl" type="audio/mp3" @error='audioError'
+          controlsList="nodownload">
         </audio>
         </v-layout>
       </v-flex>
@@ -21,7 +23,11 @@ export default {
   name: 'videoPlayer',
   components: {
   },
-  props: ['courseInfo', 'pause', 'time'],
+  props: {
+    courseInfo: {},
+    time: { default: 0 },
+    shouldPause: { default: true }
+  },
   data () {
     return {
       processedUrl: '',
@@ -81,11 +87,8 @@ export default {
     }
   },
   watch: {
-    courseInfo: async function () {
-      await this.setup()
-    },
-    pause: function () {
-      if (this.pause === true) {
+    shouldPause: function () {
+      if (this.shouldPause === true) {
         this.player.pause()
         this.$emit('paused', this.player.currentTime)
       }
@@ -108,7 +111,18 @@ export default {
   updated () {
   },
   async mounted () {
-    await this.setup()
+    this.player = this.$refs.player
+    const url = this.courseInfo.audio
+    // eslint-disable-next-line
+    const fileLocation = path.join(__static, url)
+    const fileContents = fs.readFileSync(fileLocation)
+    const blob = new window.Blob([fileContents], { type: 'audio/mp3' })
+    const urlb = URL.createObjectURL(blob)
+    this.processedUrl = urlb
+  },
+  async beforeDestroy () {
+    this.player.pause()
+    this.$emit('paused', this.player.currentTime)
   }
 }
 </script>
