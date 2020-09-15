@@ -83,6 +83,12 @@ export default {
         return true
       }
       return false
+    },
+    mobile: function () {
+      return this.courseInfo.comp.mobile
+    },
+    desktop: function () {
+      return this.courseInfo.comp.desktop
     }
   },
   methods: {
