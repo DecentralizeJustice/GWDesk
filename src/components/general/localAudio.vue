@@ -21,7 +21,11 @@ export default {
   name: 'videoPlayer',
   components: {
   },
-  props: ['courseInfo', 'pause', 'time'],
+  props: {
+    courseInfo: {},
+    time: { default: 0 },
+    shouldPause: { default: true }
+  },
   data () {
     return {
       processedUrl: '',
@@ -71,8 +75,8 @@ export default {
     }
   },
   watch: {
-    pause: function () {
-      if (this.pause === true) {
+    shouldPause: function () {
+      if (this.shouldPause === true) {
         this.player.pause()
         this.$emit('paused', this.player.currentTime)
       }
@@ -101,6 +105,10 @@ export default {
     const blob = new window.Blob([fileContents], { type: 'audio/mp3' })
     const urlb = URL.createObjectURL(blob)
     this.processedUrl = urlb
+  },
+  async beforeDestroy () {
+    this.player.pause()
+    this.$emit('paused', this.player.currentTime)
   }
 }
 </script>
