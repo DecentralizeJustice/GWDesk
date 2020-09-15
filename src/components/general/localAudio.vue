@@ -36,6 +36,16 @@ export default {
     }
   },
   methods: {
+    async setup () {
+      this.player = this.$refs.player
+      const url = this.courseInfo.audio
+      // eslint-disable-next-line
+      const fileLocation = path.join(__static, url)
+      const fileContents = fs.readFileSync(fileLocation)
+      const blob = new window.Blob([fileContents], { type: 'audio/mp3' })
+      const urlb = URL.createObjectURL(blob)
+      this.processedUrl = urlb
+    },
     audioError (e) {
       console.log(e.srcElement.error)
     },
@@ -97,6 +107,8 @@ export default {
       }
       return false
     }
+  },
+  updated () {
   },
   async mounted () {
     this.player = this.$refs.player
