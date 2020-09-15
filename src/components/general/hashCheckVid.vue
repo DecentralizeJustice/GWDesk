@@ -1,9 +1,8 @@
 <template>
-
-      <video style="width:100%;height:auto;" controls v-if='!bloburl=="" && hashPassed'
-      preload="auto">
-          <source :src='bloburl' type="video/mp4">
-      </video>
+  <video style="width:100%;height:auto;" controls v-if='!bloburl=="" && hashPassed'
+  preload="auto">
+      <source :src='bloburl' type="video/mp4">
+  </video>
 </template>
 
 <script>

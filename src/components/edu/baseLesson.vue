@@ -16,7 +16,7 @@
      </v-col>
     </v-row>
     <v-row align="center" justify='space-around' v-if='justVid'>
-    <v-col cols='7'>
+    <v-col cols='8'>
       <justVidComp
       v-bind:courseInfo="courseInfo.comp"/>
     </v-col>
@@ -38,14 +38,14 @@
      />
   </div>
   <v-row align="center" justify='space-around'   v-if='!justVid && currentComponent === "congrats"'>
-  <v-col cols='7'>
-  <justVidComp
-  v-bind:courseInfo="correctLessonInfo"
-  v-on:quizDone='partDone'/>
-</v-col>
-</v-row>
-    <v-divider/>
-    <v-card-actions>
+    <v-col cols='8'>
+      <justVidComp
+      v-bind:courseInfo="correctLessonInfo"
+      v-on:quizDone='partDone'/>
+    </v-col>
+  </v-row>
+  <v-divider/>
+  <v-card-actions>
     <v-btn
       color="red darken-1"
       @click="exit()"
@@ -53,12 +53,11 @@
       Exit
     </v-btn>
     <v-spacer></v-spacer>
-    </v-card-actions>
+  </v-card-actions>
   </v-card>
 </template>
 <script>
 import justVidComp from '@/components/general/localAudio.vue'
-// import congrats from '@/components/edu/congrats.vue'
 import vidComp from '@/components/edu/vid&NotesComp.vue'
 import quiz from '@/components/edu/quiz.vue'
 export default {

@@ -1,50 +1,16 @@
 <template>
   <v-row align="center" justify='space-around'>
-    <v-col cols='12' class="text-center" offset='0'>
+    <v-col cols='12'>
+      <fullscreen ref="fullscreenComp" @change="fullscreenChange">
+        <fullscreenVid
+          v-if='fullscreen'
+          v-bind:courseInfo="courseInfo"
+          v-bind:time='time'
+          @paused="vidPaused"
+          @toggle="toggle"/>
+      </fullscreen>
     </v-col>
-     <v-row justify="center">
-    <fullscreen ref="fullscreenComp" @change="fullscreenChange">
-      <fullscreenVid
-        v-if='fullscreen'
-        v-bind:courseInfo="courseInfo"
-        v-bind:time='time'
-        @paused="vidPaused"
-        @toggle="toggle"/>
-    </fullscreen>
-  </v-row>
-  <v-col class="text-center" cols="2">
-    <v-btn
-      color="red darken-1"
-      @click="back()"
-      class="ma-3"
-      v-if='part !== 0'
-    >
-      Back
-    </v-btn>
-    <v-btn
-      color="primary"
-      dark
-      class="ma-3"
-      @click="toggle"
-    >
-      Expand Video
-    </v-btn>
-    <v-btn
-      color="success darken-2"
-      @click="next()"
-      v-if='!done'
-    >
-      Next
-    </v-btn>
-    <v-btn
-      color="success darken-2"
-      @click="exit()"
-      v-if='done'
-    >
-      Finish
-    </v-btn>
-  </v-col>
-   <v-col cols='6'>
+   <v-col cols='8'>
      <videoPlayer
      v-bind:courseInfo="courseInfo"
      v-bind:shouldPause="fullscreen"
@@ -52,8 +18,46 @@
      @paused="vidPaused"
      />
    </v-col>
-   <v-col id=md cols='3' v-if='html' class="text-center">
-      <div v-html="html" ></div>
+   <v-col cols='3'>
+     <v-row justify="center">
+       <v-col id=md cols='12' v-if='html' class="text-center">
+          <div v-html="html" ></div>
+       </v-col>
+      </v-row>
+     <v-row justify="center">
+       <v-col class="text-center" cols="12">
+         <v-btn
+           color="red darken-1"
+           @click="back()"
+           class="ma-3"
+           v-if='part !== 0'
+         >
+           Back
+         </v-btn>
+         <v-btn
+           color="primary"
+           dark
+           class="ma-3"
+           @click="toggle"
+         >
+           Expand Video
+         </v-btn>
+         <v-btn
+           color="success darken-2"
+           @click="next()"
+           v-if='!done'
+         >
+           Next
+         </v-btn>
+         <v-btn
+           color="success darken-2"
+           @click="exit()"
+           v-if='done'
+         >
+           Finish
+         </v-btn>
+       </v-col>
+     </v-row>
    </v-col>
   </v-row>
 </template>

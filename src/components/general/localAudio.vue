@@ -5,7 +5,9 @@
       </v-flex>
       <v-flex xs12>
         <v-layout row wrap justify-center>
-          <audio controls @timeupdate="updateTime" ref="player" class="mt-4" :src="processedUrl" type="audio/mp3" @error='audioError'>
+          <audio controls @timeupdate="updateTime" ref="player" class="mt-4"
+          :src="processedUrl" type="audio/mp3" @error='audioError'
+          controlsList="nodownload">
         </audio>
         </v-layout>
       </v-flex>
