@@ -20,23 +20,32 @@ function setPort (portNumber) {
 }
 
 const granax = require('@deadcanaries/granax')
-const tor = granax()
+let tor
+try {
+  tor = granax()
+} catch (err) {
+  log.error(err)
+}
 
-tor.on('ready', function () {
-  tor.getInfo('net/listeners/socks', (err, result) => {
-    const port = parseInt(result.split('"').join('').split(':')[1])
-    setPort(port)
-    log.warn('port set:', port)
-    if (err) {
-      errorRan()
-      log.warn(err)
-    }
+try {
+  tor.on('ready', function () {
+    tor.getInfo('net/listeners/socks', (err, result) => {
+      const port = parseInt(result.split('"').join('').split(':')[1])
+      setPort(port)
+      log.warn('port set:', port)
+      if (err) {
+        errorRan()
+        log.warn(err)
+      }
+    })
   })
-})
+} catch (err) {
+  log.error(err)
+}
 
 tor.on('error', function (err) {
   errorRan()
-  log.warn(err)
+  log.error(err)
 })
 // function dormant () {
 //   tor.getInfo('dormant', (err, result) => {
@@ -65,11 +74,7 @@ tor.on('error', function (err) {
 //   }
 // })
 function errorRan () {
-  log.error('Error Fun Triggered')
-  setTimeout(() => {
-    app.relaunch()
-    app.exit()
-  }, 20000)
+  // console.log('here')
 }
 ipcMain.on('circuitEstablished34', event => {
   try {
@@ -81,7 +86,7 @@ ipcMain.on('circuitEstablished34', event => {
     })
   } catch (e) {
     errorRan()
-    log.error(e)
+    // log.error(e)
   }
 })
 ipcMain.on('dormant34', event => {
@@ -95,7 +100,7 @@ ipcMain.on('dormant34', event => {
     })
   } catch (e) {
     errorRan()
-    log.error(e)
+    // log.error(e)
   }
 })
 // Keep a global reference of the window object, if you don't, the window will
@@ -113,7 +118,7 @@ function createWindow () {
       icon: path.join(__static, 'icon.png'), // eslint-disable-line
       webPreferences: {
         enableRemoteModule: true,
-        nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
+        nodeIntegration: true, // process.env.ELECTRON_NODE_INTEGRATION,
         webSecurity: false
       }
     })
