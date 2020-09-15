@@ -16,7 +16,7 @@
      </v-col>
     </v-row>
     <v-row align="center" justify='space-around' v-if='justVid'>
-    <v-col cols='8'>
+    <v-col cols='7'>
       <justVidComp
       v-bind:courseInfo="courseInfo.comp"/>
     </v-col>
@@ -38,7 +38,7 @@
      />
   </div>
   <v-row align="center" justify='space-around'   v-if='!justVid && currentComponent === "congrats"'>
-    <v-col cols='8'>
+    <v-col cols='7'>
       <justVidComp
       v-bind:courseInfo="correctLessonInfo"
       v-on:quizDone='partDone'/>
