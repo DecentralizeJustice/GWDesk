@@ -1,13 +1,13 @@
 
 import intro from '@/assets/lessons/educational/lessons/btc/intro.js'
-import exodusIntro from '@/assets/lessons/tutorials/tutorials/exodus/desktop/general/backup.js'
-
+import exodusWindowsInstall from '@/assets/lessons/tutorials/tutorials/exodus/desktop/windows/install.js'
+import exodusMacInstall from '@/assets/lessons/tutorials/tutorials/exodus/desktop/mac/install.js'
 const btcLandingInfo = {
   title: 'Bitcoin',
   lessons: [
     { title: 'Intro to Bitcoin', icon: 'cake', comp: intro, unlocked: true, first: true },
-    { title: 'Exodus Wallet Backup', icon: 'atom-variant', comp: exodusIntro, unlocked: true },
-    { title: 'Use Cash App', icon: 'account-question', unlocked: false }
+    { title: 'Exodus Windows Setup', icon: 'atom-variant', comp: exodusWindowsInstall, unlocked: true },
+    { title: 'Exodus Mac Setup', icon: 'account-question', comp: exodusMacInstall, unlocked: true }
   ]
 }
 export default btcLandingInfo
