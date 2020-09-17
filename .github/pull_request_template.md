@@ -10,4 +10,3 @@
 * [ ] Check Welcome Component
 * [ ] Check Lesson Component
 * [ ] Check Tutorial Component
-<!-- You can erase any parts of this template not applicable to your Pull Request. -->
