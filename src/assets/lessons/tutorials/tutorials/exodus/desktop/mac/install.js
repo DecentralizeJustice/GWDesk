@@ -20,7 +20,7 @@ import notes2 from '@/assets/lessons/tutorials/courseNotes/exodus/desktop/genera
 const backup = {
   tutorial: true,
   desktop: true,
-  title: 'Exodus Desktop Mac Setup',
+  title: 'Exodus Mac Setup',
   slides: [
     [
       slide01,
