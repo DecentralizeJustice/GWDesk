@@ -1,3 +1,8 @@
+import slide01 from '@/assets/lessons/tutorials/slides/kraken/setup/01.jpg'
+import slide02 from '@/assets/lessons/tutorials/slides/kraken/setup/02.jpg'
+import slide03 from '@/assets/lessons/tutorials/slides/kraken/setup/03.jpg'
+import slide04 from '@/assets/lessons/tutorials/slides/kraken/setup/04.jpg'
+import slide05 from '@/assets/lessons/tutorials/slides/kraken/setup/05.jpg'
 import slide1 from '@/assets/lessons/tutorials/slides/kraken/setup/1.jpg'
 import slide2 from '@/assets/lessons/tutorials/slides/kraken/setup/2.jpg'
 import slide3 from '@/assets/lessons/tutorials/slides/kraken/setup/3.jpg'
@@ -17,12 +22,20 @@ import slide16 from '@/assets/lessons/tutorials/slides/kraken/setup/16.jpg'
 import slide17 from '@/assets/lessons/tutorials/slides/kraken/setup/17.jpg'
 import slide18 from '@/assets/lessons/tutorials/slides/kraken/setup/18.jpg'
 import slide19 from '@/assets/lessons/tutorials/slides/kraken/setup/19.jpg'
-import notes1 from '@/assets/lessons/tutorials/courseNotes/kraken/setup.html'
+import notes1 from '@/assets/lessons/tutorials/courseNotes/kraken/setup/prep.html'
+import notes2 from '@/assets/lessons/tutorials/courseNotes/kraken/setup/setup.html'
 const backup = {
   tutorial: true,
   desktop: true,
   title: 'Kraken Account Setup',
   slides: [
+    [
+      slide01,
+      slide02,
+      slide03,
+      slide04,
+      slide05
+    ],
     [
       slide1,
       slide2,
@@ -47,15 +60,20 @@ const backup = {
   ],
   breakpoints: [
     [
+      '0:00', '0:52', '2:01', '2:40', '2:47'
+    ],
+    [
       '0:00', '0:18', '0:38', '0:57', '1:10', '1:36', '1:55', '2:09', '2:39', '2:49',
       '3:03', '3:29', '3:41', '4:04', '4:13', '4:59', '5:06', '5:54', '6:07'
     ]
   ],
   audio: [
+    'audio/kraken/open/prepFinal.mp3',
     'audio/kraken/open/verifyFinal.mp3'
   ],
   notes: [
-    notes1
+    notes1,
+    notes2
   ]
 }
 export default backup
