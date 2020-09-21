@@ -60,7 +60,7 @@ export default {
         })
     },
     updateTime () {
-      const breakpoints = this.courseInfo.breakpoints
+      const breakpoints = this.addFirstBreakpoint(this.courseInfo.breakpoints)
       const time = this.player.currentTime
       for (var i = 0; i < breakpoints.length; i++) {
         const lowseconds = this.getSeconds(breakpoints[i])
@@ -72,6 +72,12 @@ export default {
           break
         }
       }
+    },
+    addFirstBreakpoint (breakpoints) {
+      if (breakpoints[0] !== '0:00') {
+        breakpoints.splice(0, 0, '0:00')
+      }
+      return breakpoints
     },
     getSeconds (timeString) {
       if (typeof timeString === 'undefined') {
@@ -95,6 +101,9 @@ export default {
     },
     time: function () {
       this.player.currentTime = this.time
+    },
+    courseInfo: function () {
+      this.setup()
     }
   },
   computed: {
@@ -111,14 +120,7 @@ export default {
   updated () {
   },
   async mounted () {
-    this.player = this.$refs.player
-    const url = this.courseInfo.audio
-    // eslint-disable-next-line
-    const fileLocation = path.join(__static, url)
-    const fileContents = fs.readFileSync(fileLocation)
-    const blob = new window.Blob([fileContents], { type: 'audio/mp3' })
-    const urlb = URL.createObjectURL(blob)
-    this.processedUrl = urlb
+    this.setup()
   },
   async beforeDestroy () {
     this.player.pause()
