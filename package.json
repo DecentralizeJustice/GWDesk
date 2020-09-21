@@ -33,6 +33,7 @@
     "chai-as-promised": "^7.1.1",
     "core-js": "^3.6.4",
     "electron": "^9.0.3",
+    "electron-context-menu": "^2.3.0",
     "electron-log": "^4.2.2",
     "electron-store": "^5.0.0",
     "electron-updater": "^4.3.1",
