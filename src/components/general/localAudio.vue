@@ -60,7 +60,7 @@ export default {
         })
     },
     updateTime () {
-      const breakpoints = this.courseInfo.breakpoints
+      const breakpoints = this.addFirstBreakpoint(this.courseInfo.breakpoints)
       const time = this.player.currentTime
       for (var i = 0; i < breakpoints.length; i++) {
         const lowseconds = this.getSeconds(breakpoints[i])
@@ -72,6 +72,12 @@ export default {
           break
         }
       }
+    },
+    addFirstBreakpoint (breakpoints) {
+      if (breakpoints[0] !== '0:00') {
+        breakpoints.splice(0, 0, '0:00')
+      }
+      return breakpoints
     },
     getSeconds (timeString) {
       if (typeof timeString === 'undefined') {
