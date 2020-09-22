@@ -11,8 +11,8 @@
         </audio>
         </v-layout>
       </v-flex>
-      <v-btn color='primary' class='mt-3' @click='goToNextLesson'
-      v-if='nextLessonAvailable'>Next Lesson</v-btn>
+      <!-- <v-btn color='primary' class='mt-3' @click='goToNextLesson'
+      v-if='nextLessonAvailable'>Next Lesson</v-btn> -->
     </v-layout>
 </template>
 
