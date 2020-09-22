@@ -7,7 +7,7 @@
        <v-progress-linear
          :value='progress'
          color="blue-grey"
-         height="18"
+         height="16"
        >
          <template v-slot="{ value }">
            <strong>{{ Math.ceil(value) }}%</strong>

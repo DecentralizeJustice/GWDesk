@@ -1,9 +1,10 @@
 <template>
   <v-card style='overflow-x: hidden;'>
-    <v-container fluid style='height:100vh;'>
+    <v-container fluid style='height:100vh;' fill-height>
         <v-row
           no-gutters
           justify='center'
+          align='center'
         >
           <v-col lg='9' md='9'>
            <videoPlayer
