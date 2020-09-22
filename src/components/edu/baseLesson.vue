@@ -21,22 +21,24 @@
       v-bind:courseInfo="courseInfo.comp"/>
     </v-col>
     </v-row>
-    <div v-if='!justVid && currentComponent === "mainQuiz"'>
-      <vidComp
-      v-on:startQuiz='startQuiz()'
-      v-bind:courseInfo="correctLessonInfo"
-      v-bind:bonus="false"
-      :html='html'
-      v-if='vid'/>
-     <quiz
-     v-bind:questions="test"
-     v-on:backToVideo='backToVideo()'
-     v-on:quizDone='partDone'
-     v-if='!vid'
-     v-bind:bonus="false"
-     :key="234"
-     />
-  </div>
+      <v-row align="center" justify='space-around' v-if='!justVid && currentComponent === "mainQuiz"'>
+      <v-col cols='10' v-if='vid'>
+        <vidComp
+        v-on:startQuiz='startQuiz()'
+        v-bind:courseInfo="correctLessonInfo"
+        v-bind:bonus="false"
+        :html='html'/>
+      </v-col>
+      <v-col cols='12' v-if='!vid'>
+         <quiz
+         v-bind:questions="test"
+         v-on:backToVideo='backToVideo()'
+         v-on:quizDone='partDone'
+         v-bind:bonus="false"
+         :key="234"
+         />
+      </v-col>
+      </v-row>
   <v-row align="center" justify='space-around'   v-if='!justVid && currentComponent === "congrats"'>
     <v-col cols='7'>
       <justVidComp

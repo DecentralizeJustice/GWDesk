@@ -1,7 +1,10 @@
 <template>
-    <v-layout row wrap justify-center>
-      <v-flex xs12>
+    <v-layout row wrap justify-center >
+      <v-flex xs12  v-if='!fullscreen'>
         <v-img :src='slide' contain></v-img>
+      </v-flex>
+      <v-flex xs12 style='text-align: center' v-if='fullscreen'>
+        <img :src='slide' style="max-height:75vh;"/>
       </v-flex>
       <v-flex xs12>
         <v-layout row wrap justify-center>
@@ -11,8 +14,8 @@
         </audio>
         </v-layout>
       </v-flex>
-      <v-btn color='primary' class='mt-3' @click='goToNextLesson'
-      v-if='nextLessonAvailable'>Next Lesson</v-btn>
+      <!-- <v-btn color='primary' class='mt-3' @click='goToNextLesson'
+      v-if='nextLessonAvailable'>Next Lesson</v-btn> -->
     </v-layout>
 </template>
 
@@ -25,6 +28,7 @@ export default {
   },
   props: {
     courseInfo: {},
+    fullscreen: { default: false },
     time: { default: 0 },
     shouldPause: { default: true }
   },
