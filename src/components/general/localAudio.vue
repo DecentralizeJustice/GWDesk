@@ -1,6 +1,6 @@
 <template>
-    <v-layout row wrap justify-center>
-      <v-flex xs12>
+    <v-layout row wrap justify-center >
+      <v-flex xs12 style="max-height:75vh;max-width:75vw;">
         <v-img :src='slide' contain></v-img>
       </v-flex>
       <v-flex xs12>

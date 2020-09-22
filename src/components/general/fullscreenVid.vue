@@ -1,12 +1,14 @@
 <template>
   <v-card style='overflow-x: hidden;'>
+
     <v-container fluid style='height:100vh;' fill-height>
+
         <v-row
           no-gutters
           justify='center'
           align='center'
-        >
-          <v-col cols='8'>
+        ><v-responsive>
+          <v-col cols='12'>
            <videoPlayer
            v-bind:courseInfo="courseInfo"
            @paused="vidPaused"
@@ -14,11 +16,14 @@
            />
            </v-col>
            <v-col cols='12' class="text-center">
-             <v-btn color='red' @click="toggle" class="mt-3">
+             <v-btn color='red' @click="toggle">
                Exit
              </v-btn>
+
            </v-col>
+                   </v-responsive>
         </v-row>
+
       </v-container>
   </v-card>
 </template>
