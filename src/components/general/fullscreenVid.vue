@@ -6,7 +6,7 @@
           justify='center'
           align='center'
         >
-          <v-col lg='9' md='9'>
+          <v-col cols='8'>
            <videoPlayer
            v-bind:courseInfo="courseInfo"
            @paused="vidPaused"
