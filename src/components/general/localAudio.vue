@@ -1,7 +1,10 @@
 <template>
     <v-layout row wrap justify-center >
-      <v-flex xs12 style="max-height:75vh;max-width:75vw;">
+      <v-flex xs12  v-if='!fullscreen'>
         <v-img :src='slide' contain></v-img>
+      </v-flex>
+      <v-flex xs12 style='text-align: center' v-if='fullscreen'>
+        <img :src='slide' style="max-height:75vh;"/>
       </v-flex>
       <v-flex xs12>
         <v-layout row wrap justify-center>
@@ -25,6 +28,7 @@ export default {
   },
   props: {
     courseInfo: {},
+    fullscreen: { default: false },
     time: { default: 0 },
     shouldPause: { default: true }
   },

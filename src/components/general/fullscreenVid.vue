@@ -7,21 +7,20 @@
           no-gutters
           justify='center'
           align='center'
-        ><v-responsive>
+        >
           <v-col cols='12'>
            <videoPlayer
            v-bind:courseInfo="courseInfo"
            @paused="vidPaused"
            v-bind:time='time'
+           v-bind:fullscreen='true'
            />
            </v-col>
-           <v-col cols='12' class="text-center">
+           <v-col cols='12' class="text-center mt-2">
              <v-btn color='red' @click="toggle">
                Exit
              </v-btn>
-
            </v-col>
-                   </v-responsive>
         </v-row>
 
       </v-container>
