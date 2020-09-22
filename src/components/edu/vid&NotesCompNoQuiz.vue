@@ -10,7 +10,7 @@
           @toggle="toggle"/>
       </fullscreen>
     </v-col>
-   <v-col cols='7'>
+   <v-col lg='6' md='6'>
      <videoPlayer
      v-bind:courseInfo="courseInfo"
      v-bind:shouldPause="fullscreen"

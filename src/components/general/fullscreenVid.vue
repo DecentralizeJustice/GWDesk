@@ -5,23 +5,18 @@
           no-gutters
           justify='center'
         >
-          <v-col lg='11' md='9' sm='9' xl='12'>
+          <v-col lg='9' md='9'>
            <videoPlayer
            v-bind:courseInfo="courseInfo"
            @paused="vidPaused"
            v-bind:time='time'
            />
            </v-col>
-        </v-row>
-        <v-row
-          no-gutters
-          justify='center'
-        >
-        <v-col cols='12' class="text-center">
-          <v-btn color='red' @click="toggle" class="mt-3">
-            Exit
-          </v-btn>
-        </v-col>
+           <v-col cols='12' class="text-center">
+             <v-btn color='red' @click="toggle" class="mt-3">
+               Exit
+             </v-btn>
+           </v-col>
         </v-row>
       </v-container>
   </v-card>
