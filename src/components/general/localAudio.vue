@@ -1,7 +1,10 @@
 <template>
-    <v-layout row wrap justify-center>
-      <v-flex xs12>
+    <v-layout row wrap justify-center >
+      <v-flex xs12  v-if='!fullscreen'>
         <v-img :src='slide' contain></v-img>
+      </v-flex>
+      <v-flex xs12 style='text-align: center' v-if='fullscreen'>
+        <img :src='slide' style="max-height:75vh;"/>
       </v-flex>
       <v-flex xs12>
         <v-layout row wrap justify-center>
@@ -11,8 +14,8 @@
         </audio>
         </v-layout>
       </v-flex>
-      <v-btn color='primary' class='mt-3' @click='goToNextLesson'
-      v-if='nextLessonAvailable'>Next Lesson</v-btn>
+      <!-- <v-btn color='primary' class='mt-3' @click='goToNextLesson'
+      v-if='nextLessonAvailable'>Next Lesson</v-btn> -->
     </v-layout>
 </template>
 
@@ -25,6 +28,7 @@ export default {
   },
   props: {
     courseInfo: {},
+    fullscreen: { default: false },
     time: { default: 0 },
     shouldPause: { default: true }
   },
@@ -60,7 +64,7 @@ export default {
         })
     },
     updateTime () {
-      const breakpoints = this.courseInfo.breakpoints
+      const breakpoints = this.addFirstBreakpoint(this.courseInfo.breakpoints)
       const time = this.player.currentTime
       for (var i = 0; i < breakpoints.length; i++) {
         const lowseconds = this.getSeconds(breakpoints[i])
@@ -72,6 +76,12 @@ export default {
           break
         }
       }
+    },
+    addFirstBreakpoint (breakpoints) {
+      if (breakpoints[0] !== '0:00') {
+        breakpoints.splice(0, 0, '0:00')
+      }
+      return breakpoints
     },
     getSeconds (timeString) {
       if (typeof timeString === 'undefined') {
@@ -95,6 +105,9 @@ export default {
     },
     time: function () {
       this.player.currentTime = this.time
+    },
+    courseInfo: function () {
+      this.setup()
     }
   },
   computed: {
@@ -111,14 +124,7 @@ export default {
   updated () {
   },
   async mounted () {
-    this.player = this.$refs.player
-    const url = this.courseInfo.audio
-    // eslint-disable-next-line
-    const fileLocation = path.join(__static, url)
-    const fileContents = fs.readFileSync(fileLocation)
-    const blob = new window.Blob([fileContents], { type: 'audio/mp3' })
-    const urlb = URL.createObjectURL(blob)
-    this.processedUrl = urlb
+    this.setup()
   },
   async beforeDestroy () {
     this.player.pause()

@@ -5,6 +5,7 @@ import {
   createProtocol
 } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
+const contextMenu = require('electron-context-menu')
 const log = require('electron-log')
 const isDevelopment = process.env.NODE_ENV !== 'production'
 const { autoUpdater } = require('electron-updater')
@@ -47,32 +48,6 @@ tor.on('error', function (err) {
   errorRan()
   log.error(err)
 })
-// function dormant () {
-//   tor.getInfo('dormant', (err, result) => {
-//     log.warn({ dormant: result })
-//     if (err) {
-//       log.warn({ error: err })
-//     }
-//   })
-// }
-// function circuitEstablished () {
-//   tor.getInfo('status/circuit-established', (err, result) => {
-//     log.warn({ circuitEstablished: result })
-//     sender.send({ circuitEstablished: result })
-//     if (err) {
-//       log.warn({ circuitEstablished: err })
-//     }
-//   })
-// }
-
-// ipcMain.on('dormant', event => {
-//   try {
-//     sender = event.sender
-//     dormant()
-//   } catch (e) {
-//     // log.error(e)
-//   }
-// })
 function errorRan () {
   // console.log('here')
 }
@@ -90,7 +65,6 @@ ipcMain.on('circuitEstablished34', event => {
   }
 })
 ipcMain.on('dormant34', event => {
-  // event.reply({ circuitEstablished: false })
   try {
     tor.getInfo('dormant', (err, result) => {
       win.webContents.send('dormant34', { dormant: result })
@@ -102,6 +76,12 @@ ipcMain.on('dormant34', event => {
     errorRan()
     // log.error(e)
   }
+})
+contextMenu({
+  showSearchWithGoogle: false,
+  showLookUpSelection: false,
+  prepend: (defaultActions, params, browserWindow) => [
+  ]
 })
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -119,7 +99,8 @@ function createWindow () {
       webPreferences: {
         enableRemoteModule: true,
         nodeIntegration: true, // process.env.ELECTRON_NODE_INTEGRATION,
-        webSecurity: false
+        webSecurity: false,
+        spellcheck: false
       }
     })
   if (port) {

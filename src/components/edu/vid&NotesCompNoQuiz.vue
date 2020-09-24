@@ -1,6 +1,6 @@
 <template>
   <v-row align="center" justify='space-around'>
-    <v-col cols='12'>
+    <v-col cols='12' v-show='fullscreen'>
       <fullscreen ref="fullscreenComp" @change="fullscreenChange">
         <fullscreenVid
           v-if='fullscreen'
@@ -10,7 +10,7 @@
           @toggle="toggle"/>
       </fullscreen>
     </v-col>
-   <v-col cols='8'>
+   <v-col lg='6' md='6'>
      <videoPlayer
      v-bind:courseInfo="courseInfo"
      v-bind:shouldPause="fullscreen"
@@ -18,7 +18,7 @@
      @paused="vidPaused"
      />
    </v-col>
-   <v-col cols='3'>
+   <v-col cols='4'>
      <v-row justify="center">
        <v-col id=md cols='12' v-if='html' class="text-center">
           <div v-html="html" ></div>
@@ -26,14 +26,6 @@
       </v-row>
      <v-row justify="center">
        <v-col class="text-center" cols="12">
-         <v-btn
-           color="red darken-1"
-           @click="back()"
-           class="ma-3"
-           v-if='part !== 0'
-         >
-           Back
-         </v-btn>
          <v-btn
            color="primary"
            dark
@@ -48,6 +40,14 @@
            v-if='!done'
          >
            Next
+         </v-btn>
+         <v-btn
+           color="red darken-1"
+           @click="back()"
+           class="ma-3"
+           v-if='part !== 0'
+         >
+           Back
          </v-btn>
          <v-btn
            color="success darken-2"
