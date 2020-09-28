@@ -100,7 +100,8 @@ function createWindow () {
         enableRemoteModule: true,
         nodeIntegration: true, // process.env.ELECTRON_NODE_INTEGRATION,
         webSecurity: false,
-        spellcheck: false
+        spellcheck: false,
+        allowRunningInsecureContent: false
       }
     })
   if (port) {
