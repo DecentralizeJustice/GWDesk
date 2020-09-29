@@ -27,7 +27,7 @@
                      :color="iconColor(true)"
                      @click.stop="openDialog(item.title)"
                    >
-                     Explore
+                     Start
                    </v-btn>
                  </v-card-actions>
                  </v-card>
@@ -58,9 +58,8 @@
 </template>
 
 <script>
-import subjectHome from '@/components/edu/subjectHome.vue'
-import introLandingInfo from '@/assets/landingInfo/intro.js'
-import btcLandingInfo from '@/assets/landingInfo/btc.js'
+import subjectHome from '@/components/courses/subjectHome.vue'
+import begginnerLandingInfo from '@/assets/courses/landinginfo/intro.js'
 export default {
   mounted () {
     if (typeof this.routeInfo.course !== 'undefined') {
@@ -75,24 +74,10 @@ export default {
     dialog: false,
     currentLesson: '',
     lessonMapping: {
-      Introduction: introLandingInfo,
-      Bitcoin: btcLandingInfo
+      'Beginner To Crypto': begginnerLandingInfo
     },
     lessons: [
-      { title: 'Introduction', icon: 'atom-variant', unlocked: true },
-      { title: 'Bitcoin', icon: 'lock', unlocked: true },
-      { title: 'Monero', icon: 'eye-off', unlocked: false },
-      // { title: 'Dai', icon: 'lock', unlocked: 'false' },
-      // { title: 'Pool Together', icon: 'lock', unlocked: 'false' },
-      // { title: 'Ethereum', icon: 'lock', unlocked: 'false' },
-      // { title: 'Uniswap', icon: 'lock', unlocked: 'false' },
-      // { title: 'Bisq', icon: 'lock', unlocked: 'false' },
-      // { title: 'Custom Tokens', icon: 'lock', unlocked: 'false' },
-      // { title: 'Blockchain Mechanics', icon: 'bitcoin', unlocked: 'false' },
-      { title: 'General Education', icon: 'book-information-variant', unlocked: false },
-      { title: 'Tools', icon: 'hammer-wrench', unlocked: false },
-      // { title: 'Heart to Heart', icon: 'account-heart', unlocked: 'false' },
-      { title: 'About Guide Wallet', icon: 'information-outline', unlocked: false }
+      { title: 'Beginner To Crypto', icon: 'atom-variant', unlocked: true }
     ]
   }),
   methods: {
