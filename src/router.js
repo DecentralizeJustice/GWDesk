@@ -14,7 +14,7 @@ const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
-    { path: '/', redirect: '/lessons' },
+    { path: '/', redirect: '/courses' },
     {
       path: '/lessons',
       name: 'lessons',
