@@ -1,4 +1,4 @@
-import welcome from '@/assets/lessons/educational/lessons/intro/welcome.js'
+import welcome from '@/assets/courses/courseInfo/welcome.js'
 
 const introLandingInfo = {
   title: 'Intro To Cryptocurrency',
