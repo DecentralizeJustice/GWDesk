@@ -4,7 +4,11 @@
     <v-divider/>
     <v-row align="center" justify='space-around'>
       <v-col cols='5'>
-        <v-row align="center" justify='space-around' style='background:black;'>
+        <v-card
+          elevation="2"
+          color="grey darken-3"
+        >
+        <v-row align="center" justify='space-around'>
           <v-col cols='10'>
             <div class="text-h6">
               Summary:
@@ -35,6 +39,7 @@
             </v-btn>
           </v-col> -->
         </v-row>
+        </v-card>
       </v-col>
      <v-col cols='6'>
         <v-stepper
@@ -56,12 +61,22 @@
               height="200px"
             ></v-card>
             <v-btn
-              color="primary"
-              @click="step = index + 2"
+              color="green" class="mr-2"
             >
-              Continue
+              Start Lesson
             </v-btn>
-            <v-btn text @click="step = index">
+            <v-btn
+              color="cyan darken-4"
+              class="mr-2"
+              @click="step = index + 2"
+              v-if='step !== lessons.length'
+            >
+              Skip
+            </v-btn>
+            <v-btn color="red"
+              class="mr-2"
+              @click="step = index"
+              v-if='step !== 1'>
               Back
             </v-btn>
           </v-stepper-content>
