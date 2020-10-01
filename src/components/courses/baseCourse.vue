@@ -1,5 +1,6 @@
 <template>
-  <v-card>
+  <div>
+  <v-card v-if='!showEducation'>
     <v-card-title class="headline justify-center">{{title}}</v-card-title>
     <v-divider/>
     <v-row align="center" justify='space-around'>
@@ -61,6 +62,7 @@
               height="200px"
             ></v-card>
             <v-btn
+              @click='startEducation()'
               color="green" class="mr-2"
             >
               Start Lesson
@@ -98,16 +100,33 @@
     <v-spacer></v-spacer>
     </v-card-actions>
   </v-card>
+  <component
+  v-if='showEducation'
+  style='overflow-x: hidden !important;'
+  v-bind:is="currentEducation"
+  v-bind:courseInfo="currentLesson"
+  v-on:changeLesson="stop()"/>
+</div>
 </template>
 <script>
+import baseLesson from '@/components/edu/baseLesson.vue'
+import baseTutorial from '@/components/edu/baseTutorial.vue'
 export default {
   props: ['courseInfo'],
   data: () => ({
-    step: 1
+    step: 1,
+    currentComponent: '',
+    showEducation: false
   }),
   components: {
   },
   computed: {
+    currentEducation () {
+      if (this.currentLesson.comp.tutorial) {
+        return baseTutorial
+      }
+      return baseLesson
+    },
     about: function () {
       return this.courseInfo.comp.about
     },
@@ -122,29 +141,23 @@ export default {
     },
     lessons: function () {
       return this.courseInfo.comp.lessons
+    },
+    currentLesson: function () {
+      return this.courseInfo.comp.lessons[this.step - 1]
     }
   },
   methods: {
+    startEducation () {
+      this.showEducation = true
+    },
+    stop () {
+      this.showEducation = false
+    },
     exit () {
       this.$emit('changeLesson', '')
-    },
-    startQuiz () {
-      this.vid = false
-    },
-    backToVideo () {
-      this.vid = true
-    },
-    partDone () {
-      if (this.currentComponent === 'congrats') {
-        this.exit()
-        return
-      }
-      this.part += 1
-      this.backToVideo()
     }
   },
   mounted () {
-    // console.log(this.courseInfo.comp)
   }
 }
 </script>

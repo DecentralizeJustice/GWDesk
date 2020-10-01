@@ -1,3 +1,5 @@
+import welcomeComp from '@/assets/lessons/educational/lessons/intro/welcome.js'
+import whyCrytpo from '@/assets/lessons/educational/lessons/intro/whyCrypto.js'
 const welcome = {
   title: 'Full Introduction to Crypto',
   about: `This lesson is a detailed introduction to Cryptocurrency
@@ -7,10 +9,12 @@ const welcome = {
   time: '~ 2 hours',
   lessons: [
     {
-      title: 'test'
+      title: 'Welcome To Guiding Wallet',
+      comp: welcomeComp
     },
     {
-      title: 'also test'
+      title: 'Why Crypto is Amazing',
+      comp: whyCrytpo
     }
   ]
 }
