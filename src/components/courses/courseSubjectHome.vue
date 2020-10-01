@@ -10,7 +10,7 @@
 </template>
 <script>
 import landing from '@/components/edu/landing.vue'
-import baseCourse from '@/components/courses/baseLesson.vue'
+import baseCourse from '@/components/courses/baseCourse.vue'
 export default {
   props: ['landingInfo', 'setLesson'],
   data: () => ({

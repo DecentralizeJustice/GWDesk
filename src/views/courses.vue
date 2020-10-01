@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import subjectHome from '@/components/courses/subjectHome.vue'
+import subjectHome from '@/components/courses/courseSubjectHome.vue'
 import begginnerLandingInfo from '@/assets/courses/landinginfo/intro.js'
 export default {
   mounted () {
