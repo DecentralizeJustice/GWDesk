@@ -19,7 +19,7 @@ export default {
   }),
   mounted () {
     if (typeof this.setLesson !== 'undefined') {
-      this.changeLesson(this.setLesson)
+      // this.changeLesson(this.setLesson)
     }
   },
   computed: {
@@ -38,7 +38,11 @@ export default {
   },
   methods: {
     exit () {
-      this.$emit('exit')
+      if (this.lesson === '') {
+        this.$emit('exit')
+      } else {
+        this.lesson = ''
+      }
     },
     changeLesson (lesson) {
       this.lesson = lesson

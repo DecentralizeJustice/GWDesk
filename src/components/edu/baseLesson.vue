@@ -55,6 +55,13 @@
       Exit
     </v-btn>
     <v-spacer></v-spacer>
+    <v-btn
+      v-if="done"
+      color="green darken-1"
+      @click="exit()"
+    >
+      Finish
+    </v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -104,6 +111,12 @@ export default {
       const numberOfQuestions = this.questions.length
       return (this.part / numberOfQuestions) * 100
     },
+    done: function () {
+      if (this.justVid || this.progress === 100) {
+        return true
+      }
+      return false
+    },
     questions: function () {
       return this.courseInfo.comp.questions
     },
@@ -124,7 +137,10 @@ export default {
   },
   methods: {
     exit () {
-      this.$emit('changeLesson', '')
+      if (this.done) {
+        this.$emit('exit', true)
+      }
+      this.$emit('exit', false)
     },
     startQuiz () {
       this.vid = false

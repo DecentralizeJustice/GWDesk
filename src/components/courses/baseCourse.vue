@@ -105,7 +105,7 @@
   style='overflow-x: hidden !important;'
   v-bind:is="currentEducation"
   v-bind:courseInfo="currentLesson"
-  v-on:changeLesson="stop()"/>
+  v-on:exit="stop"/>
 </div>
 </template>
 <script>
@@ -150,11 +150,14 @@ export default {
     startEducation () {
       this.showEducation = true
     },
-    stop () {
+    stop (completed) {
       this.showEducation = false
+      if (completed) {
+        this.step = this.step + 1
+      }
     },
     exit () {
-      this.$emit('changeLesson', '')
+      this.$emit('exit')
     }
   },
   mounted () {
