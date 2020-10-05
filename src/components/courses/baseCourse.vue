@@ -34,6 +34,19 @@
               {{time}}
             </div>
           </v-col>
+          <v-col cols='10'>
+            <div class="text-center">
+            <div class="text-h6 mb-3">
+              Completed:
+            </div>
+            <v-progress-linear
+              v-model="progress"
+              height="25"
+            >
+              <strong>{{ Math.ceil(progress) }}%</strong>
+            </v-progress-linear>
+          </div>
+          </v-col>
           <!-- <v-col cols='6'>
             <v-btn color="primary">
               More Info
@@ -43,6 +56,7 @@
         </v-card>
       </v-col>
      <v-col cols='6'>
+       <div class='frame'>
         <v-stepper
           v-model="step"
           vertical
@@ -51,16 +65,17 @@
           <v-stepper-step
             :complete="step > index + 1"
             :step="index + 1"
-
           >
             {{item.title}}
           </v-stepper-step>
           <v-stepper-content :step="index + 1">
-            <v-card
-              color="grey lighten-1"
-              class="mb-12"
-              height="200px"
-            ></v-card>
+            <v-row align="center" justify='space-around'>
+              <v-col cols='8'>
+                <v-img
+                  :src="thumbnail"
+                ></v-img>
+              </v-col>
+          </v-row>
             <v-btn
               @click='startEducation()'
               color="green" class="mr-2"
@@ -87,6 +102,7 @@
           ></v-divider>
         </div>
         </v-stepper>
+      </div>
      </v-col>
     </v-row>
   <v-divider/>
@@ -121,6 +137,12 @@ export default {
   components: {
   },
   computed: {
+    progress () {
+      return (this.step / this.courseInfo.comp.lessons.length) * 100
+    },
+    thumbnail () {
+      return this.courseInfo.comp.lessons[this.step - 1].comp.thumbnail
+    },
     currentEducation () {
       if (this.currentLesson.comp.tutorial) {
         return baseTutorial
@@ -152,7 +174,7 @@ export default {
     },
     stop (completed) {
       this.showEducation = false
-      if (completed) {
+      if (completed && (this.step !== this.lessons.length)) {
         this.step = this.step + 1
       }
     },
@@ -164,3 +186,24 @@ export default {
   }
 }
 </script>
+<style>
+.frame {
+    overflow-y: auto;
+    border: 1px solid rgba(0, 0, 0, .5);
+    max-height: 60vh;
+}
+
+.frame::-webkit-scrollbar {
+    -webkit-appearance: none;
+}
+
+.frame::-webkit-scrollbar:vertical {
+    width: 11px;
+}
+
+.frame::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    border: 2px solid white; /* should match background, can't be transparent */
+    background-color: grey;
+}
+</style>
