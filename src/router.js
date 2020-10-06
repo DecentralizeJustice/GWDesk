@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Lessons from './views/lessons.vue'
+import Courses from './views/courses.vue'
 import Feedback from './views/feedback.vue'
 import DevPannel from './views/dev.vue'
 import Settings from './views/settings.vue'
@@ -13,11 +14,18 @@ const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
-    { path: '/', redirect: '/lessons' },
+    { path: '/', redirect: '/courses' },
     {
       path: '/lessons',
       name: 'lessons',
       component: Lessons,
+      props: (route) => (
+        { routeInfo: route.params })
+    },
+    {
+      path: '/courses',
+      name: 'courses',
+      component: Courses,
       props: (route) => (
         { routeInfo: route.params })
     },

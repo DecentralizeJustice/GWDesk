@@ -13,7 +13,9 @@ import slide12 from '@/assets/lessons/educational/lessonData/slides/intro/howtoS
 import slide13 from '@/assets/lessons/educational/lessonData/slides/intro/howtoStore/slide13.jpg'
 import questions from '@/assets/lessons/educational/lessonData/eduTest/intro/howtostore.js'
 import notes1 from '@/assets/lessons/educational/lessonData/courseNotes/intro/howtoStore.html'
+import thumbnail from '@/assets/lessons/educational/lessonData/thumbnails/intro/store.jpg'
 const howtoStore = {
+  thumbnail,
   title: 'How to Store Crypto?',
   nextLesson: {
     lesson: 4,

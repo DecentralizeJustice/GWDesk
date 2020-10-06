@@ -41,19 +41,21 @@
 export default {
   data: () => ({
     devOptions: [
-      'Lessons', 'Feedback', 'BTC Single', 'Settings', 'Dev Pannel'
+      'Courses', 'Lessons', 'Feedback', 'BTC Single', 'Settings', 'Dev Pannel'
     ],
     prodOptions: [
-      'Lessons', 'Feedback'// , 'BTC Singlesig', 'Settings'
+      'Courses', 'Lessons', 'Feedback'// , 'BTC Singlesig', 'Settings'
     ],
     icons: {
       Feedback: 'comment-quote',
       Lessons: 'book-open-page-variant',
+      Courses: 'book-open-variant',
       'BTC Single': 'lock',
       'Dev Pannel': 'hammer-wrench',
       Settings: 'settings'
     },
     routerLinks: {
+      Courses: 'courses',
       Feedback: 'feedback',
       Lessons: 'lessons',
       Settings: 'settings',
