@@ -65,6 +65,7 @@
           <v-stepper-step
             :complete="step > index + 1"
             :step="index + 1"
+            class="text-h6"
           >
             {{item.title}}
           </v-stepper-step>

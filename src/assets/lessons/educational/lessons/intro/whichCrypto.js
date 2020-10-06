@@ -22,7 +22,9 @@ import slide21 from '@/assets/lessons/educational/lessonData/slides/intro/whichC
 import questions from '@/assets/lessons/educational/lessonData/eduTest/intro/introWhichCryptocurrency.js'
 import notes1 from '@/assets/lessons/educational/lessonData/courseNotes/intro/whichCrypto/part1.html'
 import notes2 from '@/assets/lessons/educational/lessonData/courseNotes/intro/whichCrypto/part2.html'
+import thumbnail from '@/assets/lessons/educational/lessonData/thumbnails/intro/best.jpg'
 const whichCrypto = {
+  thumbnail,
   title: 'Which Crypto Is Best?',
   nextLesson: {
     lesson: 3,
