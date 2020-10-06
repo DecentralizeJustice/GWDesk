@@ -139,4 +139,8 @@ export default {
   font-size: 1.2rem;
   text-align: left;
 }
+#content > ol{
+  font-size: 1.2rem;
+  text-align: left;
+}
 </style>
