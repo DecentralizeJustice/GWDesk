@@ -39,10 +39,10 @@ const questions = [
   ],
   [
     {
-      q: 'One reason selling crypto for cash is dangerous is:',
+      q: 'One reason selling crypto for cash is dangerous is that:',
       opt: [
         'Not many places will allow you to sale crypto.',
-        'Your money can be seized by the governemnt.',
+        'Your money can be seized by the government.',
         'The exchange rates are usually too high.'
       ],
       ans: 1
