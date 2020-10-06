@@ -74,7 +74,7 @@ const questions = [
         'Showing you coins that the US Government approves of.',
         'Holding your money and making investments for you.'
       ],
-      ans: 2
+      ans: 1
     },
     {
       q: 'Bitconnect was a crypto that:',
@@ -89,9 +89,9 @@ const questions = [
     {
       q: 'Pool Together is a crypto that:',
       opt: [
-        'The governemnt uses for lotteries.',
-        'A lottery where you never lose your initial investment.',
-        'Allows people to pool thier money and invest in real estate.'
+        'the governemnt uses for lotteries.',
+        'lets you play in a lottery where you never lose your initial investment.',
+        'allows people to pool thier money and invest in real estate.'
       ],
       ans: 1
     }

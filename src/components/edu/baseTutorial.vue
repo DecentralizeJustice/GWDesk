@@ -39,6 +39,13 @@
       Exit
     </v-btn>
     <v-spacer></v-spacer>
+    <v-btn
+      v-if="done"
+      color="green darken-1"
+      @click="exit()"
+    >
+      Finish
+    </v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -93,7 +100,10 @@ export default {
   },
   methods: {
     exit () {
-      this.$emit('changeLesson', '')
+      if (this.done) {
+        this.$emit('exit', true)
+      }
+      this.$emit('exit', false)
     },
     next () {
       this.part = this.part + 1

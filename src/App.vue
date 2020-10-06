@@ -100,7 +100,7 @@ export default {
       try {
         await this.$router.push(
           {
-            name: 'lessons'
+            name: 'courses'
           })
       } catch (err) {
       }

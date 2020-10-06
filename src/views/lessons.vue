@@ -61,6 +61,8 @@
 import subjectHome from '@/components/edu/subjectHome.vue'
 import introLandingInfo from '@/assets/landingInfo/intro.js'
 import btcLandingInfo from '@/assets/landingInfo/btc.js'
+import coinbaseInfo from '@/assets/landingInfo/coinbase.js'
+import exodusInfo from '@/assets/landingInfo/exodus.js'
 export default {
   mounted () {
     if (typeof this.routeInfo.course !== 'undefined') {
@@ -76,11 +78,15 @@ export default {
     currentLesson: '',
     lessonMapping: {
       Introduction: introLandingInfo,
-      Bitcoin: btcLandingInfo
+      Bitcoin: btcLandingInfo,
+      Coinbase: coinbaseInfo,
+      Exodus: exodusInfo
     },
     lessons: [
       { title: 'Introduction', icon: 'atom-variant', unlocked: true },
       { title: 'Bitcoin', icon: 'lock', unlocked: true },
+      { title: 'Coinbase', icon: 'book-information-variant', unlocked: true },
+      { title: 'Exodus', icon: 'book-information-variant', unlocked: true },
       { title: 'Monero', icon: 'eye-off', unlocked: false },
       // { title: 'Dai', icon: 'lock', unlocked: 'false' },
       // { title: 'Pool Together', icon: 'lock', unlocked: 'false' },
@@ -89,8 +95,7 @@ export default {
       // { title: 'Bisq', icon: 'lock', unlocked: 'false' },
       // { title: 'Custom Tokens', icon: 'lock', unlocked: 'false' },
       // { title: 'Blockchain Mechanics', icon: 'bitcoin', unlocked: 'false' },
-      { title: 'General Education', icon: 'book-information-variant', unlocked: false },
-      { title: 'Tools', icon: 'hammer-wrench', unlocked: false },
+      // { title: 'Tools', icon: 'hammer-wrench', unlocked: false },
       // { title: 'Heart to Heart', icon: 'account-heart', unlocked: 'false' },
       { title: 'About Guide Wallet', icon: 'information-outline', unlocked: false }
     ]

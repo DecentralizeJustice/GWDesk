@@ -32,7 +32,9 @@ import slide31 from '@/assets/lessons/educational/lessonData/slides/intro/whycry
 import questions from '@/assets/lessons/educational/lessonData/eduTest/intro/introWhyCryptocurrency.js'
 import notes1 from '@/assets/lessons/educational/lessonData/courseNotes/intro/whyCrypto/part1.html'
 import notes2 from '@/assets/lessons/educational/lessonData/courseNotes/intro/whyCrypto/part2.html'
+import cover from '@/assets/lessons/educational/lessonData/thumbnails/intro/whatiscrypto.jpg'
 const why = {
+  thumbnail: cover,
   title: 'What is Crypto?',
   nextLesson: {
     lesson: 2,

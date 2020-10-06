@@ -19,7 +19,9 @@ import slide18 from '@/assets/lessons/educational/lessonData/slides/intro/howtoB
 import questions from '@/assets/lessons/educational/lessonData/eduTest/intro/howtoBuy.js'
 import notes1 from '@/assets/lessons/educational/lessonData/courseNotes/intro/howtoBuy/part1.html'
 import notes2 from '@/assets/lessons/educational/lessonData/courseNotes/intro/howtoBuy/part2.html'
+import thumbnail from '@/assets/lessons/educational/lessonData/thumbnails/intro/buy.jpg'
 const howtoBuy = {
+  thumbnail,
   title: 'How to Buy Crypto?',
   nextLesson: {
     lesson: 0,

@@ -3,7 +3,7 @@ name: BuildReleaseCandidate
 
 on:
   push:
-    branches: [ releaseCandidate ]
+    branches: [ release ]
 
 jobs:
 
