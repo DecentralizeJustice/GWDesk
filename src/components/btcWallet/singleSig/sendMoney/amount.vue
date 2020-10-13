@@ -133,6 +133,7 @@ import {
   decodeElectrumPsbt
 } from '@/assets/util/btc/psbtUtil.js'
 import { getAllFeeRates } from '@/assets/views/btcSingleSig/send.js'
+// import { getElectrumTransaction } from '@/assets/util/btc/electrum/send.js'
 const BigNumber = require('bignumber.js')
 const R = require('ramda')
 export default {
@@ -235,6 +236,8 @@ export default {
         const trans = await send(feeRate, this.newTransInfo.amountArray, this.addressArray,
           singleSigInfo.electrumWalletName, singleSigInfo.rpcport, singleSigInfo.rpcuser,
           singleSigInfo.rpcpassword, singleSigInfo.network)
+        // await getElectrumTransaction(trans.data.result, singleSigInfo.rpcport, singleSigInfo.rpcuser, singleSigInfo.rpcpassword)
+        // console.log(previousTrasactions)
         this.updateTransInfo(trans.data.result)
       } catch (err) {
         this.pause = true

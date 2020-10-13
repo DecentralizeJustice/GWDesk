@@ -74,14 +74,16 @@ export default {
     continueDisabled () {
       const trans = this.transaction
       const currentSection = this.currentSection
+      const psbt = trans.psbt
+      const addressArray = trans.addressArray
       switch (currentSection) {
       case 0:
-        if (trans.addressArray.length === 0) {
+        if (addressArray.length === 0) {
           return true
         }
         break
       case 1:
-        if (trans.psbt === undefined) {
+        if (psbt === undefined) {
           return true
         }
         break
@@ -99,6 +101,7 @@ export default {
     async finish () {
       const walletInfo = this.singleSigInfo
       const finalHexTransaction = await finalizeTrans(this.transaction.signedPSBT)
+      console.log(finalHexTransaction)
       const result = await broadcastTransaction(finalHexTransaction,
         walletInfo.rpcport, walletInfo.rpcuser, walletInfo.rpcpassword)
       this.transaction.transactionId = result.data.result

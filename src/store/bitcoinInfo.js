@@ -8,8 +8,8 @@ export const bitcoinInfo = {
       rpcpassword: '1',
       electrumWalletName: 'no',
       network: 'testnet',
-      hardwareWalletFingerprint: 'aeaa2564',
-      xpub: 'vpub5YhwwGPiiVo9JpARL8kog2vhhTQvcM7vtAdVhz8DL9YLHAJVxDnaDCoecdUDBMm2Hd4qNBcwUqW61DSXW4mR5G7qkFSNUwL6B6XpotCZeyM'
+      hardwareWalletFingerprint: 'f23bb7d0',
+      xpub: 'vpub5Y3LsqvBH22zW2oF1V1bTHk47Br3vbETwpNMFX7xgBe9LptUayqwpGYwwBBm23GLUp3otGM5tECqy844sPWiUBTJVckTNtXyySTu18cFHVy'
     }
   },
   mutations: {

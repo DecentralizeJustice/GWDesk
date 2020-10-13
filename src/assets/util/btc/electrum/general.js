@@ -61,6 +61,11 @@ export async function getinfo (rpcport, rpcuser, rpcpassword) {
   return request
 }
 
+export async function getTransaction (txid, rpcport, rpcuser, rpcpassword) {
+  const request = await makeRpcRequest('gettransaction', { txid }, rpcport, rpcuser,
+    rpcpassword)
+  return request
+}
 export async function getunusedaddress (walletName, network, rpcport, rpcuser, rpcpassword) {
   const pathAddition = getPathNetwork(network)
   const request = await makeRpcRequest('getunusedaddress',

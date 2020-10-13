@@ -152,6 +152,13 @@
             >
               Wallet Ready?
             </v-btn>
+            <v-btn
+              color="red darken-3"
+              class="mx-2 my-2"
+              v-on:click="getTransaction(transId, rpcport, rpcuser, rpcpassword)"
+            >
+              Get Transaction
+            </v-btn>
           </div>
           </v-card>
     </v-flex>
@@ -164,7 +171,7 @@ import {
   restoreWallet, loadWallet, hardStopDeamon, makeRpcRequest,
   getinfo, requestStopDeamon, listAddresses, listLoadedWallets,
   listWalletsThatExist, getBalance, getWalletHistory, sendAll, send,
-  broadcastTransaction, getFeeRate, getunusedaddress, walletReady
+  broadcastTransaction, getFeeRate, getunusedaddress, walletReady, getTransaction
 } from '@/assets/util/btc/electrum/general.js'
 export default {
   components: {
@@ -179,7 +186,8 @@ export default {
     rpcuser: 'user',
     rpcpassword: '1',
     walletName: 'no',
-    recoveryInfo: 'vpub5YhwwGPiiVo9JpARL8kog2vhhTQvcM7vtAdVhz8DL9YLHAJVxDnaDCoecdUDBMm2Hd4qNBcwUqW61DSXW4mR5G7qkFSNUwL6B6XpotCZeyM',
+    transId: 'b403bdaa673afd92eba80c22bce8166e0bcac8bda3e02ed7d49c2d9fcfebed43',
+    recoveryInfo: 'vpub5Y3LsqvBH22zW2oF1V1bTHk47Br3vbETwpNMFX7xgBe9LptUayqwpGYwwBBm23GLUp3otGM5tECqy844sPWiUBTJVckTNtXyySTu18cFHVy',
     hex: '02000000000101f5fa3ecbae0cbc84ebc5e527e479b118afbbdcb1192b9ee46d0549fc6f11bd730100000000fdffffff0235040000000000001600144838adc22e8c00b76737aed7d87a4c1a7e07529ed00700000000000017a914ffd0dbb44402d5f8f12d9ba5b484a2c1bb47da428702483045022100b3d5e2ae31521a78311a059ccb29dde42ac4864c01363f1b1e727bc34d924d710220688be7be8531fef33119580ed9d8fab50170b97973ebe441dbe9982dcc748337012103e7003a77c616c0099ea07777d7c20d06b374ed0e5a74348cb857fb94e1ba1fa61d471a00'
   }),
   methods: {
@@ -202,6 +210,10 @@ export default {
     unpackFile: async function () {
       const result = await unpackElectrum()
       console.log(result)
+    },
+    getTransaction: async function (transId, rpcport, rpcuser, rpcpassword) {
+      const result = await getTransaction(transId, rpcport, rpcuser, rpcpassword)
+      console.log(result.data.result)
     },
     listWalletsThatExist: async function (network) {
       const results = await listWalletsThatExist(network)
@@ -259,7 +271,7 @@ export default {
       rpcpassword, network) {
       const result = await restoreWallet(walletName, recoveryInfo, rpcport, rpcuser,
         rpcpassword, network)
-      console.log(result.data.result)
+      console.log(result.data)
     },
     startDeamon: async function (network) {
       const result = await startDeamon(network)

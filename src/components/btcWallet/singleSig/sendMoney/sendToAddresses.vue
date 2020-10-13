@@ -68,18 +68,17 @@ const R = require('ramda')
 export default {
   props: ['transaction'],
   data: () => ({
-    proposedAddress: ''
+    proposedAddress: 'mkHS9ne12qx9pS9VojpwU5xtRd4T7X7ZUt'
   }),
   methods: {
-    addToArray (address) {
-      address = 'mkHS9ne12qx9pS9VojpwU5xtRd4T7X7ZUt'
-      const address0 = '2NGZrVvZG92qGYqzTLjCAewvPZ7JE8S8VxE'
+    addToArray (address = 'mkHS9ne12qx9pS9VojpwU5xtRd4T7X7ZUt') {
+      // const address0 = '2NGZrVvZG92qGYqzTLjCAewvPZ7JE8S8VxE'
       const newAddressArray = this.addressArray
       if (R.includes(address, this.addressArray) || !validate(address)) {
         this.proposedAddress = ''
         return
       }
-      newAddressArray.push(address, address0)
+      newAddressArray.push(address)
       this.proposedAddress = ''
       this.$emit('updateAddressArray', newAddressArray)
     },
