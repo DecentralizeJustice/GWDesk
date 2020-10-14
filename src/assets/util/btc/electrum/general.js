@@ -139,7 +139,7 @@ export async function restoreWallet (walletName, recoveryInfo, rpcport, rpcuser,
   return request
 }
 
-export async function sendAll (destination, walletName, rpcport, rpcuser, rpcpassword, network) {
+export async function sendAll (satPerByte, destination, walletName, rpcport, rpcuser, rpcpassword, network) {
   const pathAddition = getPathNetwork(network)
   const request = await makeRpcRequest('payto',
     {
@@ -147,7 +147,8 @@ export async function sendAll (destination, walletName, rpcport, rpcuser, rpcpas
       destination: destination,
       unsigned: true,
       rbf: true,
-      amount: '!'
+      amount: '!',
+      feerate: satPerByte
     },
     rpcport, rpcuser, rpcpassword)
   return request

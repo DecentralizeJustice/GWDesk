@@ -9,6 +9,7 @@
           ></v-text-field>
           <v-btn
             color="green"
+            :disabled='addressArray.length>=maxNumberAddress'
             v-on:click="addToArray (proposedAddress)">
             <v-icon>mdi-plus-circle</v-icon>
               &#8205; Add
@@ -68,7 +69,8 @@ const R = require('ramda')
 export default {
   props: ['transaction'],
   data: () => ({
-    proposedAddress: 'mkHS9ne12qx9pS9VojpwU5xtRd4T7X7ZUt'
+    proposedAddress: 'mkHS9ne12qx9pS9VojpwU5xtRd4T7X7ZUt',
+    maxNumberAddress: 2
   }),
   methods: {
     addToArray (address = 'mkHS9ne12qx9pS9VojpwU5xtRd4T7X7ZUt') {

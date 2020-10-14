@@ -77,15 +77,14 @@
           >
           <v-card-text class="subtitle-1 white--text">
             <h1 class="title">Change:</h1>
-            {{changeAmount}} BTC
-          </v-card-text>
-          <v-card-text class="subtitle-1 white--text">
+            {{changeAmount}} BTC <br>
             <h1 class="title">Available Balance:</h1>
-            {{balance}} BTC
+            {{balance}} BTC <br>
+            <v-btn v-if="addressArray.length === 1" color="primary"
+              class="mt-1" @click="setNoChangeAmount">
+              Send All
+            </v-btn>
           </v-card-text>
-          <!-- <v-btn v-if="addressArray.length === 1" color="red lighten-1" class="mb-2" @click="send">
-            No Change
-          </v-btn> -->
           </v-card>
           </v-col>
           <v-col cols="7" align-self='center'>
@@ -127,13 +126,12 @@
 
 <script>
 import {
-  send, getBalance // sendAll
+  send, getBalance, sendAll
 } from '@/assets/util/btc/electrum/general.js'
 import {
   decodeElectrumPsbt
 } from '@/assets/util/btc/psbtUtil.js'
 import { getAllFeeRates } from '@/assets/views/btcSingleSig/send.js'
-// import { getElectrumTransaction } from '@/assets/util/btc/electrum/send.js'
 const BigNumber = require('bignumber.js')
 const R = require('ramda')
 export default {
@@ -164,7 +162,8 @@ export default {
         feeExist: value => !value.isNaN() || 'Required Custom or Template Fee.',
         feePrecise: value => new BigNumber(value).dp() < 4 || 'Too Precise Amount',
         feeNotZero: value => !(new BigNumber(value).isZero()) || "Can't be zero.",
-        feeNotLessThan1: value => !(new BigNumber(value).isLessThan(new BigNumber(1))) || 'Below Min. Fee'
+        feeNotLessThan1: value => !(new BigNumber(value).isLessThan(new BigNumber(1))) ||
+        'Below Min. Fee'
       }
     }
   },
@@ -222,22 +221,20 @@ export default {
     newTransInfo: {
       handler (newval) {
         if (!R.equals(newval, this.oldTransInfo)) {
-          this.send()
+          this.createTransaction()
         }
       },
       deep: true
     }
   },
   methods: {
-    firstSend: async function () {
+    baseTransaction: async function () {
       try {
         const singleSigInfo = this.singleSigInfo
         const feeRate = this.chossenFeeRate / 1000
         const trans = await send(feeRate, this.newTransInfo.amountArray, this.addressArray,
           singleSigInfo.electrumWalletName, singleSigInfo.rpcport, singleSigInfo.rpcuser,
           singleSigInfo.rpcpassword, singleSigInfo.network)
-        // await getElectrumTransaction(trans.data.result, singleSigInfo.rpcport, singleSigInfo.rpcuser, singleSigInfo.rpcpassword)
-        // console.log(previousTrasactions)
         this.updateTransInfo(trans.data.result)
       } catch (err) {
         this.pause = true
@@ -246,7 +243,7 @@ export default {
         console.log(err)
       }
     },
-    send: async function () {
+    createTransaction: async function () {
       try {
         this.pause = true
         const singleSigInfo = this.singleSigInfo
@@ -257,6 +254,27 @@ export default {
         this.oldTransInfo = R.clone(this.newTransInfo)
         this.updateTransInfo(trans.data.result)
         this.pause = false
+      } catch (err) {
+        this.triggerTooHigh()
+        this.newTransInfo = R.clone(this.oldTransInfo)
+      }
+    },
+    setNoChangeAmount: async function () {
+      try {
+        this.pause = true
+        const singleSigInfo = this.singleSigInfo
+        const feeRate = this.chossenFeeRate / 1000
+        const trans = await sendAll(feeRate, this.addressArray[0],
+          singleSigInfo.electrumWalletName, singleSigInfo.rpcport, singleSigInfo.rpcuser,
+          singleSigInfo.rpcpassword, singleSigInfo.network)
+        // this.oldTransInfo = R.clone(this.newTransInfo)
+        // this.updateTransInfo(trans.data.result)
+        const transInfo = await decodeElectrumPsbt(trans.data.result)
+        const amount = transInfo.amountArray[0]
+        const noChangeInfo = R.clone(this.newTransInfo)
+        noChangeInfo.amountArray[0] = amount
+        this.pause = false
+        this.newTransInfo = R.clone(noChangeInfo)
       } catch (err) {
         this.triggerTooHigh()
         this.newTransInfo = R.clone(this.oldTransInfo)
@@ -278,8 +296,6 @@ export default {
       this.$emit('updateIncompletePSBT', psbt)
       this.$emit('updateBalance', Number(this.balance))
       this.$emit('updateEstimatedTime', this.speedSelectGroup[this.newTransInfo.speed])
-    },
-    noChange: async function () {
     },
     setBalance: async function () {
       const singleSigInfo = this.singleSigInfo
@@ -308,7 +324,7 @@ export default {
     await this.setupFeeInfo()
     await this.setBalance()
     await this.fillinAmounts()
-    await this.firstSend()
+    await this.baseTransaction()
   }
 }
 </script>
