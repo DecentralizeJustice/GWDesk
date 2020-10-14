@@ -20,7 +20,7 @@
   },
   "main": "background.js",
   "resolutions": {
-  "electron-icon-builder/icon-gen/svg2png/yargs/yargs-parser": "18.1.2"
+    "electron-icon-builder/icon-gen/svg2png/yargs/yargs-parser": "18.1.2"
   },
   "dependencies": {
     "@deadcanaries/granax": "^3.2.5",
@@ -39,11 +39,13 @@
     "electron-log": "^4.2.2",
     "electron-store": "^5.0.0",
     "electron-updater": "^4.3.1",
+    "find-process": "^1.4.3",
     "fs-extra": "^8.1.0",
     "psbt": "^1.1.2",
     "qs": "^6.9.4",
     "ramda": "^0.27.0",
     "tar-fs": "^2.0.1",
+    "tree-kill": "^1.2.2",
     "typeface-roboto": "^0.0.75",
     "vue": "^2.6.10",
     "vue-fullscreen": "^2.1.6",

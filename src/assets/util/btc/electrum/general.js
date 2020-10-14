@@ -1,4 +1,6 @@
 import path from 'path'
+const kill = require('tree-kill')
+const find = require('find-process')
 const remote = require('electron').remote
 const spawn = require('child_process').spawn
 const os = require('os')
@@ -111,13 +113,12 @@ export async function makeRpcRequest (method, params, rpcport, rpcuser,
   return request
 }
 
-export async function hardStopDeamon (network) {
-  const binaryFolder = app.getPath('userData') + '/binaries/'
-  const baseCommands = ['-D', 'electrumFolder', 'stop']
-  const commands = addCommandNetwork(baseCommands, network)
-  await spawn('./macElectrum', commands,
-    { cwd: binaryFolder })
-  await timeout(10000)
+export async function hardStopDeamon () {
+  const pidList = await find('name', 'macElectrum', true)
+  for (var i = 0; i < pidList.length; i++) {
+    const pid = pidList[i].pid
+    await kill(pid)
+  }
   return true
 }
 

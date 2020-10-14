@@ -101,7 +101,6 @@ export default {
     async finish () {
       const walletInfo = this.singleSigInfo
       const finalHexTransaction = await finalizeTrans(this.transaction.signedPSBT)
-      console.log(finalHexTransaction)
       const result = await broadcastTransaction(finalHexTransaction,
         walletInfo.rpcport, walletInfo.rpcuser, walletInfo.rpcpassword)
       this.transaction.transactionId = result.data.result

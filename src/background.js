@@ -9,6 +9,8 @@ const contextMenu = require('electron-context-menu')
 const log = require('electron-log')
 const isDevelopment = process.env.NODE_ENV !== 'production'
 const { autoUpdater } = require('electron-updater')
+const kill = require('tree-kill')
+const find = require('find-process')
 autoUpdater.autoDownload = false
 const { ipcMain } = require('electron')
 let port
@@ -128,8 +130,19 @@ function createWindow () {
     event.preventDefault()
   })
 }
-app.on('will-quit', () => {
+app.on('quit', () => {
+  hardStopDeamon()
 })
+app.on('will-quit', () => {
+  hardStopDeamon()
+})
+async function hardStopDeamon () {
+  const pidList = await find('name', 'macElectrum', true)
+  for (var i = 0; i < pidList.length; i++) {
+    const pid = pidList[i].pid
+    await kill(pid)
+  }
+}
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
   // On macOS it is common for applications and their menu bar
@@ -207,6 +220,7 @@ ipcMain.on('DOWNLOAD_UPDATE_PENDING', event => {
 // })
 // Exit cleanly on request from parent process in development mode.
 if (isDevelopment) {
+  hardStopDeamon()
   if (process.platform === 'win32') {
     process.on('message', data => {
       if (data === 'graceful-exit') {
