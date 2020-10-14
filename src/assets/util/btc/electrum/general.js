@@ -121,6 +121,13 @@ export async function hardStopDeamon () {
   }
   return true
 }
+export async function checkIfNodeProcessRunning () {
+  const pidList = await find('name', 'macElectrum', true)
+  if (pidList.length > 0) {
+    return true
+  }
+  return false
+}
 
 export async function requestStopDeamon (rpcport, rpcuser, rpcpassword) {
   const request = await makeRpcRequest('stop', {}, rpcport, rpcuser,

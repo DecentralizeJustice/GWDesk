@@ -159,6 +159,13 @@
             >
               Get Transaction
             </v-btn>
+            <v-btn
+              color="blue darken-3"
+              class="mx-2 my-2"
+              v-on:click="checkIfNodeProcessRunning()"
+            >
+              Electrum Running
+            </v-btn>
           </div>
           </v-card>
     </v-flex>
@@ -171,7 +178,8 @@ import {
   restoreWallet, loadWallet, hardStopDeamon, makeRpcRequest,
   getinfo, requestStopDeamon, listAddresses, listLoadedWallets,
   listWalletsThatExist, getBalance, getWalletHistory, sendAll, send,
-  broadcastTransaction, getFeeRate, getunusedaddress, walletReady, getTransaction
+  broadcastTransaction, getFeeRate, getunusedaddress, walletReady,
+  getTransaction, checkIfNodeProcessRunning
 } from '@/assets/util/btc/electrum/general.js'
 export default {
   components: {
@@ -206,6 +214,10 @@ export default {
     getunusedaddress: async function (walletName, network, rpcport, rpcuser, rpcpassword) {
       const result = await getunusedaddress(walletName, network, rpcport, rpcuser, rpcpassword)
       console.log(result.data.result)
+    },
+    checkIfNodeProcessRunning: async function () {
+      const result = await checkIfNodeProcessRunning()
+      console.log(result)
     },
     unpackFile: async function () {
       const result = await unpackElectrum()
