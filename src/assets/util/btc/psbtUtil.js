@@ -98,7 +98,8 @@ function addInputInfo (psbt, bitcoinjsHex, wrongPsbt) {
       witnessUtxo: {
         script: wrongPsbt.data.inputs[i].witnessUtxo.script,
         value: Number(wrongPsbt.data.inputs[i].witnessUtxo.value)
-      }
+      },
+      sighashType: 1
     }
     psbt.addInput(input)
     const bip32info = wrongPsbt.data.inputs[i].bip32Derivation[0]
