@@ -74,11 +74,30 @@ export function changePhoto (photo) {
     { cwd: binaryFolder })
   return command
 }
+export function updateFirmware (version) {
+  const binaryFolder = app.getPath('userData') + '/binaries/macTrezorCliTool'
+  const commands = ['firmware-update', '-v', `${version}`]
+  const command = spawn('./macTrezorCliTool', commands,
+    { cwd: binaryFolder })
+  return command
+}
 export async function listDevices () {
   const binary = app.getPath('userData') + '/binaries/hwi'
   const { stdout } = await exec(`"${binary}" enumerate`)
   const json = JSON.parse(stdout)
   return json
+}
+
+export async function getVersionNumber () {
+  const binary = app.getPath('userData') + '/binaries/macTrezorCliTool'
+  const { stdout } = await exec(`"${binary}"/macTrezorCliTool get-features`)
+  const majorPatt = /major_version: [0-9]/i
+  const majorVersion = stdout.match(majorPatt)[0].substr(-1)
+  const minorPatt = /minor_version: [0-9]/i
+  const minorVersion = stdout.match(minorPatt)[0].substr(-1)
+  const patchPatt = /patch_version: [0-9]/i
+  const patchVersion = stdout.match(patchPatt)[0].substr(-1)
+  return majorVersion + '.' + minorVersion + '.' + patchVersion
 }
 
 // function getNetworkFlag (network) {
