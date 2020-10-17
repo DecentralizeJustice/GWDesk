@@ -3,16 +3,23 @@ const bs58check = require('bs58check')
 // const bip32 = require('bip32')
 // const bip39 = require('bip39')
 
-function pubToTpub (pub) {
+export function pubToTpub (pub) {
   var data = bs58check.decode(pub)
   data = data.slice(4)
   data = Buffer.concat([Buffer.from('043587cf', 'hex'), data])
   return bs58check.encode(data)
 }
-function pubToVpub (pub) {
+export function pubToVpub (pub) {
   var data = bs58check.decode(pub)
   data = data.slice(4)
   data = Buffer.concat([Buffer.from('02575483', 'hex'), data])
+  return bs58check.encode(data)
+}
+
+export function pubTovpub (pub) {
+  var data = bs58check.decode(pub)
+  data = data.slice(4)
+  data = Buffer.concat([Buffer.from('045f1cf6', 'hex'), data])
   return bs58check.encode(data)
 }
 
@@ -38,4 +45,3 @@ export async function getXFP (pub) {
 //   data = Buffer.concat([Buffer.from('02575483', 'hex'), data])
 //   return bs58check.encode(data)
 // }
-export { pubToTpub, pubToVpub }

@@ -1,6 +1,6 @@
 <template>
   <v-layout align-center justify-center row fill-height>
-    <v-flex xs9>
+    <v-flex xs11>
   <v-card>
     <v-card-title class="headline justify-center">
       Settings
