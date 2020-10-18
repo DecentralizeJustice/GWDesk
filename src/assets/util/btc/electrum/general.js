@@ -9,7 +9,6 @@ const axios = require('axios')
 const fs = require('fs-extra')
 const app = remote.app
 const copyFile = fs.promises.copyFile
-const unlink = fs.promises.unlink
 const readdir = fs.promises.readdir
 const timeout = ms => new Promise(resolve => setTimeout(resolve, ms))
 
@@ -33,7 +32,7 @@ export async function deleteWallet (walletName, network) {
     const pathAddition = getPathNetwork(network)
     const destination =
     app.getPath('userData') + `/binaries/electrumFolder/${pathAddition}wallets/`
-    await unlink(destination + walletName)
+    await fs.removeSync(destination + walletName)
     return true
   } catch (e) {
     if (e.toString().slice(0, 47) === 'Error: ENOENT: no such file or directory, unlin') {
@@ -43,7 +42,13 @@ export async function deleteWallet (walletName, network) {
     }
   }
 }
-
+export async function deleteElectrumFolder (network) {
+  const pathAddition = getPathNetwork(network)
+  const destination =
+    app.getPath('userData') + `/binaries/electrumFolder/${pathAddition}`
+  await fs.removeSync(destination)
+  return true
+}
 export async function listWalletsThatExist (network) {
   const pathAddition = getPathNetwork(network)
   const destination =

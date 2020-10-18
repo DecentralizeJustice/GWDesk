@@ -61,6 +61,13 @@
               Delete Wallet
             </v-btn>
             <v-btn
+              class="mx-2 my-2"
+              color="pink"
+              v-on:click="deleteElectrumFolder(network)"
+            >
+              Delete Electrum Folder
+            </v-btn>
+            <v-btn
               color="amber darken-4"
               class="mx-2 my-2"
               v-on:click="getinfo(rpcport, rpcuser, rpcpassword)"
@@ -179,7 +186,7 @@ import {
   getinfo, requestStopDeamon, listAddresses, listLoadedWallets,
   listWalletsThatExist, getBalance, getWalletHistory, sendAll, send,
   broadcastTransaction, getFeeRate, getunusedaddress, walletReady,
-  getTransaction, checkIfNodeProcessRunning
+  getTransaction, checkIfNodeProcessRunning, deleteElectrumFolder
 } from '@/assets/util/btc/electrum/general.js'
 export default {
   components: {
@@ -270,6 +277,10 @@ export default {
     listLoadedWallets: async function (rpcport, rpcuser, rpcpassword) {
       const result = await listLoadedWallets(rpcport, rpcuser, rpcpassword)
       console.log(result.data.result)
+    },
+    deleteElectrumFolder: async function (network) {
+      const result = await deleteElectrumFolder(network)
+      console.log(result)
     },
     deleteWallet: async function (walletName, network) {
       const result = await deleteWallet(walletName, network)

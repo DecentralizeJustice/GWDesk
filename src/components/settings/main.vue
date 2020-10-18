@@ -61,8 +61,8 @@ import {
 } from '@/assets/util/trezorCli/general.js'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import {
-  // hardStopDeamon, deleteWallet, unpackElectrum, startDeamon, configDaemon,
-  restoreWallet // , loadWallet, hardStopDeamon, makeRpcRequest,
+  startDeamon, hardStopDeamon, deleteWallet, unpackElectrum, configDaemon,
+  restoreWallet, deleteElectrumFolder, loadWallet // hardStopDeamon, makeRpcRequest,
   // getinfo, requestStopDeamon, listAddresses, listLoadedWallets,
   // listWalletsThatExist, getBalance, getWalletHistory, sendAll, send,
   // broadcastTransaction, getFeeRate, getunusedaddress, walletReady,
@@ -75,30 +75,30 @@ export default {
   data: () => ({
     dialog: false,
     hardwareWallets: [],
-    channel: {}
+    channel: {},
+    settingUp: false
   }),
   methods: {
     ...mapActions('hardwareInfo',
       ['updateHardwareWalletInfo']
     ),
     setupElectrum: async function () {
-      // await hardStopDeamon()
-      // await deleteWallet(this.singleSigElectrumName, this.btcSingleSigTestnet.network)
-      // await unpackElectrum()
-      // await startDeamon(this.btcSingleSigTestnet.network)
-      // await configDaemon(this.btcSingleSigTestnet.port, this.btcSingleSigTestnet.user,
-      //   this.btcSingleSigTestnet.password, this.btcSingleSigTestnet.network)
-      // await hardStopDeamon()
-      // await startDeamon(this.btcSingleSigTestnet.network)
-      console.log(this.singleSigElectrumName,
+      this.settingUp = true
+      await hardStopDeamon()
+      await deleteWallet(this.singleSigElectrumName, this.btcSingleSigTestnet.network)
+      await deleteElectrumFolder(this.btcSingleSigTestnet.network)
+      await unpackElectrum()
+      await configDaemon(this.btcSingleSigTestnet.rpcPort, this.btcSingleSigTestnet.rpcUser,
+        this.btcSingleSigTestnet.rpcPassword, this.btcSingleSigTestnet.network)
+      await startDeamon(this.btcSingleSigTestnet.network)
+      await restoreWallet(this.singleSigElectrumName,
         this.singleSigHardwareWalletInfo.vpub, this.btcSingleSigTestnet.rpcport,
         this.btcSingleSigTestnet.rpcuser,
         this.btcSingleSigTestnet.rpcpassword, this.btcSingleSigTestnet.network)
-      const test = await restoreWallet(this.singleSigElectrumName,
-        this.singleSigHardwareWalletInfo.vpub, this.btcSingleSigTestnet.rpcport,
+      await loadWallet(this.singleSigElectrumName, this.btcSingleSigTestnet.rpcport,
         this.btcSingleSigTestnet.rpcuser,
         this.btcSingleSigTestnet.rpcpassword, this.btcSingleSigTestnet.network)
-      console.log(test)
+      this.settingUp = false
       console.log('done')
     },
     getxpub: async function (model, path, xpubpath) {
