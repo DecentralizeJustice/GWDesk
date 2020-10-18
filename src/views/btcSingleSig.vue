@@ -1,6 +1,37 @@
 <template>
   <v-layout align-center justify-center row fill-height>
-    <v-flex xs11>
+    <v-flex xs11 v-if='!walletReady'>
+      <v-card class="text-xs-center no-gutters" style="" >
+        <v-card-title class="headline justify-center">
+          Wallet Syncing...
+        </v-card-title>
+            <v-divider/>
+            <div class="text-center mb-5 mt-5">
+              <v-progress-circular
+                :size="100"
+                :width="7"
+                color="purple"
+                indeterminate
+              ></v-progress-circular>
+            </div>
+          <v-divider/>
+          <v-card-actions>
+          <v-btn
+            color="orange"
+            text
+          >
+            <v-icon>mdi-help</v-icon>
+          </v-btn>
+          <v-btn
+            color="primary"
+            text
+          >
+            <v-icon>mdi-refresh</v-icon>
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-flex>
+    <v-flex xs11 v-if='walletReady'>
       <v-card class="text-xs-center no-gutters" style="" >
         <v-card-title class="headline justify-center">
           Bitcoin Single Sig
@@ -57,6 +88,7 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
 import balance from '@/components/btcWallet/singleSig/balance/balance.vue'
 import sendMoney from '@/components/btcWallet/singleSig/sendMoney/main.vue'
 import recieveMoney from '@/components/btcWallet/singleSig/recMoney/mainCard.vue'
@@ -69,7 +101,27 @@ export default {
     transactions
   },
   data: () => ({
-  })
+    walletReady: true
+  }),
+  computed: {
+    ...mapGetters('hardwareInfo', [
+      'singleSigElectrumName'
+    ])
+  },
+  methods: {
+    start: function () {
+      this.correctWalletExist()
+    },
+    correctWalletExist: function () {
+      console.log(this.singleSigElectrumName)
+    },
+    ...mapActions('hardwareInfo',
+      ['updateHardwareWalletInfo']
+    )
+  },
+  async mounted () {
+    this.start()
+  }
 }
 </script>
 <style scoped>

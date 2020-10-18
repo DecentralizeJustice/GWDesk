@@ -1,4 +1,4 @@
-
+const crypto = require('crypto')
 export const hardwareInfo = {
   namespaced: true,
   state: {
@@ -36,6 +36,11 @@ export const hardwareInfo = {
   getters: {
     singleSigHardwareWalletInfo: state => {
       return state.wallets[0]
+    },
+    singleSigElectrumName: state => {
+      const info = state.wallets[0].vpub
+      const hash = crypto.createHash('sha1').update(info).digest('hex')
+      return hash
     }
   }
 }

@@ -55,13 +55,19 @@
 import {
   listDevices, setup, getxpub
 } from '@/assets/util/hwi/general.js'
-// import intialize from '@/components/hardwareWallets/initializeWallet.vue'
-// import { createNamespacedHelpers } from 'vuex'
 import { pubTovpub } from '@/assets/util/btc/pubUtil.js'
 import {
   getVersionNumber
 } from '@/assets/util/trezorCli/general.js'
-import { mapActions, mapGetters } from 'vuex'// = createNamespacedHelpers('hardwareInfo')
+import { mapActions, mapGetters, mapState } from 'vuex'
+import {
+  // hardStopDeamon, deleteWallet, unpackElectrum, startDeamon, configDaemon,
+  restoreWallet // , loadWallet, hardStopDeamon, makeRpcRequest,
+  // getinfo, requestStopDeamon, listAddresses, listLoadedWallets,
+  // listWalletsThatExist, getBalance, getWalletHistory, sendAll, send,
+  // broadcastTransaction, getFeeRate, getunusedaddress, walletReady,
+  // getTransaction, checkIfNodeProcessRunning
+} from '@/assets/util/btc/electrum/general.js'
 export default {
   components: {
     // intialize
@@ -75,6 +81,26 @@ export default {
     ...mapActions('hardwareInfo',
       ['updateHardwareWalletInfo']
     ),
+    setupElectrum: async function () {
+      // await hardStopDeamon()
+      // await deleteWallet(this.singleSigElectrumName, this.btcSingleSigTestnet.network)
+      // await unpackElectrum()
+      // await startDeamon(this.btcSingleSigTestnet.network)
+      // await configDaemon(this.btcSingleSigTestnet.port, this.btcSingleSigTestnet.user,
+      //   this.btcSingleSigTestnet.password, this.btcSingleSigTestnet.network)
+      // await hardStopDeamon()
+      // await startDeamon(this.btcSingleSigTestnet.network)
+      console.log(this.singleSigElectrumName,
+        this.singleSigHardwareWalletInfo.vpub, this.btcSingleSigTestnet.rpcport,
+        this.btcSingleSigTestnet.rpcuser,
+        this.btcSingleSigTestnet.rpcpassword, this.btcSingleSigTestnet.network)
+      const test = await restoreWallet(this.singleSigElectrumName,
+        this.singleSigHardwareWalletInfo.vpub, this.btcSingleSigTestnet.rpcport,
+        this.btcSingleSigTestnet.rpcuser,
+        this.btcSingleSigTestnet.rpcpassword, this.btcSingleSigTestnet.network)
+      console.log(test)
+      console.log('done')
+    },
     getxpub: async function (model, path, xpubpath) {
       const pub = await getxpub(model, path, xpubpath)
       return pub
@@ -96,6 +122,7 @@ export default {
         vpub: convertedvpub
       }
       this.updateHardwareWalletInfo(walletInfo)
+      this.setupElectrum()
     },
     setup: async function () {
       this.channel = setup(this.hardwareWallets[0].model, this.hardwareWallets[0].path)
@@ -118,8 +145,13 @@ export default {
     }
   },
   computed: {
+    ...mapState('bitcoinInfo', [
+      // map this.count to store.state.count
+      'btcSingleSigTestnet'
+    ]),
     ...mapGetters('hardwareInfo', [
-      'singleSigHardwareWalletInfo'
+      'singleSigHardwareWalletInfo',
+      'singleSigElectrumName'
     ]),
     walletInitialized () {
       if (this.hardwareWallets.length === 0) {
@@ -132,7 +164,6 @@ export default {
     }
   },
   mounted () {
-    console.log(this.singleSigHardwareWalletInfo)
     this.getDevices()
   }
 }

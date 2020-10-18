@@ -33,9 +33,9 @@ export default {
   }),
   methods: {
     async setup () {
-      const walletInfo = this.singleSigInfo
+      const walletInfo = this.btcSingleSigTestnet
       const balanceInfo = await
-      getBalance(walletInfo.electrumWalletName, walletInfo.rpcport, walletInfo.rpcuser,
+      getBalance('f25565e10b324c85b36ccc8ab0f16384b87c78bf', walletInfo.rpcport, walletInfo.rpcuser,
         walletInfo.rpcpassword, walletInfo.network)
       this.balance = balanceInfo.data.result.confirmed
       this.unconfirmed = balanceInfo.data.result.unconfirmed
@@ -43,7 +43,7 @@ export default {
   },
   computed: {
     ...mapState({
-      singleSigInfo: state => state.btcSingleSig
+      btcSingleSigTestnet: state => state.btcSingleSigTestnet
     })
   },
   async mounted () {

@@ -29,11 +29,19 @@ export async function unpackElectrum () {
 }
 
 export async function deleteWallet (walletName, network) {
-  const pathAddition = getPathNetwork(network)
-  const destination =
-  app.getPath('userData') + `/binaries/electrumFolder/${pathAddition}wallets/`
-  await unlink(destination + walletName)
-  return true
+  try {
+    const pathAddition = getPathNetwork(network)
+    const destination =
+    app.getPath('userData') + `/binaries/electrumFolder/${pathAddition}wallets/`
+    await unlink(destination + walletName)
+    return true
+  } catch (e) {
+    if (e.toString().slice(0, 47) === 'Error: ENOENT: no such file or directory, unlin') {
+      return true
+    } else {
+      throw Error(e)
+    }
+  }
 }
 
 export async function listWalletsThatExist (network) {
