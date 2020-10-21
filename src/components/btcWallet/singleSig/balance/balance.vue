@@ -21,9 +21,8 @@
     </v-container>
 </template>
 <script>
-import { createNamespacedHelpers } from 'vuex'
 import { getBalance } from '@/assets/util/btc/electrum/general.js'
-const { mapState } = createNamespacedHelpers('bitcoinInfo')
+import { mapGetters, mapState } from 'vuex'
 export default {
   components: {
   },
@@ -35,16 +34,19 @@ export default {
     async setup () {
       const walletInfo = this.btcSingleSigTestnet
       const balanceInfo = await
-      getBalance('f25565e10b324c85b36ccc8ab0f16384b87c78bf', walletInfo.rpcport, walletInfo.rpcuser,
-        walletInfo.rpcpassword, walletInfo.network)
+      getBalance(this.singleSigElectrumName, walletInfo.rpcPort, walletInfo.rpcUser,
+        walletInfo.rpcPassword, walletInfo.network)
       this.balance = balanceInfo.data.result.confirmed
       this.unconfirmed = balanceInfo.data.result.unconfirmed
     }
   },
   computed: {
-    ...mapState({
-      btcSingleSigTestnet: state => state.btcSingleSigTestnet
-    })
+    ...mapState('bitcoinInfo', [
+      'btcSingleSigTestnet'
+    ]),
+    ...mapGetters('hardwareInfo', [
+      'singleSigElectrumName'
+    ])
   },
   async mounted () {
     await this.setup()

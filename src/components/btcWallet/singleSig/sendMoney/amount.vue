@@ -126,7 +126,7 @@
 
 <script>
 import {
-  send, getBalance, sendAll
+  send, getBalance, sendAll, deserializeTrans
 } from '@/assets/util/btc/electrum/general.js'
 import {
   decodeElectrumPsbt
@@ -197,25 +197,6 @@ export default {
     addressArray: function () {
       return this.transaction.addressArray
     }
-    // allAddressesUsed: function () {
-    //   const notZero = x => !x.isEqualTo(new BigNumber(0))
-    //   const allUsed = R.all(notZero)(this.addressArraySat)
-    //   const allValuesExist = this.addressArraySat.length === this.addressArray.length
-    //   if (allUsed && allValuesExist) {
-    //     return true
-    //   } else {
-    //     return false
-    //   }
-    // },
-    // allValidAmounts: function () {
-    //   const notZero = x => new BigNumber(x).dp() < 9
-    //   const allValid = R.all(notZero)(this.amountArray)
-    //   if (allValid) {
-    //     return true
-    //   } else {
-    //     return false
-    //   }
-    // },
   },
   watch: {
     newTransInfo: {
@@ -233,8 +214,8 @@ export default {
         const singleSigInfo = this.singleSigInfo
         const feeRate = this.chossenFeeRate / 1000
         const trans = await send(feeRate, this.newTransInfo.amountArray, this.addressArray,
-          singleSigInfo.electrumWalletName, singleSigInfo.rpcport, singleSigInfo.rpcuser,
-          singleSigInfo.rpcpassword, singleSigInfo.network)
+          singleSigInfo.walletName, singleSigInfo.rpcPort, singleSigInfo.rpcUser,
+          singleSigInfo.rpcPassword, singleSigInfo.network)
         this.updateTransInfo(trans.data.result)
       } catch (err) {
         this.pause = true
@@ -249,8 +230,8 @@ export default {
         const singleSigInfo = this.singleSigInfo
         const feeRate = this.chossenFeeRate / 1000
         const trans = await send(feeRate, this.newTransInfo.amountArray, this.addressArray,
-          singleSigInfo.electrumWalletName, singleSigInfo.rpcport, singleSigInfo.rpcuser,
-          singleSigInfo.rpcpassword, singleSigInfo.network)
+          singleSigInfo.walletName, singleSigInfo.rpcPort, singleSigInfo.rpcUser,
+          singleSigInfo.rpcPassword, singleSigInfo.network)
         this.oldTransInfo = R.clone(this.newTransInfo)
         this.updateTransInfo(trans.data.result)
         this.pause = false
@@ -265,8 +246,8 @@ export default {
         const singleSigInfo = this.singleSigInfo
         const feeRate = this.chossenFeeRate / 1000
         const trans = await sendAll(feeRate, this.addressArray[0],
-          singleSigInfo.electrumWalletName, singleSigInfo.rpcport, singleSigInfo.rpcuser,
-          singleSigInfo.rpcpassword, singleSigInfo.network)
+          singleSigInfo.walletName, singleSigInfo.rpcPort, singleSigInfo.rpcUser,
+          singleSigInfo.rpcPassword, singleSigInfo.network)
         // this.oldTransInfo = R.clone(this.newTransInfo)
         // this.updateTransInfo(trans.data.result)
         const transInfo = await decodeElectrumPsbt(trans.data.result)
@@ -291,7 +272,10 @@ export default {
       this.pause = false
     },
     updateTransInfo: async function (psbt) {
-      this.transAmountInfoPSBT = await decodeElectrumPsbt(psbt)
+      const decodedElectrumPsbt = await deserializeTrans(psbt,
+        this.singleSigInfo.rpcPort, this.singleSigInfo.rpcUser,
+        this.singleSigInfo.rpcPassword)
+      this.transAmountInfoPSBT = await decodeElectrumPsbt(psbt, decodedElectrumPsbt.data.result)
       this.$emit('updateFeeInfo', (this.chossenFeeRate / 1000))
       this.$emit('updateIncompletePSBT', psbt)
       this.$emit('updateBalance', Number(this.balance))
@@ -299,8 +283,8 @@ export default {
     },
     setBalance: async function () {
       const singleSigInfo = this.singleSigInfo
-      const balance = await getBalance(singleSigInfo.electrumWalletName,
-        singleSigInfo.rpcport, singleSigInfo.rpcuser, singleSigInfo.rpcpassword,
+      const balance = await getBalance(singleSigInfo.walletName,
+        singleSigInfo.rpcPort, singleSigInfo.rpcUser, singleSigInfo.rpcPassword,
         singleSigInfo.network)
       this.balance = balance.data.result.confirmed
       return true
@@ -308,7 +292,7 @@ export default {
     setupFeeInfo: async function () {
       const walletInfo = this.singleSigInfo
       const feeInfo = await
-      getAllFeeRates(walletInfo.rpcport, walletInfo.rpcuser, walletInfo.rpcpassword)
+      getAllFeeRates(walletInfo.rpcPort, walletInfo.rpcUser, walletInfo.rpcPassword)
       this.feeInfo = feeInfo
       return true
     },

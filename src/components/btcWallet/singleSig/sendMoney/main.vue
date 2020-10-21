@@ -13,7 +13,7 @@
           <component
           v-bind:is="currentMain"
           v-bind:transaction="transaction"
-          v-bind:singleSigInfo='singleSigInfo'
+          v-bind:singleSigInfo='allWalletInfo'
           v-on:updateAddressArray="updateAddressArray"
           v-on:updateIncompletePSBT='updateIncompletePSBT'
           v-on:updateSignedPSBT='updateSignedPSBT'
@@ -46,10 +46,11 @@ import {
 import {
   broadcastTransaction
 } from '@/assets/util/btc/electrum/general.js'
-import { createNamespacedHelpers } from 'vuex'
-const { mapState } = createNamespacedHelpers('bitcoinInfo')
+import { mapState, mapGetters } from 'vuex'
+// const R = require('ramda')
 export default {
   data: () => ({
+    allWalletInfo: {},
     componentList: [sendToAddresses, amount, confirm, sign],
     currentSection: 0,
     transaction: {
@@ -93,16 +94,20 @@ export default {
     currentMain () {
       return this.componentList[this.currentSection]
     },
-    ...mapState({
-      singleSigInfo: state => state.btcSingleSig
-    })
+    ...mapState('bitcoinInfo', [
+      'btcSingleSigTestnet'
+    ]),
+    ...mapGetters('hardwareInfo', [
+      'singleSigElectrumName',
+      'singleSigHardwareWalletInfo'
+    ])
   },
   methods: {
     async finish () {
-      const walletInfo = this.singleSigInfo
+      const walletInfo = this.btcSingleSigTestnet
       const finalHexTransaction = await finalizeTrans(this.transaction.signedPSBT)
       const result = await broadcastTransaction(finalHexTransaction,
-        walletInfo.rpcport, walletInfo.rpcuser, walletInfo.rpcpassword)
+        walletInfo.rpcPort, walletInfo.rpcUser, walletInfo.rpcPassword)
       this.transaction.transactionId = result.data.result
     },
     updateStep (stepUpdate) {
@@ -135,6 +140,16 @@ export default {
     updateEstimatedTime (time) {
       this.transaction.estimatedTime = time
     }
+  },
+  mounted () {
+    this.allWalletInfo.fingerprint = this.singleSigHardwareWalletInfo.fingerprint
+    this.allWalletInfo.vpub = this.singleSigHardwareWalletInfo.vpub
+    this.allWalletInfo.path = this.singleSigHardwareWalletInfo.vpubPath
+    this.allWalletInfo.walletName = this.singleSigElectrumName
+    this.allWalletInfo.network = this.btcSingleSigTestnet.network
+    this.allWalletInfo.rpcPassword = this.btcSingleSigTestnet.rpcPassword
+    this.allWalletInfo.rpcUser = this.btcSingleSigTestnet.rpcUser
+    this.allWalletInfo.rpcPort = this.btcSingleSigTestnet.rpcPort
   }
 }
 </script>

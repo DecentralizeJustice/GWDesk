@@ -6,7 +6,6 @@ export const bitcoinInfo = {
       rpcPort: '7777',
       rpcUser: 'user',
       rpcPassword: '1',
-      electrumWalletName: 'f25565e10b324c85b36ccc8ab0f16384b87c78bf',
       network: 'testnet'
     }
   },

@@ -157,7 +157,7 @@ export async function validPSBTFromPSBT (base64PSBT) {
   const finalPSBT64 = await createPSBTfromTrans(bitcoinJSTrans, wrongPsbt)
   return finalPSBT64
 }
-export async function decodeElectrumPsbt (base64PSBT) {
+export async function decodeElectrumPsbt (base64PSBT, decodedElectrumPsbt) {
   const network = bitcoin.networks.testnet
   const bigNum = 100000000
   const transObject = {}
@@ -173,8 +173,9 @@ export async function decodeElectrumPsbt (base64PSBT) {
   const hex = buff.toString('hex')
   const transHex = psbtTools.decodePsbt({ psbt: hex })
   const bitcoinJSTrans = bitcoin.Transaction.fromHex(transHex.unsigned_transaction)
-  for (let i = 0; i < wrongPsbt.data.inputs.length; i++) {
-    const inputValue = wrongPsbt.data.inputs[i].witnessUtxo.value / bigNum
+  const inputs = decodedElectrumPsbt.inputs
+  for (let i = 0; i < inputs.length; i++) {
+    const inputValue = inputs[i].value_sats
     transObject.inputSum = inputValue + transObject.inputSum
   }
   for (let i = 0; i < wrongPsbt.data.outputs.length; i++) {

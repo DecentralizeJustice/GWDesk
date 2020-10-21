@@ -113,7 +113,7 @@ export default {
       this.correctWalletExist()
     },
     correctWalletExist: function () {
-      console.log(this.singleSigElectrumName)
+      // console.log(this.singleSigElectrumName)
     },
     ...mapActions('hardwareInfo',
       ['updateHardwareWalletInfo']

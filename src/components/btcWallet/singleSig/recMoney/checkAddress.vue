@@ -38,36 +38,39 @@
 <script>
 import { findPath } from '@/assets/views/btcSingleSig/receive.js'
 import { displayAddress } from '@/assets/util/hwi/general.js'
-import { createNamespacedHelpers } from 'vuex'
 import { getunusedaddress, listAddresses } from '@/assets/util/btc/electrum/general.js'
-const { mapState } = createNamespacedHelpers('bitcoinInfo')
+import { mapState, mapGetters } from 'vuex'
 const { clipboard } = require('electron')
 export default {
   props: ['walletInfo'],
   data: () => ({
     unusedAddress: '',
-    path: 'm/84h/1h/0h/0/',
-    network: 'testnet',
+    path: '',
     addressReady: false,
     addressGuess: ''
   }),
   computed: {
-    ...mapState({
-      singleSigInfo: state => state.btcSingleSig
-    })
+    ...mapState('bitcoinInfo', [
+      'btcSingleSigTestnet'
+    ]),
+    ...mapGetters('hardwareInfo', [
+      'singleSigElectrumName',
+      'singleSigHardwareWalletInfo'
+    ])
   },
   methods: {
     async setup () {
-      const walletInfo = this.singleSigInfo
+      const walletInfo = this.btcSingleSigTestnet
       const unusedAddress = await
-      getunusedaddress(walletInfo.electrumWalletName, walletInfo.network,
+      getunusedaddress(this.singleSigElectrumName, walletInfo.network,
         walletInfo.rpcport, walletInfo.rpcuser, walletInfo.rpcpassword)
       this.unusedAddress = unusedAddress.data.result
       const addressList = await
-      listAddresses(walletInfo.electrumWalletName, walletInfo.rpcport,
+      listAddresses(this.singleSigElectrumName, walletInfo.rpcport,
         walletInfo.rpcuser, walletInfo.rpcpassword, walletInfo.network)
       const addressListLength = addressList.data.result.length
-      const pathIndex = findPath(walletInfo.xpub, this.unusedAddress, addressListLength)
+      const pathIndex = findPath(this.singleSigHardwareWalletInfo.vpub, this.unusedAddress, addressListLength)
+      this.path = this.singleSigHardwareWalletInfo.vpubPath + '/0/'
       this.path += pathIndex
       await this.showAddress()
     },
@@ -81,7 +84,8 @@ export default {
       }
     },
     async showAddress () {
-      await displayAddress(this.walletInfo.model, this.walletInfo.path, this.path, this.network)
+      await displayAddress(this.walletInfo.model, this.walletInfo.path, this.path,
+        this.btcSingleSigTestnet.network)
     }
   },
   async created () {

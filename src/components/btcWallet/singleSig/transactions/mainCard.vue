@@ -73,9 +73,8 @@
 import {
   getWalletHistory
 } from '@/assets/util/btc/electrum/general.js'
-import { createNamespacedHelpers } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 const R = require('ramda')
-const { mapState } = createNamespacedHelpers('bitcoinInfo')
 export default {
   data: () => ({
     panel: [],
@@ -83,9 +82,9 @@ export default {
   }),
   methods: {
     async setup () {
-      const walletInfo = this.singleSigInfo
-      const result = await getWalletHistory(walletInfo.electrumWalletName, walletInfo.rpcport,
-        walletInfo.rpcuser, walletInfo.rpcpassword, walletInfo.network)
+      const walletInfo = this.btcSingleSigTestnet
+      const result = await getWalletHistory(this.singleSigElectrumName, walletInfo.rpcPort,
+        walletInfo.rpcUser, walletInfo.rpcPassword, walletInfo.network)
       const sortByTimestamp = R.sortBy(R.prop('monotonic_timestamp'))
       this.transactions = R.reverse(sortByTimestamp(result.data.result.transactions))
     },
@@ -171,9 +170,12 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-      singleSigInfo: state => state.btcSingleSig
-    })
+    ...mapState('bitcoinInfo', [
+      'btcSingleSigTestnet'
+    ]),
+    ...mapGetters('hardwareInfo', [
+      'singleSigElectrumName'
+    ])
   },
   mounted: async function () {
     await this.setup()

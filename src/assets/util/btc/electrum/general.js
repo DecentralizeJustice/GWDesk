@@ -76,6 +76,20 @@ export async function getinfo (rpcport, rpcuser, rpcpassword) {
   return request
 }
 
+export async function deserializeTrans (tx, rpcport, rpcuser, rpcpassword) {
+  const request = await makeRpcRequest('deserialize', { tx: tx }, rpcport, rpcuser,
+    rpcpassword)
+  return request
+}
+
+export async function listunspent (walletName, network, rpcport, rpcuser, rpcpassword) {
+  const pathAddition = getPathNetwork(network)
+  const request = await makeRpcRequest('listunspent',
+    { wallet: `electrumFolder/${pathAddition}wallets/${walletName}` },
+    rpcport, rpcuser, rpcpassword)
+  return request
+}
+
 export async function getTransaction (txid, rpcport, rpcuser, rpcpassword) {
   const request = await makeRpcRequest('gettransaction', { txid }, rpcport, rpcuser,
     rpcpassword)
