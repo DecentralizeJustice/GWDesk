@@ -55,9 +55,12 @@
 import {
   decodeElectrumPsbt
 } from '@/assets/util/btc/psbtUtil.js'
+import {
+  deserializeTrans
+} from '@/assets/util/btc/electrum/general.js'
 const R = require('ramda')
 export default {
-  props: ['transaction'],
+  props: ['transaction', 'singleSigInfo'],
   data: () => ({
     psbtInfo: {}
   }),
@@ -71,7 +74,7 @@ export default {
       return this.psbtInfo.addressArray
     },
     balanceAfterTransaction: function () {
-      return (this.transaction.balance - this.psbtInfo.inputSum + this.psbtInfo.changeAmount).toFixed(8)
+      return Math.abs((this.transaction.balance - this.psbtInfo.inputSum + this.psbtInfo.changeAmount).toFixed(8))
     },
     feeAmount: function () {
       return this.psbtInfo.feeAmount
@@ -86,9 +89,10 @@ export default {
     }
   },
   mounted: async function () {
-    this.psbtInfo = await decodeElectrumPsbt(this.transaction.psbt)
-    // console.log(this.transaction)
-    // console.log(this.psbtInfo)
+    const decodedElectrumPsbt = await deserializeTrans(this.transaction.psbt,
+      this.singleSigInfo.rpcPort, this.singleSigInfo.rpcUser,
+      this.singleSigInfo.rpcPassword)
+    this.psbtInfo = await decodeElectrumPsbt(this.transaction.psbt, decodedElectrumPsbt.data.result)
   }
 }
 </script>

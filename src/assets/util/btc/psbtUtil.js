@@ -175,7 +175,7 @@ export async function decodeElectrumPsbt (base64PSBT, decodedElectrumPsbt) {
   const bitcoinJSTrans = bitcoin.Transaction.fromHex(transHex.unsigned_transaction)
   const inputs = decodedElectrumPsbt.inputs
   for (let i = 0; i < inputs.length; i++) {
-    const inputValue = inputs[i].value_sats
+    const inputValue = (inputs[i].value_sats / bigNum)
     transObject.inputSum = inputValue + transObject.inputSum
   }
   for (let i = 0; i < wrongPsbt.data.outputs.length; i++) {

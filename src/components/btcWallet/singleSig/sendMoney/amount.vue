@@ -232,10 +232,14 @@ export default {
         const trans = await send(feeRate, this.newTransInfo.amountArray, this.addressArray,
           singleSigInfo.walletName, singleSigInfo.rpcPort, singleSigInfo.rpcUser,
           singleSigInfo.rpcPassword, singleSigInfo.network)
+        if (trans.data.error) {
+          throw Error(trans.data.error)
+        }
         this.oldTransInfo = R.clone(this.newTransInfo)
         this.updateTransInfo(trans.data.result)
         this.pause = false
       } catch (err) {
+        console.log(err)
         this.triggerTooHigh()
         this.newTransInfo = R.clone(this.oldTransInfo)
       }
@@ -248,15 +252,22 @@ export default {
         const trans = await sendAll(feeRate, this.addressArray[0],
           singleSigInfo.walletName, singleSigInfo.rpcPort, singleSigInfo.rpcUser,
           singleSigInfo.rpcPassword, singleSigInfo.network)
+        if (trans.data.error) {
+          throw Error(trans.data.error)
+        }
         // this.oldTransInfo = R.clone(this.newTransInfo)
         // this.updateTransInfo(trans.data.result)
-        const transInfo = await decodeElectrumPsbt(trans.data.result)
+        const decodedElectrumPsbt = await deserializeTrans(trans.data.result,
+          this.singleSigInfo.rpcPort, this.singleSigInfo.rpcUser,
+          this.singleSigInfo.rpcPassword)
+        const transInfo = await decodeElectrumPsbt(trans.data.result, decodedElectrumPsbt.data.result)
         const amount = transInfo.amountArray[0]
         const noChangeInfo = R.clone(this.newTransInfo)
         noChangeInfo.amountArray[0] = amount
         this.pause = false
         this.newTransInfo = R.clone(noChangeInfo)
       } catch (err) {
+        console.log(err)
         this.triggerTooHigh()
         this.newTransInfo = R.clone(this.oldTransInfo)
       }
