@@ -30,11 +30,14 @@ import {
 import {
   signTrans
 } from '@/assets/util/hwi/general.js'
+import {
+  deserializeTrans
+} from '@/assets/util/btc/electrum/general.js'
 export default {
   components: {
     walletTool
   },
-  props: ['transaction'],
+  props: ['transaction', 'singleSigInfo', 'masterFingerprint'],
   data: () => ({
     walletReady01: true,
     confirm: false,
@@ -54,7 +57,10 @@ export default {
       this.sign()
     },
     sign: async function () {
-      const validPSBT = await validPSBTFromPSBT(this.transaction.psbt)
+      const decodedElectrumPsbt = await deserializeTrans(this.transaction.psbt,
+        this.singleSigInfo.rpcPort, this.singleSigInfo.rpcUser,
+        this.singleSigInfo.rpcPassword)
+      const validPSBT = await validPSBTFromPSBT(this.transaction.psbt, decodedElectrumPsbt.data.result, this.masterFingerprint)
       const result = await signTrans(this.walletInfo.model, this.walletInfo.path,
         'testnet', validPSBT)
       this.confirm = false

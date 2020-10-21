@@ -11,6 +11,7 @@
         </v-flex>
 
           <component
+          v-bind:masterFingerprint='singleSigHardwareWalletInfo.fingerprint'
           v-bind:is="currentMain"
           v-bind:transaction="transaction"
           v-bind:singleSigInfo='allWalletInfo'
@@ -106,6 +107,7 @@ export default {
     async finish () {
       const walletInfo = this.btcSingleSigTestnet
       const finalHexTransaction = await finalizeTrans(this.transaction.signedPSBT)
+      console.log(finalHexTransaction)
       const result = await broadcastTransaction(finalHexTransaction,
         walletInfo.rpcPort, walletInfo.rpcUser, walletInfo.rpcPassword)
       this.transaction.transactionId = result.data.result

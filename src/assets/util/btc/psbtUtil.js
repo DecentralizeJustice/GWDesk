@@ -88,33 +88,41 @@ export async function finalizeTrans (base64Trans) {
   const finalHex = psbt.extractTransaction().toHex()
   return finalHex
 }
-
-function addInputInfo (psbt, bitcoinjsHex, wrongPsbt) {
-  for (var i = 0; i < bitcoinjsHex.ins.length; i++) {
-    const transIns = bitcoinjsHex.ins[i]
+function getWitnessUtxo (index, rawTransaction) {
+  const bitcoinJSTrans = bitcoin.Transaction.fromHex(rawTransaction)
+  return [bitcoinJSTrans.outs[index].script, bitcoinJSTrans.outs[index].value]
+}
+function addInputInfo (psbt, bitcoinjsHex, wrongPsbt, decodeElectrumPsbt, masterFingerprint) {
+  for (var i = 0; i < decodeElectrumPsbt.inputs.length; i++) {
+    const transIns = decodeElectrumPsbt.inputs[i]
+    const witnessScript = getWitnessUtxo(transIns.prevout_n, transIns.utxo)
     const input = {
-      hash: transIns.hash,
-      index: transIns.index,
+      hash: bitcoinjsHex.ins[i].hash,
+      index: transIns.prevout_n,
       witnessUtxo: {
-        script: wrongPsbt.data.inputs[i].witnessUtxo.script,
-        value: Number(wrongPsbt.data.inputs[i].witnessUtxo.value)
+        script: witnessScript[0],
+        value: Number(transIns.value_sats)
       },
       sighashType: 1
+    }
+    if (Number(transIns.value_sats) !== Number(witnessScript[1])) {
+      throw Error('wrong index, bitcoinjsErro')
     }
     psbt.addInput(input)
     const bip32info = wrongPsbt.data.inputs[i].bip32Derivation[0]
     const path = "m/84'/1'/0'/" + bip32info.path.slice(2)
     const updateData = { bip32Derivation: [{}] }
-    updateData.bip32Derivation[0].masterFingerprint = Buffer.from('f23bb7d0', 'hex')
+    updateData.bip32Derivation[0].masterFingerprint = Buffer.from(masterFingerprint, 'hex')
     updateData.bip32Derivation[0].path = path
     updateData.bip32Derivation[0].pubkey = bip32info.pubkey
     psbt.updateInput(i, updateData)
-    psbt.setInputSequence(i, transIns.sequence)
+    console.log(bitcoinjsHex.ins[i].sequence)
+    psbt.setInputSequence(i, bitcoinjsHex.ins[i].sequence)
   }
   return psbt
 }
 
-function addOutputInfo (psbt, bitcoinjsHex, wrongPsbt) {
+function addOutputInfo (psbt, bitcoinjsHex, wrongPsbt, masterFingerprint) {
   const network = bitcoin.networks.testnet
   for (var i = 0; i < bitcoinjsHex.outs.length; i++) {
     const transOut = bitcoinjsHex.outs[i]
@@ -128,7 +136,7 @@ function addOutputInfo (psbt, bitcoinjsHex, wrongPsbt) {
       const bip32info = bip32InfoAll[0]
       const path = "m/84'/1'/0'/" + bip32info.path.slice(2)
       const updateData = { bip32Derivation: [{}] }
-      updateData.bip32Derivation[0].masterFingerprint = Buffer.from('f23bb7d0', 'hex')
+      updateData.bip32Derivation[0].masterFingerprint = Buffer.from(masterFingerprint, 'hex')
       updateData.bip32Derivation[0].path = path
       updateData.bip32Derivation[0].pubkey = bip32info.pubkey
       psbt.updateOutput(i, updateData)
@@ -137,24 +145,24 @@ function addOutputInfo (psbt, bitcoinjsHex, wrongPsbt) {
   return psbt
 }
 
-export async function createPSBTfromTrans (bitcoinjsHex, wrongPsbt) {
+export async function createPSBTfromTrans (bitcoinjsHex, wrongPsbt, decodeElectrumPsbt, masterFingerprint) {
   const network = bitcoin.networks.testnet
   let psbt = new bitcoin.Psbt({ network })
-  psbt = addInputInfo(psbt, bitcoinjsHex, wrongPsbt)
-  psbt = addOutputInfo(psbt, bitcoinjsHex, wrongPsbt)
+  psbt = addInputInfo(psbt, bitcoinjsHex, wrongPsbt, decodeElectrumPsbt, masterFingerprint)
+  psbt = addOutputInfo(psbt, bitcoinjsHex, wrongPsbt, masterFingerprint)
   psbt.setVersion(bitcoinjsHex.version)
   // fee snipping not issue yet
   // psbt.setLocktime(bitcoinjsHex.locktime)
   return psbt.toBase64()
 }
 
-export async function validPSBTFromPSBT (base64PSBT) {
+export async function validPSBTFromPSBT (base64PSBT, decodeElectrumPsbt, masterFingerprint) {
   const wrongPsbt = bitcoin.Psbt.fromBase64(base64PSBT)
   const buff = Buffer.from(base64PSBT, 'base64')
   const hex = buff.toString('hex')
   const transHex = psbtTools.decodePsbt({ psbt: hex })
   const bitcoinJSTrans = bitcoin.Transaction.fromHex(transHex.unsigned_transaction)
-  const finalPSBT64 = await createPSBTfromTrans(bitcoinJSTrans, wrongPsbt)
+  const finalPSBT64 = await createPSBTfromTrans(bitcoinJSTrans, wrongPsbt, decodeElectrumPsbt, masterFingerprint)
   return finalPSBT64
 }
 export async function decodeElectrumPsbt (base64PSBT, decodedElectrumPsbt) {
