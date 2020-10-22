@@ -26,6 +26,9 @@
 import navDrawer from '@/components/general/navDrawer.vue'
 import updateWindow from '@/components/general/update.vue'
 import { dormant, circuitEstablished } from '@/assets/util/tor.js'
+import {
+  hardStopDeamon
+} from '@/assets/util/btc/electrum/general.js'
 const appVersion = require('../package.json').version
 const electron = window.require('electron')
 const ipcRenderer = electron.ipcRenderer
@@ -125,6 +128,7 @@ export default {
   },
   async mounted () {
     this.start()
+    await hardStopDeamon()
     await this.loop()
     if (process.env.NODE_ENV !== 'development') {
       ipcRenderer.send('CHECK_FOR_UPDATE_PENDING')

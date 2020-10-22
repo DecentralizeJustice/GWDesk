@@ -103,6 +103,10 @@ function addInputInfo (psbt, bitcoinjsHex, wrongPsbt, decodeElectrumPsbt, master
         script: witnessScript[0],
         value: Number(transIns.value_sats)
       },
+      // nonWitnessUtxo: Buffer.from(
+      //   transIns.utxo,
+      //   'hex'
+      // ),
       sighashType: 1
     }
     if (Number(transIns.value_sats) !== Number(witnessScript[1])) {
@@ -116,7 +120,6 @@ function addInputInfo (psbt, bitcoinjsHex, wrongPsbt, decodeElectrumPsbt, master
     updateData.bip32Derivation[0].path = path
     updateData.bip32Derivation[0].pubkey = bip32info.pubkey
     psbt.updateInput(i, updateData)
-    console.log(bitcoinjsHex.ins[i].sequence)
     psbt.setInputSequence(i, bitcoinjsHex.ins[i].sequence)
   }
   return psbt

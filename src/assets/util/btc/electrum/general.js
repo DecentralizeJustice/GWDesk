@@ -266,7 +266,28 @@ export async function getBalance (walletName, rpcport, rpcuser, rpcpassword, net
 export async function listLoadedWallets (rpcport, rpcuser, rpcpassword) {
   const request = await makeRpcRequest('list_wallets', {},
     rpcport, rpcuser, rpcpassword)
-  return request
+  const info = {
+    data: {}
+  }
+  const walletPaths = []
+  const finalPathList = []
+  if (request.data.result.length === 0) {
+    return request
+  }
+  request.data.result.forEach((element) => {
+    walletPaths.push(element.path)
+  })
+  walletPaths.forEach((item, i) => {
+    const myRegexp = /wallets\/(.*)/
+    const match = myRegexp.exec(item)
+    match.forEach(thing => {
+      if (thing.length === 40) {
+        finalPathList.push(thing)
+      }
+    })
+  })
+  info.data.result = finalPathList
+  return info
 }
 
 export async function loadWallet (walletName, rpcport, rpcuser, rpcpassword, network) {

@@ -31,7 +31,7 @@
         </v-card-actions>
       </v-card>
     </v-flex>
-    <v-flex xs11 v-if='walletReady'>
+    <v-flex xs11 v-if='!walletError && walletReady'>
       <v-card class="text-xs-center no-gutters" style="" >
         <v-card-title class="headline justify-center">
           Bitcoin Single Sig
@@ -88,7 +88,11 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import {
+  listWalletsThatExist, checkIfNodeProcessRunning, startDeamon,
+  listLoadedWallets, loadWallet
+} from '@/assets/util/btc/electrum/general.js'
+import { mapState, mapGetters } from 'vuex'
 import balance from '@/components/btcWallet/singleSig/balance/balance.vue'
 import sendMoney from '@/components/btcWallet/singleSig/sendMoney/main.vue'
 import recieveMoney from '@/components/btcWallet/singleSig/recMoney/mainCard.vue'
@@ -101,26 +105,70 @@ export default {
     transactions
   },
   data: () => ({
-    walletReady: true
+    walletReady: false,
+    retries: 20,
+    walletError: false
   }),
   computed: {
+    ...mapState('bitcoinInfo', [
+      'btcSingleSigTestnet'
+    ]),
+    network: function () {
+      return this.btcSingleSigTestnet.network
+    },
     ...mapGetters('hardwareInfo', [
-      'singleSigElectrumName'
+      'singleSigElectrumName',
+      'singleSigHardwareWalletInfo'
     ])
   },
   methods: {
-    start: function () {
-      this.correctWalletExist()
+    start: async function () {
+      if (this.retries < 0) {
+        throw Error('Too many attempts to bring up wallet')
+      }
+      await this.correctWalletExist()
+      await this.electrumRunning()
+      await this.correctWalletLoaded()
+      return true
     },
-    correctWalletExist: function () {
-      // console.log(this.singleSigElectrumName)
+    electrumRunning: async function () {
+      const nodeStatus = await checkIfNodeProcessRunning()
+      if (!nodeStatus) {
+        this.retries = this.retries - 1
+        await startDeamon(this.network)
+        this.start()
+      }
+      return true
     },
-    ...mapActions('hardwareInfo',
-      ['updateHardwareWalletInfo']
-    )
+    correctWalletExist: async function () {
+      const wallets = await listWalletsThatExist(this.network)
+      if (!wallets.includes(this.singleSigElectrumName)) {
+        this.walletError = true
+        throw Error('Correct Wallet Does not Exist')
+      }
+      return true
+    },
+    correctWalletLoaded: async function () {
+      const loadedWallets = await listLoadedWallets(this.btcSingleSigTestnet.rpcPort,
+        this.btcSingleSigTestnet.rpcUser, this.btcSingleSigTestnet.rpcPassword)
+      if (!loadedWallets.data.result.includes(this.singleSigElectrumName)) {
+        this.retries = this.retries - 1
+        await loadWallet(this.singleSigElectrumName, this.btcSingleSigTestnet.rpcPort,
+          this.btcSingleSigTestnet.rpcUser, this.btcSingleSigTestnet.rpcPassword,
+          this.network)
+        this.start()
+      }
+      return true
+    }
   },
   async mounted () {
-    this.start()
+    try {
+      await this.start()
+      this.walletReady = true
+    } catch (e) {
+      this.walletError = true
+      console.log('Wallet Bring Up Error')
+    }
   }
 }
 </script>
