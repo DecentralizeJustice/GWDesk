@@ -1,7 +1,15 @@
 <template>
   <v-layout align-center justify-center row fill-height>
-    <v-flex xs11 v-if='!walletReady'>
-      <v-card class="text-xs-center no-gutters" style="" >
+    <v-flex xs11 >
+      <v-card class="text-xs-center no-gutters" style="" v-if='!correctWalletExist'>
+        <v-card-title class="headline justify-center">
+          No Hardware Wallet Setup
+        </v-card-title>
+        <div class="text-center mb-5">
+          Please Setup Hardware Wallet
+        </div>
+      </v-card>
+      <v-card class="text-xs-center no-gutters" style="" v-if='!walletReady && correctWalletExist'>
         <v-card-title class="headline justify-center">
           Wallet Syncing...
         </v-card-title>
@@ -30,9 +38,7 @@
           </v-btn>
         </v-card-actions>
       </v-card>
-    </v-flex>
-    <v-flex xs11 v-if='!walletError && walletReady'>
-      <v-card class="text-xs-center no-gutters" style="" >
+      <v-card class="text-xs-center no-gutters" style="" v-if='!walletError && walletReady && correctWalletExist'>
         <v-card-title class="headline justify-center">
           Bitcoin Single Sig
         </v-card-title>
@@ -107,7 +113,8 @@ export default {
   data: () => ({
     walletReady: false,
     retries: 20,
-    walletError: false
+    walletError: false,
+    correctWalletExist: true
   }),
   computed: {
     ...mapState('bitcoinInfo', [
@@ -126,7 +133,10 @@ export default {
       if (this.retries < 0) {
         throw Error('Too many attempts to bring up wallet')
       }
-      await this.correctWalletExist()
+      if (!this.correctWalletExist) {
+        return true
+      }
+      await this.checkCorrectWalletExist()
       await this.electrumRunning()
       await this.correctWalletLoaded()
       return true
@@ -140,11 +150,10 @@ export default {
       }
       return true
     },
-    correctWalletExist: async function () {
+    checkCorrectWalletExist: async function () {
       const wallets = await listWalletsThatExist(this.network)
       if (!wallets.includes(this.singleSigElectrumName)) {
-        this.walletError = true
-        throw Error('Correct Wallet Does not Exist')
+        this.correctWalletExist = false
       }
       return true
     },

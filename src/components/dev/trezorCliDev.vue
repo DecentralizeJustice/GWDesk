@@ -60,6 +60,13 @@
             >
               Get Version
             </v-btn>
+            <v-btn
+              color="teal"
+              class="mx-2 my-2"
+              v-on:click="getStatus()"
+            >
+              Get Status
+            </v-btn>
             </div>
           </v-card>
     </v-flex>
@@ -69,7 +76,7 @@
 <script>
 import {
   unpackMainBinary, unpackPhotos, changeName, changePhoto,
-  getInfo, getNode, updateFirmware, getVersionNumber
+  getInfo, getNode, updateFirmware, getVersionNumber, getStatus
 } from '@/assets/util/trezorCli/general.js'
 export default {
   components: {
@@ -94,6 +101,10 @@ export default {
       const test = await getVersionNumber()
       console.log(test)
     },
+    getStatus: async function () {
+      const test = await getStatus()
+      console.log(test)
+    },
     unpackPhotos: async function () {
       const result = await unpackPhotos()
       console.log(result)
@@ -107,8 +118,8 @@ export default {
       this.addListeners(this.channel)
     },
     getInfo: async function () {
-      this.channel = getInfo()
-      this.addListeners(this.channel)
+      const info = await getInfo()
+      console.log(info)
     },
     getNode: async function () {
       this.channel = getNode(this.node)

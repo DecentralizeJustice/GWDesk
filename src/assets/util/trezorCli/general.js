@@ -53,12 +53,10 @@ export function changeName (name) {
     { cwd: binaryFolder })
   return command
 }
-export function getInfo () {
-  const binaryFolder = app.getPath('userData') + '/binaries/macTrezorCliTool'
-  const commands = ['get-features']
-  const command = spawn('./macTrezorCliTool', commands,
-    { cwd: binaryFolder })
-  return command
+export async function getInfo () {
+  const binary = app.getPath('userData') + '/binaries/macTrezorCliTool'
+  const { stdout } = await exec(`"${binary}"/macTrezorCliTool get-features`)
+  return stdout
 }
 export function getNode (node) {
   const binaryFolder = app.getPath('userData') + '/binaries/macTrezorCliTool'
@@ -89,8 +87,7 @@ export async function listDevices () {
 }
 
 export async function getVersionNumber () {
-  const binary = app.getPath('userData') + '/binaries/macTrezorCliTool'
-  const { stdout } = await exec(`"${binary}"/macTrezorCliTool get-features`)
+  const stdout = await getInfo()
   const majorPatt = /major_version: [0-9]/i
   const majorVersion = stdout.match(majorPatt)[0].substr(-1)
   const minorPatt = /minor_version: [0-9]/i
@@ -100,6 +97,27 @@ export async function getVersionNumber () {
   return majorVersion + '.' + minorVersion + '.' + patchVersion
 }
 
+export async function getStatus () {
+  let status = ''
+  const stdout = await getInfo()
+  const initializePatt = /initialized: True|initialized: False/i
+  const initialized = !(stdout.match(initializePatt)[0].length === 18)
+  if (!initialized) {
+    status = 'notInitialized'
+    return status
+  }
+  const backupPatt = /needs_backup: True|needs_backup: False/i
+  const backuped = !(stdout.match(backupPatt)[0].length === 18)
+  if (initialized && backuped) {
+    status = 'initializedAndBackuped'
+    return status
+  }
+  if (initialized && !backuped) {
+    status = 'initializedAndNotBackuped'
+    return status
+  }
+  throw Error('Unknown Wallet Status')
+}
 // function getNetworkFlag (network) {
 //   if (network === 'testnet') {
 //     return '--testnet'

@@ -98,7 +98,6 @@ export default {
       await loadWallet(this.singleSigElectrumName, this.btcSingleSigTestnet.rpcport,
         this.btcSingleSigTestnet.rpcuser,
         this.btcSingleSigTestnet.rpcpassword, this.btcSingleSigTestnet.network)
-      console.log(this.singleSigHardwareWalletInfo.vpub)
       this.settingUp = false
       console.log('done')
     },
