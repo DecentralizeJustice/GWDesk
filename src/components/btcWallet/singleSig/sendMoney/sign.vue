@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import walletTool from '@/components/hardwareWallets/findWallet.vue'
+import walletTool from '@/components/hardwareWallets/mainWalletTool.vue'
 import {
   validPSBTFromPSBT
 } from '@/assets/util/btc/psbtUtil.js'
@@ -42,7 +42,8 @@ export default {
     walletReady01: true,
     confirm: false,
     done: false,
-    walletInfo: {}
+    walletInfo: {},
+    network: 'testnet'
   }),
   computed: {
     transId: function () {
@@ -62,7 +63,7 @@ export default {
         this.singleSigInfo.rpcPassword)
       const validPSBT = await validPSBTFromPSBT(this.transaction.psbt, decodedElectrumPsbt.data.result, this.masterFingerprint)
       const result = await signTrans(this.walletInfo.model, this.walletInfo.path,
-        'testnet', validPSBT)
+        this.network, validPSBT)
       this.confirm = false
       this.done = true
       this.updateSignedPSBT(result.psbt)

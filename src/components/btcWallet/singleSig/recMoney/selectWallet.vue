@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import walletTool from '@/components/hardwareWallets/findWallet.vue'
+import walletTool from '@/components/hardwareWallets/mainWalletTool.vue'
 export default {
   components: {
     walletTool

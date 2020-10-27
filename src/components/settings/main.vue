@@ -1,7 +1,11 @@
 <template>
     <v-layout align-center justify-center row fill-height>
       <v-flex xs11>
-          <v-card flat>
+        <mainWalletComp
+        v-bind:goal='goal'
+        v-bind:goalInfo='goalInfo'
+        v-on:goalCompleted='goalCompleted'/>
+          <!-- <v-card flat>
             <v-container v-if='hardwareWallets.length === 0'>
               <v-row justify="center">
                 <v-col cols="6" justify="center">
@@ -46,12 +50,13 @@
                 </v-btn>
               </v-row>
             </v-container>
-          </v-card>
+          </v-card> -->
     </v-flex>
     </v-layout>
 </template>
 
 <script>
+import mainWalletComp from '@/components/hardwareWallets/mainWalletTool.vue'
 import {
   listDevices, setup, getxpub
 } from '@/assets/util/hwi/general.js'
@@ -71,17 +76,23 @@ import {
 export default {
   components: {
     // intialize
+    mainWalletComp
   },
   data: () => ({
     dialog: false,
+    goal: 'extractXpub',
     hardwareWallets: [],
     channel: {},
-    settingUp: false
+    settingUp: false,
+    goalInfo: {}
   }),
   methods: {
     ...mapActions('hardwareInfo',
       ['updateHardwareWalletInfo']
     ),
+    goalCompleted: function (goal, info) {
+      console.log(goal, info)
+    },
     setupElectrum: async function () {
       this.settingUp = true
       await hardStopDeamon()
@@ -164,7 +175,7 @@ export default {
     }
   },
   mounted () {
-    this.getDevices()
+    this.goalInfo.xpubPath = this.singleSigHardwareWalletInfo.vpubPath
   }
 }
 </script>

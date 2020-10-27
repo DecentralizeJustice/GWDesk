@@ -10,8 +10,8 @@
         <v-col
           cols="12"
         >
-        <v-btn color="green" @click="walletReady">
-          Ready
+        <v-btn color="green" @click="walletSelected">
+          Select
         </v-btn>
         </v-col>
       </v-row>
@@ -22,7 +22,7 @@
 <script>
 import image1 from '@/assets/photos/trezormodelt.jpeg'
 export default {
-  props: ['walletInfo'],
+  props: ['walletInfo', 'goal'],
   components: {
   },
   data: () => ({
@@ -31,7 +31,7 @@ export default {
   }),
   methods: {
     walletReady: function () {
-      this.$emit('walletReady', this.walletInfo)
+      this.$emit('walletSelected')
     }
   },
   computed: {
