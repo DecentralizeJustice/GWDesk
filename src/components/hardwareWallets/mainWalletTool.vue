@@ -44,11 +44,17 @@ import {
   listDevices
 } from '@/assets/util/hwi/general.js'
 import extractXpub from '@/components/hardwareWallets/extractXpub.vue'
+import getVersion from '@/components/hardwareWallets/getVersion.vue'
+import getInfo from '@/components/hardwareWallets/getGenWalletInfo.vue'
+import showAddress from '@/components/hardwareWallets/showAddress.vue'
 export default {
   components: {
-    extractXpub
+    extractXpub,
+    getVersion,
+    getInfo,
+    showAddress
   },
-  props: ['goal', 'goalInfo'],
+  props: ['goal', 'goalInfo', 'hardwareInfo'],
   data: () => ({
     hardwareWallets: []
   }),
@@ -61,6 +67,15 @@ export default {
       if (this.goal === 'extractXpub') {
         return extractXpub
       }
+      if (this.goal === 'getVersion') {
+        return getVersion
+      }
+      if (this.goal === 'getInfo') {
+        return getInfo
+      }
+      if (this.goal === 'showAddress') {
+        return showAddress
+      }
       console.log('Unknown Goal')
     },
     goalCompleted: function (info) {
@@ -70,6 +85,9 @@ export default {
   computed: {
   },
   mounted () {
+    if (this.hardwareInfo) {
+      this.hardwareWallets = this.hardwareInfo
+    }
     this.getDevices()
   }
 }

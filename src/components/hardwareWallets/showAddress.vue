@@ -1,3 +1,4 @@
+
 <template>
   <v-card flat cols="12">
       <v-row justify="space-around">
@@ -7,7 +8,7 @@
               indeterminate
               color="primary"
             ></v-progress-circular>
-            Extracting Xpub
+            Showing Address On Wallet
           </div>
         </v-col>
       </v-row>
@@ -16,7 +17,7 @@
 
 <script>
 import {
-  getxpub
+  displayAddress
 } from '@/assets/util/hwi/general.js'
 export default {
   props: ['walletInfo', 'goalInfo'],
@@ -25,19 +26,20 @@ export default {
   data: () => ({
   }),
   methods: {
-    getxpub: async function () {
-      const pub = await getxpub(this.walletInfo.model, this.walletInfo.path, this.goalInfo.xpubPath)
-      return pub.xpub
+    displayAddress: async function () {
+      const address = await displayAddress(this.walletInfo.model, this.walletInfo.path)
+      return address
     },
-    emitXpub: function (pub) {
-      this.$emit('goalCompleted', { xpub: pub })
+    emitXpub: function (address) {
+      this.$emit('goalCompleted', { address })
     }
   },
   computed: {
   },
   async mounted () {
-    const pub = await this.getxpub()
-    this.emitXpub(pub)
+    console.log(this.goalInfo)
+    const address = await this.displayAddress()
+    this.emitAddress(address)
   }
 }
 </script>

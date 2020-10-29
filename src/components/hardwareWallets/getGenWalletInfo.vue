@@ -7,7 +7,7 @@
               indeterminate
               color="primary"
             ></v-progress-circular>
-            Extracting Xpub
+            Getting Wallet Info
           </div>
         </v-col>
       </v-row>
@@ -15,9 +15,6 @@
 </template>
 
 <script>
-import {
-  getxpub
-} from '@/assets/util/hwi/general.js'
 export default {
   props: ['walletInfo', 'goalInfo'],
   components: {
@@ -25,19 +22,14 @@ export default {
   data: () => ({
   }),
   methods: {
-    getxpub: async function () {
-      const pub = await getxpub(this.walletInfo.model, this.walletInfo.path, this.goalInfo.xpubPath)
-      return pub.xpub
-    },
-    emitXpub: function (pub) {
-      this.$emit('goalCompleted', { xpub: pub })
+    emitInfo: function (info) {
+      this.$emit('goalCompleted', { info })
     }
   },
   computed: {
   },
   async mounted () {
-    const pub = await this.getxpub()
-    this.emitXpub(pub)
+    this.emitInfo(this.walletInfo)
   }
 }
 </script>

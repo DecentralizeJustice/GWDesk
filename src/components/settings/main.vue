@@ -2,68 +2,29 @@
     <v-layout align-center justify-center row fill-height>
       <v-flex xs11>
         <mainWalletComp
+        v-if='!allInfoCollected'
         v-bind:goal='goal'
         v-bind:goalInfo='goalInfo'
         v-on:goalCompleted='goalCompleted'/>
-          <!-- <v-card flat>
-            <v-container v-if='hardwareWallets.length === 0'>
+          <v-card flat v-if='allInfoCollected'>
+            <v-container v-if='settingUpWalletSoftware'>
               <v-row justify="center">
-                <v-col cols="6" justify="center">
-                  <v-alert
-                    dense
-                    border="left"
-                    type="info"
-                  >
-                    Plug In Hardware Wallet
-                  </v-alert>
-                </v-col>
-              </v-row>
-              <v-row justify="center">
-                <v-btn
-                  color="purple darken-4"
-                  class="mx-2 my-2"
-                  v-on:click="getDevices()"
-                >
-                  Check For Wallet
-                </v-btn>
+                Setting Up Wallet Software
               </v-row>
             </v-container>
-            <v-container v-if='!walletInitialized'>
+            <v-container v-if='done'>
               <v-row justify="center">
-                <v-btn
-                  color="blue darken-4"
-                  class="mx-2 my-2"
-                  v-on:click="setup()"
-                >
-                  Initialize Wallet
-                </v-btn>
+                Done!!!!
               </v-row>
             </v-container>
-            <v-container v-if='walletInitialized && hardwareWallets.length !== 0'>
-              <v-row justify="center">
-                <v-btn
-                  color="orange"
-                  class="mx-2 my-2"
-                  v-on:click="extractWalletInfo()"
-                >
-                  Export Wallet Info
-                </v-btn>
-              </v-row>
-            </v-container>
-          </v-card> -->
+          </v-card>
     </v-flex>
     </v-layout>
 </template>
 
 <script>
 import mainWalletComp from '@/components/hardwareWallets/mainWalletTool.vue'
-import {
-  listDevices, setup, getxpub
-} from '@/assets/util/hwi/general.js'
 import { pubTovpub } from '@/assets/util/btc/pubUtil.js'
-import {
-  getVersionNumber
-} from '@/assets/util/trezorCli/general.js'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import {
   startDeamon, hardStopDeamon, deleteWallet, unpackElectrum, configDaemon,
@@ -79,22 +40,48 @@ export default {
     mainWalletComp
   },
   data: () => ({
-    dialog: false,
+    allInfoCollected: false,
+    settingUpWalletSoftware: false,
+    done: false,
     goal: 'extractXpub',
-    hardwareWallets: [],
-    channel: {},
-    settingUp: false,
-    goalInfo: {}
+    goalInfo: {},
+    vpub: '',
+    version: '',
+    fingerprint: '',
+    model: ''
   }),
   methods: {
     ...mapActions('hardwareInfo',
       ['updateHardwareWalletInfo']
     ),
+    setXpub: async function (xpub) {
+      const vpub = await pubTovpub(xpub)
+      this.vpub = vpub
+      this.goal = 'getVersion'
+    },
+    setVersion: async function (version) {
+      this.version = version
+      this.goal = 'getInfo'
+    },
+    getWalletInfo: async function (info) {
+      this.fingerprint = info.fingerprint
+      this.model = info.model
+      this.setWalletInfo()
+    },
     goalCompleted: function (goal, info) {
-      console.log(goal, info)
+      if (goal === 'extractXpub') {
+        this.setXpub(info.xpub)
+      }
+      if (goal === 'getVersion') {
+        this.setVersion(info.version)
+      }
+      if (goal === 'getInfo') {
+        this.getWalletInfo(info.info)
+      }
     },
     setupElectrum: async function () {
-      this.settingUp = true
+      this.allInfoCollected = true
+      this.settingUpWalletSoftware = true
       await hardStopDeamon()
       await deleteWallet(this.singleSigElectrumName, this.btcSingleSigTestnet.network)
       await deleteElectrumFolder(this.btcSingleSigTestnet.network)
@@ -109,70 +96,32 @@ export default {
       await loadWallet(this.singleSigElectrumName, this.btcSingleSigTestnet.rpcport,
         this.btcSingleSigTestnet.rpcuser,
         this.btcSingleSigTestnet.rpcpassword, this.btcSingleSigTestnet.network)
-      this.settingUp = false
-      console.log('done')
+      this.settingUpWalletSoftware = false
+      this.done = true
     },
-    getxpub: async function (model, path, xpubpath) {
-      const pub = await getxpub(model, path, xpubpath)
-      return pub
-    },
-    getVersion: async function () {
-      const versionNumber = await getVersionNumber()
-      return versionNumber
-    },
-    extractWalletInfo: async function () {
-      const hwiInfo = await listDevices()
-      const xpubPath = this.singleSigHardwareWalletInfo
-      const vpub = await this.getxpub(hwiInfo[0].model, hwiInfo[0].path, xpubPath.vpubPath)
-      const convertedvpub = pubTovpub(vpub.xpub)
-      const firmwareVersion = await this.getVersion()
+    setWalletInfo: async function () {
+      const vpub = this.vpub
+      const firmwareVersion = this.version
+      const fingerprint = this.fingerprint
+      const model = this.model
       const walletInfo = {
-        fingerprint: hwiInfo[0].fingerprint,
-        model: hwiInfo[0].model,
+        fingerprint,
+        model,
         firmwareVersion,
-        vpub: convertedvpub
+        vpub
       }
-      this.updateHardwareWalletInfo(walletInfo)
+      await this.updateHardwareWalletInfo(walletInfo)
       this.setupElectrum()
-    },
-    setup: async function () {
-      this.channel = setup(this.hardwareWallets[0].model, this.hardwareWallets[0].path)
-      this.addListeners(this.channel)
-    },
-    getDevices: async function () {
-      const result = await listDevices()
-      this.hardwareWallets = result
-    },
-    addListeners: function (stream) {
-      stream.stdout.on('data', (data) => {
-        console.log(`stdout: ${data}`)
-      })
-      stream.stderr.on('data', (data) => {
-        console.error(`stderr: ${data}`)
-      })
-      stream.on('close', (code) => {
-        console.log(`child process exited with code ${code}`)
-      })
     }
   },
   computed: {
     ...mapState('bitcoinInfo', [
-      // map this.count to store.state.count
       'btcSingleSigTestnet'
     ]),
     ...mapGetters('hardwareInfo', [
       'singleSigHardwareWalletInfo',
       'singleSigElectrumName'
-    ]),
-    walletInitialized () {
-      if (this.hardwareWallets.length === 0) {
-        return true
-      }
-      if (this.hardwareWallets[0].error === 'Not initialized') {
-        return false
-      }
-      return true
-    }
+    ])
   },
   mounted () {
     this.goalInfo.xpubPath = this.singleSigHardwareWalletInfo.vpubPath

@@ -112,7 +112,7 @@ export default {
   },
   data: () => ({
     walletReady: false,
-    retries: 20,
+    retries: 10,
     walletError: false,
     correctWalletExist: true
   }),

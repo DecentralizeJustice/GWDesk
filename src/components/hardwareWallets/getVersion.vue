@@ -7,7 +7,7 @@
               indeterminate
               color="primary"
             ></v-progress-circular>
-            Extracting Xpub
+            Getting Version
           </div>
         </v-col>
       </v-row>
@@ -16,28 +16,28 @@
 
 <script>
 import {
-  getxpub
-} from '@/assets/util/hwi/general.js'
+  getVersionNumber
+} from '@/assets/util/trezorCli/general.js'
 export default {
-  props: ['walletInfo', 'goalInfo'],
+  props: ['goalInfo'],
   components: {
   },
   data: () => ({
   }),
   methods: {
-    getxpub: async function () {
-      const pub = await getxpub(this.walletInfo.model, this.walletInfo.path, this.goalInfo.xpubPath)
-      return pub.xpub
+    getVersionNumber: async function () {
+      const version = await getVersionNumber()
+      return version
     },
-    emitXpub: function (pub) {
-      this.$emit('goalCompleted', { xpub: pub })
+    emitVersion: function (version) {
+      this.$emit('goalCompleted', { version: version })
     }
   },
   computed: {
   },
   async mounted () {
-    const pub = await this.getxpub()
-    this.emitXpub(pub)
+    const version = await this.getVersionNumber()
+    this.emitVersion(version)
   }
 }
 </script>
