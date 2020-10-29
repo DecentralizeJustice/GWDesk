@@ -2,8 +2,9 @@
   <v-container>
       <mainWalletComp
       v-bind:goal='goal'
-      v-on:goalCompleted='goalCompleted'/>
-      <v-flex xs12 v-if='false'>
+      v-bind:goalInfo='goalInfo'
+      v-if='addressOnWallet && !addressReady'/>
+      <v-flex xs12>
         <v-card-title  v-show="!addressReady" primary-title class="justify-center">
           <div>
             <h3 class="headline" >Enter The Last 4 Characters of Address:</h3>
@@ -26,6 +27,7 @@
         <v-btn
           color="orange"
           v-on:click="showAddress()"
+          v-show="!addressReady"
         >
           Show Address Again
         </v-btn>
@@ -42,7 +44,6 @@
 <script>
 import mainWalletComp from '@/components/hardwareWallets/mainWalletTool.vue'
 import { findPath } from '@/assets/views/btcSingleSig/receive.js'
-import { displayAddress } from '@/assets/util/hwi/general.js'
 import { getunusedaddress, listAddresses } from '@/assets/util/btc/electrum/general.js'
 import { mapState, mapGetters } from 'vuex'
 const { clipboard } = require('electron')
@@ -55,12 +56,12 @@ export default {
     path: '',
     addressReady: false,
     addressGuess: '',
-    step: 0,
-    walletInfo: {},
-    goal: 'showAddress'
+    goal: 'showAddress',
+    goalInfo: { path: '', network: '' },
+    addressOnWallet: true
   }),
   methods: {
-    async setup () {
+    setup: async function () {
       const walletInfo = this.btcSingleSigTestnet
       const unusedAddress = await
       getunusedaddress(this.singleSigElectrumName, walletInfo.network,
@@ -70,30 +71,26 @@ export default {
       listAddresses(this.singleSigElectrumName, walletInfo.rpcport,
         walletInfo.rpcuser, walletInfo.rpcpassword, walletInfo.network)
       const addressListLength = addressList.data.result.length
-      const pathIndex = findPath(this.singleSigHardwareWalletInfo.vpub, this.unusedAddress, addressListLength)
+      const pathIndex = await findPath(this.singleSigHardwareWalletInfo.vpub, this.unusedAddress, addressListLength)
       this.path = this.singleSigHardwareWalletInfo.vpubPath + '/0/'
       this.path += pathIndex
-      await this.showAddress()
     },
-    copyToClipboard () {
+    copyToClipboard: function () {
       clipboard.writeText(this.unusedAddress, 'selection')
     },
-    checkGuess () {
+    checkGuess: function () {
       const last4 = this.unusedAddress.slice(-4)
       if (this.addressGuess === last4) {
         this.addressReady = true
       }
     },
-    async showAddress () {
-      await displayAddress(this.walletInfo.model, this.walletInfo.path, this.path,
-        this.btcSingleSigTestnet.network)
-    },
-    walletReady: function (walletInfo) {
-      this.walletInfo = walletInfo
-      this.step += 1
-    },
-    goalCompleted: function (goal, info) {
-      console.log(goal, info)
+    showAddress: async function () {
+      function sleep (ms) {
+        return new Promise(resolve => setTimeout(resolve, ms))
+      }
+      this.addressOnWallet = false
+      await sleep(1000)
+      this.addressOnWallet = true
     }
   },
   computed: {
@@ -106,7 +103,9 @@ export default {
     ])
   },
   async mounted () {
-
+    await this.setup()
+    this.goalInfo.path = this.path
+    this.goalInfo.network = this.btcSingleSigTestnet.network
   }
 }
 </script>

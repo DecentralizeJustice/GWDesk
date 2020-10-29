@@ -27,19 +27,18 @@ export default {
   }),
   methods: {
     displayAddress: async function () {
-      const address = await displayAddress(this.walletInfo.model, this.walletInfo.path)
-      return address
+      displayAddress(this.walletInfo.model, this.walletInfo.path,
+        this.goalInfo.path, this.goalInfo.network)
     },
-    emitXpub: function (address) {
-      this.$emit('goalCompleted', { address })
+    emitAddress: function () {
+      this.$emit('goalCompleted')
     }
   },
   computed: {
   },
   async mounted () {
-    console.log(this.goalInfo)
-    const address = await this.displayAddress()
-    this.emitAddress(address)
+    await this.displayAddress()
+    this.emitAddress()
   }
 }
 </script>
