@@ -1,5 +1,4 @@
 <template>
-  <div>
   <v-col
   :cols="12"
   >
@@ -12,6 +11,19 @@
       >
       <v-alert type="error" >
         Not Enough Money
+      </v-alert>
+
+      </v-col>
+    </v-row>
+    <v-row
+      justify="center"
+      v-if='noMoney'
+    >
+      <v-col
+      :cols="6"
+      >
+      <v-alert type="error" >
+        No Funds
       </v-alert>
 
       </v-col>
@@ -81,7 +93,7 @@
             <h1 class="title">Available Balance:</h1>
             {{balance}} BTC <br>
             <v-btn v-if="addressArray.length === 1" color="primary"
-              class="mt-1" @click="setNoChangeAmount">
+              class="mt-1" @click="setNoChangeAmount" :disabled='pause'>
               Send All
             </v-btn>
           </v-card-text>
@@ -121,7 +133,6 @@
       </v-col>
     </v-row>
   </v-col>
-</div>
 </template>
 
 <script>
@@ -138,6 +149,7 @@ export default {
   props: ['transaction', 'singleSigInfo'],
   data: function () {
     return {
+      noMoney: false,
       oldTransInfo: {
         amountArray: [],
         speed: 0
@@ -318,8 +330,13 @@ export default {
   mounted: async function () {
     await this.setupFeeInfo()
     await this.setBalance()
-    await this.fillinAmounts()
-    await this.baseTransaction()
+    if (this.balance !== '0') {
+      await this.fillinAmounts()
+      await this.baseTransaction()
+    } else {
+      this.pause = true
+      this.noMoney = true
+    }
   }
 }
 </script>

@@ -23,7 +23,6 @@
           v-on:updateEstimatedTime='updateEstimatedTime'/>
 
           <bottomNav v-on:change="updateStep"
-            v-on:finish="finish"
             v-bind:transaction="transaction"
             v-bind:currentSection="currentSection"
             v-bind:continueDisabled='continueDisabled'
@@ -129,6 +128,9 @@ export default {
     },
     updateSignedPSBT (newPSBT) {
       this.transaction.signedPSBT = newPSBT
+      if (newPSBT) {
+        this.finish()
+      }
     },
     updateAddressArray (newArray) {
       this.transaction.addressArray = newArray

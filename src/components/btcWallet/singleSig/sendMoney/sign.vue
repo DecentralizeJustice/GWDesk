@@ -1,25 +1,23 @@
 <template>
-
-      <v-flex xs12>
-        <div v-show="walletReady01">
-        <v-card-text primary-title class="justify-center">
-          <div>
-            <h3 class="headline" >Unlock 'My Trezor' Hardware Wallet</h3>
-          </div>
-        </v-card-text>
-        <walletTool
-        v-on:walletReady='walletReady'/>
-      </div>
-      <v-card-text primary-title class="justify-center" v-show="confirm">
-          <h3 class="headline" >Confirm Transaction on Hardware Wallet</h3>
-      </v-card-text>
-      <v-card-text class="justify-center" v-show="done">
-          <h2 class="headline" >Transaction Complete</h2>
-          <h2 class="title pt-3" >Transaction Id:</h2>
-          {{transaction.transactionId}}
-      </v-card-text>
-      </v-flex>
-
+  <v-flex xs12>
+    <walletTool
+    v-bind:goal='goal'
+    v-bind:goalInfo='goalInfo'
+    v-on:goalCompleted='goalCompleted'
+    v-if='!done && transSent'/>
+    <v-btn
+      color="purple darken-4"
+      v-on:click="sendTransaction()"
+      v-show="!done"
+    >
+      Send Transaction Again
+    </v-btn>
+  <v-card-text class="justify-center" v-show="done">
+      <h2 class="headline" >Transaction Complete</h2>
+      <h2 class="title pt-3" >Transaction Id:</h2>
+      {{transaction.transactionId}}
+  </v-card-text>
+  </v-flex>
 </template>
 
 <script>
@@ -27,9 +25,6 @@ import walletTool from '@/components/hardwareWallets/mainWalletTool.vue'
 import {
   validPSBTFromPSBT
 } from '@/assets/util/btc/psbtUtil.js'
-import {
-  signTrans
-} from '@/assets/util/hwi/general.js'
 import {
   deserializeTrans
 } from '@/assets/util/btc/electrum/general.js'
@@ -39,11 +34,11 @@ export default {
   },
   props: ['transaction', 'singleSigInfo', 'masterFingerprint'],
   data: () => ({
-    walletReady01: true,
-    confirm: false,
     done: false,
-    walletInfo: {},
-    network: 'testnet'
+    transSent: true,
+    network: 'testnet',
+    goal: 'signTrans',
+    goalInfo: { network: '', psbt: '' }
   }),
   computed: {
     transId: function () {
@@ -51,29 +46,35 @@ export default {
     }
   },
   methods: {
-    walletReady: function (walletInfo) {
-      this.walletReady01 = false
-      this.confirm = true
-      this.walletInfo = walletInfo
-      this.sign()
+    sendTransaction: async function () {
+      function sleep (ms) {
+        return new Promise(resolve => setTimeout(resolve, ms))
+      }
+      this.transSent = false
+      await sleep(1000)
+      this.transSent = true
     },
-    sign: async function () {
+    setupSign: async function () {
       const decodedElectrumPsbt = await deserializeTrans(this.transaction.psbt,
         this.singleSigInfo.rpcPort, this.singleSigInfo.rpcUser,
         this.singleSigInfo.rpcPassword)
       const validPSBT = await validPSBTFromPSBT(this.transaction.psbt, decodedElectrumPsbt.data.result, this.masterFingerprint)
-      const result = await signTrans(this.walletInfo.model, this.walletInfo.path,
-        this.network, validPSBT)
-      this.confirm = false
-      this.done = true
-      this.updateSignedPSBT(result.psbt)
+      this.goalInfo.network = this.network
+      this.goalInfo.psbt = validPSBT
     },
     updateSignedPSBT: function (psbt) {
       this.$emit('updateSignedPSBT', psbt)
+    },
+    goalCompleted: function (goal, info) {
+      if (info.signedTransation !== undefined) {
+        this.done = true
+        this.updateSignedPSBT(info.signedTransation)
+      }
     }
   },
-  mounted () {
+  mounted: async function () {
     this.$emit('updateSignedPSBT', undefined)
+    await this.setupSign()
   }
 }
 </script>
