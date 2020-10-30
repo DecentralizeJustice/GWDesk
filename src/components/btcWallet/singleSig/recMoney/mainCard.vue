@@ -3,7 +3,8 @@
       <mainWalletComp
       v-bind:goal='goal'
       v-bind:goalInfo='goalInfo'
-      v-if='addressOnWallet && !addressReady'/>
+      :key='keyStuff'
+      v-if='!addressReady'/>
       <v-flex xs12>
         <v-card-title  v-show="!addressReady" primary-title class="justify-center">
           <div>
@@ -58,7 +59,8 @@ export default {
     addressGuess: '',
     goal: 'showAddress',
     goalInfo: { path: '', network: '' },
-    addressOnWallet: true
+    addressOnWallet: true,
+    keyStuff: 0
   }),
   methods: {
     setup: async function () {
@@ -85,12 +87,11 @@ export default {
       }
     },
     showAddress: async function () {
-      function sleep (ms) {
-        return new Promise(resolve => setTimeout(resolve, ms))
+      if (this.keyStuff === 0) {
+        this.keyStuff = 1
+      } else {
+        this.keyStuff = 0
       }
-      this.addressOnWallet = false
-      await sleep(1000)
-      this.addressOnWallet = true
     }
   },
   computed: {

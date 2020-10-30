@@ -2,12 +2,12 @@
     <v-layout align-center justify-center row fill-height>
       <v-flex xs11>
         <mainWalletComp
-        v-if='!allInfoCollected'
+        v-if='!allInfoCollected && !done'
         v-bind:goal='goal'
         v-bind:goalInfo='goalInfo'
         v-on:goalCompleted='goalCompleted'/>
-          <v-card flat v-if='allInfoCollected'>
-            <v-container v-if='settingUpWalletSoftware'>
+          <v-card flat v-if='allInfoCollected || done'>
+            <v-container v-if='settingUpWalletSoftware && !done'>
               <v-row justify="center">
                 Setting Up Wallet Software
               </v-row>
@@ -36,7 +36,6 @@ import {
 } from '@/assets/util/btc/electrum/general.js'
 export default {
   components: {
-    // intialize
     mainWalletComp
   },
   data: () => ({
@@ -57,7 +56,12 @@ export default {
     setXpub: async function (xpub) {
       const vpub = await pubTovpub(xpub)
       this.vpub = vpub
-      this.goal = 'getVersion'
+      if (this.singleSigHardwareWalletInfo.vpub === this.vpub) {
+        this.done = true
+        console.log(this.done)
+      } else {
+        this.goal = 'getVersion'
+      }
     },
     setVersion: async function (version) {
       this.version = version

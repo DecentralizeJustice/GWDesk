@@ -4,7 +4,8 @@
     v-bind:goal='goal'
     v-bind:goalInfo='goalInfo'
     v-on:goalCompleted='goalCompleted'
-    v-if='!done && transSent'/>
+    v-if='!done && transSent'
+    :key="keyStuff"/>
     <v-btn
       color="purple darken-4"
       v-on:click="sendTransaction()"
@@ -35,6 +36,7 @@ export default {
   props: ['transaction', 'singleSigInfo', 'masterFingerprint'],
   data: () => ({
     done: false,
+    keyStuff: 0,
     transSent: true,
     network: 'testnet',
     goal: 'signTrans',
@@ -47,12 +49,11 @@ export default {
   },
   methods: {
     sendTransaction: async function () {
-      function sleep (ms) {
-        return new Promise(resolve => setTimeout(resolve, ms))
+      if (this.keyStuff === 0) {
+        this.keyStuff = 1
+      } else {
+        this.keyStuff = 0
       }
-      this.transSent = false
-      await sleep(1000)
-      this.transSent = true
     },
     setupSign: async function () {
       const decodedElectrumPsbt = await deserializeTrans(this.transaction.psbt,
