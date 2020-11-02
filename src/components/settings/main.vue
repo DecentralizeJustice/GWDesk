@@ -58,7 +58,6 @@ export default {
       this.vpub = vpub
       if (this.singleSigHardwareWalletInfo.vpub === this.vpub) {
         this.done = true
-        console.log(this.done)
       } else {
         this.goal = 'getVersion'
       }

@@ -67,6 +67,13 @@
             >
               Get Status
             </v-btn>
+            <v-btn
+              color="green"
+              class="mx-2 my-2"
+              v-on:click="wipe()"
+            >
+              Wipe
+            </v-btn>
             </div>
           </v-card>
     </v-flex>
@@ -75,7 +82,7 @@
 
 <script>
 import {
-  unpackMainBinary, unpackPhotos, changeName, changePhoto,
+  unpackMainBinary, unpackPhotos, changeName, changePhoto, wipe,
   getInfo, getNode, updateFirmware, getVersionNumber, getStatus
 } from '@/assets/util/trezorCli/general.js'
 export default {
@@ -103,6 +110,10 @@ export default {
     },
     getStatus: async function () {
       const test = await getStatus()
+      console.log(test)
+    },
+    wipe: async function () {
+      const test = await wipe()
       console.log(test)
     },
     unpackPhotos: async function () {

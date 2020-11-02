@@ -48,13 +48,15 @@ import getVersion from '@/components/hardwareWallets/getVersion.vue'
 import getInfo from '@/components/hardwareWallets/getGenWalletInfo.vue'
 import showAddress from '@/components/hardwareWallets/showAddress.vue'
 import signTrans from '@/components/hardwareWallets/signTrans.vue'
+import getStatus from '@/components/hardwareWallets/getStatus.vue'
 export default {
   components: {
     extractXpub,
     getVersion,
     getInfo,
     showAddress,
-    signTrans
+    signTrans,
+    getStatus
   },
   props: ['goal', 'goalInfo', 'hardwareInfo'],
   data: () => ({
@@ -80,6 +82,9 @@ export default {
       }
       if (this.goal === 'signTrans') {
         return signTrans
+      }
+      if (this.goal === 'getStatus') {
+        return getStatus
       }
       console.log('Unknown Goal')
     },

@@ -58,6 +58,11 @@ export async function getInfo () {
   const { stdout } = await exec(`"${binary}"/macTrezorCliTool get-features`)
   return stdout
 }
+export async function wipe () {
+  const binary = app.getPath('userData') + '/binaries/macTrezorCliTool'
+  const { stdout } = await exec(`"${binary}"/macTrezorCliTool wipe-device -b`)
+  return stdout
+}
 export function getNode (node) {
   const binaryFolder = app.getPath('userData') + '/binaries/macTrezorCliTool'
   const commands = ['get-public-node', '-n', node]
@@ -100,20 +105,31 @@ export async function getVersionNumber () {
 export async function getStatus () {
   let status = ''
   const stdout = await getInfo()
+  const firmwarePatt = /firmware_present: False/i
+  const isNull = stdout.match(firmwarePatt) === null
+  if (!isNull) {
+    const firmwarePresent = !(stdout.match(firmwarePatt)[0] === 'firmware_present: False')
+    if (!firmwarePresent) {
+      status = [0, 'noFirmware']
+      return status
+    } else {
+      throw Error('Not possible wallet state')
+    }
+  }
   const initializePatt = /initialized: True|initialized: False/i
   const initialized = !(stdout.match(initializePatt)[0].length === 18)
   if (!initialized) {
-    status = 'notInitialized'
+    status = [1, 'notInitialized']
     return status
   }
   const backupPatt = /needs_backup: True|needs_backup: False/i
   const backuped = !(stdout.match(backupPatt)[0].length === 18)
-  if (initialized && backuped) {
-    status = 'initializedAndBackuped'
+  if (initialized && !backuped) {
+    status = [2, 'initializedAndNotBackuped']
     return status
   }
-  if (initialized && !backuped) {
-    status = 'initializedAndNotBackuped'
+  if (initialized && backuped) {
+    status = [3, 'initializedAndBackuped']
     return status
   }
   throw Error('Unknown Wallet Status')

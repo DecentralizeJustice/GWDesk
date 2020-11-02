@@ -7,19 +7,19 @@
     </v-card-title>
     <v-divider></v-divider>
     <v-tabs>
-      <v-tab>
+      <!-- <v-tab>
         General
       </v-tab>
       <v-tab>
+        Bitcoin
+      </v-tab> -->
+      <v-tab>
         Hardware Wallet
       </v-tab>
-      <v-tab>
-        Bitcoin
-      </v-tab>
-      <v-tab-item>
-      </v-tab-item>
       <v-tab-item>
           <hardwareWallet/>
+      </v-tab-item>
+      <v-tab-item>
       </v-tab-item>
       <v-tab-item>
       </v-tab-item>
