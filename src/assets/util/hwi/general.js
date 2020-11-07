@@ -9,6 +9,13 @@ const zlib = require('zlib')
 const tar = require('tar-fs')
 const binaryFolder = '/binaries/'
 const os = require('os')
+export function backup () {
+  const binaryFolder = app.getPath('userData') + '/binaries/macTrezorCliTool'
+  const commands = ['firmware-update', 'backup-device']
+  const command = spawn('./macTrezorCliTool', commands,
+    { cwd: binaryFolder })
+  return command
+}
 
 export async function unpackBinary () {
   const destination = app.getPath('userData') + '/binaries'

@@ -7,7 +7,7 @@
               indeterminate
               color="primary"
             ></v-progress-circular>
-            Extracting Xpub
+            Check Device for Backup Info, Do not unplug device!!!
           </div>
         </v-col>
       </v-row>
@@ -16,8 +16,8 @@
 
 <script>
 import {
-  getxpub
-} from '@/assets/util/hwi/general.js'
+  backup
+} from '@/assets/util/trezorCli/general.js'
 export default {
   props: ['walletInfo', 'goalInfo'],
   components: {
@@ -25,19 +25,17 @@ export default {
   data: () => ({
   }),
   methods: {
-    getxpub: async function () {
-      const pub = await getxpub(this.walletInfo.model, this.walletInfo.path, this.goalInfo.xpubPath)
-      return pub.xpub
-    },
-    emitXpub: function (pub) {
-      this.$emit('goalCompleted', { xpub: pub })
+    backupFunc: async function () {
+      const result = await backup()
+      if (result === 'Seed successfully backed up') {
+        this.$emit('goalCompleted', { backupSuccess: true })
+      }
     }
   },
   computed: {
   },
   async mounted () {
-    const pub = await this.getxpub()
-    this.emitXpub(pub)
+    await this.backupFunc()
   }
 }
 </script>

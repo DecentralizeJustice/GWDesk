@@ -9,7 +9,9 @@
         <syncNewWallet
         v-if='syncingWallet'
         v-on:syncDone='syncingWallet = false'/>
-        <setupWallet v-if='needsToBeSetup'/>
+        <setupWallet
+        v-if='needsToBeSetup'
+        v-on:hwWalletSetup='hwSetup'/>
         <v-card flat v-if='incorrectWallet && !syncingWallet && !needsToBeSetup'>
           <v-container>
             <v-row justify="center">
@@ -72,6 +74,10 @@ export default {
         this.goal = 'manageWallet'
       }
     },
+    hwSetup: function () {
+      this.goal = 'getStatus'
+      this.needsToBeSetup = false
+    },
     goalCompleted: function (goal, info) {
       if (goal === 'getStatus') {
         if (info.status[0] !== 3) {
@@ -99,8 +105,6 @@ export default {
     ])
   },
   mounted () {
-    // this.checkIfWalletIsCorrect()
-    // this.goalInfo.xpubPath = this.singleSigHardwareWalletInfo.vpubPath
   }
 }
 </script>

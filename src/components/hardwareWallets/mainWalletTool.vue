@@ -53,6 +53,7 @@ import checkMasterFingerprint from '@/components/hardwareWallets/walletGoals/che
 import manageWallet from '@/components/hardwareWallets/walletGoals/manageWallet.vue'
 import installFirmware from '@/components/hardwareWallets/walletGoals/installFirmware.vue'
 import initialize from '@/components/hardwareWallets/walletGoals/initialize.vue'
+import backup from '@/components/hardwareWallets/walletGoals/backup.vue'
 export default {
   components: {
     extractXpub,
@@ -63,7 +64,8 @@ export default {
     getStatus,
     checkMasterFingerprint,
     installFirmware,
-    initialize
+    initialize,
+    backup
   },
   props: ['goal', 'goalInfo', 'hardwareInfo'],
   data: () => ({
@@ -104,6 +106,9 @@ export default {
       }
       if (this.goal === 'initialize') {
         return initialize
+      }
+      if (this.goal === 'backup') {
+        return backup
       }
       console.log('Unknown Goal')
     },

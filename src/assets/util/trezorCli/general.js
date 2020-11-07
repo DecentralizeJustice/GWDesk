@@ -84,18 +84,13 @@ export function updateFirmware (version) {
     { cwd: binaryFolder })
   return command
 }
-export async function listDevices () {
-  const binary = app.getPath('userData') + '/binaries/hwi'
-  const { stdout } = await exec(`"${binary}" enumerate`)
-  const json = JSON.parse(stdout)
-  return json
-}
 
 export async function backup () {
-  const binary = app.getPath('userData') + '/binaries/hwi'
-  const { stdout } = await exec(`"${binary}" backup-device`)
+  const binary = app.getPath('userData') + '/binaries/macTrezorCliTool'
+  const { stdout } = await exec(`"${binary}"/macTrezorCliTool backup-device`)
   return stdout
 }
+
 export async function getVersionNumber () {
   const stdout = await getInfo()
   const majorPatt = /major_version: [0-9]/i
@@ -108,15 +103,13 @@ export async function getVersionNumber () {
 }
 
 export async function getStatus () {
-  let status = ''
   const stdout = await getInfo()
   const firmwarePatt = /firmware_present: False/i
   const isNull = stdout.match(firmwarePatt) === null
   if (!isNull) {
     const firmwarePresent = !(stdout.match(firmwarePatt)[0] === 'firmware_present: False')
     if (!firmwarePresent) {
-      status = [0, 'noFirmware']
-      return status
+      return [0, 'noFirmware']
     } else {
       throw Error('Not possible wallet state')
     }
@@ -124,18 +117,21 @@ export async function getStatus () {
   const initializePatt = /initialized: True|initialized: False/i
   const initialized = !(stdout.match(initializePatt)[0].length === 18)
   if (!initialized) {
-    status = [1, 'notInitialized']
-    return status
+    return [1, 'notInitialized']
   }
   const backupPatt = /needs_backup: True|needs_backup: False/i
+  const unfinishedBackuppatt = /unfinished_backup: True/i
   const backuped = !(stdout.match(backupPatt)[0].length === 18)
-  if (initialized && !backuped) {
-    status = [2, 'initializedAndNotBackuped']
-    return status
+  const unfinishedBackup = (stdout.match(unfinishedBackuppatt) !== null) &&
+    (stdout.match(unfinishedBackuppatt)[0].length === 23)
+  if (initialized && unfinishedBackup) {
+    return [4, 'backupFailed']
   }
-  if (initialized && backuped) {
-    status = [3, 'initializedAndBackuped']
-    return status
+  if (initialized && !backuped) {
+    return [2, 'initializedAndNotBackuped']
+  }
+  if (initialized && backuped && !unfinishedBackup) {
+    return [3, 'initializedAndBackuped']
   }
   throw Error('Unknown Wallet Status')
 }

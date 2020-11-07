@@ -18,7 +18,8 @@ export default {
   },
   data: () => ({
     status: '',
-    goal: 'getStatus'
+    goal: 'getStatus',
+    goalInfo: {}
   }),
   methods: {
     goalCompleted: function (goal, info) {
@@ -29,7 +30,7 @@ export default {
       }
     },
     walletSetup: async function () {
-      this.$emit('walletSetup')
+      this.$emit('hwWalletSetup')
     },
     updateStatus: function () {
       this.goal = 'getStatus'
@@ -48,6 +49,9 @@ export default {
       if (status === 3) {
         this.walletSetup()
       }
+      if (status === 4) {
+        console.log('backup failed')
+      }
     }
   },
   computed: {
@@ -58,7 +62,7 @@ export default {
     }
   },
   mounted () {
-    this.updateStatus()
+    this.goal = 'getStatus'
   }
 }
 </script>

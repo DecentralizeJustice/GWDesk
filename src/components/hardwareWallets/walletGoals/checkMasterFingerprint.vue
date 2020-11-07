@@ -15,6 +15,9 @@
 </template>
 
 <script>
+import {
+  listDevices
+} from '@/assets/util/hwi/general.js'
 export default {
   props: ['walletInfo', 'goalInfo'],
   components: {
@@ -29,7 +32,8 @@ export default {
   computed: {
   },
   async mounted () {
-    const result = (this.goalInfo.fingerprint === this.walletInfo.fingerprint)
+    const test = await listDevices()
+    const result = (this.goalInfo.fingerprint === test[0].fingerprint)
     this.emitResult(result)
   }
 }
