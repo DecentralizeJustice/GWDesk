@@ -43,12 +43,16 @@
 import {
   listDevices
 } from '@/assets/util/hwi/general.js'
-import extractXpub from '@/components/hardwareWallets/extractXpub.vue'
-import getVersion from '@/components/hardwareWallets/getVersion.vue'
-import getInfo from '@/components/hardwareWallets/getGenWalletInfo.vue'
-import showAddress from '@/components/hardwareWallets/showAddress.vue'
-import signTrans from '@/components/hardwareWallets/signTrans.vue'
-import getStatus from '@/components/hardwareWallets/getStatus.vue'
+import extractXpub from '@/components/hardwareWallets/walletGoals/extractXpub.vue'
+import getVersion from '@/components/hardwareWallets/walletGoals/getVersion.vue'
+import getInfo from '@/components/hardwareWallets/walletGoals/getGenWalletInfo.vue'
+import showAddress from '@/components/hardwareWallets/walletGoals/showAddress.vue'
+import signTrans from '@/components/hardwareWallets/walletGoals/signTrans.vue'
+import getStatus from '@/components/hardwareWallets/walletGoals/getStatus.vue'
+import checkMasterFingerprint from '@/components/hardwareWallets/walletGoals/checkMasterFingerprint.vue'
+import manageWallet from '@/components/hardwareWallets/walletGoals/manageWallet.vue'
+import installFirmware from '@/components/hardwareWallets/walletGoals/installFirmware.vue'
+import initialize from '@/components/hardwareWallets/walletGoals/initialize.vue'
 export default {
   components: {
     extractXpub,
@@ -56,7 +60,10 @@ export default {
     getInfo,
     showAddress,
     signTrans,
-    getStatus
+    getStatus,
+    checkMasterFingerprint,
+    installFirmware,
+    initialize
   },
   props: ['goal', 'goalInfo', 'hardwareInfo'],
   data: () => ({
@@ -85,6 +92,18 @@ export default {
       }
       if (this.goal === 'getStatus') {
         return getStatus
+      }
+      if (this.goal === 'checkFingerPrint') {
+        return checkMasterFingerprint
+      }
+      if (this.goal === 'manageWallet') {
+        return manageWallet
+      }
+      if (this.goal === 'installFirmware') {
+        return installFirmware
+      }
+      if (this.goal === 'initialize') {
+        return initialize
       }
       console.log('Unknown Goal')
     },

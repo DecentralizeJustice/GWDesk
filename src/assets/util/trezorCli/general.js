@@ -91,6 +91,11 @@ export async function listDevices () {
   return json
 }
 
+export async function backup () {
+  const binary = app.getPath('userData') + '/binaries/hwi'
+  const { stdout } = await exec(`"${binary}" backup-device`)
+  return stdout
+}
 export async function getVersionNumber () {
   const stdout = await getInfo()
   const majorPatt = /major_version: [0-9]/i

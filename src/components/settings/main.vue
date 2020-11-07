@@ -2,119 +2,91 @@
     <v-layout align-center justify-center row fill-height>
       <v-flex xs11>
         <mainWalletComp
-        v-if='!allInfoCollected && !done'
+        v-if='!incorrectWallet && !syncingWallet && !needsToBeSetup'
         v-bind:goal='goal'
         v-bind:goalInfo='goalInfo'
         v-on:goalCompleted='goalCompleted'/>
-          <v-card flat v-if='allInfoCollected || done'>
-            <v-container v-if='settingUpWalletSoftware && !done'>
-              <v-row justify="center">
-                Setting Up Wallet Software
-              </v-row>
-            </v-container>
-            <v-container v-if='done'>
-              <v-row justify="center">
-                Done!!!!
-              </v-row>
-            </v-container>
-          </v-card>
+        <syncNewWallet
+        v-if='syncingWallet'
+        v-on:syncDone='syncingWallet = false'/>
+        <setupWallet v-if='needsToBeSetup'/>
+        <v-card flat v-if='incorrectWallet && !syncingWallet && !needsToBeSetup'>
+          <v-container>
+            <v-row justify="center">
+              This Is Not The Synced Wallet. <br>
+              Plug In Correct Wallet or sync this hardware wallet.
+            </v-row>
+            <v-row
+              align="center"
+              justify="center"
+              class="mt-5"
+            >
+              <v-btn
+              @click='syncingWallet = true'
+                color="primary"
+              >
+                Sync This Hardware Wallet
+              </v-btn>
+            </v-row>
+            <v-row
+              align="center"
+              justify="center"
+              class="mt-5"
+            >
+              <v-btn
+              @click='incorrectWallet = false'
+                color="secondary"
+              >
+                Check for Another Wallet
+              </v-btn>
+            </v-row>
+          </v-container>
+        </v-card>
     </v-flex>
     </v-layout>
 </template>
 
 <script>
 import mainWalletComp from '@/components/hardwareWallets/mainWalletTool.vue'
-import { pubTovpub } from '@/assets/util/btc/pubUtil.js'
-import { mapActions, mapGetters, mapState } from 'vuex'
-import {
-  startDeamon, hardStopDeamon, deleteWallet, unpackElectrum, configDaemon,
-  restoreWallet, deleteElectrumFolder, loadWallet // hardStopDeamon, makeRpcRequest,
-  // getinfo, requestStopDeamon, listAddresses, listLoadedWallets,
-  // listWalletsThatExist, getBalance, getWalletHistory, sendAll, send,
-  // broadcastTransaction, getFeeRate, getunusedaddress, walletReady,
-  // getTransaction, checkIfNodeProcessRunning
-} from '@/assets/util/btc/electrum/general.js'
+import syncNewWallet from '@/components/settings/syncNewWallet.vue'
+import setupWallet from '@/components/settings/setupWallet.vue'
+import { mapGetters, mapState } from 'vuex'
 export default {
   components: {
-    mainWalletComp
+    mainWalletComp,
+    setupWallet,
+    syncNewWallet
   },
   data: () => ({
-    allInfoCollected: false,
-    settingUpWalletSoftware: false,
-    done: false,
-    goal: 'extractXpub',
-    goalInfo: {},
-    vpub: '',
-    version: '',
-    fingerprint: '',
-    model: ''
+    incorrectWallet: false,
+    syncingWallet: false,
+    needsToBeSetup: false,
+    goal: 'getStatus',
+    goalInfo: {}
   }),
   methods: {
-    ...mapActions('hardwareInfo',
-      ['updateHardwareWalletInfo']
-    ),
-    setXpub: async function (xpub) {
-      const vpub = await pubTovpub(xpub)
-      this.vpub = vpub
-      if (this.singleSigHardwareWalletInfo.vpub === this.vpub) {
-        this.done = true
+    proccessFingerPrintInfo: async function (matchResult) {
+      if (!matchResult) {
+        this.incorrectWallet = true
       } else {
-        this.goal = 'getVersion'
+        this.goal = 'manageWallet'
       }
-    },
-    setVersion: async function (version) {
-      this.version = version
-      this.goal = 'getInfo'
-    },
-    getWalletInfo: async function (info) {
-      this.fingerprint = info.fingerprint
-      this.model = info.model
-      this.setWalletInfo()
     },
     goalCompleted: function (goal, info) {
-      if (goal === 'extractXpub') {
-        this.setXpub(info.xpub)
+      if (goal === 'getStatus') {
+        if (info.status[0] !== 3) {
+          this.needsToBeSetup = true
+        } else {
+          this.checkIfWalletIsCorrect()
+        }
       }
-      if (goal === 'getVersion') {
-        this.setVersion(info.version)
-      }
-      if (goal === 'getInfo') {
-        this.getWalletInfo(info.info)
+      if (goal === 'checkFingerPrint') {
+        this.proccessFingerPrintInfo(info.result)
       }
     },
-    setupElectrum: async function () {
-      this.allInfoCollected = true
-      this.settingUpWalletSoftware = true
-      await hardStopDeamon()
-      await deleteWallet(this.singleSigElectrumName, this.btcSingleSigTestnet.network)
-      await deleteElectrumFolder(this.btcSingleSigTestnet.network)
-      await unpackElectrum()
-      await configDaemon(this.btcSingleSigTestnet.rpcPort, this.btcSingleSigTestnet.rpcUser,
-        this.btcSingleSigTestnet.rpcPassword, this.btcSingleSigTestnet.network)
-      await startDeamon(this.btcSingleSigTestnet.network)
-      await restoreWallet(this.singleSigElectrumName,
-        this.singleSigHardwareWalletInfo.vpub, this.btcSingleSigTestnet.rpcport,
-        this.btcSingleSigTestnet.rpcuser,
-        this.btcSingleSigTestnet.rpcpassword, this.btcSingleSigTestnet.network)
-      await loadWallet(this.singleSigElectrumName, this.btcSingleSigTestnet.rpcport,
-        this.btcSingleSigTestnet.rpcuser,
-        this.btcSingleSigTestnet.rpcpassword, this.btcSingleSigTestnet.network)
-      this.settingUpWalletSoftware = false
-      this.done = true
-    },
-    setWalletInfo: async function () {
-      const vpub = this.vpub
-      const firmwareVersion = this.version
-      const fingerprint = this.fingerprint
-      const model = this.model
-      const walletInfo = {
-        fingerprint,
-        model,
-        firmwareVersion,
-        vpub
-      }
-      await this.updateHardwareWalletInfo(walletInfo)
-      this.setupElectrum()
+    checkIfWalletIsCorrect: async function () {
+      this.goal = 'checkFingerPrint'
+      this.goalInfo.fingerprint = this.singleSigHardwareWalletInfo.fingerprint
     }
   },
   computed: {
@@ -127,7 +99,8 @@ export default {
     ])
   },
   mounted () {
-    this.goalInfo.xpubPath = this.singleSigHardwareWalletInfo.vpubPath
+    // this.checkIfWalletIsCorrect()
+    // this.goalInfo.xpubPath = this.singleSigHardwareWalletInfo.vpubPath
   }
 }
 </script>
