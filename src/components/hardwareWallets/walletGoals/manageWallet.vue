@@ -16,13 +16,12 @@
 </template>
 
 <script>
-import mainWalletComp from '@/components/hardwareWallets/mainWalletTool.vue'
 import trezorT from '@/components/hardwareWallets/wallets/trezorT.vue'
 export default {
   props: ['walletInfo', 'goalInfo'],
+  name: 'manageWallet',
   components: {
-    trezorT,
-    mainWalletComp
+    trezorT
   },
   data: () => ({
     gettingStatus: false,

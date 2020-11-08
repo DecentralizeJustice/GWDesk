@@ -25,9 +25,13 @@ export default {
     goalCompleted: function (goal, info) {
       if (goal === 'getStatus') {
         this.status = info.status
-      } else {
-        this.updateStatus()
+        return
       }
+      if (goal === 'backupFailed') {
+        this.goal = 'wipeSetupInfo'
+        return
+      }
+      this.updateStatus()
     },
     walletSetup: async function () {
       this.$emit('hwWalletSetup')
@@ -39,19 +43,25 @@ export default {
       const status = this.status[0]
       if (status === 0) {
         this.goal = 'installFirmware'
+        return
       }
       if (status === 1) {
         this.goal = 'initialize'
+        return
       }
       if (status === 2) {
         this.goal = 'backup'
+        return
       }
       if (status === 3) {
         this.walletSetup()
+        return
       }
       if (status === 4) {
-        console.log('backup failed')
+        this.goal = 'backupFailed'
+        return
       }
+      console.log('Unknown Next Step')
     }
   },
   computed: {

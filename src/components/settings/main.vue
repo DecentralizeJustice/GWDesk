@@ -37,9 +37,9 @@
             >
               <v-btn
               @click='incorrectWallet = false'
-                color="secondary"
+                color="orange darken-4"
               >
-                Check for Another Wallet
+                Plug In Another Wallet
               </v-btn>
             </v-row>
           </v-container>
@@ -49,13 +49,12 @@
 </template>
 
 <script>
-import mainWalletComp from '@/components/hardwareWallets/mainWalletTool.vue'
 import syncNewWallet from '@/components/settings/syncNewWallet.vue'
 import setupWallet from '@/components/settings/setupWallet.vue'
 import { mapGetters, mapState } from 'vuex'
 export default {
+  name: 'mainSettings',
   components: {
-    mainWalletComp,
     setupWallet,
     syncNewWallet
   },

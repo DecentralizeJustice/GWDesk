@@ -54,6 +54,8 @@ import manageWallet from '@/components/hardwareWallets/walletGoals/manageWallet.
 import installFirmware from '@/components/hardwareWallets/walletGoals/installFirmware.vue'
 import initialize from '@/components/hardwareWallets/walletGoals/initialize.vue'
 import backup from '@/components/hardwareWallets/walletGoals/backup.vue'
+import backupFailed from '@/components/hardwareWallets/walletGoals/backupFailed.vue'
+import wipeSetupInfo from '@/components/hardwareWallets/walletGoals/wipeSetupInfo.vue'
 export default {
   components: {
     extractXpub,
@@ -65,8 +67,11 @@ export default {
     checkMasterFingerprint,
     installFirmware,
     initialize,
-    backup
+    backup,
+    backupFailed,
+    wipeSetupInfo
   },
+  name: 'mainWalletTool',
   props: ['goal', 'goalInfo', 'hardwareInfo'],
   data: () => ({
     hardwareWallets: []
@@ -77,40 +82,37 @@ export default {
       this.hardwareWallets = result
     },
     correctComponent: function () {
-      if (this.goal === 'extractXpub') {
+      switch (this.goal) {
+      case 'extractXpub':
         return extractXpub
-      }
-      if (this.goal === 'getVersion') {
+      case 'getVersion':
         return getVersion
-      }
-      if (this.goal === 'getInfo') {
+      case 'getInfo':
         return getInfo
-      }
-      if (this.goal === 'showAddress') {
+      case 'showAddress':
         return showAddress
-      }
-      if (this.goal === 'signTrans') {
+      case 'signTrans':
         return signTrans
-      }
-      if (this.goal === 'getStatus') {
+      case 'getStatus':
         return getStatus
-      }
-      if (this.goal === 'checkFingerPrint') {
+      case 'checkFingerPrint':
         return checkMasterFingerprint
-      }
-      if (this.goal === 'manageWallet') {
+      case 'manageWallet':
         return manageWallet
-      }
-      if (this.goal === 'installFirmware') {
+      case 'installFirmware':
         return installFirmware
-      }
-      if (this.goal === 'initialize') {
+      case 'initialize':
         return initialize
-      }
-      if (this.goal === 'backup') {
+      case 'backup':
         return backup
+      case 'backupFailed':
+        return backupFailed
+      case 'wipeSetupInfo':
+        return wipeSetupInfo
+      default:
+        console.log('Unknown Goal')
+        console.log(this.goal)
       }
-      console.log('Unknown Goal')
     },
     goalCompleted: function (info) {
       this.$emit('goalCompleted', this.goal, info)

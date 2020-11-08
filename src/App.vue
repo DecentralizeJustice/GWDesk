@@ -27,8 +27,14 @@ import navDrawer from '@/components/general/navDrawer.vue'
 import updateWindow from '@/components/general/update.vue'
 import { dormant, circuitEstablished } from '@/assets/util/tor.js'
 import {
-  hardStopDeamon
+  hardStopDeamon, unpackElectrum
 } from '@/assets/util/btc/electrum/general.js'
+import {
+  unpackBinary
+} from '@/assets/util/hwi/general.js'
+import {
+  unpackMainBinary
+} from '@/assets/util/trezorCli/general.js'
 const appVersion = require('../package.json').version
 const electron = window.require('electron')
 const ipcRenderer = electron.ipcRenderer
@@ -50,6 +56,11 @@ export default {
     updateStarted: false
   }),
   methods: {
+    copyBinary: async function () {
+      await unpackElectrum()
+      await unpackBinary()
+      await unpackMainBinary()
+    },
     shouldUpdate: function (downloadVersion, currentVersion) {
       const downloadVersionArray = downloadVersion.split('.').map(e => parseInt(e))
       const currentVersionArray = currentVersion.split('.').map(e => parseInt(e))
@@ -128,6 +139,7 @@ export default {
   },
   async mounted () {
     this.start()
+    this.copyBinary()
     await hardStopDeamon()
     await this.loop()
     if (process.env.NODE_ENV !== 'development') {
