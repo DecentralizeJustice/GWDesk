@@ -26,7 +26,9 @@ import slide25 from '@/assets/lessons/tutorials/slides/coinbase/withdraw/25.jpg'
 import slide26 from '@/assets/lessons/tutorials/slides/coinbase/withdraw/26.jpg'
 import slide27 from '@/assets/lessons/tutorials/slides/coinbase/withdraw/27.jpg'
 import notes1 from '@/assets/lessons/tutorials/courseNotes/coinbase/setup/withdrawBTC.html'
+import thumbnail from '@/assets/lessons/educational/lessonData/thumbnails/intro/buy.jpg'
 const backup = {
+  thumbnail,
   tutorial: true,
   desktop: true,
   title: 'Coinbase Withdraw BTC',

@@ -29,6 +29,7 @@ import slide28 from '@/assets/lessons/tutorials/slides/btc/firstBuy/28.jpg'
 import slide29 from '@/assets/lessons/tutorials/slides/btc/firstBuy/29.jpg'
 import notes1 from '@/assets/lessons/tutorials/courseNotes/btc/firstPurchase.html'
 const info = {
+  thumbnail: slide29,
   tutorial: true,
   desktop: true,
   title: 'First BTC Purchase',

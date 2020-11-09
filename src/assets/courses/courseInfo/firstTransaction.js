@@ -21,7 +21,7 @@ const info = {
       comp: coinbaseLinkBank
     },
     {
-      title: 'Coinbase DepositFiat',
+      title: 'Coinbase Deposit Fiat',
       comp: coinbaseDepositFiat
     },
     {

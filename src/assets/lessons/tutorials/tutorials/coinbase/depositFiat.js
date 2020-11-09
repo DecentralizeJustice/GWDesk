@@ -9,7 +9,9 @@ import slide7 from '@/assets/lessons/tutorials/slides/coinbase/depositFiat/7.jpg
 import slide8 from '@/assets/lessons/tutorials/slides/coinbase/depositFiat/8.jpg'
 import slide9 from '@/assets/lessons/tutorials/slides/coinbase/depositFiat/9.jpg'
 import notes1 from '@/assets/lessons/tutorials/courseNotes/coinbase/setup/depositFiat.html'
+import thumbnail from '@/assets/lessons/educational/lessonData/thumbnails/intro/buy.jpg'
 const fiat = {
+  thumbnail,
   tutorial: true,
   desktop: true,
   title: 'Coinbase Deposit Fiat',
