@@ -7,7 +7,8 @@
               indeterminate
               color="primary"
             ></v-progress-circular>
-            Initializing Wallet
+            Initializing Wallet <br>
+            Please Unplug and Plugin Device once onscreen process is finished.
           </div>
         </v-col>
       </v-row>

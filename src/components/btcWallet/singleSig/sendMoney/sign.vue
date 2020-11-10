@@ -62,6 +62,7 @@ export default {
       const validPSBT = await validPSBTFromPSBT(this.transaction.psbt, decodedElectrumPsbt.data.result, this.masterFingerprint)
       this.goalInfo.network = this.network
       this.goalInfo.psbt = validPSBT
+      this.goalInfo.masterFingerprint = this.masterFingerprint
     },
     updateSignedPSBT: function (psbt) {
       this.$emit('updateSignedPSBT', psbt)

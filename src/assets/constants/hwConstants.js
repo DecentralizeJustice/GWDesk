@@ -2,9 +2,12 @@
 // https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki
 // coldcard export xpub selects this path
 // should be    "m/48'/1'/0'/2'/0'"
-const divPath = "m/48'/1'/0'/2'"
-const changeDiv = "m/48'/1'/0'/2'/1"
-const recDiv = "m/48'/1'/0'/2'/0"
-export {
-  divPath, recDiv, changeDiv
+const hwInfo = {
+  // divPath: "m/48'/1'/0'/2'",
+  // changeDiv: "m/48'/1'/0'/2'/1",
+  // const recDiv = "m/48'/1'/0'/2'/0"
+  hwWalletVersions: {
+    trezorT: '2.3.4'
+  }
 }
+export default hwInfo

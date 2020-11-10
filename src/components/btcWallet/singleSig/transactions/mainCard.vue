@@ -14,7 +14,7 @@
         {{getType(item.incoming)}}
         {{Math.abs(item.bc_value)}} BTC
         <br>
-        {{getDate (item.monotonic_timestamp)}}
+        {{getDate (item.monotonic_timestamp, item.confirmations)}}
 
         <v-row
             align="center"
@@ -120,7 +120,10 @@ export default {
         return 'green darken-2'
       }
     },
-    getDate (epoch) {
+    getDate (epoch, confirmations) {
+      if (confirmations === 0) {
+        return 'Unconfirmed'
+      }
       const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday',
         'Friday', 'Saturday']
       const monthNames = ['January', 'February', 'March', 'April', 'May',

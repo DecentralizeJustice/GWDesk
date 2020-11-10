@@ -7,7 +7,7 @@
               indeterminate
               color="primary"
             ></v-progress-circular>
-            Getting Status
+            Getting Wallet Status
           </div>
         </v-col>
       </v-row>

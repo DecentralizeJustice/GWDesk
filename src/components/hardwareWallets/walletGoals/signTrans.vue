@@ -38,8 +38,12 @@ export default {
   computed: {
   },
   async mounted () {
-    const signedTrans = await this.sign()
-    this.emitTrans(signedTrans)
+    if (this.goalInfo.masterFingerprint === this.walletInfo.fingerprint) {
+      const signedTrans = await this.sign()
+      this.emitTrans(signedTrans)
+      return
+    }
+    console.log('wrong wallet', this.goalInfo.masterFingerprint, this.walletInfo.fingerprint)
   }
 }
 </script>

@@ -158,9 +158,6 @@ export default {
         amountArray: [],
         speed: 0
       },
-      speedSelectGroup: [
-        '4 Hours', '1.5 Hours', '50 Min', '20 Min', '10 Min'
-      ],
       transAmountInfoPSBT: {},
       pause: false,
       tooHigh: false,
@@ -180,18 +177,11 @@ export default {
     }
   },
   computed: {
-    // feeWarningRatio: function () {
-    //   if (this.feeRatio > 30) {
-    //     return 'error'
-    //   }
-    //   if (this.feeRatio > 20) {
-    //     return 'warning'
-    //   }
-    //   if (this.feeRatio > 10) {
-    //     return 'info'
-    //   }
-    //   return 'info'
-    // },
+    speedSelectGroup: function () {
+      return [
+        '4 Hours', '1.5 Hours', '50 Min', '20 Min', '10 Min'
+      ]
+    },
     feeArrayOptions: function () {
       const feeInfo = this.feeInfo
       return [feeInfo['20'], feeInfo['10'], feeInfo['5'],

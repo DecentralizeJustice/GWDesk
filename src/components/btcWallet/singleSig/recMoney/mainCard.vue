@@ -105,6 +105,7 @@ export default {
   },
   async mounted () {
     await this.setup()
+    this.goalInfo.masterFingerprint = this.singleSigHardwareWalletInfo.fingerprint
     this.goalInfo.path = this.path
     this.goalInfo.network = this.btcSingleSigTestnet.network
   }

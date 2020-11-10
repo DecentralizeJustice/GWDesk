@@ -103,11 +103,10 @@ function addInputInfo (psbt, bitcoinjsHex, wrongPsbt, decodeElectrumPsbt, master
         script: witnessScript[0],
         value: Number(transIns.value_sats)
       },
-      // nonWitnessUtxo: Buffer.from(
-      //   transIns.utxo,
-      //   'hex'
-      // ),
-      sighashType: 1
+      nonWitnessUtxo: Buffer.from(
+        transIns.utxo,
+        'hex'
+      )
     }
     if (Number(transIns.value_sats) !== Number(witnessScript[1])) {
       throw Error('wrong index, bitcoinjsErro')

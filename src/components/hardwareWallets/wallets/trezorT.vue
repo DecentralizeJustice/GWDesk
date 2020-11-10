@@ -1,6 +1,11 @@
 <template>
   <v-card class="text-center flat" style="background-color: grey;">
-    <v-container>
+    <walletTool
+    v-bind:goal='goal'
+    v-bind:goalInfo='goalInfo'
+    v-on:goalCompleted='goalCompleted'
+    v-if='updateFirmware'/>
+    <v-container v-if='!updateFirmware'>
       <v-row justify="center">
         <v-col cols="12">
           <v-img
@@ -10,11 +15,18 @@
         <v-col
           cols="3"
         >
-          <v-btn
+          <!-- <v-btn
             color="red"
             v-on:click="wipe()"
           >
             Wipe
+          </v-btn> -->
+          <v-btn
+            color="orange"
+            v-on:click="updateWallet()"
+            v-if='updateNeeded'
+          >
+            Update Wallet
           </v-btn>
           <!-- <v-btn
             color="red"
@@ -26,24 +38,6 @@
         <v-col
           cols="4"
         >
-          <v-btn
-            color="blue"
-            v-on:click="setup()"
-            v-if='abletoSetup'
-          >
-            Setup
-          </v-btn>
-        </v-col>
-        <v-col
-          cols="4"
-        >
-          <v-btn
-            color="pink"
-            v-on:click="restore()"
-            v-if='abletoSetup'
-          >
-            Restore
-          </v-btn>
         </v-col>
       </v-row>
     </v-container>
@@ -52,48 +46,55 @@
 
 <script>
 import image1 from '@/assets/photos/trezormodelt.jpeg'
+import walletTool from '@/components/hardwareWallets/mainWalletTool.vue'
 import {
-  wipe
-} from '@/assets/util/hwi/general.js'
+  getVersionNumber
+} from '@/assets/util/trezorCli/general.js'
+import hwInfo from '@/assets/constants/hwConstants.js'
 export default {
   props: ['walletInfo', 'status'],
   components: {
+    walletTool
   },
   data: () => ({
-    dialog: false,
-    pingridUse: false
+    currentWalletVersion: '',
+    goal: 'installFirmware',
+    goalInfo: '',
+    updateFirmware: false,
+    updateNeeded: false
   }),
   methods: {
-    wipe: async function () {
-      await wipe(this.model, this.path)
+    getVersionNumber: async function () {
+      const result = await getVersionNumber()
+      return result
     },
-    setup: function () {
-      this.$emit('setup', this.model, this.path)
+    updateWallet: async function () {
+      this.updateFirmware = true
     },
-    restore: function () {
-      this.$emit('restore', this.model, this.path)
+    goalCompleted: function (goal, info) {
+      if (goal === 'installFirmware') {
+        if (info.installSuccess) {
+          this.updateFirmware = false
+          return
+        }
+      }
+      console.log(goal, info)
     }
   },
   computed: {
-    abletoSetup: function () {
-      if (this.status[0] === 0 || this.status[0] === 1) {
-        return true
-      } else {
-        return false
-      }
+    mostRecentWalletVersion: function () {
+      return hwInfo.hwWalletVersions.trezorT
     },
     walletPhoto: function () {
       return image1
-    },
-    model: function () {
-      return this.walletInfo.model
-    },
-    path: function () {
-      return this.walletInfo.path
     }
+
   },
-  mounted () {
-    // console.log(this.pingridUse)
+  async mounted () {
+    this.currentWalletVersion = await getVersionNumber()
+    if (this.mostRecentWalletVersion !== this.currentWalletVersion) {
+      this.updateNeeded = true
+    }
   }
 }
 </script>

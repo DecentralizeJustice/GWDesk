@@ -2,13 +2,20 @@
   <v-container fluid>
     <v-row justify="center" align="center">
       <v-col cols="6">
-        <v-alert v-if='hardwareWallets.length === 0'
+        <v-alert v-if='hardwareWallets.length === 0 && !lookingforWallet'
           dense
           border="left"
           type="warning"
         >
           No Wallet Not Found
         </v-alert>
+        <div v-if='lookingforWallet'
+        >            <v-progress-circular
+                      indeterminate
+                      color="primary"
+                    ></v-progress-circular>
+          Looking for Wallet....
+        </div>
         <v-alert v-if='hardwareWallets.length > 1'
           dense
           border="left"
@@ -20,7 +27,7 @@
     </v-row>
     <v-row justify="center" align="center">
         <v-btn class='mx-auto'
-        @click='getDevices' v-if='hardwareWallets.length !== 1'
+        @click='getDevices' v-if='hardwareWallets.length !== 1 && !lookingforWallet'
         color='primary'>
           Look for Wallet
         </v-btn>
@@ -74,11 +81,13 @@ export default {
   name: 'mainWalletTool',
   props: ['goal', 'goalInfo', 'hardwareInfo'],
   data: () => ({
-    hardwareWallets: []
+    hardwareWallets: [],
+    lookingforWallet: true
   }),
   methods: {
     getDevices: async function () {
       const result = await listDevices()
+      this.lookingforWallet = false
       this.hardwareWallets = result
     },
     correctComponent: function () {

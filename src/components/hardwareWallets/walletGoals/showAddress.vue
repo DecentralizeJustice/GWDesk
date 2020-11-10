@@ -37,8 +37,12 @@ export default {
   computed: {
   },
   async mounted () {
-    await this.displayAddress()
-    this.emitAddress()
+    if (this.goalInfo.masterFingerprint === this.walletInfo.fingerprint) {
+      await this.displayAddress()
+      this.emitAddress()
+      return
+    }
+    console.log('wrong wallet', this.goalInfo.masterFingerprint, this.walletInfo.fingerprint)
   }
 }
 </script>
