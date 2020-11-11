@@ -2,7 +2,7 @@
   <v-card flat cols="12">
       <v-row justify="space-around">
         <v-col>
-          <div class="text-center" v-if='!needsBootLoaderMode'>
+          <div class="text-center" v-if='!needsBootLoaderMode && !firstContinue'>
             <v-progress-circular
               indeterminate
               color="primary"
@@ -10,11 +10,20 @@
             !!! Do not Unplug Device !!!
             Installing Firmware
           </div>
-          <div class="text-center" v-if='needsBootLoaderMode'>
+          <div class="text-center" v-if='needsBootLoaderMode && !firstContinue'>
             Place Device Into Bootloader Mode and Continue
             <v-btn
               color="orange"
               v-on:click="install()"
+            >
+              Continue
+            </v-btn>
+          </div>
+          <div class="text-center" v-if='firstContinue'>
+            Press continue to install firmware.
+            <v-btn
+              color="orange"
+              v-on:click="firstInstall()"
             >
               Continue
             </v-btn>
@@ -35,9 +44,14 @@ export default {
   },
   data: () => ({
     channel: {},
-    needsBootLoaderMode: false
+    needsBootLoaderMode: false,
+    firstContinue: true
   }),
   methods: {
+    firstInstall: async function () {
+      this.firstContinue = false
+      await this.isntall()
+    },
     install: async function () {
       this.needsBootLoaderMode = false
       this.channel = await updateFirmware(this.mostRecentWalletVersion)
@@ -65,7 +79,6 @@ export default {
     }
   },
   async mounted () {
-    await this.install()
   }
 }
 </script>

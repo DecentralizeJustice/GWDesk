@@ -93,7 +93,7 @@ export default {
     walletName: 'Turing',
     photoName: 'turing',
     channel: {},
-    version: '2.1.7'
+    version: '2.3.3'
   }),
   methods: {
     unpack: async function () {

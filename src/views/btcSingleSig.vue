@@ -38,7 +38,8 @@
           </v-btn>
         </v-card-actions>
       </v-card>
-      <v-card class="text-xs-center no-gutters" style="" v-if='!walletError && walletReady && correctWalletExist'>
+      <v-card class="text-xs-center no-gutters" style=""
+      v-if='!walletError && walletReady && correctWalletExist' :key='keyInfo'>
         <v-card-title class="headline justify-center">
           Bitcoin Single Sig
         </v-card-title>
@@ -84,6 +85,7 @@
           <v-btn
             color="primary"
             text
+            @click='refresh()'
           >
             <v-icon>mdi-refresh</v-icon>
           </v-btn>
@@ -114,7 +116,8 @@ export default {
     walletReady: false,
     retries: 10,
     walletError: false,
-    correctWalletExist: true
+    correctWalletExist: true,
+    keyInfo: 1
   }),
   computed: {
     ...mapState('bitcoinInfo', [
@@ -129,6 +132,9 @@ export default {
     ])
   },
   methods: {
+    refresh: function () {
+      this.keyInfo = this.keyInfo * -1
+    },
     start: async function () {
       if (this.retries < 0) {
         throw Error('Too many attempts to bring up wallet')

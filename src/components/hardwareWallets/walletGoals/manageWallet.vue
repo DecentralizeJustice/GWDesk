@@ -6,7 +6,7 @@
     v-bind:goalInfo='goalInfo'
     v-on:goalCompleted='goalCompleted'/>
       <v-row justify="space-around" v-if='!gettingStatus'>
-        <v-col cols="6">
+        <v-col cols="3">
           <trezorT
           v-bind:walletInfo='walletInfo'
           v-bind:status='status'/>

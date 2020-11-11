@@ -14,7 +14,7 @@ const find = require('find-process')
 autoUpdater.autoDownload = false
 const { ipcMain } = require('electron')
 let port
-// let sender
+
 function setPort (portNumber) {
   log.warn('portSet', portNumber)
   if (!isDevelopment) {
@@ -37,7 +37,6 @@ try {
       setPort(port)
       log.warn('port set:', port)
       if (err) {
-        errorRan()
         log.warn(err)
       }
     })
@@ -47,12 +46,8 @@ try {
 }
 
 tor.on('error', function (err) {
-  errorRan()
   log.error(err)
 })
-function errorRan () {
-  // console.log('here')
-}
 ipcMain.on('circuitEstablished34', event => {
   try {
     tor.getInfo('status/circuit-established', (err, result) => {
@@ -62,8 +57,7 @@ ipcMain.on('circuitEstablished34', event => {
       }
     })
   } catch (e) {
-    errorRan()
-    // log.error(e)
+    log.error(e)
   }
 })
 ipcMain.on('dormant34', event => {
@@ -75,8 +69,7 @@ ipcMain.on('dormant34', event => {
       }
     })
   } catch (e) {
-    errorRan()
-    // log.error(e)
+    log.error(e)
   }
 })
 contextMenu({
@@ -185,10 +178,7 @@ autoUpdater.on('update-downloaded', (ev, info) => {
 ipcMain.on('CHECK_FOR_UPDATE_PENDING', event => {
   const { sender } = event
 
-  // Automatically invoke success on development environment.
-  if (process.env.NODE_ENV === 'development') {
-    // sender.send(CHECK_FOR_UPDATE_SUCCESS);
-  } else {
+  if (process.env.NODE_ENV !== 'development') {
     autoUpdater.autoDownload = false
     const result = autoUpdater.checkForUpdates()
     result
@@ -214,10 +204,6 @@ ipcMain.on('DOWNLOAD_UPDATE_PENDING', event => {
     })
 })
 
-// ipcMain.on('QUIT_AND_INSTALL_UPDATE', () => {
-//   autoUpdater.quitAndInstall()
-//   // app.quit()
-// })
 // Exit cleanly on request from parent process in development mode.
 if (isDevelopment) {
   hardStopDeamon()

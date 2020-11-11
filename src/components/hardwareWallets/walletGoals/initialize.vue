@@ -2,14 +2,23 @@
   <v-card flat cols="12">
       <v-row justify="space-around">
         <v-col>
-          <div class="text-center">
+          <div class="text-center" v-if='!settingup'>
             <v-progress-circular
               indeterminate
               color="primary"
             ></v-progress-circular>
-            Initializing Wallet <br>
-            Please Unplug and Plugin Device once onscreen process is finished.
+            Initializing Wallet <br> Do not unplug device. <br>
+            When Process is done on wallet reinsert device.
           </div>
+          <div v-if='!settingup'>
+          <br>Press Continue When Ready.
+          <v-btn
+            color="primary"
+            @click ='setup()'
+          >
+            Continue
+          </v-btn>
+        </div>
         </v-col>
       </v-row>
   </v-card>
@@ -24,6 +33,7 @@ export default {
   components: {
   },
   data: () => ({
+    settingup: false
   }),
   methods: {
     setup: async function () {
@@ -45,7 +55,6 @@ export default {
   computed: {
   },
   async mounted () {
-    await this.setup()
   }
 }
 </script>
