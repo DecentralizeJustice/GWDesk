@@ -1,11 +1,11 @@
 <template>
   <v-card class="text-center flat" style="background-color: grey;">
-    <walletTool
+    <mainWalletComp
     v-bind:goal='goal'
     v-bind:goalInfo='goalInfo'
     v-on:goalCompleted='goalCompleted'
-    v-if='(checkingForUpdate || updateNeeded) && !refreshNeeded'/>
-    <v-container v-if='!checkingForUpdate && !updateNeeded && !refreshNeeded'>
+    v-if='showTool && !refreshNeeded'/>
+    <v-container v-if='!showTool && !refreshNeeded'>
       <v-row justify="center">
         <v-col cols="12">
           <v-img
@@ -13,20 +13,14 @@
           ></v-img>
         </v-col>
         <v-col
-          cols="3"
+          cols="4"
         >
-          <!-- <v-btn
+          <v-btn
             color="red"
             v-on:click="wipe()"
           >
             Wipe
-          </v-btn> -->
-          <!-- <v-btn
-            color="red"
-            v-on:click="wipe()"
-          >
-            Update
-          </v-btn> -->
+          </v-btn>
         </v-col>
         <v-col
           cols="4"
@@ -42,36 +36,42 @@
 
 <script>
 import image1 from '@/assets/photos/trezormodelt.jpeg'
-import walletTool from '@/components/hardwareWallets/mainWalletTool.vue'
 export default {
   props: ['walletInfo', 'status'],
   components: {
-    walletTool
   },
   data: () => ({
     currentWalletVersion: '',
     goal: 'checkIfUpdateNeeded',
     goalInfo: '',
-    updateNeeded: true,
-    checkingForUpdate: true,
-    refreshNeeded: false
+    refreshNeeded: false,
+    showTool: true
   }),
   methods: {
     goalCompleted: function (goal, info) {
       if (goal === 'checkIfUpdateNeeded') {
-        this.checkingForUpdate = false
         if (info.walletNeedsUpdate) {
           this.goal = 'installFirmware'
         } else {
-          this.updateNeeded = false
+          this.showTool = false
         }
       }
       if (goal === 'installFirmware') {
         if (info.installSuccess) {
-          this.updateNeeded = false
           this.refreshNeeded = true
+          this.showTool = false
         }
       }
+      if (goal === 'wipeSetupInfo') {
+        if (!info.wipeDone) {
+          console.log(info)
+        }
+        this.refreshNeeded = true
+      }
+    },
+    wipe: function () {
+      this.goal = 'wipeSetupInfo'
+      this.showTool = true
     }
   },
   computed: {

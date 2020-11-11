@@ -2,17 +2,26 @@
     <v-layout align-center justify-center row fill-height>
       <v-flex xs11>
         <mainWalletComp
-        v-if='(!allInfoCollected && !done)'
+        v-if='!allInfoCollected && !done'
         v-bind:goal='goal'
         v-bind:goalInfo='goalInfo'
         v-on:goalCompleted='goalCompleted'/>
-          <v-card flat v-if='allInfoCollected || done'>
-            <v-container v-if='settingUpWalletSoftware && !done'>
-              <v-row justify="center">
-                Setting Up Wallet Software
-              </v-row>
-            </v-container>
-          </v-card>
+        <v-card flat v-if='allInfoCollected || done'>
+          <v-container v-if='settingUpWalletSoftware'>
+            <v-row justify="center">
+              <v-progress-circular
+                indeterminate
+                color="primary"
+              ></v-progress-circular>
+              Setting Up Wallet Software
+            </v-row>
+          </v-container>
+          <v-container v-if='done'>
+            <v-row justify="center">
+              Wallet Already Setup. Refresh Page.
+            </v-row>
+          </v-container>
+        </v-card>
     </v-flex>
     </v-layout>
 </template>

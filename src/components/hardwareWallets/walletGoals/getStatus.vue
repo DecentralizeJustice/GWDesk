@@ -2,12 +2,17 @@
   <v-card flat cols="12">
       <v-row justify="space-around">
         <v-col>
-          <div class="text-center">
+          <div class="text-center" v-if='!checkFailed'>
             <v-progress-circular
               indeterminate
               color="primary"
             ></v-progress-circular>
             Getting Wallet Status
+          </div>
+        </v-col>
+        <v-col>
+          <div class="text-center" v-if='checkFailed'>
+            Error Encountered. Refresh Page.
           </div>
         </v-col>
       </v-row>
@@ -23,11 +28,17 @@ export default {
   components: {
   },
   data: () => ({
+    checkFailed: false
   }),
   methods: {
     getStatus: async function () {
-      const status = await getStatus()
-      return status
+      try {
+        const status = await getStatus()
+        return status
+      } catch (e) {
+        this.checkFailed = true
+        console.log(e)
+      }
     },
     emitStatus: function (status) {
       this.$emit('goalCompleted', { status })

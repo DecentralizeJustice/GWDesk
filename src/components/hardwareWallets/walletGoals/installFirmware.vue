@@ -50,7 +50,7 @@ export default {
   methods: {
     firstInstall: async function () {
       this.firstContinue = false
-      await this.isntall()
+      await this.install()
     },
     install: async function () {
       this.needsBootLoaderMode = false

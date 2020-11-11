@@ -23,21 +23,24 @@ export default {
   }),
   methods: {
     goalCompleted: function (goal, info) {
+      // console.log(goal, info)
       if (goal === 'getStatus') {
         this.status = info.status
+        this.nextStep()
         return
       }
       if (goal === 'backupFailed') {
         this.goal = 'wipeSetupInfo'
         return
       }
-      this.updateStatus()
+      if (goal === 'initialize' && info.needsToRestore) {
+        this.goal = 'restore'
+        return
+      }
+      this.goal = 'getStatus'
     },
     walletSetup: async function () {
       this.$emit('hwWalletSetup')
-    },
-    updateStatus: function () {
-      this.goal = 'getStatus'
     },
     nextStep: function () {
       const status = this.status[0]
@@ -67,9 +70,6 @@ export default {
   computed: {
   },
   watch: {
-    status: function (val) {
-      this.nextStep()
-    }
   },
   mounted () {
     this.goal = 'getStatus'

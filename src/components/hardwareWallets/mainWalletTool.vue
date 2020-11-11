@@ -64,6 +64,7 @@ import backup from '@/components/hardwareWallets/walletGoals/backup.vue'
 import backupFailed from '@/components/hardwareWallets/walletGoals/backupFailed.vue'
 import wipeSetupInfo from '@/components/hardwareWallets/walletGoals/wipeSetupInfo.vue'
 import checkIfUpdateNeeded from '@/components/hardwareWallets/walletGoals/checkIfUpdateNeeded.vue'
+import restore from '@/components/hardwareWallets/walletGoals/restore.vue'
 export default {
   components: {
     extractXpub,
@@ -77,7 +78,8 @@ export default {
     initialize,
     backup,
     backupFailed,
-    wipeSetupInfo
+    wipeSetupInfo,
+    restore
   },
   name: 'mainWalletTool',
   props: ['goal', 'goalInfo', 'hardwareInfo'],
@@ -121,6 +123,8 @@ export default {
         return wipeSetupInfo
       case 'checkIfUpdateNeeded':
         return checkIfUpdateNeeded
+      case 'restore':
+        return restore
       default:
         console.log('Unknown Goal', this.goal)
       }
