@@ -24,9 +24,20 @@
         </v-col>
     </v-col>
     </v-row>
-    <div v-if='refreshNeeded'>
-      Please Refresh Page.
-    </div>
+    <v-row
+      align="center"
+      justify="space-around"
+      class="mt-5"
+      v-if='refreshNeeded'
+    >
+      <v-alert
+          dark
+          type="error"
+          border="left"
+        >
+        Please Refresh Page.
+      </v-alert>
+    </v-row>
   </div>
 </template>
 

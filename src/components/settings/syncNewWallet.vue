@@ -1,29 +1,47 @@
 <template>
-    <v-layout align-center justify-center row fill-height>
-      <v-flex xs11>
-        <mainWalletComp
-        v-if='!allInfoCollected && !done'
-        v-bind:goal='goal'
-        v-bind:goalInfo='goalInfo'
-        v-on:goalCompleted='goalCompleted'/>
-        <div flat v-if='allInfoCollected || done'>
-          <v-container v-if='settingUpWalletSoftware'>
-            <v-row justify="center">
-              <v-progress-circular
-                indeterminate
-                color="primary"
-              ></v-progress-circular>
-              Setting Up Wallet Software
-            </v-row>
-          </v-container>
-          <v-container v-if='done'>
-            <v-row justify="center">
-              Wallet Already Setup. Refresh Page.
-            </v-row>
-          </v-container>
-          </div>
-    </v-flex>
-    </v-layout>
+  <div>
+    <mainWalletComp
+    v-if='!allInfoCollected && !done'
+    v-bind:goal='goal'
+    v-bind:goalInfo='goalInfo'
+    v-on:goalCompleted='goalCompleted'/>
+    <v-row justify="center" v-if='allInfoCollected || done'>
+      <v-col cols='6' v-if='done'>
+        <v-alert
+        type="info"
+        >
+          Wallet Already Setup. Refresh Page.
+        </v-alert>
+      </v-col>
+      <v-col v-if='settingUpWalletSoftware' cols='12'>
+        <v-row
+          align="center"
+          justify="space-around"
+          class="mb-5"
+        >
+          <v-progress-circular
+             indeterminate
+             color="primary"
+             :size="100"
+           ></v-progress-circular>
+        </v-row>
+        <v-row
+          align="center"
+          justify="space-around"
+          class="mt-5"
+        >
+          <v-alert
+            color="black"
+            dark
+            type="info"
+            border="left"
+          >
+          Setting Up Wallet Software...
+          </v-alert>
+        </v-row>
+      </v-col>
+    </v-row>
+  </div>
 </template>
 
 <script>

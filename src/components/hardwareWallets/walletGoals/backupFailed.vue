@@ -1,20 +1,34 @@
 <template>
-  <v-card flat cols="12">
-      <v-row justify="space-around">
-        <v-col>
-          <div class="text-center">
-            Your Wallet Was Setup Incorrectly. If it was setup with another wallet, use it with that wallet.
-            If you set it up with this wallet, wipe and attempt to setup again.
-          </div>
-          <v-btn
-            color="primary"
-            @click='emitReady'
+  <v-row justify="space-around">
+    <v-col class="text-center">
+      <v-row
+        align="center"
+        justify="space-around"
+        class="mt-5"
+      >
+        <v-alert
+            dark
+            type="warning"
+            border="left"
           >
-            Wipe and Try to Setup
-          </v-btn>
-        </v-col>
+          Your Wallet Was Setup Incorrectly. If you set it up with Guiding Wallet,
+          wipe wallet and attempt to setup again.
+          If it was setup with another wallet, use this hardware wallet with that wallet.
+        </v-alert>
       </v-row>
-  </v-card>
+      <v-row
+        align="center"
+        justify="space-around"
+      >
+        <v-btn
+          color="primary"
+          v-on:click="emitReady()"
+        >
+          Wipe and Try to Setup
+        </v-btn>
+      </v-row>
+    </v-col>
+  </v-row>
 </template>
 
 <script>

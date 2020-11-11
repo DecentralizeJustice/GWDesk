@@ -1,5 +1,5 @@
 <template>
-  <v-col cols='12'>
+  <div>
     <v-row
       align="center"
       justify="space-around"
@@ -25,7 +25,7 @@
       Checking If Wallet Updated Needed...
       </v-alert>
     </v-row>
-  </v-col>
+  </div>
 </template>
 
 <script>

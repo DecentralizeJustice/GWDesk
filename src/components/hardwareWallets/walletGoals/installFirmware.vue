@@ -1,36 +1,98 @@
 <template>
-  <v-card flat cols="12">
-      <v-row justify="space-around">
-        <v-col>
-          <div class="text-center" v-if='!needsBootLoaderMode && !firstContinue'>
-            <v-progress-circular
-              indeterminate
-              color="primary"
-            ></v-progress-circular>
-            !!! Do not Unplug Device !!!
-            Installing Firmware
-          </div>
-          <div class="text-center" v-if='needsBootLoaderMode && !firstContinue'>
-            Place Device Into Bootloader Mode and Continue
-            <v-btn
-              color="orange"
-              v-on:click="install()"
-            >
-              Continue
-            </v-btn>
-          </div>
-          <div class="text-center" v-if='firstContinue'>
-            Press continue to install firmware.
-            <v-btn
-              color="orange"
-              v-on:click="firstInstall()"
-            >
-              Continue
-            </v-btn>
-          </div>
-        </v-col>
+  <v-row justify="center">
+    <v-col class="text-center" v-if='!needsBootLoaderMode && !firstContinue'>
+      <v-row
+        align="center"
+        justify="space-around"
+        class="mt-5"
+      >
+      <v-alert
+          dark
+          type="warning"
+          border="left"
+        >
+        Do Not Unplug Wallet
+        </v-alert>
       </v-row>
-  </v-card>
+      <v-row
+        align="center"
+        justify="space-around"
+        class="mb-5"
+      >
+        <v-progress-circular
+           indeterminate
+           color="primary"
+           :size="100"
+         ></v-progress-circular>
+      </v-row>
+      <v-row
+        align="center"
+        justify="space-around"
+        class="mt-5"
+      >
+      <v-alert
+          color="black"
+          dark
+          type="info"
+          border="left"
+        >
+        Installing Firmware...
+        </v-alert>
+      </v-row>
+    </v-col>
+    <v-col class="text-center" v-if='needsBootLoaderMode && !firstContinue'>
+      <v-row
+        align="center"
+        justify="space-around"
+        class="mt-5"
+      >
+      <v-alert
+          dark
+          type="info"
+          border="left"
+        >
+        Place Device Into Bootloader Mode and Continue
+        </v-alert>
+      </v-row>
+      <v-row
+        align="center"
+        justify="space-around"
+      >
+      <v-btn
+        color="primary"
+        v-on:click="install()"
+      >
+        Continue
+      </v-btn>
+    </v-row>
+    </v-col>
+    <v-col class="text-center" v-if='firstContinue'>
+      <v-row
+        align="center"
+        justify="space-around"
+        class="mt-5"
+      >
+        <v-alert
+            dark
+            type="info"
+            border="left"
+          >
+          Press continue to install firmware.
+        </v-alert>
+      </v-row>
+      <v-row
+        align="center"
+        justify="space-around"
+      >
+        <v-btn
+          color="primary"
+          v-on:click="firstInstall()"
+        >
+          Continue
+        </v-btn>
+      </v-row>
+    </v-col>
+  </v-row>
 </template>
 
 <script>

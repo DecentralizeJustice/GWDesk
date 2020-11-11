@@ -33,7 +33,7 @@
         justify="space-around"
       >
       <v-alert
-          type="alert"
+          type="error"
           border="left"
         >
         Error Encountered. Refresh Page.

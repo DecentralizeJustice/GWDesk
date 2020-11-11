@@ -1,13 +1,9 @@
 <template>
-    <v-layout align-center justify-center row fill-height>
-      <v-flex xs11>
-        <mainWalletComp
-        v-if='true'
-        v-bind:goal='goal'
-        v-bind:goalInfo='goalInfo'
-        v-on:goalCompleted='goalCompleted'/>
-    </v-flex>
-    </v-layout>
+  <mainWalletComp
+  v-if='true'
+  v-bind:goal='goal'
+  v-bind:goalInfo='goalInfo'
+  v-on:goalCompleted='goalCompleted'/>
 </template>
 
 <script>

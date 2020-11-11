@@ -1,17 +1,13 @@
 <template>
-  <v-card flat cols="12">
-      <v-row justify="space-around">
-        <v-col v-if='readyToRestore'>
-          <div class="text-center">
-            <v-progress-circular
-              indeterminate
-              color="primary"
-            ></v-progress-circular>
-            Restoring Wallet
-          </div>
-        </v-col>
-        <v-col v-if='!readyToRestore'>
-          Restore Wallet When Ready
+  <v-row justify="center">
+    <v-col cols='8' v-if='!readyToRestore'>
+      <v-alert
+      type="info"
+      >
+        Press Continue When  Ready to Restore Wallet.
+      </v-alert>
+      <v-row justify="center">
+        <v-col cols='4'>
           <v-btn
             color="primary"
             @click ='restoreWallet()'
@@ -20,7 +16,47 @@
           </v-btn>
         </v-col>
       </v-row>
-  </v-card>
+    </v-col>
+    <v-col v-if='readyToRestore' cols='12'>
+      <v-row
+        align="center"
+        justify="space-around"
+        class="mt-5"
+      >
+        <v-alert
+          type="warning"
+          border="left"
+        >
+          Do not unplug device.
+        </v-alert>
+      </v-row>
+      <v-row
+        align="center"
+        justify="space-around"
+        class="mb-5"
+      >
+        <v-progress-circular
+           indeterminate
+           color="primary"
+           :size="100"
+         ></v-progress-circular>
+      </v-row>
+      <v-row
+        align="center"
+        justify="space-around"
+        class="mt-5"
+      >
+        <v-alert
+          color="black"
+          dark
+          type="info"
+          border="left"
+        >
+        Restoring Wallet...
+        </v-alert>
+      </v-row>
+    </v-col>
+  </v-row>
 </template>
 
 <script>

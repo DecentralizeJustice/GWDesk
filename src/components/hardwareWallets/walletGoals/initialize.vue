@@ -1,33 +1,70 @@
 <template>
-  <v-card flat cols="12">
-      <v-row justify="space-around">
-        <v-col>
-          <div class="text-center" v-if='settingup'>
-            <v-progress-circular
-              indeterminate
-              color="primary"
-            ></v-progress-circular>
-            Initializing Wallet <br> Do not unplug device. <br>
-            When Process is done on wallet reinsert device.
-          </div>
-          <div v-if='!settingup'>
-          <br>Press Continue When Ready to Initialize Hardware Wallet. or Restore Wallet.
+  <v-row justify="center">
+    <v-col cols='8' v-if='!settingup'>
+      <v-alert
+      type="info"
+      >
+        Press Continue When Ready to Initialize Hardware Wallet or Restore Wallet.
+      </v-alert>
+      <v-row justify="center">
+        <v-col cols='4'>
           <v-btn
             color="primary"
             @click ='setup()'
           >
             Continue
           </v-btn>
+        </v-col>
+        <v-col cols='4'>
           <v-btn
-            color="primary"
+            color="orange darken-3"
             @click ='needsToRestore()'
           >
             Restore Wallet
           </v-btn>
-        </div>
         </v-col>
       </v-row>
-  </v-card>
+    </v-col>
+    <v-col v-if='settingup' cols='12'>
+      <v-row
+        align="center"
+        justify="space-around"
+        class="mt-5"
+      >
+        <v-alert
+          type="warning"
+          border="left"
+        >
+          Do not unplug device.
+        </v-alert>
+      </v-row>
+      <v-row
+        align="center"
+        justify="space-around"
+        class="mb-5"
+      >
+        <v-progress-circular
+           indeterminate
+           color="primary"
+           :size="100"
+         ></v-progress-circular>
+      </v-row>
+      <v-row
+        align="center"
+        justify="space-around"
+        class="mt-5"
+      >
+        <v-alert
+          color="black"
+          dark
+          type="info"
+          border="left"
+        >
+        Initializing Wallet...
+        </v-alert>
+      </v-row>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
