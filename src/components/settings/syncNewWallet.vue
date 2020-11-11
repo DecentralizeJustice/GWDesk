@@ -6,7 +6,7 @@
         v-bind:goal='goal'
         v-bind:goalInfo='goalInfo'
         v-on:goalCompleted='goalCompleted'/>
-        <v-card flat v-if='allInfoCollected || done'>
+        <div flat v-if='allInfoCollected || done'>
           <v-container v-if='settingUpWalletSoftware'>
             <v-row justify="center">
               <v-progress-circular
@@ -21,7 +21,7 @@
               Wallet Already Setup. Refresh Page.
             </v-row>
           </v-container>
-        </v-card>
+          </div>
     </v-flex>
     </v-layout>
 </template>

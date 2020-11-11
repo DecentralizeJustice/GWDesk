@@ -1,22 +1,46 @@
 <template>
-  <v-card flat cols="12">
-      <v-row justify="space-around">
-        <v-col>
-          <div class="text-center" v-if='!checkFailed'>
-            <v-progress-circular
-              indeterminate
-              color="primary"
-            ></v-progress-circular>
-            Getting Wallet Status
-          </div>
-        </v-col>
-        <v-col>
-          <div class="text-center" v-if='checkFailed'>
-            Error Encountered. Refresh Page.
-          </div>
-        </v-col>
+  <v-row justify="space-around">
+    <v-col v-if='!checkFailed' cols='12'>
+      <v-row
+        align="center"
+        justify="space-around"
+        class="mb-5"
+      >
+        <v-progress-circular
+           indeterminate
+           color="primary"
+           :size="100"
+         ></v-progress-circular>
       </v-row>
-  </v-card>
+      <v-row
+        align="center"
+        justify="space-around"
+        class="mt-5"
+      >
+      <v-alert
+          color="black"
+          dark
+          type="info"
+          border="left"
+        >
+        Getting Wallet Status...
+        </v-alert>
+      </v-row>
+    </v-col>
+    <v-col v-if='checkFailed'>
+      <v-row
+        align="center"
+        justify="space-around"
+      >
+      <v-alert
+          type="alert"
+          border="left"
+        >
+        Error Encountered. Refresh Page.
+        </v-alert>
+      </v-row>
+    </v-col>
+  </v-row>
 </template>
 
 <script>

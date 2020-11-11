@@ -1,19 +1,19 @@
 <template>
-  <v-card class="text-center flat" style="background-color: grey;">
+  <div>
     <mainWalletComp
     v-bind:goal='goal'
     v-bind:goalInfo='goalInfo'
     v-on:goalCompleted='goalCompleted'
     v-if='showTool && !refreshNeeded'/>
-    <v-container v-if='!showTool && !refreshNeeded'>
-      <v-row justify="center">
+    <v-row justify="center" v-if='!showTool && !refreshNeeded' >
+      <v-col class="grey" cols='8'>
         <v-col cols="12">
           <v-img
             :src="walletPhoto"
           ></v-img>
         </v-col>
         <v-col
-          cols="4"
+          cols="8"
         >
           <v-btn
             color="red"
@@ -22,16 +22,12 @@
             Wipe
           </v-btn>
         </v-col>
-        <v-col
-          cols="4"
-        >
-        </v-col>
-      </v-row>
-    </v-container>
+    </v-col>
+    </v-row>
     <div v-if='refreshNeeded'>
-      Please Refresh Page
+      Please Refresh Page.
     </div>
-  </v-card>
+  </div>
 </template>
 
 <script>

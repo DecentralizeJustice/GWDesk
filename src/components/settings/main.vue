@@ -1,51 +1,47 @@
 <template>
-    <v-layout align-center justify-center row fill-height>
-      <v-flex xs11>
-        <mainWalletComp
-        v-if='!incorrectWallet && !syncingWallet && !needsToBeSetup'
-        v-bind:goal='goal'
-        v-bind:goalInfo='goalInfo'
-        v-on:goalCompleted='goalCompleted'/>
-        <syncNewWallet
-        v-if='syncingWallet'
-        v-on:syncDone='syncingWallet = false'/>
-        <setupWallet
-        v-if='needsToBeSetup'
-        v-on:hwWalletSetup='hwSetup'/>
-        <v-card flat v-if='incorrectWallet && !syncingWallet && !needsToBeSetup'>
-          <v-container>
-            <v-row justify="center">
-              This Is Not The Synced Wallet. <br>
-              Plug In Correct Wallet or sync this hardware wallet.
-            </v-row>
-            <v-row
-              align="center"
-              justify="center"
-              class="mt-5"
-            >
-              <v-btn
-              @click='syncingWallet = true'
-                color="primary"
-              >
-                Sync This Hardware Wallet
-              </v-btn>
-            </v-row>
-            <v-row
-              align="center"
-              justify="center"
-              class="mt-5"
-            >
-              <v-btn
-              @click='incorrectWallet = false'
-                color="orange darken-4"
-              >
-                Plug In Another Wallet
-              </v-btn>
-            </v-row>
-          </v-container>
-        </v-card>
-    </v-flex>
-    </v-layout>
+  <div>
+    <mainWalletComp
+    v-if='!incorrectWallet && !syncingWallet && !needsToBeSetup'
+    v-bind:goal='goal'
+    v-bind:goalInfo='goalInfo'
+    v-on:goalCompleted='goalCompleted'/>
+    <syncNewWallet
+    v-if='syncingWallet'
+    v-on:syncDone='syncingWallet = false'/>
+    <setupWallet
+    v-if='needsToBeSetup'
+    v-on:hwWalletSetup='hwSetup'/>
+    <v-col cols='12' v-if='incorrectWallet && !syncingWallet && !needsToBeSetup'>
+      <v-row justify="center">
+        This Is Not The Synced Wallet. <br>
+        Plug In Correct Wallet or sync this hardware wallet.
+      </v-row>
+      <v-row
+        align="center"
+        justify="center"
+        class="mt-5"
+      >
+        <v-btn
+        @click='syncingWallet = true'
+          color="primary"
+        >
+          Sync This Hardware Wallet
+        </v-btn>
+      </v-row>
+      <v-row
+        align="center"
+        justify="center"
+        class="mt-5"
+      >
+        <v-btn
+        @click='incorrectWallet = false'
+          color="orange darken-4"
+        >
+          Plug In Another Wallet
+        </v-btn>
+      </v-row>
+    </v-col>
+  </div>
 </template>
 
 <script>
