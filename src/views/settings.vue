@@ -1,48 +1,40 @@
 <template>
-  <v-layout align-center justify-center row fill-height>
-    <v-flex xs11>
-  <v-card :key='keyInfo'>
-    <v-card-title class="headline justify-center">
-      Settings
-    </v-card-title>
-    <v-divider></v-divider>
-    <v-tabs>
-      <!-- <v-tab>
-        General
-      </v-tab>
-      <v-tab>
-        Bitcoin
-      </v-tab> -->
-      <v-tab>
-        Hardware Wallet
-      </v-tab>
-      <v-tab-item>
-          <hardwareWallet/>
-      </v-tab-item>
-      <v-tab-item>
-      </v-tab-item>
-      <v-tab-item>
-      </v-tab-item>
-    </v-tabs>
-    <v-divider/>
-    <v-card-actions>
-    <v-btn
-      color="orange"
-      text
+  <v-row no-gutters align-content='center' justify='center'>
+    <v-col
+      cols="10"
     >
-      <v-icon>mdi-help</v-icon>
-    </v-btn>
-    <v-btn
-      color="primary"
-      text
-      @click='refresh()'
-    >
-      <v-icon>mdi-refresh</v-icon>
-    </v-btn>
-  </v-card-actions>
-  </v-card>
-</v-flex>
-</v-layout>
+    <v-card :key='keyInfo' class="grey darken-3" >
+      <v-card-title class="headline justify-center">
+        Settings
+      </v-card-title>
+      <v-divider></v-divider>
+      <v-tabs>
+        <v-tab>
+          Hardware Wallet
+        </v-tab>
+        <v-tab-item>
+          <hardwareWallet style="min-height:25vh;" />
+        </v-tab-item>
+      </v-tabs>
+      <v-divider/>
+      <v-card-actions>
+      <v-btn
+        color="orange"
+        text
+      >
+        <v-icon>mdi-help</v-icon>
+      </v-btn>
+      <v-btn
+        color="primary"
+        text
+        @click='refresh()'
+      >
+        <v-icon>mdi-refresh</v-icon>
+      </v-btn>
+      </v-card-actions>
+    </v-card>
+    </v-col>
+  </v-row>
 </template>
 
 <script>

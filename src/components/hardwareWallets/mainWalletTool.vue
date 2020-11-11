@@ -1,49 +1,75 @@
 <template>
-  <v-container fluid>
-    <v-row justify="center" align="center">
-      <v-col cols="6">
-        <v-alert v-if='hardwareWallets.length === 0 && !lookingforWallet'
-          dense
-          border="left"
-          type="warning"
-        >
-          No Wallet Not Found
-        </v-alert>
-        <div v-if='lookingforWallet'
-        >            <v-progress-circular
-                      indeterminate
-                      color="primary"
-                    ></v-progress-circular>
-          Looking for Wallet....
-        </div>
-        <v-alert v-if='hardwareWallets.length > 1'
-          dense
-          border="left"
-          type="warning"
-        >
-          Too Many Wallets Connected
-        </v-alert>
-      </v-col>
-    </v-row>
-    <v-row justify="center" align="center">
-        <v-btn class='mx-auto'
-        @click='getDevices' v-if='hardwareWallets.length !== 1 && !lookingforWallet'
-        color='primary'>
-          Look for Wallet
-        </v-btn>
-    </v-row>
-    <v-row justify="space-around" v-if='hardwareWallets.length === 1'>
-      <v-col >
-        <component
-        v-bind:is="correctComponent(hardwareWallets[0].model)"
-        v-bind:walletInfo='hardwareWallets[0]'
-        v-bind:goal='goal'
-        v-bind:goalInfo='goalInfo'
-        v-on:goalCompleted="goalCompleted"
-        />
-      </v-col>
-    </v-row>
-  </v-container>
+  <v-row align-content='center' justify='center'>
+    <v-col cols="6" v-if='hardwareWallets.length !== 1'>
+      <v-row align-content='center' justify='center'>
+        <v-col cols= '12'>
+          <v-alert v-if='hardwareWallets.length === 0 && !lookingforWallet'
+            dense
+            border="left"
+            type="warning"
+          >
+            No Wallet Not Found
+          </v-alert>
+          <v-alert v-if='hardwareWallets.length > 1'
+            dense
+            border="left"
+            type="warning"
+          >
+            Too Many Wallets Connected
+          </v-alert>
+        </v-col>
+        <v-col v-if='hardwareWallets.length !== 1 && !lookingforWallet'
+            cols='12'>
+          <v-row
+            align="center"
+            justify="space-around"
+          >
+            <v-btn class='mx-auto'
+            @click='getDevices'
+            color='primary'>
+              Look for Wallet
+            </v-btn>
+          </v-row>
+        </v-col>
+        <v-col v-if='lookingforWallet' cols='12'>
+          <v-row
+            align="center"
+            justify="space-around"
+            class="mb-5"
+          >
+            <v-progress-circular
+               indeterminate
+               color="primary"
+               :size="100"
+             ></v-progress-circular>
+          </v-row>
+          <v-row
+            align="center"
+            justify="space-around"
+            class="mt-5"
+          >
+          <v-alert
+              color="black"
+              dark
+              type="info"
+              border="left"
+            >
+            Looking for Wallet...
+            </v-alert>
+          </v-row>
+        </v-col>
+      </v-row>
+    </v-col>
+    <v-col justify="center" v-if='hardwareWallets.length === 1' cols='12'>
+      <component
+      v-bind:is="correctComponent(hardwareWallets[0].model)"
+      v-bind:walletInfo='hardwareWallets[0]'
+      v-bind:goal='goal'
+      v-bind:goalInfo='goalInfo'
+      v-on:goalCompleted="goalCompleted"
+      />
+    </v-col>
+  </v-row>
 </template>
 
 <script>
@@ -85,10 +111,11 @@ export default {
   props: ['goal', 'goalInfo', 'hardwareInfo'],
   data: () => ({
     hardwareWallets: [],
-    lookingforWallet: true
+    lookingforWallet: false
   }),
   methods: {
     getDevices: async function () {
+      this.lookingforWallet = true
       const result = await listDevices()
       this.lookingforWallet = false
       this.hardwareWallets = result
@@ -139,6 +166,7 @@ export default {
     if (this.hardwareInfo) {
       this.hardwareWallets = this.hardwareInfo
     }
+    this.lookingforWallet = true
     this.getDevices()
   }
 }

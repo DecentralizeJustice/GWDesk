@@ -3,7 +3,11 @@
     <navDrawer app/>
     <v-main>
       <transition name="fade">
+        <v-container fluid fill-height
+          align-content='center' justify='center'
+        >
         <router-view/>
+          </v-container>
       </transition>
           <v-dialog
             v-model="showDialog"
