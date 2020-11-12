@@ -27,17 +27,23 @@
         </v-alert>
       </v-row>
     </v-col>
-    <v-col v-if='checkFailed'>
+    <v-col v-if='checkFailed' cols='12'>
       <v-row
         align="center"
-        justify="space-around"
+        justify="center"
+        class="mt-5"
+      >
+      <v-col
+        cols="6"
       >
       <v-alert
+          dark
           type="error"
           border="left"
         >
-        Error Encountered. Refresh Page.
+        An error has occured. Refresh Page.
         </v-alert>
+      </v-col>
       </v-row>
     </v-col>
   </v-row>
@@ -63,16 +69,13 @@ export default {
         this.checkFailed = true
         console.log(e)
       }
-    },
-    emitStatus: function (status) {
-      this.$emit('goalCompleted', { status })
     }
   },
   computed: {
   },
   async mounted () {
     const status = await this.getStatus()
-    this.emitStatus(status)
+    this.$emit('goalCompleted', { status })
   }
 }
 </script>

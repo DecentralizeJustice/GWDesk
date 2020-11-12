@@ -1,17 +1,18 @@
 <template>
-  <v-container>
+  <v-row justify='space-around' align='center'>
+    <v-col cols='6' v-show="!addressReady">
       <mainWalletComp
       v-bind:goal='goal'
       v-bind:goalInfo='goalInfo'
       :key='keyStuff'
       v-if='!addressReady'/>
-      <v-flex xs12>
-        <v-card-title  v-show="!addressReady" primary-title class="justify-center">
-          <div>
+    </v-col>
+    <v-col cols='6' v-show="!addressReady">
+      <v-row>
+        <v-col cols='12'>
+          <div primary-title class="justify-center">
             <h3 class="headline" >Enter The Last 4 Characters of Address:</h3>
           </div>
-        </v-card-title>
-        <v-container v-show="!addressReady">
           <v-row>
             <v-col cols="12" sm="6">
               <v-text-field
@@ -21,26 +22,30 @@
               ></v-text-field>
             </v-col>
           </v-row>
-        </v-container>
-        <div v-show="addressReady">
-          {{unusedAddress}}
-        </div>
-        <v-btn
-          color="orange"
-          v-on:click="showAddress()"
-          v-show="!addressReady"
-        >
-          Show Address Again
-        </v-btn>
-        <v-btn
-          color="blue"
-          v-on:click="copyToClipboard()"
-          v-show="addressReady"
-        >
-          Copy Address
-        </v-btn>
-      </v-flex>
-  </v-container>
+          <v-btn
+            color="deep-purple darken-4"
+            v-on:click="showAddress()"
+          >
+            Show Address Again
+          </v-btn>
+      </v-col>
+      </v-row>
+    </v-col>
+    <v-col cols='6' v-show="addressReady" class="">
+      <v-row justify='space-around' align='center' class="ma-5">
+            {{unusedAddress}}
+      </v-row>
+      <v-row justify='space-around' align='center' class="mt-5">
+          <v-btn
+            color="blue"
+            v-on:click="copyToClipboard()"
+            v-show="addressReady"
+          >
+            Copy Address
+          </v-btn>
+      </v-row>
+    </v-col>
+  </v-row>
 </template>
 <script>
 import mainWalletComp from '@/components/hardwareWallets/mainWalletTool.vue'

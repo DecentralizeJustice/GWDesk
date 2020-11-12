@@ -13,7 +13,7 @@
           Hardware Wallet
         </v-tab>
         <v-tab-item>
-          <hardwareWallet style="min-height:25vh;" />
+          <hardwareWallet/>
         </v-tab-item>
       </v-tabs>
       <v-divider/>

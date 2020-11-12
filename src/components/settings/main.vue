@@ -7,14 +7,18 @@
     v-on:goalCompleted='goalCompleted'/>
     <syncNewWallet
     v-if='syncingWallet'
-    v-on:syncDone='syncingWallet = false'/>
+    v-on:syncDone='afterSync()'/>
     <setupWallet
     v-if='needsToBeSetup'
     v-on:hwWalletSetup='hwSetup'/>
     <v-col cols='12' v-if='incorrectWallet && !syncingWallet && !needsToBeSetup'>
       <v-row justify="center">
-        This Is Not The Synced Wallet. <br>
-        Plug In Correct Wallet or sync this hardware wallet.
+        <v-alert
+          type="info"
+          >
+          This Is Not The Synced Wallet. <br>
+          Plug In Another Wallet or sync this hardware wallet.
+        </v-alert>
       </v-row>
       <v-row
         align="center"
@@ -68,6 +72,12 @@ export default {
       } else {
         this.goal = 'manageWallet'
       }
+    },
+    afterSync: function () {
+      this.syncingWallet = false
+      this.needsToBeSetup = false
+      this.incorrectWallet = false
+      this.goal = 'getStatus'
     },
     hwSetup: function () {
       this.goal = 'getStatus'

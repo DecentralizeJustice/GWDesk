@@ -29,6 +29,9 @@ export default {
         this.goal = 'wipeSetupInfo'
         return
       }
+      if (goal === 'initialize' && !info.needsToRestore) {
+        console.log(goal, info)
+      }
       if (goal === 'initialize' && info.needsToRestore) {
         this.goal = 'restore'
         return
