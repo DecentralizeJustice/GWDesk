@@ -17,7 +17,6 @@ jobs:
       with:
         python-version: '3.6.12'
         architecture: 'x64'
-    - run: pyenv install --list
     - name: setup pyenv
       uses: "gabrielfalcao/pyenv-action@v5"
       with:
