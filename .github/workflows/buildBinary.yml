@@ -17,4 +17,8 @@ jobs:
       with:
         python-version: '3.6.12'
         architecture: 'x64'
+    - name: setup pyenv
+      uses: "gabrielfalcao/pyenv-action@v5"
+      with:
+          default: 3.6.12
     - run: ./contrib/build_bin.sh
