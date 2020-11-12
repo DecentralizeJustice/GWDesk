@@ -1,5 +1,15 @@
 <template>
-  <v-container class="" style="max-height: 70vh;overflow-y: auto;">
+  <div>
+      <v-row justify='center' align='center' v-if='noTransactions'>
+        <v-col cols='6'>
+        <v-alert
+          type="info"
+        >
+          No Transactions
+        </v-alert>
+      </v-col>
+    </v-row>
+  <div class="" style="max-height: 70vh;overflow-y: auto;" v-if='!noTransactions'>
     <v-card
       class='mt-2'
       v-bind:color="getpanelolor(item.confirmations)"
@@ -67,7 +77,8 @@
         </v-simple-table> -->
       </div>
     </v-card>
-  </v-container>
+  </div>
+</div>
 </template>
 <script>
 import {
@@ -178,7 +189,14 @@ export default {
     ]),
     ...mapGetters('hardwareInfo', [
       'singleSigElectrumName'
-    ])
+    ]),
+    noTransactions: function () {
+      if (this.transactions.length === 0) {
+        return true
+      } else {
+        return false
+      }
+    }
   },
   mounted: async function () {
     await this.setup()

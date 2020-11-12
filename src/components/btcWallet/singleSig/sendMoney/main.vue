@@ -2,14 +2,9 @@
   <v-container grid-list-md text-center fill-height text-xs-center>
     <v-layout align-center justify-center row fill-height>
       <v-flex xs12 >
-        <v-card
-          class="text-center"
-          elevation="0"
-        >
         <v-flex xs10 class="mx-auto mb-5">
           <topStepper v-bind:currentSection="currentSection"/>
         </v-flex>
-
           <component
           v-bind:masterFingerprint='singleSigHardwareWalletInfo.fingerprint'
           v-bind:is="currentMain"
@@ -27,7 +22,6 @@
             v-bind:currentSection="currentSection"
             v-bind:continueDisabled='continueDisabled'
           />
-        </v-card>
     </v-flex>
     </v-layout>
   </v-container>
