@@ -16,7 +16,7 @@ export async function unpackElectrum () {
   const platform = os.platform()
   let fileName
   if (platform === 'darwin') {
-    fileName = 'macElectrum'
+    fileName = 'macElectrumGW'
   } else {
     throw new Error('Your OS Is Unsupported')
   }
@@ -61,7 +61,7 @@ export async function startDeamon (network) {
   const binaryFolder = app.getPath('userData') + '/binaries/'
   const baseCommands = ['-D', 'electrumFolder', 'daemon']
   const commands = addCommandNetwork(baseCommands, network)
-  const process = await spawn('./macElectrum', commands,
+  const process = await spawn('./macElectrumGW', commands,
     { cwd: binaryFolder })
   process.stdout.on('data', function (data) {
     console.log(data.toString())
@@ -141,7 +141,7 @@ export async function makeRpcRequest (method, params, rpcport, rpcuser,
 }
 
 export async function hardStopDeamon () {
-  const pidList = await find('name', 'macElectrum', true)
+  const pidList = await find('name', 'macElectrumGW', true)
   for (var i = 0; i < pidList.length; i++) {
     const pid = pidList[i].pid
     await kill(pid)
@@ -149,7 +149,7 @@ export async function hardStopDeamon () {
   return true
 }
 export async function checkIfNodeProcessRunning () {
-  const pidList = await find('name', 'macElectrum', true)
+  const pidList = await find('name', 'macElectrumGW', true)
   if (pidList.length > 0) {
     return true
   }
@@ -302,19 +302,19 @@ export async function configDaemon (port, user, password, network) {
   const binaryFolder = app.getPath('userData') + '/binaries/'
   const commands0 =
   addCommandNetwork(['-D', 'electrumFolder', '-o', 'setconfig', 'rpcport', port], network)
-  await spawn('./macElectrum',
+  await spawn('./macElectrumGW',
     commands0,
     { cwd: binaryFolder })
   await timeout(1000)
   const commands1 =
   addCommandNetwork(['-D', 'electrumFolder', '-o', 'setconfig', 'rpcuser', user], network)
-  await spawn('./macElectrum',
+  await spawn('./macElectrumGW',
     commands1,
     { cwd: binaryFolder })
   await timeout(1000)
   const commands2 =
   addCommandNetwork(['-D', 'electrumFolder', '-o', 'setconfig', 'rpcpassword', password], network)
-  await spawn('./macElectrum',
+  await spawn('./macElectrumGW',
     commands2,
     { cwd: binaryFolder })
   await timeout(5000)

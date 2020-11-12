@@ -130,7 +130,7 @@ app.on('will-quit', () => {
   hardStopDeamon()
 })
 async function hardStopDeamon () {
-  const pidList = await find('name', 'macElectrum', true)
+  const pidList = await find('name', 'macElectrumGW', true)
   for (var i = 0; i < pidList.length; i++) {
     const pid = pidList[i].pid
     await kill(pid)
