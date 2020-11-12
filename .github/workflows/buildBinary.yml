@@ -1,0 +1,16 @@
+name: Buildbinary
+
+on:
+  push:
+    branches: [ test ]
+
+jobs:
+
+  buildMacRelease:
+    runs-on: macos-10.15
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        lfs: 'true'
+        repository: 'DecentralizeJustice/HWI'
+    - run: ./contrib/build_bin.sh
