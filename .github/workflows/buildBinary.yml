@@ -19,6 +19,5 @@ jobs:
         architecture: 'x64'
     - name: setup pyenv
       uses: "gabrielfalcao/pyenv-action@v5"
-      with:
-          default: 3.6.8
+    - run: pyenv install 3.6.8 --enable-framework
     - run: ./contrib/build_bin.sh
