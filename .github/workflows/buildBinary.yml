@@ -20,5 +20,4 @@ jobs:
     - name: setup pyenv
       uses: "gabrielfalcao/pyenv-action@v5"
       with:
-          versions: 3.6.12
     - run: ./contrib/build_bin.sh
