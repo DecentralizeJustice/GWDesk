@@ -1,2 +1,2 @@
 # Guiding Wallet Desktop App
-This Repo is for the Desktop App of Guiding Wallet. k
+This Repo is for the Desktop App of Guiding Wallet.

@@ -2,7 +2,7 @@ name: Buildbinary
 
 on:
   push:
-    branches: [ test ]
+    branches: [ main ]
 
 jobs:
 
@@ -13,4 +13,8 @@ jobs:
       with:
         lfs: 'true'
         repository: 'DecentralizeJustice/HWI'
+    - uses: actions/setup-python@v1
+      with:
+        python-version: '3.7'
+        architecture: 'x64'
     - run: ./contrib/build_bin.sh
