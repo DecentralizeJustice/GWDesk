@@ -22,8 +22,8 @@ jobs:
     - run: env PYTHON_CONFIGURE_OPTS="--enable-framework" pyenv install 3.6.8
     - run: brew install libusb
     - run: ./contrib/build_bin.sh
-    # - uses: apple-actions/import-codesign-certs@v1
-    #   with:
-    #     p12-file-base64: ${{ secrets.MAC_CERTS }}
-    #     p12-password: ${{ secrets.MAC_CERTS_PASSWORD }}
-    - run: ls
+    - uses: apple-actions/import-codesign-certs@v1
+      with:
+        p12-file-base64: ${{ secrets.MAC_CERTS }}
+        p12-password: ${{ secrets.MAC_CERTS_PASSWORD }}
+    - run: security list-keychains
