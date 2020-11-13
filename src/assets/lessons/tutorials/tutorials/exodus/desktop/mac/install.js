@@ -17,7 +17,9 @@ import slide09 from '@/assets/lessons/tutorials/slides/exodus/desktop/mac/instal
 import slide10 from '@/assets/lessons/tutorials/slides/exodus/desktop/mac/install/10.jpg'
 import notes1 from '@/assets/lessons/tutorials/courseNotes/exodus/desktop/mac/install.html'
 import notes2 from '@/assets/lessons/tutorials/courseNotes/exodus/desktop/general/backup.html'
+import thumbnail from '@/assets/lessons/tutorials/thumbnails/wallet.jpg'
 const backup = {
+  thumbnail,
   tutorial: true,
   desktop: true,
   title: 'Exodus Mac Setup',

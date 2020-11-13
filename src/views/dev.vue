@@ -23,6 +23,9 @@
       <v-tab>
         Tor
       </v-tab>
+      <v-tab>
+        HW Comp
+      </v-tab>
       <v-tab-item>
         <hwi />
       </v-tab-item>
@@ -38,6 +41,9 @@
       <v-tab-item>
         <tor/>
       </v-tab-item>
+      <v-tab-item>
+        <hw/>
+      </v-tab-item>
     </v-tabs>
   </v-card>
 </v-flex>
@@ -50,13 +56,15 @@ import electrum from '@/components/dev/electrumDev.vue'
 import general from '@/components/dev/generalDev.vue'
 import trezorCli from '@/components/dev/trezorCliDev.vue'
 import tor from '@/components/dev/tor.vue'
+import hw from '@/components/dev/mainWalletComp.vue'
 export default {
   components: {
     hwi,
     electrum,
     general,
     trezorCli,
-    tor
+    tor,
+    hw
   },
   data: () => ({
   }),

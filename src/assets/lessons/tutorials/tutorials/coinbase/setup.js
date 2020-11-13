@@ -18,7 +18,9 @@ import slide16 from '@/assets/lessons/tutorials/slides/coinbase/setup/16.jpg'
 import slide17 from '@/assets/lessons/tutorials/slides/coinbase/setup/17.jpg'
 import notes1 from '@/assets/lessons/tutorials/courseNotes/coinbase/setup/prep.html'
 import notes2 from '@/assets/lessons/tutorials/courseNotes/coinbase/setup/setup.html'
+import thumbnail from '@/assets/lessons/tutorials/thumbnails/setup.jpg'
 const backup = {
+  thumbnail,
   tutorial: true,
   desktop: true,
   title: 'Coinbase Account Setup',

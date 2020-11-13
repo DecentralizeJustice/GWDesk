@@ -25,15 +25,6 @@
           >
             Continue
           </v-btn>
-          <v-btn
-            color="green"
-            v-on:click="finish"
-            v-bind:disabled="!finishReady"
-            v-show='finishAvailable'
-          >
-            Finish
-          </v-btn>
-
         </v-card-actions>
 </template>
 
@@ -47,9 +38,6 @@ export default {
     continueForward () {
       this.$emit('change', 'continue')
     },
-    finish () {
-      this.$emit('finish')
-    },
     goBack () {
       this.$emit('change', 'back')
     },
@@ -58,18 +46,6 @@ export default {
     }
   },
   computed: {
-    // advancedAvailable () {
-    //   if (this.currentSection === 0) {
-    //     return true
-    //   }
-    //   return false
-    // }
-    finishAvailable () {
-      if (this.currentSection === 3) {
-        return true
-      }
-      return false
-    },
     backAvailable () {
       if (this.currentSection === 0) {
         return false
@@ -81,12 +57,6 @@ export default {
         return false
       }
       return true
-    },
-    finishReady () {
-      if (this.transaction.signedPSBT !== undefined) {
-        return true
-      }
-      return false
     }
   }
 }

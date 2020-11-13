@@ -38,14 +38,20 @@ export default {
   }),
   methods: {
     dormantb: function () {
-      ipcRenderer.on('dormant', (event, message) => {
-        console.log(message)
+      ipcRenderer.on('dormant34', (event, message) => {
+        const status = message.dormant
+        if (status !== '1\n') {
+          console.log('not dormant')
+        }
       })
       dormant()
     },
     circuitEstablishedb: function () {
-      ipcRenderer.on('circuitEstablished', (event, message) => {
-        console.log(message)
+      ipcRenderer.on('circuitEstablished34', (event, message) => {
+        const status = message.circuitEstablished
+        if (status === '1\n') {
+          console.log('circuit ready')
+        }
       })
       circuitEstablished()
     }

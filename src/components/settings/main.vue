@@ -1,78 +1,115 @@
 <template>
-    <v-layout align-center justify-center row fill-height>
-      <v-flex xs11>
-          <v-card flat>
-            <v-container>
-              <v-row justify="space-around">
-                <v-col cols="6">
-                  <v-alert v-if='hardwareWallets.length === 0'
-                    dense
-                    border="left"
-                    type="warning"
-                  >
-                    No Wallets Recognized
-                  </v-alert>
-                </v-col>
-              </v-row>
-              <v-row justify="center">
-                <v-btn
-                  color="purple darken-4"
-                  class="mx-2 my-2"
-                  v-on:click="changeName()"
-                >
-                  Select New Wallet Profile
-                </v-btn>
-              </v-row>
-            </v-container>
-          </v-card>
-    </v-flex>
-    </v-layout>
+  <div>
+    <mainWalletComp
+    v-if='!incorrectWallet && !syncingWallet && !needsToBeSetup'
+    v-bind:goal='goal'
+    v-bind:goalInfo='goalInfo'
+    v-on:goalCompleted='goalCompleted'/>
+    <syncNewWallet
+    v-if='syncingWallet'
+    v-on:syncDone='afterSync()'/>
+    <setupWallet
+    v-if='needsToBeSetup'
+    v-on:hwWalletSetup='hwSetup'/>
+    <v-col cols='12' v-if='incorrectWallet && !syncingWallet && !needsToBeSetup'>
+      <v-row justify="center">
+        <v-alert
+          type="info"
+          >
+          This Is Not The Synced Wallet. <br>
+          Plug In Another Wallet or sync this hardware wallet.
+        </v-alert>
+      </v-row>
+      <v-row
+        align="center"
+        justify="center"
+        class="mt-5"
+      >
+        <v-btn
+        @click='syncingWallet = true'
+          color="primary"
+        >
+          Sync This Hardware Wallet
+        </v-btn>
+      </v-row>
+      <v-row
+        align="center"
+        justify="center"
+        class="mt-5"
+      >
+        <v-btn
+        @click='incorrectWallet = false'
+          color="orange darken-4"
+        >
+          Plug In Another Wallet
+        </v-btn>
+      </v-row>
+    </v-col>
+  </div>
 </template>
 
 <script>
-import {
-  listDevices
-} from '@/assets/util/hwi/general.js'
-import {
-  changeName, changePhoto
-} from '@/assets/util/trezorCli/general.js'
+import syncNewWallet from '@/components/settings/syncNewWallet.vue'
+import setupWallet from '@/components/settings/setupWallet.vue'
+import { mapGetters, mapState } from 'vuex'
 export default {
+  name: 'mainSettings',
   components: {
+    setupWallet,
+    syncNewWallet
   },
   data: () => ({
-    dialog: false,
-    hardwareWallets: [],
-    channel: {}
+    incorrectWallet: false,
+    syncingWallet: false,
+    needsToBeSetup: false,
+    goal: 'getStatus',
+    goalInfo: {}
   }),
   methods: {
-    getDevices: async function () {
-      const result = await listDevices()
-      this.hardwareWallets = result
+    proccessFingerPrintInfo: async function (matchResult) {
+      if (!matchResult) {
+        this.incorrectWallet = true
+      } else {
+        this.goal = 'manageWallet'
+      }
     },
-    addListeners: function (stream) {
-      stream.stdout.on('data', (data) => {
-        console.log(`stdout: ${data}`)
-      })
-      stream.stderr.on('data', (data) => {
-        console.error(`stderr: ${data}`)
-      })
-      stream.on('close', (code) => {
-        console.log(`child process exited with code ${code}`)
-      })
+    afterSync: function () {
+      this.syncingWallet = false
+      this.needsToBeSetup = false
+      this.incorrectWallet = false
+      this.goal = 'getStatus'
     },
-    changeName: async function () {
-      this.channel = changeName(this.walletName)
-      this.addListeners(this.channel)
+    hwSetup: function () {
+      this.goal = 'getStatus'
+      this.needsToBeSetup = false
     },
-    changePhoto: async function () {
-      this.channel = changePhoto(this.photoName)
-      this.addListeners(this.channel)
+    goalCompleted: function (goal, info) {
+      if (goal === 'getStatus') {
+        if (info.status[0] !== 3) {
+          this.needsToBeSetup = true
+        } else {
+          this.checkIfWalletIsCorrect()
+        }
+      }
+      if (goal === 'checkFingerPrint') {
+        this.proccessFingerPrintInfo(info.result)
+      }
+    },
+    checkIfWalletIsCorrect: async function () {
+      this.goal = 'checkFingerPrint'
+      this.goalInfo.fingerprint = this.singleSigHardwareWalletInfo.fingerprint
     }
   },
   computed: {
+    ...mapState('bitcoinInfo', [
+      'btcSingleSigTestnet'
+    ]),
+    ...mapGetters('hardwareInfo', [
+      'singleSigHardwareWalletInfo',
+      'singleSigElectrumName'
+    ])
   },
   mounted () {
-    this.getDevices()
   }
 }
 </script>

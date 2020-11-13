@@ -2,18 +2,14 @@
   <v-container grid-list-md text-center fill-height text-xs-center>
     <v-layout align-center justify-center row fill-height>
       <v-flex xs12 >
-        <v-card
-          class="text-center"
-          elevation="0"
-        >
         <v-flex xs10 class="mx-auto mb-5">
           <topStepper v-bind:currentSection="currentSection"/>
         </v-flex>
-
           <component
+          v-bind:masterFingerprint='singleSigHardwareWalletInfo.fingerprint'
           v-bind:is="currentMain"
           v-bind:transaction="transaction"
-          v-bind:singleSigInfo='singleSigInfo'
+          v-bind:singleSigInfo='allWalletInfo'
           v-on:updateAddressArray="updateAddressArray"
           v-on:updateIncompletePSBT='updateIncompletePSBT'
           v-on:updateSignedPSBT='updateSignedPSBT'
@@ -22,12 +18,10 @@
           v-on:updateEstimatedTime='updateEstimatedTime'/>
 
           <bottomNav v-on:change="updateStep"
-            v-on:finish="finish"
             v-bind:transaction="transaction"
             v-bind:currentSection="currentSection"
             v-bind:continueDisabled='continueDisabled'
           />
-        </v-card>
     </v-flex>
     </v-layout>
   </v-container>
@@ -46,10 +40,11 @@ import {
 import {
   broadcastTransaction
 } from '@/assets/util/btc/electrum/general.js'
-import { createNamespacedHelpers } from 'vuex'
-const { mapState } = createNamespacedHelpers('bitcoinInfo')
+import { mapState, mapGetters } from 'vuex'
+// const R = require('ramda')
 export default {
   data: () => ({
+    allWalletInfo: {},
     componentList: [sendToAddresses, amount, confirm, sign],
     currentSection: 0,
     transaction: {
@@ -74,14 +69,16 @@ export default {
     continueDisabled () {
       const trans = this.transaction
       const currentSection = this.currentSection
+      const psbt = trans.psbt
+      const addressArray = trans.addressArray
       switch (currentSection) {
       case 0:
-        if (trans.addressArray.length === 0) {
+        if (addressArray.length === 0) {
           return true
         }
         break
       case 1:
-        if (trans.psbt === undefined) {
+        if (psbt === undefined) {
           return true
         }
         break
@@ -91,16 +88,21 @@ export default {
     currentMain () {
       return this.componentList[this.currentSection]
     },
-    ...mapState({
-      singleSigInfo: state => state.btcSingleSig
-    })
+    ...mapState('bitcoinInfo', [
+      'btcSingleSigTestnet'
+    ]),
+    ...mapGetters('hardwareInfo', [
+      'singleSigElectrumName',
+      'singleSigHardwareWalletInfo'
+    ])
   },
   methods: {
     async finish () {
-      const walletInfo = this.singleSigInfo
+      const walletInfo = this.btcSingleSigTestnet
       const finalHexTransaction = await finalizeTrans(this.transaction.signedPSBT)
+      console.log(finalHexTransaction)
       const result = await broadcastTransaction(finalHexTransaction,
-        walletInfo.rpcport, walletInfo.rpcuser, walletInfo.rpcpassword)
+        walletInfo.rpcPort, walletInfo.rpcUser, walletInfo.rpcPassword)
       this.transaction.transactionId = result.data.result
     },
     updateStep (stepUpdate) {
@@ -120,6 +122,9 @@ export default {
     },
     updateSignedPSBT (newPSBT) {
       this.transaction.signedPSBT = newPSBT
+      if (newPSBT) {
+        this.finish()
+      }
     },
     updateAddressArray (newArray) {
       this.transaction.addressArray = newArray
@@ -133,6 +138,16 @@ export default {
     updateEstimatedTime (time) {
       this.transaction.estimatedTime = time
     }
+  },
+  mounted () {
+    this.allWalletInfo.fingerprint = this.singleSigHardwareWalletInfo.fingerprint
+    this.allWalletInfo.vpub = this.singleSigHardwareWalletInfo.vpub
+    this.allWalletInfo.path = this.singleSigHardwareWalletInfo.vpubPath
+    this.allWalletInfo.walletName = this.singleSigElectrumName
+    this.allWalletInfo.network = this.btcSingleSigTestnet.network
+    this.allWalletInfo.rpcPassword = this.btcSingleSigTestnet.rpcPassword
+    this.allWalletInfo.rpcUser = this.btcSingleSigTestnet.rpcUser
+    this.allWalletInfo.rpcPort = this.btcSingleSigTestnet.rpcPort
   }
 }
 </script>

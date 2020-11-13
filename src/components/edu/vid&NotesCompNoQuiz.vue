@@ -49,13 +49,6 @@
          >
            Back
          </v-btn>
-         <v-btn
-           color="success darken-2"
-           @click="exit()"
-           v-if='done'
-         >
-           Finish
-         </v-btn>
        </v-col>
      </v-row>
    </v-col>
