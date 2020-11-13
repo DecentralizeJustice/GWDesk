@@ -3,7 +3,7 @@ name: BuildRelease
 
 on:
   push:
-    branches: [ main ]
+    branches: [ none ]
 
 jobs:
 
