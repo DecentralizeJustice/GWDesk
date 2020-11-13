@@ -1,5 +1,4 @@
 <template>
-  <div>
   <v-col
   :cols="12"
   >
@@ -12,6 +11,19 @@
       >
       <v-alert type="error" >
         Not Enough Money
+      </v-alert>
+
+      </v-col>
+    </v-row>
+    <v-row
+      justify="center"
+      v-if='noMoney'
+    >
+      <v-col
+      :cols="6"
+      >
+      <v-alert type="error" >
+        No Funds
       </v-alert>
 
       </v-col>
@@ -77,15 +89,14 @@
           >
           <v-card-text class="subtitle-1 white--text">
             <h1 class="title">Change:</h1>
-            {{changeAmount}} BTC
-          </v-card-text>
-          <v-card-text class="subtitle-1 white--text">
+            {{changeAmount}} BTC <br>
             <h1 class="title">Available Balance:</h1>
-            {{balance}} BTC
+            {{balance}} BTC <br>
+            <v-btn v-if="addressArray.length === 1" color="primary"
+              class="mt-1" @click="setNoChangeAmount" :disabled='pause'>
+              Send All
+            </v-btn>
           </v-card-text>
-          <!-- <v-btn v-if="addressArray.length === 1" color="red lighten-1" class="mb-2" @click="send">
-            No Change
-          </v-btn> -->
           </v-card>
           </v-col>
           <v-col cols="7" align-self='center'>
@@ -122,12 +133,11 @@
       </v-col>
     </v-row>
   </v-col>
-</div>
 </template>
 
 <script>
 import {
-  send, getBalance // sendAll
+  send, getBalance, sendAll, deserializeTrans
 } from '@/assets/util/btc/electrum/general.js'
 import {
   decodeElectrumPsbt
@@ -139,6 +149,7 @@ export default {
   props: ['transaction', 'singleSigInfo'],
   data: function () {
     return {
+      noMoney: false,
       oldTransInfo: {
         amountArray: [],
         speed: 0
@@ -147,9 +158,6 @@ export default {
         amountArray: [],
         speed: 0
       },
-      speedSelectGroup: [
-        '4 Hours', '1.5 Hours', '50 Min', '20 Min', '10 Min'
-      ],
       transAmountInfoPSBT: {},
       pause: false,
       tooHigh: false,
@@ -163,23 +171,17 @@ export default {
         feeExist: value => !value.isNaN() || 'Required Custom or Template Fee.',
         feePrecise: value => new BigNumber(value).dp() < 4 || 'Too Precise Amount',
         feeNotZero: value => !(new BigNumber(value).isZero()) || "Can't be zero.",
-        feeNotLessThan1: value => !(new BigNumber(value).isLessThan(new BigNumber(1))) || 'Below Min. Fee'
+        feeNotLessThan1: value => !(new BigNumber(value).isLessThan(new BigNumber(1))) ||
+        'Below Min. Fee'
       }
     }
   },
   computed: {
-    // feeWarningRatio: function () {
-    //   if (this.feeRatio > 30) {
-    //     return 'error'
-    //   }
-    //   if (this.feeRatio > 20) {
-    //     return 'warning'
-    //   }
-    //   if (this.feeRatio > 10) {
-    //     return 'info'
-    //   }
-    //   return 'info'
-    // },
+    speedSelectGroup: function () {
+      return [
+        '4 Hours', '1.5 Hours', '50 Min', '20 Min', '10 Min'
+      ]
+    },
     feeArrayOptions: function () {
       const feeInfo = this.feeInfo
       return [feeInfo['20'], feeInfo['10'], feeInfo['5'],
@@ -197,44 +199,25 @@ export default {
     addressArray: function () {
       return this.transaction.addressArray
     }
-    // allAddressesUsed: function () {
-    //   const notZero = x => !x.isEqualTo(new BigNumber(0))
-    //   const allUsed = R.all(notZero)(this.addressArraySat)
-    //   const allValuesExist = this.addressArraySat.length === this.addressArray.length
-    //   if (allUsed && allValuesExist) {
-    //     return true
-    //   } else {
-    //     return false
-    //   }
-    // },
-    // allValidAmounts: function () {
-    //   const notZero = x => new BigNumber(x).dp() < 9
-    //   const allValid = R.all(notZero)(this.amountArray)
-    //   if (allValid) {
-    //     return true
-    //   } else {
-    //     return false
-    //   }
-    // },
   },
   watch: {
     newTransInfo: {
       handler (newval) {
         if (!R.equals(newval, this.oldTransInfo)) {
-          this.send()
+          this.createTransaction()
         }
       },
       deep: true
     }
   },
   methods: {
-    firstSend: async function () {
+    baseTransaction: async function () {
       try {
         const singleSigInfo = this.singleSigInfo
         const feeRate = this.chossenFeeRate / 1000
         const trans = await send(feeRate, this.newTransInfo.amountArray, this.addressArray,
-          singleSigInfo.electrumWalletName, singleSigInfo.rpcport, singleSigInfo.rpcuser,
-          singleSigInfo.rpcpassword, singleSigInfo.network)
+          singleSigInfo.walletName, singleSigInfo.rpcPort, singleSigInfo.rpcUser,
+          singleSigInfo.rpcPassword, singleSigInfo.network)
         this.updateTransInfo(trans.data.result)
       } catch (err) {
         this.pause = true
@@ -243,18 +226,50 @@ export default {
         console.log(err)
       }
     },
-    send: async function () {
+    createTransaction: async function () {
       try {
         this.pause = true
         const singleSigInfo = this.singleSigInfo
         const feeRate = this.chossenFeeRate / 1000
         const trans = await send(feeRate, this.newTransInfo.amountArray, this.addressArray,
-          singleSigInfo.electrumWalletName, singleSigInfo.rpcport, singleSigInfo.rpcuser,
-          singleSigInfo.rpcpassword, singleSigInfo.network)
+          singleSigInfo.walletName, singleSigInfo.rpcPort, singleSigInfo.rpcUser,
+          singleSigInfo.rpcPassword, singleSigInfo.network)
+        if (trans.data.error) {
+          throw Error(trans.data.error)
+        }
         this.oldTransInfo = R.clone(this.newTransInfo)
         this.updateTransInfo(trans.data.result)
         this.pause = false
       } catch (err) {
+        console.log(err)
+        this.triggerTooHigh()
+        this.newTransInfo = R.clone(this.oldTransInfo)
+      }
+    },
+    setNoChangeAmount: async function () {
+      try {
+        this.pause = true
+        const singleSigInfo = this.singleSigInfo
+        const feeRate = this.chossenFeeRate / 1000
+        const trans = await sendAll(feeRate, this.addressArray[0],
+          singleSigInfo.walletName, singleSigInfo.rpcPort, singleSigInfo.rpcUser,
+          singleSigInfo.rpcPassword, singleSigInfo.network)
+        if (trans.data.error) {
+          throw Error(trans.data.error)
+        }
+        // this.oldTransInfo = R.clone(this.newTransInfo)
+        // this.updateTransInfo(trans.data.result)
+        const decodedElectrumPsbt = await deserializeTrans(trans.data.result,
+          this.singleSigInfo.rpcPort, this.singleSigInfo.rpcUser,
+          this.singleSigInfo.rpcPassword)
+        const transInfo = await decodeElectrumPsbt(trans.data.result, decodedElectrumPsbt.data.result)
+        const amount = transInfo.amountArray[0]
+        const noChangeInfo = R.clone(this.newTransInfo)
+        noChangeInfo.amountArray[0] = amount
+        this.pause = false
+        this.newTransInfo = R.clone(noChangeInfo)
+      } catch (err) {
+        console.log(err)
         this.triggerTooHigh()
         this.newTransInfo = R.clone(this.oldTransInfo)
       }
@@ -270,18 +285,19 @@ export default {
       this.pause = false
     },
     updateTransInfo: async function (psbt) {
-      this.transAmountInfoPSBT = await decodeElectrumPsbt(psbt)
+      const decodedElectrumPsbt = await deserializeTrans(psbt,
+        this.singleSigInfo.rpcPort, this.singleSigInfo.rpcUser,
+        this.singleSigInfo.rpcPassword)
+      this.transAmountInfoPSBT = await decodeElectrumPsbt(psbt, decodedElectrumPsbt.data.result)
       this.$emit('updateFeeInfo', (this.chossenFeeRate / 1000))
       this.$emit('updateIncompletePSBT', psbt)
       this.$emit('updateBalance', Number(this.balance))
       this.$emit('updateEstimatedTime', this.speedSelectGroup[this.newTransInfo.speed])
     },
-    noChange: async function () {
-    },
     setBalance: async function () {
       const singleSigInfo = this.singleSigInfo
-      const balance = await getBalance(singleSigInfo.electrumWalletName,
-        singleSigInfo.rpcport, singleSigInfo.rpcuser, singleSigInfo.rpcpassword,
+      const balance = await getBalance(singleSigInfo.walletName,
+        singleSigInfo.rpcPort, singleSigInfo.rpcUser, singleSigInfo.rpcPassword,
         singleSigInfo.network)
       this.balance = balance.data.result.confirmed
       return true
@@ -289,7 +305,7 @@ export default {
     setupFeeInfo: async function () {
       const walletInfo = this.singleSigInfo
       const feeInfo = await
-      getAllFeeRates(walletInfo.rpcport, walletInfo.rpcuser, walletInfo.rpcpassword)
+      getAllFeeRates(walletInfo.rpcPort, walletInfo.rpcUser, walletInfo.rpcPassword)
       this.feeInfo = feeInfo
       return true
     },
@@ -304,8 +320,13 @@ export default {
   mounted: async function () {
     await this.setupFeeInfo()
     await this.setBalance()
-    await this.fillinAmounts()
-    await this.firstSend()
+    if (this.balance !== '0') {
+      await this.fillinAmounts()
+      await this.baseTransaction()
+    } else {
+      this.pause = true
+      this.noMoney = true
+    }
   }
 }
 </script>

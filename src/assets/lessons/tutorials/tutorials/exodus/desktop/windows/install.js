@@ -17,7 +17,9 @@ import slide09 from '@/assets/lessons/tutorials/slides/exodus/desktop/windows/in
 import slide10 from '@/assets/lessons/tutorials/slides/exodus/desktop/windows/install/10.jpg'
 import notes1 from '@/assets/lessons/tutorials/courseNotes/exodus/desktop/windows/install.html'
 import notes2 from '@/assets/lessons/tutorials/courseNotes/exodus/desktop/general/backup.html'
+import thumbnail from '@/assets/lessons/tutorials/thumbnails/wallet.jpg'
 const backup = {
+  thumbnail,
   tutorial: true,
   desktop: true,
   title: 'Exodus Windows Setup',

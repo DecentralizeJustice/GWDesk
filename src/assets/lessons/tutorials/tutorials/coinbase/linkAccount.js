@@ -9,7 +9,9 @@ import slide8 from '@/assets/lessons/tutorials/slides/coinbase/linkbank/8.jpg'
 import slide9 from '@/assets/lessons/tutorials/slides/coinbase/linkbank/9.jpg'
 import slide10 from '@/assets/lessons/tutorials/slides/coinbase/linkbank/10.jpg'
 import notes1 from '@/assets/lessons/tutorials/courseNotes/coinbase/setup/linkbankaccount.html'
+import thumbnail from '@/assets/lessons/tutorials/thumbnails/bank.jpg'
 const backup = {
+  thumbnail,
   tutorial: true,
   desktop: true,
   title: 'Coinbase Link Bank Account',

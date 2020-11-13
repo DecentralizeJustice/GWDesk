@@ -1,5 +1,15 @@
 <template>
-  <v-container class="" style="max-height: 70vh;overflow-y: auto;">
+  <div>
+      <v-row justify='center' align='center' v-if='noTransactions'>
+        <v-col cols='6'>
+        <v-alert
+          type="info"
+        >
+          No Transactions
+        </v-alert>
+      </v-col>
+    </v-row>
+  <div class="" style="max-height: 70vh;overflow-y: auto;" v-if='!noTransactions'>
     <v-card
       class='mt-2'
       v-bind:color="getpanelolor(item.confirmations)"
@@ -14,7 +24,7 @@
         {{getType(item.incoming)}}
         {{Math.abs(item.bc_value)}} BTC
         <br>
-        {{getDate (item.monotonic_timestamp)}}
+        {{getDate (item.monotonic_timestamp, item.confirmations)}}
 
         <v-row
             align="center"
@@ -67,15 +77,15 @@
         </v-simple-table> -->
       </div>
     </v-card>
-  </v-container>
+  </div>
+</div>
 </template>
 <script>
 import {
   getWalletHistory
 } from '@/assets/util/btc/electrum/general.js'
-import { createNamespacedHelpers } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 const R = require('ramda')
-const { mapState } = createNamespacedHelpers('bitcoinInfo')
 export default {
   data: () => ({
     panel: [],
@@ -83,9 +93,9 @@ export default {
   }),
   methods: {
     async setup () {
-      const walletInfo = this.singleSigInfo
-      const result = await getWalletHistory(walletInfo.electrumWalletName, walletInfo.rpcport,
-        walletInfo.rpcuser, walletInfo.rpcpassword, walletInfo.network)
+      const walletInfo = this.btcSingleSigTestnet
+      const result = await getWalletHistory(this.singleSigElectrumName, walletInfo.rpcPort,
+        walletInfo.rpcUser, walletInfo.rpcPassword, walletInfo.network)
       const sortByTimestamp = R.sortBy(R.prop('monotonic_timestamp'))
       this.transactions = R.reverse(sortByTimestamp(result.data.result.transactions))
     },
@@ -121,7 +131,10 @@ export default {
         return 'green darken-2'
       }
     },
-    getDate (epoch) {
+    getDate (epoch, confirmations) {
+      if (confirmations === 0) {
+        return 'Unconfirmed'
+      }
       const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday',
         'Friday', 'Saturday']
       const monthNames = ['January', 'February', 'March', 'April', 'May',
@@ -171,9 +184,19 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-      singleSigInfo: state => state.btcSingleSig
-    })
+    ...mapState('bitcoinInfo', [
+      'btcSingleSigTestnet'
+    ]),
+    ...mapGetters('hardwareInfo', [
+      'singleSigElectrumName'
+    ]),
+    noTransactions: function () {
+      if (this.transactions.length === 0) {
+        return true
+      } else {
+        return false
+      }
+    }
   },
   mounted: async function () {
     await this.setup()

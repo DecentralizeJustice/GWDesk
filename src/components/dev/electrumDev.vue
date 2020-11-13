@@ -61,11 +61,25 @@
               Delete Wallet
             </v-btn>
             <v-btn
+              class="mx-2 my-2"
+              color="pink"
+              v-on:click="deleteElectrumFolder(network)"
+            >
+              Delete Electrum Folder
+            </v-btn>
+            <v-btn
               color="amber darken-4"
               class="mx-2 my-2"
               v-on:click="getinfo(rpcport, rpcuser, rpcpassword)"
             >
               Get Node Info
+            </v-btn>
+            <v-btn
+              color="blue"
+              class="mx-2 my-2"
+              v-on:click="deserialize(psbt64, rpcport, rpcuser, rpcpassword)"
+            >
+              Deserialize
             </v-btn>
             <v-btn
               color="brown"
@@ -146,11 +160,32 @@
               Get Unused Address
             </v-btn>
             <v-btn
+              color="grey"
+              class="mx-2 my-2"
+              v-on:click="listunspent(walletName, network, rpcport, rpcuser, rpcpassword)"
+            >
+              List Unspent
+            </v-btn>
+            <v-btn
               color="grey darken-3"
               class="mx-2 my-2"
               v-on:click="walletReady(walletName, network, rpcport, rpcuser, rpcpassword)"
             >
               Wallet Ready?
+            </v-btn>
+            <v-btn
+              color="red darken-3"
+              class="mx-2 my-2"
+              v-on:click="getTransaction(transId, rpcport, rpcuser, rpcpassword)"
+            >
+              Get Transaction
+            </v-btn>
+            <v-btn
+              color="blue darken-3"
+              class="mx-2 my-2"
+              v-on:click="checkIfNodeProcessRunning()"
+            >
+              Electrum Running
             </v-btn>
           </div>
           </v-card>
@@ -164,7 +199,9 @@ import {
   restoreWallet, loadWallet, hardStopDeamon, makeRpcRequest,
   getinfo, requestStopDeamon, listAddresses, listLoadedWallets,
   listWalletsThatExist, getBalance, getWalletHistory, sendAll, send,
-  broadcastTransaction, getFeeRate, getunusedaddress, walletReady
+  broadcastTransaction, getFeeRate, getunusedaddress, walletReady,
+  getTransaction, checkIfNodeProcessRunning, deleteElectrumFolder,
+  listunspent, deserializeTrans
 } from '@/assets/util/btc/electrum/general.js'
 export default {
   components: {
@@ -178,9 +215,11 @@ export default {
     rpcport: '7777',
     rpcuser: 'user',
     rpcpassword: '1',
-    walletName: 'no',
-    recoveryInfo: 'vpub5YhwwGPiiVo9JpARL8kog2vhhTQvcM7vtAdVhz8DL9YLHAJVxDnaDCoecdUDBMm2Hd4qNBcwUqW61DSXW4mR5G7qkFSNUwL6B6XpotCZeyM',
-    hex: '02000000000101f5fa3ecbae0cbc84ebc5e527e479b118afbbdcb1192b9ee46d0549fc6f11bd730100000000fdffffff0235040000000000001600144838adc22e8c00b76737aed7d87a4c1a7e07529ed00700000000000017a914ffd0dbb44402d5f8f12d9ba5b484a2c1bb47da428702483045022100b3d5e2ae31521a78311a059ccb29dde42ac4864c01363f1b1e727bc34d924d710220688be7be8531fef33119580ed9d8fab50170b97973ebe441dbe9982dcc748337012103e7003a77c616c0099ea07777d7c20d06b374ed0e5a74348cb857fb94e1ba1fa61d471a00'
+    walletName: 'f25565e10b324c85b36ccc8ab0f16384b87c78bf',
+    transId: 'b403bdaa673afd92eba80c22bce8166e0bcac8bda3e02ed7d49c2d9fcfebed43',
+    recoveryInfo: 'vpub5Y3LsqvBH22zW2oF1V1bTHk47Br3vbETwpNMFX7xgBe9LptUayqwpGYwwBBm23GLUp3otGM5tECqy844sPWiUBTJVckTNtXyySTu18cFHVy',
+    hex: '02000000000101f5fa3ecbae0cbc84ebc5e527e479b118afbbdcb1192b9ee46d0549fc6f11bd730100000000fdffffff0235040000000000001600144838adc22e8c00b76737aed7d87a4c1a7e07529ed00700000000000017a914ffd0dbb44402d5f8f12d9ba5b484a2c1bb47da428702483045022100b3d5e2ae31521a78311a059ccb29dde42ac4864c01363f1b1e727bc34d924d710220688be7be8531fef33119580ed9d8fab50170b97973ebe441dbe9982dcc748337012103e7003a77c616c0099ea07777d7c20d06b374ed0e5a74348cb857fb94e1ba1fa61d471a00',
+    psbt64: 'cHNidP8BAFICAAAAAb+WnT16PfXuOW5xik1YNgMJo0uhui8t2tnwI04LIAOCAAAAAAD9////AZIOAQAAAAAAFgAU3RacollkleIxk+lz8my/mLCXiH3obxwAAAEA/egBAgAAAAABA7jQHOtpvtA9sb/Znz7X6eg3PucNYUBYZbnYvnYgNipHAAAAAAD9////4dnLsJyC+RaBLjepvKz2m8PsimypuvkRWOC79svSBMMAAAAAAP3////996L6yACtEDyX7OebOF4Z95PXf5f8pdBc9nZz/piz8gAAAAAA/f///wE3DwEAAAAAABYAFH0TrtTd5i87gtP/mAE0SsqCbEhPAkcwRAIgOsn2jkTqpwWRFwl4x70n9R2v+pI0izi+bdprYK0AH1gCIEOhHWgWUSIovV2dgaYZLAjhv/JZqI2QWS/Q2k9j0DHEASEDeFtLDAv0jsHPHBO/i3JBADyxzwEmOqWb04+fbLe9qzgCSDBFAiEApyoI3TgLCDQe5dj8gpxAAZYUrhGHOv1slE4RFE8Z5dsCIHDJUQOaIKznmfomxpSbumg8/fvRo+2p3mw+LQoFnML7ASEDbcGB21wH38VeUZoGnOOYRoRmwhQip78DtFOpC8K9egUCRzBEAiBuN0+hNgRcVzJDePjoLvoeemPXtEd9/BJFdkgCQxg/+QIgc5+yUu4PwKIInba2Ye3GqGcmwVWUgXrEyYkFuYxYeUABIQN4W0sMC/SOwc8cE7+LckEAPLHPASY6pZvTj59st72rOOdvHAAiBgKn4O5t4J8XaubCP6ruBTSc1HkYmNZhuVclRe7TFtcjfwytXPTrAAAAAAsAAAAAAA=='
   }),
   methods: {
     get: async function () {
@@ -199,9 +238,25 @@ export default {
       const result = await getunusedaddress(walletName, network, rpcport, rpcuser, rpcpassword)
       console.log(result.data.result)
     },
+    deserialize: async function (tx, rpcport, rpcuser, rpcpassword) {
+      const result = await deserializeTrans(tx, rpcport, rpcuser, rpcpassword)
+      console.log(result.data.result)
+    },
+    listunspent: async function (walletName, network, rpcport, rpcuser, rpcpassword) {
+      const result = await listunspent(walletName, network, rpcport, rpcuser, rpcpassword)
+      console.log(result.data.result)
+    },
+    checkIfNodeProcessRunning: async function () {
+      const result = await checkIfNodeProcessRunning()
+      console.log(result)
+    },
     unpackFile: async function () {
       const result = await unpackElectrum()
       console.log(result)
+    },
+    getTransaction: async function (transId, rpcport, rpcuser, rpcpassword) {
+      const result = await getTransaction(transId, rpcport, rpcuser, rpcpassword)
+      console.log(result.data.result)
     },
     listWalletsThatExist: async function (network) {
       const results = await listWalletsThatExist(network)
@@ -247,6 +302,10 @@ export default {
       const result = await listLoadedWallets(rpcport, rpcuser, rpcpassword)
       console.log(result.data.result)
     },
+    deleteElectrumFolder: async function (network) {
+      const result = await deleteElectrumFolder(network)
+      console.log(result)
+    },
     deleteWallet: async function (walletName, network) {
       const result = await deleteWallet(walletName, network)
       console.log(result)
@@ -259,7 +318,7 @@ export default {
       rpcpassword, network) {
       const result = await restoreWallet(walletName, recoveryInfo, rpcport, rpcuser,
         rpcpassword, network)
-      console.log(result.data.result)
+      console.log(result.data)
     },
     startDeamon: async function (network) {
       const result = await startDeamon(network)

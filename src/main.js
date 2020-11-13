@@ -6,7 +6,8 @@ import App from './App.vue'
 import router from './router'
 import store from './store/index.js'
 import vuetify from './plugins/vuetify'
-
+import mainWalletComp from '@/components/hardwareWallets/mainWalletTool.vue'
+Vue.component('mainWalletComp', mainWalletComp)
 Vue.config.productionTip = false
 
 new Vue({

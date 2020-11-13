@@ -46,6 +46,34 @@
             >
               Get Node
             </v-btn>
+            <v-btn
+              color="orange darken-4"
+              class="mx-2 my-2"
+              v-on:click="updateFirmware()"
+            >
+              Update
+            </v-btn>
+            <v-btn
+              color="pink darken-4"
+              class="mx-2 my-2"
+              v-on:click="getVersion()"
+            >
+              Get Version
+            </v-btn>
+            <v-btn
+              color="teal"
+              class="mx-2 my-2"
+              v-on:click="getStatus()"
+            >
+              Get Status
+            </v-btn>
+            <v-btn
+              color="green"
+              class="mx-2 my-2"
+              v-on:click="wipe()"
+            >
+              Wipe
+            </v-btn>
             </div>
           </v-card>
     </v-flex>
@@ -54,8 +82,8 @@
 
 <script>
 import {
-  unpackMainBinary, unpackPhotos, changeName, changePhoto,
-  getInfo, getNode
+  unpackMainBinary, unpackPhotos, changeName, changePhoto, wipe,
+  getInfo, getNode, updateFirmware, getVersionNumber, getStatus
 } from '@/assets/util/trezorCli/general.js'
 export default {
   components: {
@@ -64,11 +92,28 @@ export default {
     node: "m/44'/0'/0'",
     walletName: 'Turing',
     photoName: 'turing',
-    channel: {}
+    channel: {},
+    version: '2.3.3'
   }),
   methods: {
     unpack: async function () {
       const test = await unpackMainBinary()
+      console.log(test)
+    },
+    updateFirmware: async function () {
+      this.channel = await updateFirmware(this.version)
+      this.addListeners(this.channel)
+    },
+    getVersion: async function () {
+      const test = await getVersionNumber()
+      console.log(test)
+    },
+    getStatus: async function () {
+      const test = await getStatus()
+      console.log(test)
+    },
+    wipe: async function () {
+      const test = await wipe()
       console.log(test)
     },
     unpackPhotos: async function () {
@@ -84,8 +129,8 @@ export default {
       this.addListeners(this.channel)
     },
     getInfo: async function () {
-      this.channel = getInfo()
-      this.addListeners(this.channel)
+      const info = await getInfo()
+      console.log(info)
     },
     getNode: async function () {
       this.channel = getNode(this.node)

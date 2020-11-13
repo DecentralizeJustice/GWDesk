@@ -7,6 +7,13 @@ const app = remote.app
 const fs = require('fs-extra')
 const binaryFolder = '/binaries/'
 const os = require('os')
+export function backup () {
+  const binaryFolder = app.getPath('userData') + '/binaries/macTrezorCliTool'
+  const commands = ['firmware-update', 'backup-device']
+  const command = spawn('./macTrezorCliTool', commands,
+    { cwd: binaryFolder })
+  return command
+}
 
 const binFolder = app.getPath('userData') + '/binaries/hwiMac'
 const macName = 'hwiMac'
