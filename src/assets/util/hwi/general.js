@@ -17,6 +17,7 @@ export function backup () {
 
 const binFolder = app.getPath('userData') + '/binaries/hwiMac'
 const macName = 'hwiMac'
+
 export async function unpackBinary () {
   const destination = app.getPath('userData') + '/binaries'
   let fileName

@@ -9,28 +9,26 @@ const zlib = require('zlib')
 const tar = require('tar-fs')
 const binaryFolder = '/binaries/'
 const os = require('os')
+const binFileName = 'macTrezorCliTool'
+
 export async function unpackMainBinary () {
   const destination = app.getPath('userData') + '/binaries'
-  let tarName
+  let fileName
   const platform = os.platform()
 
   if (platform === 'darwin') {
-    tarName = 'macTrezorCliTool.tar.gz'
+    fileName = 'macTrezorCliTool'
   } else {
     throw new Error('Your OS Is Unsupported')
   }
   // eslint-disable-next-line
-  const source = path.join(__static, binaryFolder + tarName)
-  await new Promise((resolve, reject) => {
-    fs.createReadStream(source)
-      .on('error', err => reject(err))
-      .pipe(zlib.Unzip())
-      .pipe(tar.extract(destination))
-      .on('finish', resolve)
-  })
+  const source = path.join(__static, binaryFolder + fileName)
+  const wholeDestination = destination + '/' + fileName
+  await fs.copyFile(source, wholeDestination)
   return true
 }
 export async function unpackPhotos () {
+  console.log('not working')
   const destination = app.getPath('userData') + '/binaries'
   const tarName = 'roboPhotos.tar.gz'
 
@@ -47,47 +45,47 @@ export async function unpackPhotos () {
 }
 
 export function changeName (name) {
-  const binaryFolder = app.getPath('userData') + '/binaries/macTrezorCliTool'
+  const binaryFolder = app.getPath('userData') + '/binaries'
   const commands = ['set-label', '-l', name]
-  const command = spawn('./macTrezorCliTool', commands,
+  const command = spawn(`./${binFileName}`, commands,
     { cwd: binaryFolder })
   return command
 }
 export async function getInfo () {
-  const binary = app.getPath('userData') + '/binaries/macTrezorCliTool'
-  const { stdout } = await exec(`"${binary}"/macTrezorCliTool get-features`)
+  const binary = app.getPath('userData') + '/binaries'
+  const { stdout } = await exec(`"${binary}"/${binFileName} get-features`)
   return stdout
 }
 export async function wipe () {
-  const binary = app.getPath('userData') + '/binaries/macTrezorCliTool'
-  const { stdout } = await exec(`"${binary}"/macTrezorCliTool wipe-device -b`)
+  const binary = app.getPath('userData') + '/binaries'
+  const { stdout } = await exec(`"${binary}"/${binFileName} wipe-device -b`)
   return stdout
 }
 export function getNode (node) {
-  const binaryFolder = app.getPath('userData') + '/binaries/macTrezorCliTool'
+  const binaryFolder = app.getPath('userData') + '/binaries'
   const commands = ['get-public-node', '-n', node]
-  const command = spawn('./macTrezorCliTool', commands,
+  const command = spawn(`./${binFileName}`, commands,
     { cwd: binaryFolder })
   return command
 }
 export function changePhoto (photo) {
-  const binaryFolder = app.getPath('userData') + '/binaries/macTrezorCliTool'
+  const binaryFolder = app.getPath('userData') + '/binaries'
   const commands = ['set-homescreen', '-f', `../roboPhotos/${photo}.toif`]
-  const command = spawn('./macTrezorCliTool', commands,
+  const command = spawn(`./${binFileName}`, commands,
     { cwd: binaryFolder })
   return command
 }
 export function updateFirmware (version) {
-  const binaryFolder = app.getPath('userData') + '/binaries/macTrezorCliTool'
+  const binaryFolder = app.getPath('userData') + '/binaries'
   const commands = ['firmware-update', '-v', `${version}`]
-  const command = spawn('./macTrezorCliTool', commands,
+  const command = spawn(`./${binFileName}`, commands,
     { cwd: binaryFolder })
   return command
 }
 
 export async function backup () {
-  const binary = app.getPath('userData') + '/binaries/macTrezorCliTool'
-  const { stdout } = await exec(`"${binary}"/macTrezorCliTool backup-device`)
+  const binary = app.getPath('userData') + '/binaries'
+  const { stdout } = await exec(`"${binary}"/${binFileName} backup-device`)
   return stdout
 }
 
