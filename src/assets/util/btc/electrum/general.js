@@ -7,11 +7,9 @@ const os = require('os')
 const crypto = require('crypto')
 const axios = require('axios')
 const fs = require('fs-extra')
-const fsPlain = require('fs')
-const util = require('util')
-const changePermission = util.promisify(fsPlain.chmod)
+const changePermission = fs.chmod
 const app = remote.app
-const copyFile = fs.promises.copyFile
+const removeFile = fs.remove
 const readdir = fs.promises.readdir
 const timeout = ms => new Promise(resolve => setTimeout(resolve, ms))
 
@@ -26,7 +24,8 @@ export async function unpackElectrum () {
   const destination = app.getPath('userData') + '/binaries/' + fileName
   // eslint-disable-next-line
   const source = path.join(__static, '/binaries/' + fileName)
-  await copyFile(source, destination)
+  await removeFile(destination)
+  await fs.copyFile(source, destination)
   await changePermission(destination, '777')
   return true
 }

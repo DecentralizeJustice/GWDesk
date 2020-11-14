@@ -5,12 +5,12 @@ const spawn = require('child_process').spawn
 const remote = require('electron').remote
 const app = remote.app
 const fs = require('fs-extra')
-const fsPlain = require('fs')
 const zlib = require('zlib')
 const tar = require('tar-fs')
 const binaryFolder = '/binaries/'
 const os = require('os')
-const changePermission = util.promisify(fsPlain.chmod)
+const removeFile = fs.remove
+const changePermission = fs.chmod
 const binFileName = 'macTrezorCliTool'
 
 export async function unpackMainBinary () {
@@ -26,6 +26,7 @@ export async function unpackMainBinary () {
   // eslint-disable-next-line
   const source = path.join(__static, binaryFolder + fileName)
   const wholeDestination = destination + '/' + fileName
+  await removeFile(destination)
   await fs.copyFile(source, wholeDestination)
   await changePermission(wholeDestination, '777')
   return true

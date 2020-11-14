@@ -7,8 +7,8 @@ const app = remote.app
 const fs = require('fs-extra')
 const binaryFolder = '/binaries/'
 const os = require('os')
-const fsPlain = require('fs')
-const changePermission = util.promisify(fsPlain.chmod)
+const removeFile = fs.remove
+const changePermission = fs.chmod
 export function backup () {
   const binaryFolder = app.getPath('userData') + '/binaries/macTrezorCliTool'
   const commands = ['firmware-update', 'backup-device']
@@ -33,6 +33,7 @@ export async function unpackBinary () {
   // eslint-disable-next-line
   const source = path.join(__static, binaryFolder + fileName)
   const wholeDestination = destination + '/' + fileName
+  await removeFile(destination)
   await fs.copyFile(source, wholeDestination)
   await changePermission(wholeDestination, '777')
   return true
