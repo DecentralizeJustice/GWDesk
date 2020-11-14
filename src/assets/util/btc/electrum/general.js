@@ -9,7 +9,6 @@ const axios = require('axios')
 const fs = require('fs-extra')
 const changePermission = fs.chmod
 const app = remote.app
-// const removeFile = fs.remove
 const readdir = fs.promises.readdir
 const timeout = ms => new Promise(resolve => setTimeout(resolve, ms))
 
@@ -21,12 +20,13 @@ export async function unpackElectrum () {
   } else {
     throw new Error('Your OS Is Unsupported')
   }
-  const destination = app.getPath('userData') + '/binaries/' + fileName
+  const destination = app.getPath('userData') + '/binaries'
+  const wholeDestination = '/' + fileName
   // eslint-disable-next-line
   const source = path.join(__static, '/binaries/' + fileName)
-  // await removeFile(destination)
-  await fs.copyFile(source, destination)
-  await changePermission(destination, '777')
+  await fs.ensureDir(destination, 0o0777)
+  await fs.copyFile(source, wholeDestination)
+  await changePermission(wholeDestination, '777')
   return true
 }
 

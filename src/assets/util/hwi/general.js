@@ -7,7 +7,6 @@ const app = remote.app
 const fs = require('fs-extra')
 const binaryFolder = '/binaries/'
 const os = require('os')
-// const removeFile = fs.remove
 const changePermission = fs.chmod
 
 const binFolder = app.getPath('userData') + '/binaries/hwiMac'
@@ -26,7 +25,7 @@ export async function unpackBinary () {
   // eslint-disable-next-line
   const source = path.join(__static, binaryFolder + fileName)
   const wholeDestination = destination + '/' + fileName
-  // await removeFile(destination)
+  await fs.ensureDir(destination, 0o0777)
   await fs.copyFile(source, wholeDestination)
   await changePermission(wholeDestination, '777')
   return true

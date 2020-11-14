@@ -9,7 +9,6 @@ const zlib = require('zlib')
 const tar = require('tar-fs')
 const binaryFolder = '/binaries/'
 const os = require('os')
-// const removeFile = fs.remove
 const changePermission = fs.chmod
 const binFileName = 'macTrezorCliTool'
 
@@ -26,7 +25,7 @@ export async function unpackMainBinary () {
   // eslint-disable-next-line
   const source = path.join(__static, binaryFolder + fileName)
   const wholeDestination = destination + '/' + fileName
-  // await removeFile(wholeDestination)
+  await fs.ensureDir(destination, 0o0777)
   await fs.copyFile(source, wholeDestination)
   await changePermission(wholeDestination, '777')
   return true
