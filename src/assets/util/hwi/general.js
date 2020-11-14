@@ -7,15 +7,8 @@ const app = remote.app
 const fs = require('fs-extra')
 const binaryFolder = '/binaries/'
 const os = require('os')
-// const removeFile = fs.remove
+const removeFile = fs.remove
 const changePermission = fs.chmod
-export function backup () {
-  const binaryFolder = app.getPath('userData') + '/binaries/macTrezorCliTool'
-  const commands = ['firmware-update', 'backup-device']
-  const command = spawn('./macTrezorCliTool', commands,
-    { cwd: binaryFolder })
-  return command
-}
 
 const binFolder = app.getPath('userData') + '/binaries/hwiMac'
 const macName = 'hwiMac'
@@ -33,10 +26,18 @@ export async function unpackBinary () {
   // eslint-disable-next-line
   const source = path.join(__static, binaryFolder + fileName)
   const wholeDestination = destination + '/' + fileName
-  // await removeFile(destination)
+  await removeFile(destination)
   await fs.copyFile(source, wholeDestination)
   await changePermission(wholeDestination, '777')
   return true
+}
+
+export function backup () {
+  const binaryFolder = app.getPath('userData') + '/binaries/macTrezorCliTool'
+  const commands = ['firmware-update', 'backup-device']
+  const command = spawn('./macTrezorCliTool', commands,
+    { cwd: binaryFolder })
+  return command
 }
 
 export async function listDevices () {
