@@ -162,11 +162,18 @@ export default {
         throw Error('Too many attempts to bring up wallet')
       }
       if (!this.correctWalletExist) {
-        return true
+        return false
       }
-      await this.checkCorrectWalletExist()
-      await this.electrumRunning()
-      await this.correctWalletLoaded()
+      let nextready = await this.checkCorrectWalletExist()
+      if (nextready) {
+        nextready = await this.electrumRunning()
+      }
+      if (nextready) {
+        nextready = await this.correctWalletLoaded()
+      }
+      if (!nextready) {
+        return false
+      }
       return true
     },
     electrumRunning: async function () {
@@ -182,6 +189,7 @@ export default {
       const wallets = await listWalletsThatExist(this.network)
       if (!wallets.includes(this.singleSigElectrumName)) {
         this.correctWalletExist = false
+        return false
       }
       return true
     },
@@ -200,11 +208,13 @@ export default {
   },
   async mounted () {
     try {
-      await this.start()
-      this.walletReady = true
+      const startSuccessful = await this.start()
+      if (startSuccessful) {
+        this.walletReady = true
+      } else {
+        console.log('wallet not ready')
+      }
     } catch (e) {
-      console.log(e)
-      this.correctWalletExist = false
       this.walletError = true
       console.log('Wallet Bring Up Error')
     }

@@ -53,11 +53,19 @@ export async function deleteElectrumFolder (network) {
   return true
 }
 export async function listWalletsThatExist (network) {
-  const pathAddition = getPathNetwork(network)
-  const destination =
-  app.getPath('userData') + `/binaries/electrumFolder/${pathAddition}wallets/`
-  const files = await readdir(destination)
-  return files
+  try {
+    const pathAddition = getPathNetwork(network)
+    const destination =
+    app.getPath('userData') + `/binaries/electrumFolder/${pathAddition}wallets/`
+    const files = await readdir(destination)
+    return files
+  } catch (e) {
+    if (e.toString().slice(0, 40) === 'Error: ENOENT: no such file or directory') {
+      return []
+    } else {
+      throw e
+    }
+  }
 }
 
 export async function startDeamon (network) {

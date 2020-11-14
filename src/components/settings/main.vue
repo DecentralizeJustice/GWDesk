@@ -1,17 +1,17 @@
 <template>
   <div>
     <mainWalletComp
-    v-if='!incorrectWallet && !syncingWallet && !needsToBeSetup'
+    v-if='!incorrectWallet && !needsToSync && !needsToBeSetup'
     v-bind:goal='goal'
     v-bind:goalInfo='goalInfo'
     v-on:goalCompleted='goalCompleted'/>
     <syncNewWallet
-    v-if='syncingWallet'
+    v-if='needsToSync'
     v-on:syncDone='afterSync()'/>
     <setupWallet
     v-if='needsToBeSetup'
     v-on:hwWalletSetup='hwSetup'/>
-    <v-col cols='12' v-if='incorrectWallet && !syncingWallet && !needsToBeSetup'>
+    <v-col cols='12' v-if='incorrectWallet && !needsToSync && !needsToBeSetup'>
       <v-row justify="center">
         <v-alert
           type="info"
@@ -26,7 +26,7 @@
         class="mt-5"
       >
         <v-btn
-        @click='syncingWallet = true'
+        @click='needsToSync = true'
           color="primary"
         >
           Sync This Hardware Wallet
@@ -49,6 +49,9 @@
 </template>
 
 <script>
+import {
+  listWalletsThatExist
+} from '@/assets/util/btc/electrum/general.js'
 import syncNewWallet from '@/components/settings/syncNewWallet.vue'
 import setupWallet from '@/components/settings/setupWallet.vue'
 import { mapGetters, mapState } from 'vuex'
@@ -60,8 +63,8 @@ export default {
   },
   data: () => ({
     incorrectWallet: false,
-    syncingWallet: false,
     needsToBeSetup: false,
+    needsToSync: false,
     goal: 'getStatus',
     goalInfo: {}
   }),
@@ -70,18 +73,26 @@ export default {
       if (!matchResult) {
         this.incorrectWallet = true
       } else {
+        this.checkIfNeedsSync()
+      }
+    },
+    checkIfNeedsSync: async function () {
+      const wallets = await listWalletsThatExist(this.network)
+      if (!wallets.includes(this.singleSigElectrumName)) {
+        this.needsToSync = true
+      } else {
         this.goal = 'manageWallet'
       }
     },
     afterSync: function () {
-      this.syncingWallet = false
+      this.needsToSync = false
       this.needsToBeSetup = false
       this.incorrectWallet = false
       this.goal = 'getStatus'
     },
     hwSetup: function () {
-      this.goal = 'getStatus'
       this.needsToBeSetup = false
+      this.needsToSync = true
     },
     goalCompleted: function (goal, info) {
       if (goal === 'getStatus') {
@@ -107,7 +118,10 @@ export default {
     ...mapGetters('hardwareInfo', [
       'singleSigHardwareWalletInfo',
       'singleSigElectrumName'
-    ])
+    ]),
+    network: function () {
+      return this.btcSingleSigTestnet.network
+    }
   },
   mounted () {
   }

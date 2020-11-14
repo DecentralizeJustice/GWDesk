@@ -74,11 +74,7 @@ export default {
     setXpub: async function (xpub) {
       const vpub = await pubTovpub(xpub)
       this.vpub = vpub
-      if (this.singleSigHardwareWalletInfo.vpub === this.vpub) {
-        this.done = true
-      } else {
-        this.goal = 'getVersion'
-      }
+      this.goal = 'getVersion'
     },
     setVersion: async function (version) {
       this.version = version
