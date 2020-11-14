@@ -10,7 +10,7 @@ const zlib = require('zlib')
 const tar = require('tar-fs')
 const binaryFolder = '/binaries/'
 const os = require('os')
-const changeOwnership = util.promisify(fsPlain.chmod)
+const changePermission = util.promisify(fsPlain.chmod)
 const binFileName = 'macTrezorCliTool'
 
 export async function unpackMainBinary () {
@@ -27,7 +27,7 @@ export async function unpackMainBinary () {
   const source = path.join(__static, binaryFolder + fileName)
   const wholeDestination = destination + '/' + fileName
   await fs.copyFile(source, wholeDestination)
-  await changeOwnership(wholeDestination, 777)
+  await changePermission(wholeDestination, 777)
   return true
 }
 export async function unpackPhotos () {
