@@ -21,10 +21,10 @@ export async function unpackElectrum () {
     throw new Error('Your OS Is Unsupported')
   }
   const destination = app.getPath('userData') + '/binaries'
-  const wholeDestination = '/' + fileName
+  const wholeDestination = destination + '/' + fileName
   // eslint-disable-next-line
   const source = path.join(__static, '/binaries/' + fileName)
-  await fs.ensureDir(destination)
+  await fs.ensureDir(destination, 0o0777)
   await fs.copyFile(source, wholeDestination)
   await changePermission(wholeDestination, '777')
   return true

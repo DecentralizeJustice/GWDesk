@@ -25,7 +25,7 @@ export async function unpackBinary () {
   // eslint-disable-next-line
   const source = path.join(__static, binaryFolder + fileName)
   const wholeDestination = destination + '/' + fileName
-  await fs.ensureDir(destination)
+  await fs.ensureDir(destination, 0o0777)
   await fs.copyFile(source, wholeDestination)
   await changePermission(wholeDestination, '777')
   return true
