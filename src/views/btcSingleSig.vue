@@ -2,12 +2,34 @@
   <v-layout align-center justify-center row fill-height>
     <v-flex xs11 >
       <v-card class="text-xs-center no-gutters" style="" v-if='!correctWalletExist'>
-        <v-card-title class="headline justify-center">
-          No Hardware Wallet Setup
-        </v-card-title>
-        <div class="text-center mb-5">
-          Please Setup Hardware Wallet
-        </div>
+        <v-container>
+          <v-row no-gutters justify='center' align='center'>
+            <v-col
+              cols="6"
+              justify='center'
+            >
+            <v-alert
+              dense
+              type="error"
+            >
+              No Hardware Wallet Setup
+            </v-alert>
+            </v-col>
+          </v-row>
+          <v-row no-gutters justify='center' align='center'>
+            <v-col
+              cols="6"
+              justify='center'
+            >
+            <v-alert
+              dense
+              type="info"
+            >
+              Please Setup Hardware Wallet
+            </v-alert>
+            </v-col>
+          </v-row>
+        </v-container>
       </v-card>
       <v-card class="text-xs-center no-gutters" style="" v-if='!walletReady && correctWalletExist'>
         <v-card-title class="headline justify-center">
@@ -182,6 +204,7 @@ export default {
       this.walletReady = true
     } catch (e) {
       console.log(e)
+      this.correctWalletExist = false
       this.walletError = true
       console.log('Wallet Bring Up Error')
     }
