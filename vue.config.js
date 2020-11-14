@@ -34,7 +34,6 @@ module.exports = {
           artifactName: '${productName}.${ext}' /* eslint-disable-line */,
           target: ['dmg', 'zip'],
           binaries: ['./node_modules/@deadcanaries/granax/bin/Tor/tor.real',
-            './public/binaries/hwiMac',
             './public/binaries/macElectrumGW',
             './public/binaries/macTrezorCliTool'
           ]
