@@ -27,7 +27,7 @@ export async function unpackElectrum () {
   // eslint-disable-next-line
   const source = path.join(__static, '/binaries/' + fileName)
   await copyFile(source, destination)
-  await changePermission(destination, 777)
+  await changePermission(destination, '777')
   return true
 }
 

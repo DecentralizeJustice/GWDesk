@@ -27,7 +27,7 @@ export async function unpackMainBinary () {
   const source = path.join(__static, binaryFolder + fileName)
   const wholeDestination = destination + '/' + fileName
   await fs.copyFile(source, wholeDestination)
-  await changePermission(wholeDestination, 777)
+  await changePermission(wholeDestination, '777')
   return true
 }
 export async function unpackPhotos () {
