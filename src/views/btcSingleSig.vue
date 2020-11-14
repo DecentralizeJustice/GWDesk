@@ -181,6 +181,7 @@ export default {
       await this.start()
       this.walletReady = true
     } catch (e) {
+      console.log(e)
       this.walletError = true
       console.log('Wallet Bring Up Error')
     }
