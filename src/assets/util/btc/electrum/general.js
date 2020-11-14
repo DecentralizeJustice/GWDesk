@@ -7,6 +7,9 @@ const os = require('os')
 const crypto = require('crypto')
 const axios = require('axios')
 const fs = require('fs-extra')
+const fsPlain = require('fs')
+const util = require('util')
+const changeOwnership = util.promisify(fsPlain.chmod)
 const app = remote.app
 const copyFile = fs.promises.copyFile
 const readdir = fs.promises.readdir
@@ -24,7 +27,7 @@ export async function unpackElectrum () {
   // eslint-disable-next-line
   const source = path.join(__static, '/binaries/' + fileName)
   await copyFile(source, destination)
-  await fs.chmod(destination, 777)
+  await changeOwnership(destination, 777)
   return true
 }
 
