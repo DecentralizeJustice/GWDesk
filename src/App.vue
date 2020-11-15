@@ -65,6 +65,27 @@ export default {
       await unpackBinary()
       await unpackMainBinary()
     },
+    alsoStartup: async function () {
+      hardStopDeamon()
+      this.loop()
+      if (process.env.NODE_ENV !== 'development') {
+        ipcRenderer.send('CHECK_FOR_UPDATE_PENDING')
+        ipcRenderer.on('CHECK_FOR_UPDATE_SUCCESS', (event, updateInfo) => {
+          const version = updateInfo.version
+          const updateReady = this.shouldUpdate(version, appVersion)
+          if (version && updateReady) {
+            this.updateAvailable = true
+          }
+        })
+        ipcRenderer.on('CHECK_FOR_UPDATE_FAILURE', () => {
+          console.log('failed update')
+        })
+        ipcRenderer.on('DOWNLOAD_UPDATE_FAILURE', (event, err) => {
+          console.log('download failed')
+          console.log(err)
+        })
+      }
+    },
     shouldUpdate: function (downloadVersion, currentVersion) {
       const downloadVersionArray = downloadVersion.split('.').map(e => parseInt(e))
       const currentVersionArray = currentVersion.split('.').map(e => parseInt(e))
@@ -143,26 +164,8 @@ export default {
   },
   async mounted () {
     this.start()
-    this.copyBinary()
-    await hardStopDeamon()
-    await this.loop()
-    if (process.env.NODE_ENV !== 'development') {
-      ipcRenderer.send('CHECK_FOR_UPDATE_PENDING')
-      ipcRenderer.on('CHECK_FOR_UPDATE_SUCCESS', (event, updateInfo) => {
-        const version = updateInfo.version
-        const updateReady = this.shouldUpdate(version, appVersion)
-        if (version && updateReady) {
-          this.updateAvailable = true
-        }
-      })
-      ipcRenderer.on('CHECK_FOR_UPDATE_FAILURE', () => {
-        console.log('failed update')
-      })
-      ipcRenderer.on('DOWNLOAD_UPDATE_FAILURE', (event, err) => {
-        console.log('download failed')
-        console.log(err)
-      })
-    }
+    await this.copyBinary()
+    this.alsoStartup()
   }
 }
 </script>
