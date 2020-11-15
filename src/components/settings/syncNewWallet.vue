@@ -109,6 +109,7 @@ export default {
       console.log('configging')
       await configDaemon(this.btcSingleSigTestnet.rpcPort, this.btcSingleSigTestnet.rpcUser,
         this.btcSingleSigTestnet.rpcPassword, this.btcSingleSigTestnet.network)
+      await hardStopDeamon()
       await startDeamon(this.btcSingleSigTestnet.network)
       console.log('restoring')
       await restoreWallet(this.singleSigElectrumName,

@@ -317,19 +317,19 @@ export async function configDaemon (port, user, password, network) {
   await spawn('./macElectrumGW',
     commands0,
     { cwd: binaryFolder })
-  await timeout(1000)
+  await timeout(40000)
   const commands1 =
   addCommandNetwork(['-D', 'electrumFolder', '-o', 'setconfig', 'rpcuser', user], network)
   await spawn('./macElectrumGW',
     commands1,
     { cwd: binaryFolder })
-  await timeout(1000)
+  await timeout(40000)
   const commands2 =
   addCommandNetwork(['-D', 'electrumFolder', '-o', 'setconfig', 'rpcpassword', password], network)
   await spawn('./macElectrumGW',
     commands2,
     { cwd: binaryFolder })
-  await timeout(5000)
+  await timeout(40000)
   return true
 }
 
