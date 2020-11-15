@@ -77,7 +77,10 @@ export async function startDeamon (network) {
   process.stdout.on('data', function (data) {
     console.log(data.toString())
   })
-  await timeout(10000)
+  process.on('exit', function (data) {
+    console.log('done!!!!')
+  })
+  await timeout(50000)
   return true
 }
 
