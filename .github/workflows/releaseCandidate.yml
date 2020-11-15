@@ -70,6 +70,9 @@ jobs:
         p12-file-base64: ${{ secrets.MAC_CERTS }}
         p12-password: ${{ secrets.MAC_CERTS_PASSWORD }}
     - run: yarn run resign
+    - run: yarn run testsign
+    - run: yarn run testsign1
+    - run: yarn run testsign2
     - run: yarn run build
       env:
           CSC_KEY_PASSWORD: ${{ secrets.MAC_CERTS_PASSWORD }}
