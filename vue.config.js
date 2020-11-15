@@ -33,7 +33,11 @@ module.exports = {
           gatekeeperAssess: false,
           artifactName: '${productName}.${ext}' /* eslint-disable-line */,
           target: ['dmg', 'zip'],
-          binaries: ['./node_modules/@deadcanaries/granax/bin/Tor/tor.real'
+          binaries: [
+            './node_modules/@deadcanaries/granax/bin/Tor/tor.real',
+            './public/binaries/macElectrumGW',
+            './public/binaries/macTrezorCliTool',
+            './public/binaries/hwiMac'
           ]
         },
         win: {
