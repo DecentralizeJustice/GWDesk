@@ -182,6 +182,7 @@ export async function restoreWallet (walletName, recoveryInfo, rpcport, rpcuser,
       wallet_path: `electrumFolder/${pathAddition}wallets/${walletName}`
     },
     rpcport, rpcuser, rpcpassword)
+  console.log(request)
   return request
 }
 
