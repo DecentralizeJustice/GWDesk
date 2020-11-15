@@ -77,9 +77,9 @@ export async function startDeamon (network) {
   process.stdout.on('data', function (data) {
     console.log(data.toString())
   })
-  process.on('exit', function (data) {
-    console.log('done!!!!')
-  })
+  // process.on('exit', function (data) {
+  //   console.log('done!!!!')
+  // })
   await timeout(50000)
   return true
 }
@@ -185,7 +185,6 @@ export async function restoreWallet (walletName, recoveryInfo, rpcport, rpcuser,
       wallet_path: `electrumFolder/${pathAddition}wallets/${walletName}`
     },
     rpcport, rpcuser, rpcpassword)
-  console.log(request)
   return request
 }
 

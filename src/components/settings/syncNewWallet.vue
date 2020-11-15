@@ -106,17 +106,14 @@ export default {
       await deleteWallet(this.singleSigElectrumName, this.btcSingleSigTestnet.network)
       await deleteElectrumFolder(this.btcSingleSigTestnet.network)
       await unpackElectrum()
-      console.log('configging')
       await configDaemon(this.btcSingleSigTestnet.rpcPort, this.btcSingleSigTestnet.rpcUser,
         this.btcSingleSigTestnet.rpcPassword, this.btcSingleSigTestnet.network)
       await hardStopDeamon()
       await startDeamon(this.btcSingleSigTestnet.network)
-      console.log('restoring')
       await restoreWallet(this.singleSigElectrumName,
         this.singleSigHardwareWalletInfo.vpub, this.btcSingleSigTestnet.rpcport,
         this.btcSingleSigTestnet.rpcuser,
         this.btcSingleSigTestnet.rpcpassword, this.btcSingleSigTestnet.network)
-      console.log('loading')
       await loadWallet(this.singleSigElectrumName, this.btcSingleSigTestnet.rpcport,
         this.btcSingleSigTestnet.rpcuser,
         this.btcSingleSigTestnet.rpcpassword, this.btcSingleSigTestnet.network)
