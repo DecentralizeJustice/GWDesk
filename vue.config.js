@@ -29,14 +29,16 @@ module.exports = {
         mac: {
           hardenedRuntime: true,
           entitlements: './buildInfo/entitlements.mac.inherit.plist',
-          entitlementsInherit: './buildInfo/binentitlements.mac.inherit.plist',
+          entitlementsInherit: './buildInfo/entitlements.mac.inherit.plist',
           gatekeeperAssess: false,
           artifactName: '${productName}.${ext}' /* eslint-disable-line */,
           target: ['dmg', 'zip'],
           binaries: [
-            './public/binaries/hwiMac',
-            './public/binaries/macElectrumGW',
-            './public/binaries/macTrezorCliTool'
+            ['./node_modules/@deadcanaries/granax/bin/Tor/tor.real',
+              './node_modules/@deadcanaries/granax/bin/Tor/libevent-2.1.7.dylib']
+            // './public/binaries/hwiMac',
+            // './public/binaries/macElectrumGW',
+            // './public/binaries/macTrezorCliTool'
           ]
         },
         win: {
