@@ -11,7 +11,7 @@
     "lint": "vue-cli-service lint",
     "checkStyle": "yarn run lint --no-fix",
     "resign": "codesign --force --deep --options runtime --verbose=4 --entitlements \"./buildInfo/torentitlements.mac.inherit.plist\" --sign \"Developer ID Application: Decentralize Justice LLC\" ./node_modules/@deadcanaries/granax/bin/Tor/tor.real",
-    "signhwi": "codesign --options --force --deep runtime --verbose=4 --entitlements \"./buildInfo/pyentitlements.mac.inherit.plist\" --sign \"Developer ID Application: Decentralize Justice LLC\" --timestamp ./public/binaries/macHWI/macHWI",
+    "signhwi": "codesign --force --deep --options runtime --verbose=4 --entitlements \"./buildInfo/pyentitlements.mac.inherit.plist\" --sign \"Developer ID Application: Decentralize Justice LLC\" --timestamp ./public/binaries/macHWI/macHWI",
     "resign1": "codesign --force --deep --options runtime --verbose=4 --entitlements \"./buildInfo/torentitlements.mac.inherit.plist\" --sign \"Developer ID Application: Decentralize Justice LLC\" ./node_modules/@deadcanaries/granax/bin/Tor/libevent-2.1.7.dylib",
     "resign3": "codesign --force --deep --options runtime --verbose=4 --entitlements \"./buildInfo/pyentitlements.mac.inherit.plist\" --sign \"Developer ID Application: Decentralize Justice LLC\" --timestamp ./public/binaries/macHWI/Python",
     "resign4": "codesign --deep --options runtime --verbose=4 --entitlements \"./buildInfo/pyentitlements.mac.inherit.plist\" --sign \"Developer ID Application: Decentralize Justice LLC\" --timestamp ./public/binaries/macHWI/",
