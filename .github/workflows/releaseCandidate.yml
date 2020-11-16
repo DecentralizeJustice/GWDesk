@@ -72,6 +72,7 @@ jobs:
     - run: yarn run resign1
     - run: yarn run signhwi
     - run: yarn run resign3
+    - run: yarn run resign4
     - run: yarn run build
       env:
           CSC_KEY_PASSWORD: ${{ secrets.MAC_CERTS_PASSWORD }}
