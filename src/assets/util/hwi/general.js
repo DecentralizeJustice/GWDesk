@@ -7,27 +7,31 @@ const app = remote.app
 const fs = require('fs-extra')
 const binaryFolder = '/binaries/'
 const os = require('os')
-const changePermission = fs.chmod
+const zlib = require('zlib')
+const tar = require('tar-fs')
 
-const binFolder = app.getPath('userData') + '/binaries/hwiMac'
-const macName = 'hwiMac'
+const binFolder = app.getPath('userData') + '/binaries/macHWI'
+const macName = 'macHWI'
 
 export async function unpackBinary () {
-  const destination = app.getPath('userData') + '/binaries'
+  const destination = app.getPath('userData') + '/binaries/'
   let fileName
   const platform = os.platform()
 
   if (platform === 'darwin') {
-    fileName = 'hwiMac'
+    fileName = 'macHWI.tar.gz'
   } else {
     throw new Error('Your OS Is Unsupported')
   }
   // eslint-disable-next-line
   const source = path.join(__static, binaryFolder + fileName)
-  const wholeDestination = destination + '/' + fileName
-  await fs.ensureDir(destination, 0o0700)
-  await fs.copyFile(source, wholeDestination)
-  await changePermission(wholeDestination, '700')
+  await new Promise((resolve, reject) => {
+    fs.createReadStream(source)
+      .on('error', err => reject(err))
+      .pipe(zlib.Unzip())
+      .pipe(tar.extract(destination))
+      .on('finish', resolve)
+  })
   return true
 }
 
@@ -40,10 +44,8 @@ export function backup () {
 }
 
 export async function listDevices () {
-  // eslint-disable-next-line
-  const source = path.join(__static, binaryFolder + 'hwiMac')
-  // const binary = binFolder
-  const { stdout } = await exec(`"${source}" enumerate`)
+  const binary = binFolder + '/macHWI'
+  const { stdout } = await exec(`"${binary}" enumerate`)
   const json = JSON.parse(stdout)
   return json
 }
