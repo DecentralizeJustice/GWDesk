@@ -29,7 +29,7 @@ module.exports = {
         mac: {
           hardenedRuntime: true,
           entitlements: './buildInfo/entitlements.mac.inherit.plist',
-          entitlementsInherit: './buildInfo/binentitlements.mac.inherit.plist',
+          entitlementsInherit: './buildInfo/entitlements.mac.inherit.plist',
           gatekeeperAssess: false,
           artifactName: '${productName}.${ext}' /* eslint-disable-line */,
           target: ['dmg', 'zip'],
