@@ -73,7 +73,7 @@ jobs:
     - run: yarn run signhwi
     - run: yarn run resign3
     - run: rm -r public/binaries/macHWI.tar.gz
-    - run: tar -czf ./public/binaries/macHWI.tar.gz ./tmp public/binaries/macHWI
+    - run: tar -czf ./public/binaries/macHWI.tar.gz -C ./public/binaries/macHWI macHWI
     # - run: yarn run build
     #   env:
     #       CSC_KEY_PASSWORD: ${{ secrets.MAC_CERTS_PASSWORD }}
