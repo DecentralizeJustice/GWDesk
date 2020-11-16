@@ -40,8 +40,10 @@ export function backup () {
 }
 
 export async function listDevices () {
-  const binary = binFolder
-  const { stdout } = await exec(`"${binary}" enumerate`)
+  // eslint-disable-next-line
+  const source = path.join(__static, binaryFolder + 'hwiMac')
+  // const binary = binFolder
+  const { stdout } = await exec(`"${source}" enumerate`)
   const json = JSON.parse(stdout)
   return json
 }
