@@ -34,9 +34,9 @@ module.exports = {
           artifactName: '${productName}.${ext}' /* eslint-disable-line */,
           target: ['dmg', 'zip'],
           binaries: [
-            './public/binaries/hwiMac',
-            './public/binaries/macElectrumGW',
-            './public/binaries/macTrezorCliTool'
+            // './public/binaries/hwiMac',
+            // './public/binaries/macElectrumGW',
+            // './public/binaries/macTrezorCliTool'
           ]
         },
         win: {
