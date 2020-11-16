@@ -45,6 +45,8 @@ declare -a arr=(
   "resource.cpython-37m-darwin.so"
   "_random.cpython-37m-darwin.so"
   "cryptography/hazmat/bindings/_openssl.abi3.so"
+  "google/protobuf/internal/_api_implementation.cpython-37m-darwin.so"
+  "google/protobuf/pyext/_message.cpython-37m-darwin.so"
 
 )
 
