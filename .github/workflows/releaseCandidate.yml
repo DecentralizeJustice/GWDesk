@@ -71,14 +71,15 @@ jobs:
     - run: yarn run resignTor1
     - run: yarn run resignTor2
     - run: yarn run resignAll
-    - run: yarn run build
-      env:
-          CSC_KEY_PASSWORD: ${{ secrets.MAC_CERTS_PASSWORD }}
-          CSC_LINK: ${{ secrets.MAC_CERTS }}
-          APPLEID: ${{ secrets.APPLEID }}
-          APPLEIDPASS: ${{ secrets.APPLEIDPASS }}
-    - name: Upload mac dmg
-      uses: actions/upload-artifact@v2
-      with:
-        name: GuidingWallet.dmg
-        path: dist_electron/GuidingWallet.dmg
+    - run: ./sign.sh
+    # - run: yarn run build
+    #   env:
+    #       CSC_KEY_PASSWORD: ${{ secrets.MAC_CERTS_PASSWORD }}
+    #       CSC_LINK: ${{ secrets.MAC_CERTS }}
+    #       APPLEID: ${{ secrets.APPLEID }}
+    #       APPLEIDPASS: ${{ secrets.APPLEIDPASS }}
+    # - name: Upload mac dmg
+    #   uses: actions/upload-artifact@v2
+    #   with:
+    #     name: GuidingWallet.dmg
+    #     path: dist_electron/GuidingWallet.dmg
