@@ -73,6 +73,7 @@ jobs:
     - run: yarn run signhwi
     - run: yarn run resign3
     - run: cd public/binaries/
+    - run: ls
     - run: rm -r macHWI.tar.gz
     - run: tar -zcvf macHWI.tar.gz macHWI
     - run: cd ..
