@@ -72,6 +72,7 @@ jobs:
     - run: tar -xzvf public/binaries/macHWI.tar.gz -C public/binaries/
     - run: yarn run signhwi
     - run: yarn run resign3
+    - run: codesign --verify --verbose public/binaries/macHWI
     - run: rm -r public/binaries/macHWI.tar.gz
     - run: tar -czf ./public/binaries/macHWI.tar.gz -C ./public/binaries/ macHWI
     # - run: yarn run build
