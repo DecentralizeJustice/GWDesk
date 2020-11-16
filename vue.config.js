@@ -28,8 +28,8 @@ module.exports = {
         npmRebuild: false,
         mac: {
           hardenedRuntime: true,
-          entitlements: './buildInfo/entitlements.mac.inherit.plist',
-          entitlementsInherit: './buildInfo/entitlements.mac.inherit.plist',
+          entitlements: './buildInfo/mainentitlements.mac.inherit.plist',
+          entitlementsInherit: './buildInfo/mainentitlements.mac.inherit.plist',
           gatekeeperAssess: false,
           artifactName: '${productName}.${ext}' /* eslint-disable-line */,
           target: ['dmg', 'zip'],
