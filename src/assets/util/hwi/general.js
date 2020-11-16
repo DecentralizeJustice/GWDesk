@@ -7,31 +7,23 @@ const app = remote.app
 const fs = require('fs-extra')
 const binaryFolder = '/binaries/'
 const os = require('os')
-const zlib = require('zlib')
-const tar = require('tar-fs')
 
 const binFolder = app.getPath('userData') + '/binaries/macHWI'
 const macName = 'macHWI'
 
 export async function unpackBinary () {
   const destination = app.getPath('userData') + '/binaries/'
-  let fileName
+  // let fileName
   const platform = os.platform()
 
   if (platform === 'darwin') {
-    fileName = 'macHWI.tar.gz'
+    // fileName = 'macHWI'
   } else {
     throw new Error('Your OS Is Unsupported')
   }
   // eslint-disable-next-line
-  const source = path.join(__static, binaryFolder + fileName)
-  await new Promise((resolve, reject) => {
-    fs.createReadStream(source)
-      .on('error', err => reject(err))
-      .pipe(zlib.Unzip())
-      .pipe(tar.extract(destination))
-      .on('finish', resolve)
-  })
+  const source = path.join(__static, binaryFolder)
+  await fs.copy(source, destination)
   return true
 }
 
