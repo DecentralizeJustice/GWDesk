@@ -24,7 +24,8 @@ export async function unpackBinary () {
   // eslint-disable-next-line
   const source = path.join(__static, binaryFolder)
   await fs.copy(source, destination)
-  await fs.chmod(destination + 'macHWI', 0o755)
+  console.log(destination + 'macHWI/macHWI')
+  await fs.chmod(destination + 'macHWI/macHWI', 0o777)
   return true
 }
 
