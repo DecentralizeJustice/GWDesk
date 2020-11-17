@@ -51,39 +51,39 @@ jobs:
       with:
         # fix till https://github.com/actions/setup-node/issues/121 is solved
         node-version: 12.16.1
-    # - uses: actions/setup-python@v1
-    #   with:
-    #     python-version: '3.7'
-    #     architecture: 'x64'
-    # - run: node -p "require('./package').version" > get_Version.txt
-    # - uses: pCYSl5EDgo/cat@master
-    #   id: getVersion
-    #   with:
-    #     path: get_Version.txt
-    #     trim: true
-    #
-    # - run: yarn install
-    # - run: yarn run test
+    - uses: actions/setup-python@v1
+      with:
+        python-version: '3.7'
+        architecture: 'x64'
+    - run: node -p "require('./package').version" > get_Version.txt
+    - uses: pCYSl5EDgo/cat@master
+      id: getVersion
+      with:
+        path: get_Version.txt
+        trim: true
+
+    - run: yarn install
+    - run: yarn run test
     - uses: apple-actions/import-codesign-certs@v1
       with:
         p12-file-base64: ${{ secrets.MAC_CERTS }}
         p12-password: ${{ secrets.MAC_CERTS_PASSWORD }}
-    # - run: yarn run resignTor1
-    # - run: yarn run resignTor2
-    # - run: chmod +x hwiSign.sh
-    # - run: ./hwiSign.sh
-    # - run: chmod +x trezorSign.sh
-    # - run: ./trezorSign.sh
+    - run: yarn run resignTor1
+    - run: yarn run resignTor2
+    - run: chmod +x hwiSign.sh
+    - run: ./hwiSign.sh
+    - run: chmod +x trezorSign.sh
+    - run: ./trezorSign.sh
     - run: chmod +x electrumSign.sh
     - run: ./electrumSign.sh
-    # - run: yarn run build
-    #   env:
-    #       CSC_KEY_PASSWORD: ${{ secrets.MAC_CERTS_PASSWORD }}
-    #       CSC_LINK: ${{ secrets.MAC_CERTS }}
-    #       APPLEID: ${{ secrets.APPLEID }}
-    #       APPLEIDPASS: ${{ secrets.APPLEIDPASS }}
-    # - name: Upload mac dmg
-    #   uses: actions/upload-artifact@v2
-    #   with:
-    #     name: GuidingWallet.dmg
-    #     path: dist_electron/GuidingWallet.dmg
+    - run: yarn run build
+      env:
+          CSC_KEY_PASSWORD: ${{ secrets.MAC_CERTS_PASSWORD }}
+          CSC_LINK: ${{ secrets.MAC_CERTS }}
+          APPLEID: ${{ secrets.APPLEID }}
+          APPLEIDPASS: ${{ secrets.APPLEIDPASS }}
+    - name: Upload mac dmg
+      uses: actions/upload-artifact@v2
+      with:
+        name: GuidingWallet.dmg
+        path: dist_electron/GuidingWallet.dmg

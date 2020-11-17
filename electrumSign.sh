@@ -1,5 +1,5 @@
 #!/bin/sh
-## declare an array variable
+
 arr=( $(find public/binaries/macElectrumGW -type f -name "*.so") )
 for ELEMENT in ${arr[@]}
 do
