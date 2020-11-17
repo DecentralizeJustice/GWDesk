@@ -47,10 +47,8 @@ declare -a arr=(
   "_sha256.cpython-36m-darwin.so"
   "cryptography/hazmat/bindings/_constant_time.abi3.so"
   "cryptography/hazmat/bindings/_openssl.abi3.so"
-  "cpython-36m-darwin/sotruct.cpython-36m-darwin.so"
-  "cpython-36m-darwin/soib.cpython-36m-darwin.so"
-  "soib.cpython-36m-darwin.so"
-
+  "_struct/cpython-36m-darwin/sotruct.cpython-36m-darwin.so"
+  "zlib/cpython-36m-darwin/soib.cpython-36m-darwin.so"
 )
 
 for i in "${arr[@]}"
