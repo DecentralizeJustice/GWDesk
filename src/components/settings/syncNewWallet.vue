@@ -49,7 +49,7 @@ import mainWalletComp from '@/components/hardwareWallets/mainWalletTool.vue'
 import { pubTovpub } from '@/assets/util/btc/pubUtil.js'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import {
-  startDeamon, hardStopDeamon, deleteWallet, unpackElectrum, configDaemon,
+  startDeamon, hardStopDeamon, deleteWallet, configDaemon,
   restoreWallet, deleteElectrumFolder, loadWallet
 } from '@/assets/util/btc/electrum/general.js'
 export default {
@@ -105,9 +105,11 @@ export default {
       await hardStopDeamon()
       await deleteWallet(this.singleSigElectrumName, this.btcSingleSigTestnet.network)
       await deleteElectrumFolder(this.btcSingleSigTestnet.network)
-      await unpackElectrum()
+      // await unpackElectrum()
       await configDaemon(this.btcSingleSigTestnet.rpcPort, this.btcSingleSigTestnet.rpcUser,
         this.btcSingleSigTestnet.rpcPassword, this.btcSingleSigTestnet.network)
+      await hardStopDeamon()
+      await startDeamon(this.btcSingleSigTestnet.network)
       await hardStopDeamon()
       await startDeamon(this.btcSingleSigTestnet.network)
       await restoreWallet(this.singleSigElectrumName,

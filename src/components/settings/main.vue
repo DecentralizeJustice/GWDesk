@@ -77,7 +77,9 @@ export default {
       }
     },
     checkIfNeedsSync: async function () {
+      console.log('checking if need sync')
       const wallets = await listWalletsThatExist(this.network)
+      console.log(wallets, this.singleSigElectrumName)
       if (!wallets.includes(this.singleSigElectrumName)) {
         this.needsToSync = true
       } else {
@@ -85,6 +87,7 @@ export default {
       }
     },
     afterSync: function () {
+      console.log('syncDone')
       this.needsToSync = false
       this.needsToBeSetup = false
       this.incorrectWallet = false

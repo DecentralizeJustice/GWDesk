@@ -32,44 +32,59 @@ export async function configDaemon (port, user, password, network) {
   console.log(port, user, password, network)
   const binaryFolder = app.getPath('userData') + '/binaries/macElectrumGW'
   const commands0 =
-  addCommandNetwork(['-D', 'electrumFolder', '-o', 'setconfig', 'rpcport', port], network)
-  await spawn('./macElectrumGW',
+  addCommandNetwork(['-D', '../electrumFolder', '-o', 'setconfig', 'rpcport', port], network)
+  const commands1 =
+  addCommandNetwork(['-D', '../electrumFolder', '-o', 'setconfig', 'rpcuser', user], network)
+  const commands2 =
+  addCommandNetwork(['-D', '../electrumFolder', '-o', 'setconfig', 'rpcpassword', password], network)
+  const ls = spawn('./macElectrumGW',
     commands0,
     { cwd: binaryFolder })
-  await timeout(40000)
-  const commands1 =
-  addCommandNetwork(['-D', 'electrumFolder', '-o', 'setconfig', 'rpcuser', user], network)
-  await spawn('./macElectrumGW',
+  ls.on('close', (code) => {
+    console.log(`1 done ${code}`)
+  })
+  await timeout(10000)
+  console.log('moving to 2')
+  const lsh = spawn('./macElectrumGW',
     commands1,
     { cwd: binaryFolder })
-  await timeout(40000)
-  const commands2 =
-  addCommandNetwork(['-D', 'electrumFolder', '-o', 'setconfig', 'rpcpassword', password], network)
-  await spawn('./macElectrumGW',
+  lsh.on('close', (code) => {
+    console.log(`2 done ${code}`)
+  })
+  await timeout(10000)
+  console.log('moving to 3')
+  const lsu = spawn('./macElectrumGW',
     commands2,
     { cwd: binaryFolder })
-  await timeout(40000)
+  lsu.on('close', (code) => {
+    console.log(`3 done ${code}`)
+  })
+  await timeout(10000)
+  console.log('config done')
   return true
 }
 
 export async function startDeamon (network) {
+  console.log('starting Daemon')
   const binaryFolder = app.getPath('userData') + '/binaries/macElectrumGW'
-  const baseCommands = ['-D', 'electrumFolder', 'daemon']
+  const baseCommands = ['-D', '../electrumFolder', 'daemon']
   const commands = addCommandNetwork(baseCommands, network)
   const process = await spawn('./macElectrumGW', commands,
     { cwd: binaryFolder })
   process.stdout.on('data', function (data) {
     console.log(data.toString())
   })
-  await timeout(50000)
+  await timeout(10000)
   return true
 }
 export async function hardStopDeamon () {
+  console.log('stopping Daemon')
   const pidList = await find('name', 'macElectrumGW', true)
   for (var i = 0; i < pidList.length; i++) {
     const pid = pidList[i].pid
     await kill(pid)
   }
+  await timeout(5000)
   return true
 }
 export async function checkIfNodeProcessRunning () {
@@ -84,7 +99,7 @@ export async function deleteWallet (walletName, network) {
     const pathAddition = getPathNetwork(network)
     const destination =
     app.getPath('userData') + `/binaries/electrumFolder/${pathAddition}wallets/`
-    await fs.removeSync(destination + walletName)
+    await fs.remove(destination + walletName)
     return true
   } catch (e) {
     if (e.toString().slice(0, 47) === 'Error: ENOENT: no such file or directory, unlin') {
@@ -98,7 +113,7 @@ export async function deleteElectrumFolder (network) {
   const pathAddition = getPathNetwork(network)
   const destination =
     app.getPath('userData') + `/binaries/electrumFolder/${pathAddition}`
-  await fs.removeSync(destination)
+  await fs.remove(destination)
   return true
 }
 export async function listWalletsThatExist (network) {
@@ -132,7 +147,7 @@ export async function deserializeTrans (tx, rpcport, rpcuser, rpcpassword) {
 export async function listunspent (walletName, network, rpcport, rpcuser, rpcpassword) {
   const pathAddition = getPathNetwork(network)
   const request = await makeRpcRequest('listunspent',
-    { wallet: `electrumFolder/${pathAddition}wallets/${walletName}` },
+    { wallet: `../electrumFolder/${pathAddition}wallets/${walletName}` },
     rpcport, rpcuser, rpcpassword)
   return request
 }
@@ -145,7 +160,7 @@ export async function getTransaction (txid, rpcport, rpcuser, rpcpassword) {
 export async function getunusedaddress (walletName, network, rpcport, rpcuser, rpcpassword) {
   const pathAddition = getPathNetwork(network)
   const request = await makeRpcRequest('getunusedaddress',
-    { wallet: `electrumFolder/${pathAddition}wallets/${walletName}` },
+    { wallet: `../electrumFolder/${pathAddition}wallets/${walletName}` },
     rpcport, rpcuser, rpcpassword)
   return request
 }
@@ -169,6 +184,7 @@ export async function getFeeRate (withinBlock, rpcport, rpcuser, rpcpassword) {
 
 export async function makeRpcRequest (method, params, rpcport, rpcuser,
   rpcpassword) {
+  console.log(params, rpcport, rpcuser)
   const data = {
     method: method,
     params: params,
@@ -199,7 +215,7 @@ export async function restoreWallet (walletName, recoveryInfo, rpcport, rpcuser,
   const request = await makeRpcRequest('restore',
     {
       text: recoveryInfo,
-      wallet_path: `electrumFolder/${pathAddition}wallets/${walletName}`
+      wallet_path: `../electrumFolder/${pathAddition}wallets/${walletName}`
     },
     rpcport, rpcuser, rpcpassword)
   return request
@@ -209,7 +225,7 @@ export async function sendAll (satPerByte, destination, walletName, rpcport, rpc
   const pathAddition = getPathNetwork(network)
   const request = await makeRpcRequest('payto',
     {
-      wallet: `electrumFolder/${pathAddition}wallets/${walletName}`,
+      wallet: `../electrumFolder/${pathAddition}wallets/${walletName}`,
       destination: destination,
       unsigned: true,
       rbf: true,
@@ -225,7 +241,7 @@ export async function send (satPerByte, amountArray, destinationArray, walletNam
   if (amountArray.length === 1 && destinationArray.length === 1) {
     const request = await makeRpcRequest('payto',
       {
-        wallet: `electrumFolder/${pathAddition}wallets/${walletName}`,
+        wallet: `../electrumFolder/${pathAddition}wallets/${walletName}`,
         destination: destinationArray[0],
         unsigned: true,
         rbf: true,
@@ -243,7 +259,7 @@ export async function send (satPerByte, amountArray, destinationArray, walletNam
     }
     const request = await makeRpcRequest('paytomany',
       {
-        wallet: `electrumFolder/${pathAddition}wallets/${walletName}`,
+        wallet: `../electrumFolder/${pathAddition}wallets/${walletName}`,
         outputs: outputArray,
         unsigned: true,
         rbf: true,
@@ -258,7 +274,7 @@ export async function send (satPerByte, amountArray, destinationArray, walletNam
 export async function listAddresses (walletName, rpcport, rpcuser, rpcpassword, network) {
   const pathAddition = getPathNetwork(network)
   const request = await makeRpcRequest('listaddresses',
-    { wallet: `electrumFolder/${pathAddition}wallets/${walletName}` },
+    { wallet: `../electrumFolder/${pathAddition}wallets/${walletName}` },
     rpcport, rpcuser, rpcpassword)
   return request
 }
@@ -266,7 +282,7 @@ export async function listAddresses (walletName, rpcport, rpcuser, rpcpassword, 
 export async function getWalletHistory (walletName, rpcport, rpcuser, rpcpassword, network) {
   const pathAddition = getPathNetwork(network)
   const request = await makeRpcRequest('onchain_history',
-    { wallet: `electrumFolder/${pathAddition}wallets/${walletName}`, show_addresses: true },
+    { wallet: `../electrumFolder/${pathAddition}wallets/${walletName}`, show_addresses: true },
     rpcport, rpcuser, rpcpassword)
   return request
 }
@@ -274,7 +290,7 @@ export async function getWalletHistory (walletName, rpcport, rpcuser, rpcpasswor
 export async function walletReady (walletName, network, rpcport, rpcuser, rpcpassword) {
   const pathAddition = getPathNetwork(network)
   const request = await makeRpcRequest('is_synchronized',
-    { wallet: `electrumFolder/${pathAddition}wallets/${walletName}` },
+    { wallet: `../electrumFolder/${pathAddition}wallets/${walletName}` },
     rpcport, rpcuser, rpcpassword)
   return request
 }
@@ -289,7 +305,7 @@ export async function broadcastTransaction (hex, rpcport, rpcuser, rpcpassword) 
 export async function getBalance (walletName, rpcport, rpcuser, rpcpassword, network) {
   const pathAddition = getPathNetwork(network)
   const request = await makeRpcRequest('getbalance',
-    { wallet: `electrumFolder/${pathAddition}wallets/${walletName}` },
+    { wallet: `../electrumFolder/${pathAddition}wallets/${walletName}` },
     rpcport, rpcuser, rpcpassword)
   return request
 }
@@ -324,7 +340,7 @@ export async function listLoadedWallets (rpcport, rpcuser, rpcpassword) {
 export async function loadWallet (walletName, rpcport, rpcuser, rpcpassword, network) {
   const pathAddition = getPathNetwork(network)
   const request = await makeRpcRequest('load_wallet',
-    { wallet_path: `electrumFolder/${pathAddition}wallets/${walletName}` },
+    { wallet_path: `../electrumFolder/${pathAddition}wallets/${walletName}` },
     rpcport, rpcuser, rpcpassword)
   return request
 }
