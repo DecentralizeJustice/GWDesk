@@ -25,7 +25,7 @@ export async function unpackBinary () {
   const source = path.join(__static, binaryFolder)
   await fs.copy(source, destination)
   console.log(destination + 'macHWI/macHWI')
-  await fs.chmod(destination + 'macHWI/macHWI', 0o777)
+  await fs.chmod(destination + 'macHWI/macHWI', 0o755)
   return true
 }
 
