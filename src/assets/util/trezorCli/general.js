@@ -5,91 +5,87 @@ const spawn = require('child_process').spawn
 const remote = require('electron').remote
 const app = remote.app
 const fs = require('fs-extra')
-const zlib = require('zlib')
-const tar = require('tar-fs')
-const binaryFolder = '/binaries/'
 const os = require('os')
-const changePermission = fs.chmod
-const binFileName = 'macTrezorCliTool'
+const binFileName = 'macTrezorTool'
+const binaryFolder = '/binaries/'
 
 export async function unpackMainBinary () {
-  const destination = app.getPath('userData') + '/binaries'
   let fileName
   const platform = os.platform()
 
   if (platform === 'darwin') {
-    fileName = 'macTrezorCliTool'
+    fileName = 'macTrezorTool'
   } else {
     throw new Error('Your OS Is Unsupported')
   }
+  const destination = app.getPath('userData') + '/binaries/' + fileName
   // eslint-disable-next-line
-  const source = path.join(__static, binaryFolder + fileName)
-  const wholeDestination = destination + '/' + fileName
-  await fs.ensureDir(destination, 0o0700)
-  await fs.copyFile(source, wholeDestination)
-  await changePermission(wholeDestination, '700')
+  const source = path.join(__static, binaryFolder + 'macTrezorTool')
+  await fs.copy(source, destination)
+  await fs.chmod(destination + '/macTrezorTool', 0o755)
   return true
 }
-export async function unpackPhotos () {
-  console.log('not working')
-  const destination = app.getPath('userData') + '/binaries'
-  const tarName = 'roboPhotos.tar.gz'
+// export async function unpackPhotos () {
+//   console.log('not working')
+//   const destination = app.getPath('userData') + '/binaries'
+//   const tarName = 'roboPhotos.tar.gz'
+//
+//   // eslint-disable-next-line
+//   const source = path.join(__static, binaryFolder + tarName)
+//   await new Promise((resolve, reject) => {
+//     fs.createReadStream(source)
+//       .on('error', err => reject(err))
+//       .pipe(zlib.Unzip())
+//       .pipe(tar.extract(destination))
+//       .on('finish', resolve)
+//   })
+//   return true
+// }
 
-  // eslint-disable-next-line
-  const source = path.join(__static, binaryFolder + tarName)
-  await new Promise((resolve, reject) => {
-    fs.createReadStream(source)
-      .on('error', err => reject(err))
-      .pipe(zlib.Unzip())
-      .pipe(tar.extract(destination))
-      .on('finish', resolve)
-  })
-  return true
-}
-
-export function changeName (name) {
-  const binaryFolder = app.getPath('userData') + '/binaries'
-  const commands = ['set-label', '-l', name]
-  const command = spawn(`./${binFileName}`, commands,
-    { cwd: binaryFolder })
-  return command
-}
+// export function changeName (name) {
+//   const binaryFolder = app.getPath('userData') + '/binaries'
+//   const commands = ['set-label', '-l', name]
+//   const command = spawn(`./${binFileName}`, commands,
+//     { cwd: binaryFolder })
+//   return command
+// }
 export async function getInfo () {
-  const binary = app.getPath('userData') + '/binaries'
-  const { stdout } = await exec(`"${binary}"/${binFileName} get-features`)
+  const binary = app.getPath('userData') + '/binaries/' + binFileName + '/' + binFileName
+  const { stdout } = await exec(`"${binary}" get-features`)
   return stdout
 }
 export async function wipe () {
-  const binary = app.getPath('userData') + '/binaries'
-  const { stdout } = await exec(`"${binary}"/${binFileName} wipe-device -b`)
+  const binary = app.getPath('userData') + '/binaries/' + binFileName + '/' + binFileName
+  const { stdout } = await exec(`"${binary}" wipe-device --bootloader`)
   return stdout
 }
+
+export async function backup () {
+  const binary = app.getPath('userData') + '/binaries/' + binFileName + '/' + binFileName
+  const { stdout } = await exec(`"${binary}" backup-device`)
+  return stdout
+}
+
 export function getNode (node) {
-  const binaryFolder = app.getPath('userData') + '/binaries'
+  const binaryFolder = app.getPath('userData') + '/binaries/' + binFileName
   const commands = ['get-public-node', '-n', node]
   const command = spawn(`./${binFileName}`, commands,
     { cwd: binaryFolder })
   return command
 }
 export function changePhoto (photo) {
-  const binaryFolder = app.getPath('userData') + '/binaries'
+  const binaryFolder = app.getPath('userData') + '/binaries/' + binFileName
   const commands = ['set-homescreen', '-f', `../roboPhotos/${photo}.toif`]
   const command = spawn(`./${binFileName}`, commands,
     { cwd: binaryFolder })
   return command
 }
 export function updateFirmware (version) {
-  const binaryFolder = app.getPath('userData') + '/binaries'
+  const binaryFolder = app.getPath('userData') + '/binaries/' + binFileName
   const commands = ['firmware-update', '-v', `${version}`]
   const command = spawn(`./${binFileName}`, commands,
     { cwd: binaryFolder })
   return command
-}
-
-export async function backup () {
-  const binary = app.getPath('userData') + '/binaries'
-  const { stdout } = await exec(`"${binary}"/${binFileName} backup-device`)
-  return stdout
 }
 
 export async function getVersionNumber () {

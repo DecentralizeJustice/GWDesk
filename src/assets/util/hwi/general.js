@@ -5,11 +5,12 @@ const spawn = require('child_process').spawn
 const remote = require('electron').remote
 const app = remote.app
 const fs = require('fs-extra')
-const binaryFolder = '/binaries/'
 const os = require('os')
 
+const binaryFolder = '/binaries/'
+
 const binFolder = app.getPath('userData') + '/binaries/macHWI'
-const macName = 'macHWI'
+// const macName = 'macHWI'
 
 export async function unpackBinary () {
   const destination = app.getPath('userData') + '/binaries/'
@@ -24,17 +25,8 @@ export async function unpackBinary () {
   // eslint-disable-next-line
   const source = path.join(__static, binaryFolder)
   await fs.copy(source, destination)
-  console.log(destination + 'macHWI/macHWI')
   await fs.chmod(destination + 'macHWI/macHWI', 0o755)
   return true
-}
-
-export function backup () {
-  const binaryFolder = app.getPath('userData') + '/binaries/macTrezorCliTool'
-  const commands = ['firmware-update', 'backup-device']
-  const command = spawn('./macTrezorCliTool', commands,
-    { cwd: binaryFolder })
-  return command
 }
 
 export async function listDevices () {
@@ -45,56 +37,56 @@ export async function listDevices () {
 }
 
 export async function promtpin (model, path) {
-  const binary = binFolder
+  const binary = binFolder + '/macHWI'
   const { stdout } = await exec(`"${binary}" -t ${model} -d ${path} promptpin`)
   const json = JSON.parse(stdout)
   return json
 }
 
 export async function enterpin (model, path, pin) {
-  const binary = binFolder
+  const binary = binFolder + '/macHWI'
   const { stdout } = await exec(`"${binary}" -t ${model} -d ${path} sendpin ${pin}`)
   const json = JSON.parse(stdout)
   return json
 }
 export async function signTrans (model, path, network, psbt) {
-  const binary = binFolder
+  const binary = binFolder + '/macHWI'
   const extraFlag = getNetworkFlag(network)
   const { stdout } = await exec(`"${binary}" ${extraFlag} -t ${model} -d ${path} signtx ${psbt}`)
   const json = JSON.parse(stdout)
   return json
 }
 export async function getxpub (model, path, xpubpath) {
-  const binary = binFolder
+  const binary = binFolder + '/macHWI'
   const { stdout } = await exec(`"${binary}" -t ${model} -d ${path} getxpub ${xpubpath}`)
   const json = JSON.parse(stdout)
   return json
 }
 
 export async function wipe (model, path) {
-  const binary = binFolder
+  const binary = binFolder + '/macHWI'
   const { stdout } = await exec(`"${binary}" -t ${model} -d ${path} wipe`)
   const json = JSON.parse(stdout)
   return json
 }
 export async function displayAddress (model, path, addressPath, network) {
-  const binary = binFolder
+  const binary = binFolder + '/macHWI'
   const extraFlag = getNetworkFlag(network)
   const { stdout } = await exec(`"${binary}" ${extraFlag} -t ${model} -d ${path} displayaddress --wpkh --path ${addressPath} `)
   const json = JSON.parse(stdout)
   return json
 }
 export function setup (model, path) {
-  const binaryFolder = app.getPath('userData') + '/binaries'
+  const binaryFolder = app.getPath('userData') + '/binaries/macHWI'
   const commands = ['-t', `${model}`, '-d', `${path}`, '-i', 'setup']
-  const command = spawn(macName, commands,
+  const command = spawn('./macHWI', commands,
     { cwd: binaryFolder })
   return command
 }
 export function restore (model, path) {
-  const binaryFolder = app.getPath('userData') + '/binaries'
+  const binaryFolder = app.getPath('userData') + '/binaries/macHWI'
   const commands = ['-t', `${model}`, '-d', `${path}`, '-i', 'restore']
-  const command = spawn(macName, commands,
+  const command = spawn('./macHWI', commands,
     { cwd: binaryFolder })
   return command
 }

@@ -70,7 +70,6 @@ jobs:
         p12-password: ${{ secrets.MAC_CERTS_PASSWORD }}
     - run: yarn run resignTor1
     - run: yarn run resignTor2
-    - run: yarn run resignAll
     - run: chmod +x sign.sh
     - run: ./sign.sh
     - run: yarn run build
