@@ -1,6 +1,7 @@
 #!/bin/sh
 ## declare an array variable
 declare -a arr=(
+  "macHWI"
   "_sha1.cpython-37m-darwin.so"
   "_blake2.cpython-37m-darwin.so"
   "_struct.cpython-37m-darwin.so"
