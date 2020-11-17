@@ -29,6 +29,7 @@ export async function unpackElectrum () {
   return true
 }
 export async function configDaemon (port, user, password, network) {
+  console.log(port, user, password, network)
   const binaryFolder = app.getPath('userData') + '/binaries/macElectrumGW'
   const commands0 =
   addCommandNetwork(['-D', 'electrumFolder', '-o', 'setconfig', 'rpcport', port], network)
