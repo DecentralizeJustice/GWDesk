@@ -2,6 +2,7 @@
 ## declare an array variable
 declare -a arr=(
   "macTrezorTool"
+  "Python"
   "_codecs_iso2022.cpython-36m-darwin.so"
   "math.cpython-36m-darwin.so"
   "_datetime.cpython-36m-darwin.so"
