@@ -43,7 +43,7 @@ export async function configDaemon (port, user, password, network) {
   ls.on('close', (code) => {
     console.log(`1 done ${code}`)
   })
-  await timeout(10000)
+  await timeout(20000)
   console.log('moving to 2')
   const lsh = spawn('./macElectrumGW',
     commands1,
@@ -51,7 +51,7 @@ export async function configDaemon (port, user, password, network) {
   lsh.on('close', (code) => {
     console.log(`2 done ${code}`)
   })
-  await timeout(10000)
+  await timeout(20000)
   console.log('moving to 3')
   const lsu = spawn('./macElectrumGW',
     commands2,
@@ -59,7 +59,7 @@ export async function configDaemon (port, user, password, network) {
   lsu.on('close', (code) => {
     console.log(`3 done ${code}`)
   })
-  await timeout(10000)
+  await timeout(20000)
   console.log('config done')
   return true
 }
