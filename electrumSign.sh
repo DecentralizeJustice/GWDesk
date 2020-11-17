@@ -1,7 +1,7 @@
 #!/bin/sh
 ## declare an array variable
-arr=( $(find ./public/binaries/macElectrumGW -type f -name "*.so") )
+arr=( $(find public/binaries/macElectrumGW -type f -name "*.so") )
 for ELEMENT in ${arr[@]}
 do
-codesign --force --options runtime --verbose=4 --entitlements ./buildInfo/pyentitlements.mac.inherit.plist --sign "Developer ID Application: Decentralize Justice LLC" --timestamp ./public/binaries/macHWI/$ELEMENT
+codesign --force --options runtime --verbose=4 --entitlements ./buildInfo/pyentitlements.mac.inherit.plist --sign "Developer ID Application: Decentralize Justice LLC" --timestamp .$ELEMENT
 done
