@@ -44,6 +44,7 @@ const electron = window.require('electron')
 const ipcRenderer = electron.ipcRenderer
 const isDevelopment = process.env.NODE_ENV !== 'production'
 const R = require('ramda')
+const timeout = ms => new Promise(resolve => setTimeout(resolve, ms))
 export default {
   name: 'App',
   components: {
@@ -62,7 +63,9 @@ export default {
   methods: {
     copyBinary: async function () {
       await unpackElectrum()
+      await timeout(1000)
       await unpackBinary()
+      await timeout(1000)
       await unpackMainBinary()
     },
     alsoStartup: async function () {
