@@ -27,7 +27,7 @@ export async function unpackElectrum () {
   await fs.copy(source, wholeDestination)
   await timeout(1000)
   const wholeString = app.getPath('userData') + '/binaries/macElectrumGW/macElectrumGW'
-  await fsPlain.chmod(wholeString, '755')
+  await fsPlain.chmod(wholeString, '0755')
   return true
 }
 export async function configDaemon (port, user, password, network) {
