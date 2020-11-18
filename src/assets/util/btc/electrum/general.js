@@ -184,7 +184,7 @@ export async function getFeeRate (withinBlock, rpcport, rpcuser, rpcpassword) {
 
 export async function makeRpcRequest (method, params, rpcport, rpcuser,
   rpcpassword) {
-  console.log(params, rpcport, rpcuser)
+  console.log(method, params, rpcport, rpcuser, rpcpassword)
   const data = {
     method: method,
     params: params,
