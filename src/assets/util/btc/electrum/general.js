@@ -7,7 +7,6 @@ const os = require('os')
 const crypto = require('crypto')
 const axios = require('axios')
 const fs = require('fs-extra')
-const changePermission = fs.chmod
 const app = remote.app
 const readdir = fs.promises.readdir
 const timeout = ms => new Promise(resolve => setTimeout(resolve, ms))
@@ -25,7 +24,7 @@ export async function unpackElectrum () {
   // eslint-disable-next-line
   const source = path.join(__static, '/binaries/' + fileName)
   await fs.copy(source, wholeDestination)
-  await changePermission(wholeDestination + '/' + fileName, 0o777)
+  await fs.chmod(wholeDestination + '/' + fileName, 0o777)
   return true
 }
 export async function configDaemon (port, user, password, network) {

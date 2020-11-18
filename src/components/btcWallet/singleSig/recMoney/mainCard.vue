@@ -72,11 +72,11 @@ export default {
       const walletInfo = this.btcSingleSigTestnet
       const unusedAddress = await
       getunusedaddress(this.singleSigElectrumName, walletInfo.network,
-        walletInfo.rpcport, walletInfo.rpcuser, walletInfo.rpcpassword)
+        walletInfo.rpcPort, walletInfo.rpcUser, walletInfo.rpcPassword)
       this.unusedAddress = unusedAddress.data.result
       const addressList = await
-      listAddresses(this.singleSigElectrumName, walletInfo.rpcport,
-        walletInfo.rpcuser, walletInfo.rpcpassword, walletInfo.network)
+      listAddresses(this.singleSigElectrumName, walletInfo.rpcPort,
+        walletInfo.rpcUser, walletInfo.rpcPassword, walletInfo.network)
       const addressListLength = addressList.data.result.length
       const pathIndex = await findPath(this.singleSigHardwareWalletInfo.vpub, this.unusedAddress, addressListLength)
       this.path = this.singleSigHardwareWalletInfo.vpubPath + '/0/'
