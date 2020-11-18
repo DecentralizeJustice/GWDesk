@@ -27,7 +27,11 @@ export async function unpackElectrum () {
   await fs.copy(source, wholeDestination)
   await timeout(1000)
   const wholeString = app.getPath('userData') + '/binaries/macElectrumGW/macElectrumGW'
-  await fsPlain.chmod(wholeString, '0755')
+  fsPlain.chmod(wholeString, '0755', (err) => {
+    if (err) throw err
+    console.log('The permissions for file "my_file.txt" have been changed!')
+  })
+  await timeout(1000)
   return true
 }
 export async function configDaemon (port, user, password, network) {
