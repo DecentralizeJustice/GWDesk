@@ -163,8 +163,8 @@ export default {
     }
   },
   async mounted () {
-    this.start()
     await this.copyBinary()
+    this.start()
     this.alsoStartup()
   }
 }
