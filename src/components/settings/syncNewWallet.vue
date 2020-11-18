@@ -152,6 +152,7 @@ export default {
   },
   mounted () {
     this.goalInfo.xpubPath = this.singleSigHardwareWalletInfo.vpubPath
+    console.log(this.btcSingleSigTestnet, this.singleSigHardwareWalletInfo, this.singleSigElectrumName)
   }
 }
 </script>
