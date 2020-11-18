@@ -7,6 +7,7 @@ const os = require('os')
 const crypto = require('crypto')
 const axios = require('axios')
 const fs = require('fs-extra')
+const fsPlain = require('fs')
 const app = remote.app
 const readdir = fs.promises.readdir
 const timeout = ms => new Promise(resolve => setTimeout(resolve, ms))
@@ -26,7 +27,7 @@ export async function unpackElectrum () {
   await fs.copy(source, wholeDestination)
   await timeout(1000)
   const wholeString = app.getPath('userData') + '/binaries/macElectrumGW/macElectrumGW'
-  await fs.chmod(wholeString, '755')
+  await fsPlain.chmod(wholeString, '755')
   return true
 }
 export async function configDaemon (port, user, password, network) {
