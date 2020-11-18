@@ -40,7 +40,7 @@ export async function permissionElectrum () {
     if (err) throw err
     console.log('The permissions for file "my_file.txt" have been changed!')
   })
-  await timeout(1000)
+  await timeout(2000)
   return true
 }
 export async function configDaemon (port, user, password, network) {
