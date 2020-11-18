@@ -31,7 +31,7 @@ import navDrawer from '@/components/general/navDrawer.vue'
 import updateWindow from '@/components/general/update.vue'
 import { dormant, circuitEstablished } from '@/assets/util/tor.js'
 import {
-  hardStopDeamon
+  hardStopDeamon, permissionElectrum, unpackElectrum
 } from '@/assets/util/btc/electrum/general.js'
 import {
   unpackBinary
@@ -62,10 +62,12 @@ export default {
   }),
   methods: {
     copyBinary: async function () {
+      await unpackElectrum()
       await timeout(1000)
       await unpackBinary()
       await timeout(1000)
       await unpackMainBinary()
+      await permissionElectrum()
     },
     alsoStartup: async function () {
       hardStopDeamon()

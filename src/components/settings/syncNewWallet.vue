@@ -50,7 +50,7 @@ import { pubTovpub } from '@/assets/util/btc/pubUtil.js'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import {
   startDeamon, hardStopDeamon, deleteWallet, configDaemon,
-  restoreWallet, deleteElectrumFolder, loadWallet, unpackElectrum
+  restoreWallet, deleteElectrumFolder, loadWallet, permissionElectrum
 } from '@/assets/util/btc/electrum/general.js'
 export default {
   components: {
@@ -102,7 +102,7 @@ export default {
     setupElectrum: async function () {
       this.allInfoCollected = true
       this.settingUpWalletSoftware = true
-      await unpackElectrum()
+      await permissionElectrum()
       await hardStopDeamon()
       await deleteWallet(this.singleSigElectrumName, this.btcSingleSigTestnet.network)
       await deleteElectrumFolder(this.btcSingleSigTestnet.network)

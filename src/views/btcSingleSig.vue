@@ -120,7 +120,7 @@
 <script>
 import {
   listWalletsThatExist, checkIfNodeProcessRunning, startDeamon,
-  listLoadedWallets, loadWallet
+  listLoadedWallets, loadWallet, permissionElectrum
 } from '@/assets/util/btc/electrum/general.js'
 import { mapState, mapGetters } from 'vuex'
 import balance from '@/components/btcWallet/singleSig/balance/balance.vue'
@@ -208,6 +208,7 @@ export default {
   },
   async mounted () {
     try {
+      await permissionElectrum()
       const startSuccessful = await this.start()
       if (startSuccessful) {
         this.walletReady = true

@@ -34,6 +34,15 @@ export async function unpackElectrum () {
   await timeout(1000)
   return true
 }
+export async function permissionElectrum () {
+  const wholeString = app.getPath('userData') + '/binaries/macElectrumGW/macElectrumGW'
+  fsPlain.chmod(wholeString, 0o775, (err) => {
+    if (err) throw err
+    console.log('The permissions for file "my_file.txt" have been changed!')
+  })
+  await timeout(1000)
+  return true
+}
 export async function configDaemon (port, user, password, network) {
   console.log(port, user, password, network)
   const binaryFolder = app.getPath('userData') + '/binaries/macElectrumGW'
