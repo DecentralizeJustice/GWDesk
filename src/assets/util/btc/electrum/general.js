@@ -69,6 +69,7 @@ export async function startDeamon (network) {
   const binaryFolder = app.getPath('userData') + '/binaries/macElectrumGW'
   const baseCommands = ['-D', '../electrumFolder', 'daemon']
   const commands = addCommandNetwork(baseCommands, network)
+  console.log(commands)
   const process = await spawn('./macElectrumGW', commands,
     { cwd: binaryFolder })
   process.stdout.on('data', function (data) {

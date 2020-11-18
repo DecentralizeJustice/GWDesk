@@ -112,17 +112,13 @@ export default {
       await startDeamon(this.btcSingleSigTestnet.network)
       await hardStopDeamon()
       await startDeamon(this.btcSingleSigTestnet.network)
-      console.log(this.singleSigElectrumName,
-        this.singleSigHardwareWalletInfo.vpub, this.btcSingleSigTestnet.rpcport,
-        this.btcSingleSigTestnet.rpcuser,
-        this.btcSingleSigTestnet.rpcpassword, this.btcSingleSigTestnet.network)
       await restoreWallet(this.singleSigElectrumName,
-        this.singleSigHardwareWalletInfo.vpub, this.btcSingleSigTestnet.rpcport,
-        this.btcSingleSigTestnet.rpcuser,
-        this.btcSingleSigTestnet.rpcpassword, this.btcSingleSigTestnet.network)
-      await loadWallet(this.singleSigElectrumName, this.btcSingleSigTestnet.rpcport,
-        this.btcSingleSigTestnet.rpcuser,
-        this.btcSingleSigTestnet.rpcpassword, this.btcSingleSigTestnet.network)
+        this.singleSigHardwareWalletInfo.vpub, this.btcSingleSigTestnet.rpcPort,
+        this.btcSingleSigTestnet.rpcUser,
+        this.btcSingleSigTestnet.rpcPassword, this.btcSingleSigTestnet.network)
+      await loadWallet(this.singleSigElectrumName, this.btcSingleSigTestnet.rpcPort,
+        this.btcSingleSigTestnet.rpcUser,
+        this.btcSingleSigTestnet.rpcPassword, this.btcSingleSigTestnet.network)
       this.settingUpWalletSoftware = false
       this.setupComplete()
     },
