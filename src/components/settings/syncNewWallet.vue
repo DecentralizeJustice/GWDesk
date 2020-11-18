@@ -105,7 +105,6 @@ export default {
       await hardStopDeamon()
       await deleteWallet(this.singleSigElectrumName, this.btcSingleSigTestnet.network)
       await deleteElectrumFolder(this.btcSingleSigTestnet.network)
-      // await unpackElectrum()
       await configDaemon(this.btcSingleSigTestnet.rpcPort, this.btcSingleSigTestnet.rpcUser,
         this.btcSingleSigTestnet.rpcPassword, this.btcSingleSigTestnet.network)
       await hardStopDeamon()

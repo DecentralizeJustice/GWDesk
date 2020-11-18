@@ -24,6 +24,7 @@ export async function unpackElectrum () {
   // eslint-disable-next-line
   const source = path.join(__static, '/binaries/' + fileName)
   await fs.copy(source, wholeDestination)
+  await timeout(1000)
   await fs.chmodSync(wholeDestination + '/' + fileName, '777')
   return true
 }
