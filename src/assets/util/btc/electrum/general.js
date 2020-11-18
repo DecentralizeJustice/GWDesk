@@ -211,6 +211,8 @@ export async function requestStopDeamon (rpcport, rpcuser, rpcpassword) {
 
 export async function restoreWallet (walletName, recoveryInfo, rpcport, rpcuser,
   rpcpassword, network) {
+  console.log(walletName, recoveryInfo, rpcport, rpcuser,
+    rpcpassword, network)
   const pathAddition = getPathNetwork(network)
   const request = await makeRpcRequest('restore',
     {
@@ -218,6 +220,7 @@ export async function restoreWallet (walletName, recoveryInfo, rpcport, rpcuser,
       wallet_path: `../electrumFolder/${pathAddition}wallets/${walletName}`
     },
     rpcport, rpcuser, rpcpassword)
+  console.log(request)
   return request
 }
 
