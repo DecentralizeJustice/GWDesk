@@ -15,44 +15,76 @@ const timeout = ms => new Promise(resolve => setTimeout(resolve, ms))
 export async function unpackElectrum () {
   const platform = os.platform()
   let fileName
+  let source
+  let destination
+  let executable
   if (platform === 'darwin') {
     fileName = 'macElectrumGW'
+    destination = path.join(app.getPath('userData'), 'binaries', fileName)
+    executable = path.join(destination, fileName)
+  } else if (platform === 'win32') {
+    fileName = 'windowsElectrum.exe'
+    destination = path.join(app.getPath('userData'), 'binaries', fileName)
+    executable = destination
   } else {
     throw new Error('Your OS Is Unsupported')
   }
-  const destination = app.getPath('userData') + '/binaries'
-  const wholeDestination = destination + '/' + fileName
   // eslint-disable-next-line
-  const source = path.join(__static, '/binaries/' + fileName)
-  await fs.copy(source, wholeDestination)
+  source = path.join(__static, 'binaries', fileName)
+  await fs.copy(source, destination)
   await timeout(1000)
-  const wholeString = app.getPath('userData') + '/binaries/macElectrumGW/macElectrumGW'
-  fsPlain.chmod(wholeString, 0o775, (err) => {
+  fsPlain.chmod(executable, 0o775, (err) => {
     if (err) throw err
-    console.log('The permissions for file "my_file.txt" have been changed!')
+    console.log('The permissions for file exectuble have been changed!')
+    console.log(destination)
   })
   await timeout(1000)
   return true
 }
 export async function permissionElectrum () {
-  const wholeString = app.getPath('userData') + '/binaries/macElectrumGW/macElectrumGW'
-  fsPlain.chmod(wholeString, 0o775, (err) => {
+  const platform = os.platform()
+  let executable
+  if (platform === 'darwin') {
+    const fileName = 'macElectrumGW'
+    const destination = path.join(app.getPath('userData'), 'binaries', fileName)
+    executable = path.join(destination, fileName)
+  } else if (platform === 'win32') {
+    const fileName = 'windowsElectrum.exe'
+    const destination = path.join(app.getPath('userData'), 'binaries', fileName)
+    executable = destination
+  } else {
+    throw new Error('Your OS Is Unsupported')
+  }
+  fsPlain.chmod(executable, 0o775, (err) => {
     if (err) throw err
-    console.log('The permissions for file "my_file.txt" have been changed!')
+    console.log('The permissions for file executable have been changed!')
   })
   await timeout(2000)
   return true
 }
 export async function configDaemon (port, user, password, network) {
+  const platform = os.platform()
+  let destination
+  let fileName
+  let electrumFolder
+  if (platform === 'darwin') {
+    fileName = './macElectrumGW'
+    destination = path.join(app.getPath('userData'), 'binaries', fileName)
+    electrumFolder = '../electrumFolder'
+  } else {
+    fileName = '.\\windowsElectrum.exe'
+    destination = path.join(app.getPath('userData'), 'binaries')
+    electrumFolder = 'electrum_data'
+  }
   console.log(port, user, password, network)
-  const binaryFolder = app.getPath('userData') + '/binaries/macElectrumGW'
+  const binaryFolder = destination
   const commands0 =
-  addCommandNetwork(['-D', '../electrumFolder', '-o', 'setconfig', 'rpcport', port], network)
+  addCommandNetwork(['-D', electrumFolder, '-o', 'setconfig', 'rpcport', port], network)
   const commands1 =
-  addCommandNetwork(['-D', '../electrumFolder', '-o', 'setconfig', 'rpcuser', user], network)
+  addCommandNetwork(['-D', electrumFolder, '-o', 'setconfig', 'rpcuser', user], network)
   const commands2 =
-  addCommandNetwork(['-D', '../electrumFolder', '-o', 'setconfig', 'rpcpassword', password], network)
-  const ls = spawn('./macElectrumGW',
+  addCommandNetwork(['-D', electrumFolder, '-o', 'setconfig', 'rpcpassword', password], network)
+  const ls = spawn(fileName,
     commands0,
     { cwd: binaryFolder })
   ls.on('close', (code) => {
@@ -60,7 +92,7 @@ export async function configDaemon (port, user, password, network) {
   })
   await timeout(20000)
   console.log('moving to 2')
-  const lsh = spawn('./macElectrumGW',
+  const lsh = spawn(fileName,
     commands1,
     { cwd: binaryFolder })
   lsh.on('close', (code) => {
@@ -68,7 +100,7 @@ export async function configDaemon (port, user, password, network) {
   })
   await timeout(20000)
   console.log('moving to 3')
-  const lsu = spawn('./macElectrumGW',
+  const lsu = spawn(fileName,
     commands2,
     { cwd: binaryFolder })
   lsu.on('close', (code) => {
@@ -81,21 +113,45 @@ export async function configDaemon (port, user, password, network) {
 
 export async function startDeamon (network) {
   console.log('starting Daemon')
-  const binaryFolder = app.getPath('userData') + '/binaries/macElectrumGW'
-  const baseCommands = ['-D', '../electrumFolder', 'daemon']
-  const commands = addCommandNetwork(baseCommands, network)
-  console.log(commands)
-  const process = await spawn('./macElectrumGW', commands,
-    { cwd: binaryFolder })
-  process.stdout.on('data', function (data) {
-    console.log(data.toString())
-  })
-  await timeout(10000)
-  return true
+  const platform = os.platform()
+  if (platform === 'darwin') {
+    const binaryFolder = app.getPath('userData') + '/binaries/macElectrumGW'
+    const baseCommands = ['-D', '../electrumFolder', 'daemon']
+    const commands = addCommandNetwork(baseCommands, network)
+    console.log(commands)
+    const process = await spawn('./macElectrumGW', commands,
+      { cwd: binaryFolder })
+    process.stdout.on('data', function (data) {
+      console.log(data.toString())
+    })
+    await timeout(10000)
+    return true
+  } else if (platform === 'win32') {
+    const binaryFolder = path.join(app.getPath('userData'), 'binaries')
+    const baseCommands = ['-D', 'electrum_data', 'daemon']
+    const commands = addCommandNetwork(baseCommands, network)
+    console.log(commands)
+    const process = await spawn('.\\windowsElectrum.exe', commands,
+      { cwd: binaryFolder })
+    process.stdout.on('data', function (data) {
+      console.log(data.toString())
+    })
+    await timeout(10000)
+    return true
+  } else {
+    throw new Error('Your OS Is Unsupported')
+  }
 }
 export async function hardStopDeamon () {
   console.log('stopping Daemon')
-  const pidList = await find('name', 'macElectrumGW', true)
+  let processName
+  const platform = os.platform()
+  if (platform === 'darwin') {
+    processName = 'macElectrumGW'
+  } else {
+    processName = 'windowsElectrum'
+  }
+  const pidList = await find('name', processName, true)
   for (var i = 0; i < pidList.length; i++) {
     const pid = pidList[i].pid
     await kill(pid)
@@ -104,18 +160,43 @@ export async function hardStopDeamon () {
   return true
 }
 export async function checkIfNodeProcessRunning () {
-  const pidList = await find('name', 'macElectrumGW', true)
+  let processName
+  const platform = os.platform()
+  if (platform === 'darwin') {
+    processName = 'macElectrumGW'
+  } else {
+    processName = 'windowsElectrum'
+  }
+  const pidList = await find('name', processName, true)
   if (pidList.length > 0) {
     return true
   }
   return false
 }
+function getElectrumFolderLocation () {
+  const platform = os.platform()
+  if (platform === 'darwin') {
+    return '../electrumFolder/'
+  } else {
+    return 'electrum_data\\'
+  }
+}
+function getElectrumDataName () {
+  const platform = os.platform()
+  if (platform === 'darwin') {
+    return 'electrumFolder'
+  } else {
+    return 'electrum_data'
+  }
+}
+
 export async function deleteWallet (walletName, network) {
   try {
     const pathAddition = getPathNetwork(network)
+    const electrumDataName = getElectrumDataName()
     const destination =
-    app.getPath('userData') + `/binaries/electrumFolder/${pathAddition}wallets/`
-    await fs.remove(destination + walletName)
+     path.join(app.getPath('userData'), 'binaries', electrumDataName, pathAddition, 'wallets', walletName)
+    await fs.remove(destination)
     return true
   } catch (e) {
     if (e.toString().slice(0, 47) === 'Error: ENOENT: no such file or directory, unlin') {
@@ -127,16 +208,17 @@ export async function deleteWallet (walletName, network) {
 }
 export async function deleteElectrumFolder (network) {
   const pathAddition = getPathNetwork(network)
-  const destination =
-    app.getPath('userData') + `/binaries/electrumFolder/${pathAddition}`
+  const electrumDataName = getElectrumDataName()
+  const destination = path.join(app.getPath('userData'), 'binaries', electrumDataName, pathAddition)
   await fs.remove(destination)
   return true
 }
 export async function listWalletsThatExist (network) {
+  const electrumDataName = getElectrumDataName()
   try {
     const pathAddition = getPathNetwork(network)
     const destination =
-    app.getPath('userData') + `/binaries/electrumFolder/${pathAddition}wallets/`
+     path.join(app.getPath('userData'), 'binaries', electrumDataName, pathAddition, 'wallets')
     const files = await readdir(destination)
     return files
   } catch (e) {
@@ -162,8 +244,10 @@ export async function deserializeTrans (tx, rpcport, rpcuser, rpcpassword) {
 
 export async function listunspent (walletName, network, rpcport, rpcuser, rpcpassword) {
   const pathAddition = getPathNetwork(network)
+  const electrumFolderLocation = getElectrumFolderLocation()
+  const walletPath = electrumFolderLocation + path.join(pathAddition, 'wallets', walletName)
   const request = await makeRpcRequest('listunspent',
-    { wallet: `../electrumFolder/${pathAddition}wallets/${walletName}` },
+    { wallet: walletPath },
     rpcport, rpcuser, rpcpassword)
   return request
 }
@@ -175,8 +259,10 @@ export async function getTransaction (txid, rpcport, rpcuser, rpcpassword) {
 }
 export async function getunusedaddress (walletName, network, rpcport, rpcuser, rpcpassword) {
   const pathAddition = getPathNetwork(network)
+  const electrumFolderLocation = getElectrumFolderLocation()
+  const walletPath = electrumFolderLocation + path.join(pathAddition, 'wallets', walletName)
   const request = await makeRpcRequest('getunusedaddress',
-    { wallet: `../electrumFolder/${pathAddition}wallets/${walletName}` },
+    { wallet: walletPath },
     rpcport, rpcuser, rpcpassword)
   return request
 }
@@ -216,6 +302,7 @@ export async function makeRpcRequest (method, params, rpcport, rpcuser,
     }
   }
   )
+  console.log(request)
   return request
 }
 
@@ -230,10 +317,13 @@ export async function restoreWallet (walletName, recoveryInfo, rpcport, rpcuser,
   console.log(walletName, recoveryInfo, rpcport, rpcuser,
     rpcpassword, network)
   const pathAddition = getPathNetwork(network)
+  const electrumFolderLocation = getElectrumFolderLocation()
+  const walletPath = electrumFolderLocation + path.join(pathAddition, 'wallets', walletName)
+  console.log(walletPath)
   const request = await makeRpcRequest('restore',
     {
       text: recoveryInfo,
-      wallet_path: `../electrumFolder/${pathAddition}wallets/${walletName}`
+      wallet_path: walletPath
     },
     rpcport, rpcuser, rpcpassword)
   console.log(request)
@@ -242,9 +332,11 @@ export async function restoreWallet (walletName, recoveryInfo, rpcport, rpcuser,
 
 export async function sendAll (satPerByte, destination, walletName, rpcport, rpcuser, rpcpassword, network) {
   const pathAddition = getPathNetwork(network)
+  const electrumFolderLocation = getElectrumFolderLocation()
+  const walletPath = electrumFolderLocation + path.join(pathAddition, 'wallets', walletName)
   const request = await makeRpcRequest('payto',
     {
-      wallet: `../electrumFolder/${pathAddition}wallets/${walletName}`,
+      wallet: walletPath,
       destination: destination,
       unsigned: true,
       rbf: true,
@@ -257,10 +349,12 @@ export async function sendAll (satPerByte, destination, walletName, rpcport, rpc
 
 export async function send (satPerByte, amountArray, destinationArray, walletName, rpcport, rpcuser, rpcpassword, network) {
   const pathAddition = getPathNetwork(network)
+  const electrumFolderLocation = getElectrumFolderLocation()
+  const walletPath = electrumFolderLocation + path.join(pathAddition, 'wallets', walletName)
   if (amountArray.length === 1 && destinationArray.length === 1) {
     const request = await makeRpcRequest('payto',
       {
-        wallet: `../electrumFolder/${pathAddition}wallets/${walletName}`,
+        wallet: walletPath,
         destination: destinationArray[0],
         unsigned: true,
         rbf: true,
@@ -292,24 +386,30 @@ export async function send (satPerByte, amountArray, destinationArray, walletNam
 
 export async function listAddresses (walletName, rpcport, rpcuser, rpcpassword, network) {
   const pathAddition = getPathNetwork(network)
+  const electrumFolderLocation = getElectrumFolderLocation()
+  const walletPath = electrumFolderLocation + path.join(pathAddition, 'wallets', walletName)
   const request = await makeRpcRequest('listaddresses',
-    { wallet: `../electrumFolder/${pathAddition}wallets/${walletName}` },
+    { wallet: walletPath },
     rpcport, rpcuser, rpcpassword)
   return request
 }
 
 export async function getWalletHistory (walletName, rpcport, rpcuser, rpcpassword, network) {
   const pathAddition = getPathNetwork(network)
+  const electrumFolderLocation = getElectrumFolderLocation()
+  const walletPath = electrumFolderLocation + path.join(pathAddition, 'wallets', walletName)
   const request = await makeRpcRequest('onchain_history',
-    { wallet: `../electrumFolder/${pathAddition}wallets/${walletName}`, show_addresses: true },
+    { wallet: walletPath, show_addresses: true },
     rpcport, rpcuser, rpcpassword)
   return request
 }
 
 export async function walletReady (walletName, network, rpcport, rpcuser, rpcpassword) {
   const pathAddition = getPathNetwork(network)
+  const electrumFolderLocation = getElectrumFolderLocation()
+  const walletPath = electrumFolderLocation + path.join(pathAddition, 'wallets', walletName)
   const request = await makeRpcRequest('is_synchronized',
-    { wallet: `../electrumFolder/${pathAddition}wallets/${walletName}` },
+    { wallet: walletPath },
     rpcport, rpcuser, rpcpassword)
   return request
 }
@@ -323,8 +423,10 @@ export async function broadcastTransaction (hex, rpcport, rpcuser, rpcpassword) 
 
 export async function getBalance (walletName, rpcport, rpcuser, rpcpassword, network) {
   const pathAddition = getPathNetwork(network)
+  const electrumFolderLocation = getElectrumFolderLocation()
+  const walletPath = electrumFolderLocation + path.join(pathAddition, 'wallets', walletName)
   const request = await makeRpcRequest('getbalance',
-    { wallet: `../electrumFolder/${pathAddition}wallets/${walletName}` },
+    { wallet: walletPath },
     rpcport, rpcuser, rpcpassword)
   return request
 }
@@ -344,7 +446,13 @@ export async function listLoadedWallets (rpcport, rpcuser, rpcpassword) {
     walletPaths.push(element.path)
   })
   walletPaths.forEach((item, i) => {
-    const myRegexp = /wallets\/(.*)/
+    let myRegexp
+    const platform = os.platform()
+    if (platform === 'darwin') {
+      myRegexp = /wallets\/(.*)/
+    } else {
+      myRegexp = /\\wallets\\(.*)/
+    }
     const match = myRegexp.exec(item)
     match.forEach(thing => {
       if (thing.length === 40) {
@@ -358,15 +466,17 @@ export async function listLoadedWallets (rpcport, rpcuser, rpcpassword) {
 
 export async function loadWallet (walletName, rpcport, rpcuser, rpcpassword, network) {
   const pathAddition = getPathNetwork(network)
+  const electrumFolderLocation = getElectrumFolderLocation()
+  const walletPath = electrumFolderLocation + path.join(pathAddition, 'wallets', walletName)
   const request = await makeRpcRequest('load_wallet',
-    { wallet_path: `../electrumFolder/${pathAddition}wallets/${walletName}` },
+    { wallet_path: walletPath },
     rpcport, rpcuser, rpcpassword)
   return request
 }
 
 function getPathNetwork (network) {
   if (network === 'testnet') {
-    return 'testnet/'
+    return 'testnet'
   } else if (network === 'mainnet') {
     return ''
   } else {

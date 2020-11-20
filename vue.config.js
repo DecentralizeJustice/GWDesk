@@ -34,14 +34,16 @@ module.exports = {
           artifactName: '${productName}.${ext}' /* eslint-disable-line */,
           target: ['dmg', 'zip'],
           binaries: [
-            // './public/binaries/hwiMac',
-            // './public/binaries/macElectrumGW',
-            // './public/binaries/macTrezorCliTool'
           ]
         },
         win: {
           target: 'nsis',
-          artifactName: '${productName}-Setup.${ext}' /* eslint-disable-line */
+          artifactName: '${productName}-Setup.${ext}' /* eslint-disable-line */,
+          binaries: [
+            './public/binaries/windowsHWI.exe',
+            './public/binaries/windowsElectrum.exe',
+            './public/binaries/windowsTrezorTool/windowsTrezorTool.exe'
+          ]
         },
         afterSign: 'buildInfo/notarize.js',
         dmg: {
