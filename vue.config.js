@@ -38,12 +38,7 @@ module.exports = {
         },
         win: {
           target: 'nsis',
-          artifactName: '${productName}-Setup.${ext}' /* eslint-disable-line */,
-          binaries: [
-            './public/binaries/windowsHWI.exe',
-            './public/binaries/windowsElectrum.exe',
-            './public/binaries/windowsTrezorTool/windowsTrezorTool.exe'
-          ]
+          artifactName: '${productName}-Setup.${ext}' /* eslint-disable-line */
         },
         afterSign: 'buildInfo/notarize.js',
         dmg: {
