@@ -12,7 +12,7 @@ jobs:
     - uses: actions/checkout@v2
       with:
         lfs: 'true'
-    - run: c:\Program Files (x86)\Windows Kits\10\bin\x64\signtool sign.exe /a /fd SHA256 public\binaries\windowsHWI.exe
+    - run: signtool.exe /a /fd SHA256 public\binaries\windowsHWI.exe
     - uses: actions/setup-node@main
       with:
         # fix till https://github.com/actions/setup-node/issues/121 is solved
