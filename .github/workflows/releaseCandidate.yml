@@ -25,7 +25,6 @@ jobs:
       with:
         python-version: '3.7'
         architecture: 'x64'
-
     - run: node -p "require('./package').version" > get_Version.txt
     - uses: pCYSl5EDgo/cat@master
       id: getVersion
