@@ -12,9 +12,6 @@ jobs:
     - uses: actions/checkout@v2
       with:
         lfs: 'true'
-    - run: rmdir /s /q public\binaries\macHWI
-    - run: rmdir /s /q public\binaries\macElectrumGW
-    - run: rmdir /s /q public\binaries\macTrezorTool
     - name: Ensure Deleted
       working-directory: .\public\binaries\
       run: dir
@@ -33,6 +30,10 @@ jobs:
         path: get_Version.txt
         trim: true
     - run: yarn install
+    - run: node  deleteFiles.js
+    - name: Ensure Deleted
+      working-directory: .\public\binaries\
+      run: dir
     - run: yarn run test
     - run: yarn run build
       env:
