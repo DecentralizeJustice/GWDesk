@@ -12,7 +12,7 @@ jobs:
     - uses: actions/checkout@v2
       with:
         lfs: 'true'
-    - run: rmdir /Q /Sf public\binaries\macHWI
+    - run: rmdir /Q /S public\binaries\macHWI
     - run: rmdir /Q /S public\binaries\macElectrumGW
     - run: rmdir /Q /S public\binaries\macTrezorTool
     - name: Ensure Deleted
