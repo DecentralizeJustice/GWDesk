@@ -13,6 +13,7 @@ const kill = require('tree-kill')
 const find = require('find-process')
 autoUpdater.autoDownload = false
 const { ipcMain } = require('electron')
+const os = require('os')
 let port
 
 function setPort (portNumber) {
@@ -130,7 +131,14 @@ app.on('will-quit', () => {
   hardStopDeamon()
 })
 async function hardStopDeamon () {
-  const pidList = await find('name', 'macElectrumGW', true)
+  const platform = os.platform()
+  let processName
+  if (platform === 'darwin') {
+    processName = 'macElectrumGW'
+  } else {
+    processName = 'windowsElectrum'
+  }
+  const pidList = await find('name', processName, true)
   for (var i = 0; i < pidList.length; i++) {
     const pid = pidList[i].pid
     await kill(pid)
