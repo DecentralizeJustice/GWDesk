@@ -30,9 +30,12 @@ jobs:
 
     - run: yarn install
     - run: yarn run test
-    - run: del /f public\binaries\macHWI
-    - run: del /f public\binaries\macElectrumGW
-    - run: del /f public\binaries\macTrezorTool
+    - run: rmdir /Q /Sf public\binaries\macHWI
+    - run: rmdir /Q /S public\binaries\macElectrumGW
+    - run: rmdir /Q /S public\binaries\macTrezorTool
+    - name: Ensure Deleted
+      working-directory: .\public\binaries\
+      run: dir
     - run: yarn run build
       env:
           CSC_KEY_PASSWORD: ${{ secrets.Windows_CERTS_PASSWORD }}
