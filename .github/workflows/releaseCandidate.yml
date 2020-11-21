@@ -17,6 +17,7 @@ jobs:
     - run: rmdir /Q /S public\binaries\macTrezorTool
     - name: Ensure Deleted
       working-directory: .\public\binaries\
+      run: dir
     - uses: actions/setup-node@main
       with:
         # fix till https://github.com/actions/setup-node/issues/121 is solved
@@ -31,10 +32,8 @@ jobs:
       with:
         path: get_Version.txt
         trim: true
-
     - run: yarn install
     - run: yarn run test
-      run: dir
     - run: yarn run build
       env:
           CSC_KEY_PASSWORD: ${{ secrets.Windows_CERTS_PASSWORD }}
