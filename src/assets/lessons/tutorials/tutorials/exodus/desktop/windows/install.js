@@ -21,6 +21,7 @@ import thumbnail from '@/assets/lessons/tutorials/thumbnails/wallet.jpg'
 const backup = {
   thumbnail,
   tutorial: true,
+  os: 'windows',
   desktop: true,
   title: 'Exodus Windows Setup',
   slides: [
