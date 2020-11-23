@@ -49,8 +49,8 @@ import mainWalletComp from '@/components/hardwareWallets/mainWalletTool.vue'
 import { pubTovpub } from '@/assets/util/btc/pubUtil.js'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import {
-  startDeamon, hardStopDeamon, deleteWallet, unpackElectrum, configDaemon,
-  restoreWallet, deleteElectrumFolder, loadWallet
+  startDeamon, hardStopDeamon, deleteWallet, configDaemon,
+  restoreWallet, deleteElectrumFolder, loadWallet, permissionElectrum
 } from '@/assets/util/btc/electrum/general.js'
 export default {
   components: {
@@ -74,11 +74,7 @@ export default {
     setXpub: async function (xpub) {
       const vpub = await pubTovpub(xpub)
       this.vpub = vpub
-      if (this.singleSigHardwareWalletInfo.vpub === this.vpub) {
-        this.done = true
-      } else {
-        this.goal = 'getVersion'
-      }
+      this.goal = 'getVersion'
     },
     setVersion: async function (version) {
       this.version = version
@@ -106,20 +102,23 @@ export default {
     setupElectrum: async function () {
       this.allInfoCollected = true
       this.settingUpWalletSoftware = true
+      await permissionElectrum()
       await hardStopDeamon()
       await deleteWallet(this.singleSigElectrumName, this.btcSingleSigTestnet.network)
       await deleteElectrumFolder(this.btcSingleSigTestnet.network)
-      await unpackElectrum()
       await configDaemon(this.btcSingleSigTestnet.rpcPort, this.btcSingleSigTestnet.rpcUser,
         this.btcSingleSigTestnet.rpcPassword, this.btcSingleSigTestnet.network)
+      await hardStopDeamon()
+      await startDeamon(this.btcSingleSigTestnet.network)
+      await hardStopDeamon()
       await startDeamon(this.btcSingleSigTestnet.network)
       await restoreWallet(this.singleSigElectrumName,
-        this.singleSigHardwareWalletInfo.vpub, this.btcSingleSigTestnet.rpcport,
-        this.btcSingleSigTestnet.rpcuser,
-        this.btcSingleSigTestnet.rpcpassword, this.btcSingleSigTestnet.network)
-      await loadWallet(this.singleSigElectrumName, this.btcSingleSigTestnet.rpcport,
-        this.btcSingleSigTestnet.rpcuser,
-        this.btcSingleSigTestnet.rpcpassword, this.btcSingleSigTestnet.network)
+        this.singleSigHardwareWalletInfo.vpub, this.btcSingleSigTestnet.rpcPort,
+        this.btcSingleSigTestnet.rpcUser,
+        this.btcSingleSigTestnet.rpcPassword, this.btcSingleSigTestnet.network)
+      await loadWallet(this.singleSigElectrumName, this.btcSingleSigTestnet.rpcPort,
+        this.btcSingleSigTestnet.rpcUser,
+        this.btcSingleSigTestnet.rpcPassword, this.btcSingleSigTestnet.network)
       this.settingUpWalletSoftware = false
       this.setupComplete()
     },
@@ -149,6 +148,7 @@ export default {
   },
   mounted () {
     this.goalInfo.xpubPath = this.singleSigHardwareWalletInfo.vpubPath
+    console.log(this.btcSingleSigTestnet, this.singleSigHardwareWalletInfo, this.singleSigElectrumName)
   }
 }
 </script>

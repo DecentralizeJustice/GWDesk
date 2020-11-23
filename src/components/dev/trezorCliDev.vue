@@ -11,7 +11,7 @@
             >
               Unpack Main Binary
             </v-btn>
-            <v-btn
+            <!-- <v-btn
               color="red"
               v-on:click="unpackPhotos()"
               class="mx-2 my-2"
@@ -24,14 +24,14 @@
               v-on:click="changeName()"
             >
               Change Name
-            </v-btn>
-            <v-btn
+            </v-btn> -->
+            <!-- <v-btn
               color="blue darken-4"
               class="mx-2 my-2"
               v-on:click="changePhoto()"
             >
               Change Photo
-            </v-btn>
+            </v-btn> -->
             <v-btn
               color="pink darken-4"
               class="mx-2 my-2"
@@ -82,7 +82,7 @@
 
 <script>
 import {
-  unpackMainBinary, unpackPhotos, changeName, changePhoto, wipe,
+  unpackMainBinary, wipe,
   getInfo, getNode, updateFirmware, getVersionNumber, getStatus
 } from '@/assets/util/trezorCli/general.js'
 export default {
@@ -115,18 +115,6 @@ export default {
     wipe: async function () {
       const test = await wipe()
       console.log(test)
-    },
-    unpackPhotos: async function () {
-      const result = await unpackPhotos()
-      console.log(result)
-    },
-    changeName: async function () {
-      this.channel = changeName(this.walletName)
-      this.addListeners(this.channel)
-    },
-    changePhoto: async function () {
-      this.channel = changePhoto(this.photoName)
-      this.addListeners(this.channel)
     },
     getInfo: async function () {
       const info = await getInfo()

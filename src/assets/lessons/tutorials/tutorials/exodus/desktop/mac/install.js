@@ -21,6 +21,7 @@ import thumbnail from '@/assets/lessons/tutorials/thumbnails/wallet.jpg'
 const backup = {
   thumbnail,
   tutorial: true,
+  os: 'mac',
   desktop: true,
   title: 'Exodus Mac Setup',
   slides: [
