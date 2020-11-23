@@ -61,16 +61,20 @@ export default {
   computed: {
     actualLessons: function () {
       const updatedLessons = R.clone(this.landingInfo)
-      for (var i = 0; i < updatedLessons.lessons.length; i++) {
-        if (updatedLessons.lessons[i].comp.os) {
-          if (updatedLessons.lessons[i].comp.os === 'mac' && platform !== 'darwin') {
-            updatedLessons.lessons = R.remove(i, 1, updatedLessons.lessons)
+      updatedLessons.lessons = []
+      for (var i = 0; i < this.landingInfo.lessons.length; i++) {
+        if (this.landingInfo.lessons[i].comp.os) {
+          if (this.landingInfo.lessons[i].comp.os === 'mac' && platform === 'darwin') {
+            updatedLessons.lessons.push(this.landingInfo.lessons[i])
           }
-          if (updatedLessons.lessons[i].comp.os === 'windows' && platform !== 'win32') {
-            updatedLessons.lessons = R.remove(i, 1, updatedLessons.lessons)
+          if (this.landingInfo.lessons[i].comp.os === 'windows' && platform === 'win32') {
+            updatedLessons.lessons.push(this.landingInfo.lessons[i])
           }
+        } else {
+          updatedLessons.lessons.push(this.landingInfo.lessons[i])
         }
       }
+
       return updatedLessons
     }
   },
