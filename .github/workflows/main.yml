@@ -3,7 +3,7 @@ name: BuildRelease
 
 on:
   push:
-    branches: [ none ]
+    branches: [ master ]
 
 jobs:
 
@@ -21,15 +21,17 @@ jobs:
       with:
         python-version: '3.7'
         architecture: 'x64'
-
     - run: node -p "require('./package').version" > get_Version.txt
     - uses: pCYSl5EDgo/cat@master
       id: getVersion
       with:
         path: get_Version.txt
         trim: true
-
     - run: yarn install
+    - run: node  deleteFiles.js
+    - name: Ensure Deleted
+      working-directory: .\public\binaries\
+      run: dir
     - run: yarn run test
     - run: yarn run build
       env:
@@ -76,12 +78,23 @@ jobs:
         trim: true
 
     - run: yarn install
+    - run: node  deleteFiles.js
+    - name: Ensure Deleted
+      working-directory: ./public/binaries/
+      run: ls
     - run: yarn run test
     - uses: apple-actions/import-codesign-certs@v1
       with:
         p12-file-base64: ${{ secrets.MAC_CERTS }}
         p12-password: ${{ secrets.MAC_CERTS_PASSWORD }}
-    - run: yarn run resign
+    - run: yarn run resignTor1
+    - run: yarn run resignTor2
+    - run: chmod +x hwiSign.sh
+    - run: ./hwiSign.sh
+    - run: chmod +x trezorSign.sh
+    - run: ./trezorSign.sh
+    - run: chmod +x electrumSign.sh
+    - run: ./electrumSign.sh
     - run: yarn run build
       env:
           CSC_KEY_PASSWORD: ${{ secrets.MAC_CERTS_PASSWORD }}
