@@ -44,7 +44,7 @@ export default {
       'Courses', 'Lessons', 'Feedback', 'BTC Single', 'Settings', 'Dev Pannel'
     ],
     prodOptions: [
-      'Courses', 'Lessons', 'Feedback'// , 'BTC Singlesig', 'Settings'
+      'Courses', 'Lessons', 'Feedback'
     ],
     icons: {
       Feedback: 'comment-quote',

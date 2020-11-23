@@ -1,9 +1,9 @@
 <template>
   <v-card>
-    <v-card-title class="headline justify-center">{{landingInfo.title}}</v-card-title>
+    <v-card-title class="headline justify-center">{{actualLessons.title}}</v-card-title>
     <v-divider/>
     <v-row no-gutters>
-       <v-col :key="item.title" v-for="(item, index) in landingInfo.lessons" cols='4'>
+       <v-col :key="item.title" v-for="(item, index) in actualLessons.lessons" cols='4'>
          <v-card
            class="ma-3" :color="cardColor(item.unlocked)"
          >
@@ -49,6 +49,9 @@
   </v-card>
 </template>
 <script>
+const os = require('os')
+const platform = os.platform()
+const R = require('ramda')
 export default {
   props: ['landingInfo'],
   data: () => ({
@@ -56,6 +59,29 @@ export default {
   components: {
   },
   computed: {
+    actualLessons: function () {
+      const updatedLessons = R.clone(this.landingInfo)
+      updatedLessons.lessons = []
+      for (var i = 0; i < this.landingInfo.lessons.length; i++) {
+        if (this.landingInfo.lessons[i].comp.os) {
+          if (this.landingInfo.lessons[i].comp.os === 'mac' && platform === 'darwin') {
+            updatedLessons.lessons.push(this.landingInfo.lessons[i])
+          }
+          if (this.landingInfo.lessons[i].comp.os === 'windows' && platform === 'win32') {
+            updatedLessons.lessons.push(this.landingInfo.lessons[i])
+          }
+        } else {
+          updatedLessons.lessons.push(this.landingInfo.lessons[i])
+        }
+      }
+
+      return updatedLessons
+    }
+  },
+  mounted () {
+    if (typeof this.setLesson !== 'undefined') {
+      // this.changeLesson(this.setLesson)
+    }
   },
   methods: {
     cardColor (state) {

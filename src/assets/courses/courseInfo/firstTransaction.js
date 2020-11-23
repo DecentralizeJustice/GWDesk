@@ -2,9 +2,11 @@ import coinbaseSetup from '@/assets/lessons/tutorials/tutorials/coinbase/setup.j
 import coinbaseLinkBank from '@/assets/lessons/tutorials/tutorials/coinbase/linkAccount.js'
 import coinbaseDepositFiat from '@/assets/lessons/tutorials/tutorials/coinbase/depositFiat.js'
 import macExodusSetup from '@/assets/lessons/tutorials/tutorials/exodus/desktop/mac/install.js'
+import windowsExodusSetup from '@/assets/lessons/tutorials/tutorials/exodus/desktop/windows/install.js'
 import coinbaseWithdrawBTC from '@/assets/lessons/tutorials/tutorials/coinbase/withdrawbtc.js'
 import buyStickersWithBTC from '@/assets/lessons/tutorials/tutorials/btc/buySticker.js'
-
+const os = require('os')
+const platform = os.platform()
 const info = {
   title: 'First Crypto Transaction',
   about: `This is a practical course that walks you through buying your
@@ -37,5 +39,8 @@ const info = {
       comp: buyStickersWithBTC
     }
   ]
+}
+if (platform !== 'darwin') {
+  info.lessons[3].comp = windowsExodusSetup
 }
 export default info

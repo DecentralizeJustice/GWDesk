@@ -30,20 +30,21 @@
 import navDrawer from '@/components/general/navDrawer.vue'
 import updateWindow from '@/components/general/update.vue'
 import { dormant, circuitEstablished } from '@/assets/util/tor.js'
-import {
-  hardStopDeamon, unpackElectrum
-} from '@/assets/util/btc/electrum/general.js'
-import {
-  unpackBinary
-} from '@/assets/util/hwi/general.js'
-import {
-  unpackMainBinary
-} from '@/assets/util/trezorCli/general.js'
+// import {
+//   hardStopDeamon, permissionElectrum, unpackElectrum
+// } from '@/assets/util/btc/electrum/general.js'
+// import {
+//   unpackBinary
+// } from '@/assets/util/hwi/general.js'
+// import {
+//   unpackMainBinary
+// } from '@/assets/util/trezorCli/general.js'
 const appVersion = require('../package.json').version
 const electron = window.require('electron')
 const ipcRenderer = electron.ipcRenderer
 const isDevelopment = process.env.NODE_ENV !== 'production'
 const R = require('ramda')
+// const timeout = ms => new Promise(resolve => setTimeout(resolve, ms))
 export default {
   name: 'App',
   components: {
@@ -61,9 +62,33 @@ export default {
   }),
   methods: {
     copyBinary: async function () {
-      await unpackElectrum()
-      await unpackBinary()
-      await unpackMainBinary()
+      // await unpackElectrum()
+      // await timeout(1000)
+      // await unpackBinary()
+      // await timeout(1000)
+      // await unpackMainBinary()
+      // await permissionElectrum()
+    },
+    alsoStartup: async function () {
+      // await hardStopDeamon()
+      this.loop()
+      if (process.env.NODE_ENV !== 'development') {
+        ipcRenderer.send('CHECK_FOR_UPDATE_PENDING')
+        ipcRenderer.on('CHECK_FOR_UPDATE_SUCCESS', (event, updateInfo) => {
+          const version = updateInfo.version
+          const updateReady = this.shouldUpdate(version, appVersion)
+          if (version && updateReady) {
+            this.updateAvailable = true
+          }
+        })
+        ipcRenderer.on('CHECK_FOR_UPDATE_FAILURE', () => {
+          console.log('failed update')
+        })
+        ipcRenderer.on('DOWNLOAD_UPDATE_FAILURE', (event, err) => {
+          console.log('download failed')
+          console.log(err)
+        })
+      }
     },
     shouldUpdate: function (downloadVersion, currentVersion) {
       const downloadVersionArray = downloadVersion.split('.').map(e => parseInt(e))
@@ -142,27 +167,9 @@ export default {
     }
   },
   async mounted () {
+    await this.copyBinary()
     this.start()
-    this.copyBinary()
-    await hardStopDeamon()
-    await this.loop()
-    if (process.env.NODE_ENV !== 'development') {
-      ipcRenderer.send('CHECK_FOR_UPDATE_PENDING')
-      ipcRenderer.on('CHECK_FOR_UPDATE_SUCCESS', (event, updateInfo) => {
-        const version = updateInfo.version
-        const updateReady = this.shouldUpdate(version, appVersion)
-        if (version && updateReady) {
-          this.updateAvailable = true
-        }
-      })
-      ipcRenderer.on('CHECK_FOR_UPDATE_FAILURE', () => {
-        console.log('failed update')
-      })
-      ipcRenderer.on('DOWNLOAD_UPDATE_FAILURE', (event, err) => {
-        console.log('download failed')
-        console.log(err)
-      })
-    }
+    this.alsoStartup()
   }
 }
 </script>
