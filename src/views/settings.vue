@@ -18,12 +18,12 @@
       </v-tabs>
       <v-divider/>
       <v-card-actions>
-      <v-btn
+      <!-- <v-btn
         color="orange"
         text
       >
         <v-icon>mdi-help</v-icon>
-      </v-btn>
+      </v-btn> -->
       <v-btn
         color="primary"
         text

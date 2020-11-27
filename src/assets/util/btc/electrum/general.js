@@ -35,8 +35,6 @@ export async function unpackElectrum () {
   await timeout(1000)
   fsPlain.chmod(executable, 0o775, (err) => {
     if (err) throw err
-    console.log('The permissions for file exectuble have been changed!')
-    console.log(destination)
   })
   await timeout(1000)
   return true
@@ -57,7 +55,6 @@ export async function permissionElectrum () {
   }
   fsPlain.chmod(executable, 0o775, (err) => {
     if (err) throw err
-    console.log('The permissions for file executable have been changed!')
   })
   await timeout(2000)
   return true
@@ -76,7 +73,6 @@ export async function configDaemon (port, user, password, network) {
     destination = path.join(app.getPath('userData'), 'binaries')
     electrumFolder = 'electrum_data'
   }
-  console.log(port, user, password, network)
   const binaryFolder = destination
   const commands0 =
   addCommandNetwork(['-D', electrumFolder, '-o', 'setconfig', 'rpcport', port], network)
@@ -286,7 +282,6 @@ export async function getFeeRate (withinBlock, rpcport, rpcuser, rpcpassword) {
 
 export async function makeRpcRequest (method, params, rpcport, rpcuser,
   rpcpassword) {
-  console.log(method, params, rpcport, rpcuser, rpcpassword)
   const data = {
     method: method,
     params: params,
@@ -302,7 +297,6 @@ export async function makeRpcRequest (method, params, rpcport, rpcuser,
     }
   }
   )
-  console.log(request)
   return request
 }
 
@@ -314,19 +308,15 @@ export async function requestStopDeamon (rpcport, rpcuser, rpcpassword) {
 
 export async function restoreWallet (walletName, recoveryInfo, rpcport, rpcuser,
   rpcpassword, network) {
-  console.log(walletName, recoveryInfo, rpcport, rpcuser,
-    rpcpassword, network)
   const pathAddition = getPathNetwork(network)
   const electrumFolderLocation = getElectrumFolderLocation()
   const walletPath = electrumFolderLocation + path.join(pathAddition, 'wallets', walletName)
-  console.log(walletPath)
   const request = await makeRpcRequest('restore',
     {
       text: recoveryInfo,
       wallet_path: walletPath
     },
     rpcport, rpcuser, rpcpassword)
-  console.log(request)
   return request
 }
 
