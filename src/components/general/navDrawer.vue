@@ -41,25 +41,27 @@
 export default {
   data: () => ({
     devOptions: [
-      'Courses', 'Lessons', 'Feedback', 'BTC Single', 'Settings', 'Dev Pannel'
+      'Announcements', 'Courses', 'Lessons', 'Feedback', 'BTC Wallet', 'Settings', 'Dev Pannel'
     ],
     prodOptions: [
-      'Courses', 'Lessons', 'Feedback'
+      'Announcements', 'Courses', 'Lessons', 'Feedback'
     ],
     icons: {
       Feedback: 'comment-quote',
       Lessons: 'book-open-page-variant',
       Courses: 'book-open-variant',
-      'BTC Single': 'lock',
+      'BTC Wallet': 'lock',
       'Dev Pannel': 'hammer-wrench',
-      Settings: 'settings'
+      Settings: 'settings',
+      Announcements: 'bullhorn'
     },
     routerLinks: {
+      Announcements: 'announce',
       Courses: 'courses',
       Feedback: 'feedback',
       Lessons: 'lessons',
       Settings: 'settings',
-      'BTC Single': 'btcSinglesig',
+      'BTC Wallet': 'btcSinglesig',
       'Dev Pannel': 'devPannel'
     },
     open: false

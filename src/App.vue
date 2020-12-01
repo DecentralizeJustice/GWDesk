@@ -143,7 +143,7 @@ export default {
       try {
         await this.$router.push(
           {
-            name: 'courses'
+            name: 'announce'
           })
       } catch (err) {
       }
