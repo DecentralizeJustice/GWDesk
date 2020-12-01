@@ -14,6 +14,8 @@ import slide001 from '@/assets/lessons/tutorials/slides/wallets/update/1.jpg'
 import slide002 from '@/assets/lessons/tutorials/slides/wallets/update/2.jpg'
 import slide003 from '@/assets/lessons/tutorials/slides/wallets/update/3.jpg'
 
+import notes1 from '@/assets/lessons/tutorials/courseNotes/wallet/spend.html'
+
 const backup = {
   tutorial: true,
   desktop: true,
@@ -54,6 +56,11 @@ const backup = {
     'audio/wallet/walletSetup.mp3',
     'audio/wallet/spendandrec.mp3',
     'audio/wallet/update.mp3'
+  ],
+  notes: [
+    '',
+    notes1,
+    ''
   ]
 }
 export default backup
