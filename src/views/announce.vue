@@ -56,6 +56,14 @@
                  </v-icon>
                </v-col>
              </v-row>
+             <v-btn
+               color="deep-purple lighten-1"
+               @click='goToRoute(item.routeInfo)'
+               class="mt-2"
+               v-if='item.routeInfo'
+             >
+               Explore
+             </v-btn>
             </p>
             </v-card>
           </v-col>
@@ -73,15 +81,25 @@ export default {
   },
   data: () => ({
     lessons: [
-      { title: 'Lesson: Why You Need A Hardware Wallet', icon: 'deskphone' }
+      {
+        title: 'Why You Need A Hardware Wallet',
+        icon: 'deskphone'
+      }
     ],
     genUpdates: [
-      { title: 'Testnet Wallet Released', icon: 'wallet' }
+      {
+        title: 'Testnet Wallet Released',
+        icon: 'wallet',
+        routeInfo: { name: 'lessons', params: { lessonCategory: 'Wallet', lesson: 0 } }
+      }
     ]
   }),
   computed: {
   },
   methods: {
+    goToRoute: function (routeInfo) {
+      this.$router.push(routeInfo)
+    },
     openDialog: function (section) {
       this.currentLesson = section
       this.dialog = true

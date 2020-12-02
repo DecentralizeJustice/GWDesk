@@ -50,6 +50,7 @@
       overlay-opacity='1'
     >
     <subjectHome
+    v-bind:routeInfo='routeInfo'
     v-bind:landingInfo="landingInfoPicker"
     v-bind:setLesson="this.routeInfo.lesson"
     v-on:exit="dialog = false"/>
@@ -66,8 +67,8 @@ import exodusInfo from '@/assets/landingInfo/exodus.js'
 import walletInfo from '@/assets/landingInfo/wallet.js'
 export default {
   mounted () {
-    if (typeof this.routeInfo.course !== 'undefined') {
-      this.openDialog(this.routeInfo.course)
+    if (typeof this.routeInfo.lessonCategory !== 'undefined') {
+      this.openDialog(this.routeInfo.lessonCategory)
     }
   },
   components: {
