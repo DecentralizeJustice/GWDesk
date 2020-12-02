@@ -30,21 +30,21 @@
 import navDrawer from '@/components/general/navDrawer.vue'
 import updateWindow from '@/components/general/update.vue'
 import { dormant, circuitEstablished } from '@/assets/util/tor.js'
-// import {
-//   hardStopDeamon, permissionElectrum, unpackElectrum
-// } from '@/assets/util/btc/electrum/general.js'
-// import {
-//   unpackBinary
-// } from '@/assets/util/hwi/general.js'
-// import {
-//   unpackMainBinary
-// } from '@/assets/util/trezorCli/general.js'
+import {
+  hardStopDeamon, permissionElectrum, unpackElectrum
+} from '@/assets/util/btc/electrum/general.js'
+import {
+  unpackBinary
+} from '@/assets/util/hwi/general.js'
+import {
+  unpackMainBinary
+} from '@/assets/util/trezorCli/general.js'
 const appVersion = require('../package.json').version
 const electron = window.require('electron')
 const ipcRenderer = electron.ipcRenderer
 const isDevelopment = process.env.NODE_ENV !== 'production'
 const R = require('ramda')
-// const timeout = ms => new Promise(resolve => setTimeout(resolve, ms))
+const timeout = ms => new Promise(resolve => setTimeout(resolve, ms))
 export default {
   name: 'App',
   components: {
@@ -62,15 +62,15 @@ export default {
   }),
   methods: {
     copyBinary: async function () {
-      // await unpackElectrum()
-      // await timeout(1000)
-      // await unpackBinary()
-      // await timeout(1000)
-      // await unpackMainBinary()
-      // await permissionElectrum()
+      await unpackElectrum()
+      await timeout(1000)
+      await unpackBinary()
+      await timeout(1000)
+      await unpackMainBinary()
+      await permissionElectrum()
     },
     alsoStartup: async function () {
-      // await hardStopDeamon()
+      await hardStopDeamon()
       this.loop()
       if (process.env.NODE_ENV !== 'development') {
         ipcRenderer.send('CHECK_FOR_UPDATE_PENDING')
