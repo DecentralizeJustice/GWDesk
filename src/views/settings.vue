@@ -2,6 +2,7 @@
   <v-row no-gutters align-content='center' justify='center'>
     <v-col
       cols="10"
+      v-if='disclaimerRead'
     >
     <v-card :key='keyInfo' class="grey darken-3" >
       <v-card-title class="headline justify-center">
@@ -34,26 +35,85 @@
       </v-card-actions>
     </v-card>
     </v-col>
+    <v-col
+      cols="10"
+      v-if='!disclaimerRead'
+    >
+    <v-card class="grey darken-3" >
+      <v-card-title class="display-2 justify-center">
+        Terms and Conditions
+      </v-card-title>
+      <v-divider/>
+      <v-card-text class="ma-4">
+      <v-row
+        align="center"
+      >
+        <div class="white--text title font-weight-regular">
+          1. You Have taken the "Testnet Wallet Course" and understand everything within that course.
+        </div>
+        <div class="white--text title font-weight-regular">
+          2. This Testnet Wallet is realsed under the MIT License and by using it you
+          agree to that license which can be found here: https://opensource.org/licenses/MIT
+        </div>
+        <div class="white--text display-1 mt-2">
+          By clicking continue you understand and agree to the previous two points.
+        </div>
+      </v-row>
+      <v-row
+          align="center"
+          justify="space-around"
+          class="mt-3"
+        >
+          <v-btn color='green' @click='takeLesson'>
+            Take Lesson
+          </v-btn>
+          <v-btn
+            depressed
+            color="primary"
+            @click='readDiscaimer'
+          >
+            I agree & Continue
+          </v-btn>
+        </v-row>
+      </v-card-text>
+      <v-divider/>
+    </v-card>
+    </v-col>
   </v-row>
 </template>
 
 <script>
 import hardwareWallet from '@/components/settings/main.vue'
+import { mapGetters } from 'vuex'
 export default {
   components: {
     hardwareWallet
   },
   data: () => ({
-    keyInfo: 1
+    keyInfo: 1,
+    disclaimerRead: false,
+    lessonInfo: { name: 'lessons', params: { lessonCategory: 'Wallet', lesson: 0 } }
   }),
   computed: {
+    ...mapGetters('hardwareInfo', [
+      'singleSigHardwareWalletInfo'
+    ])
   },
   methods: {
+    takeLesson: function () {
+      this.$router.push(this.lessonInfo)
+    },
+    readDiscaimer: function () {
+      this.disclaimerRead = true
+    },
     refresh: function () {
       this.keyInfo = this.keyInfo * -1
     }
   },
   async mounted () {
+    if (this.singleSigHardwareWalletInfo.vpub !== '') {
+      this.disclaimerRead = true
+    }
   }
 }
 </script>

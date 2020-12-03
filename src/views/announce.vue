@@ -30,6 +30,14 @@
                  </v-icon>
                </v-col>
              </v-row>
+             <v-btn
+               color="deep-purple lighten-1"
+               @click='goToRoute(item.routeInfo)'
+               class="mt-2"
+               v-if='item.routeInfo'
+             >
+               Take Lesson
+             </v-btn>
             </p>
             </v-card>
           </v-col>
@@ -62,7 +70,7 @@
                class="mt-2"
                v-if='item.routeInfo'
              >
-               Explore
+               Take Lesson
              </v-btn>
             </p>
             </v-card>
@@ -83,7 +91,8 @@ export default {
     lessons: [
       {
         title: 'Why You Need A Hardware Wallet',
-        icon: 'deskphone'
+        icon: 'deskphone',
+        routeInfo: { name: 'lessons', params: { lessonCategory: 'Wallet', lesson: 1 } }
       }
     ],
     genUpdates: [
