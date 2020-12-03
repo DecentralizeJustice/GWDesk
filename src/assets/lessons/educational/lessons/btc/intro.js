@@ -31,14 +31,7 @@ const intro = {
       slide6,
       slide7,
       slide8,
-      slide9,
-      slide10,
-      slide11,
-      slide12,
-      slide13,
-      slide14,
-      slide15,
-      slide16
+      slide9
     ],
     [
       slide10,

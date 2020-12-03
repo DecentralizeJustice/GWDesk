@@ -41,7 +41,7 @@
           type="error"
           border="left"
         >
-        An error has occured. Refresh Page.
+        Ensure that wallet is unlocked and Refresh Page.
         </v-alert>
       </v-col>
       </v-row>
@@ -64,7 +64,7 @@ export default {
     getStatus: async function () {
       try {
         const status = await getStatus()
-        return status
+        this.$emit('goalCompleted', { status })
       } catch (e) {
         this.checkFailed = true
         console.log(e)
@@ -74,8 +74,7 @@ export default {
   computed: {
   },
   async mounted () {
-    const status = await this.getStatus()
-    this.$emit('goalCompleted', { status })
+    this.getStatus()
   }
 }
 </script>

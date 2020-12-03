@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import image1 from '@/assets/photos/trezormodelt.jpeg'
+import image1 from '@/assets/photos/trezormodelt.jpg'
 export default {
   props: ['walletInfo', 'status'],
   components: {

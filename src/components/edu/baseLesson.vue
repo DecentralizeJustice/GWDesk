@@ -39,11 +39,25 @@
          />
       </v-col>
       </v-row>
+      <v-row align="center" justify='space-around' v-if='!justVid && currentComponent === "mainNoQuiz"'>
+      <v-col cols='10' v-if='vid'>
+        <vidCompNoQuiz
+        v-on:back='back()'
+        v-on:next='next()'
+        v-bind:courseInfo="correctLessonInfo"
+        v-bind:done="done"
+        :html='html'/>
+      </v-col>
+      </v-row>
   <v-row align="center" justify='space-around'   v-if='!justVid && currentComponent === "congrats"'>
     <v-col cols='7'>
-      <justVidComp
+      <vidCompNoQuiz
+      v-on:back='back()'
+      v-on:next='next()'
       v-bind:courseInfo="correctLessonInfo"
-      v-on:quizDone='partDone'/>
+      v-on:quizDone='partDone'
+      v-bind:done="done"
+      />
     </v-col>
   </v-row>
   <v-divider/>
@@ -68,6 +82,7 @@
 <script>
 import justVidComp from '@/components/general/localAudio.vue'
 import vidComp from '@/components/edu/vid&NotesComp.vue'
+import vidCompNoQuiz from '@/components/edu/vid&NotesCompNoQuiz.vue'
 import quiz from '@/components/edu/quiz.vue'
 export default {
   props: ['courseInfo'],
@@ -78,7 +93,8 @@ export default {
   components: {
     quiz,
     vidComp,
-    justVidComp
+    justVidComp,
+    vidCompNoQuiz
   },
   computed: {
     correctLessonInfo: function () {
@@ -128,6 +144,9 @@ export default {
       // if (this.part === numberOfQuestions - 1) {
       //   return 'bonus'
       // }
+      if (this.part === numberOfQuestions && this.html) {
+        return 'mainNoQuiz'
+      }
       if (this.part === numberOfQuestions) {
         return 'congrats'
       }
@@ -147,6 +166,12 @@ export default {
     },
     backToVideo () {
       this.vid = true
+    },
+    back () {
+      this.part -= 1
+    },
+    next () {
+      this.part += 1
     },
     partDone () {
       if (this.currentComponent === 'congrats') {

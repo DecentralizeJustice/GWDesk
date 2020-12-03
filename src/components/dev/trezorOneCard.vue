@@ -8,9 +8,9 @@
     <v-container v-show='!pingridUse && !textUse'>
       <v-row justify="center">
         <v-col cols="12">
-          <v-img
+          <!-- <v-img
             :src="walletPhoto"
-          ></v-img>
+          ></v-img> -->
         </v-col>
         <v-col
           cols="4"
@@ -123,7 +123,6 @@
 </template>
 
 <script>
-import image1 from '@/assets/photos/trezor.jpeg'
 import pingrid from '@/components/dev/pingrid.vue'
 export default {
   props: ['walletInfo'],
@@ -165,7 +164,7 @@ export default {
   },
   computed: {
     walletPhoto: function () {
-      return image1
+      return ''
     },
     model: function () {
       return this.walletInfo.model
