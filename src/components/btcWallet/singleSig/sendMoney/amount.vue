@@ -179,12 +179,14 @@ export default {
   computed: {
     speedSelectGroup: function () {
       return [
-        '4 Hours', '1.5 Hours', '50 Min', '20 Min', '10 Min'
+        // '4 Hours', '1.5 Hours', '50 Min', '20 Min', '10 Min'
+        '20 Min', '10 Min'
       ]
     },
     feeArrayOptions: function () {
+      // feeInfo['20'], feeInfo['10'],feeInfo['5'],
       const feeInfo = this.feeInfo
-      return [feeInfo['20'], feeInfo['10'], feeInfo['5'],
+      return [
         feeInfo['2'], feeInfo['1']]
     },
     changeAmount: function () {
@@ -306,6 +308,7 @@ export default {
       const walletInfo = this.singleSigInfo
       const feeInfo = await
       getAllFeeRates(walletInfo.rpcPort, walletInfo.rpcUser, walletInfo.rpcPassword)
+      console.log(feeInfo, 'HERRRR')
       this.feeInfo = feeInfo
       return true
     },

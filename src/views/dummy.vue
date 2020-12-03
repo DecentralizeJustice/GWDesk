@@ -8,7 +8,7 @@ export default {
   mounted () {
     this.$router.push(
       {
-        name: 'edu',
+        name: this.routeInfo.name,
         params: {
           ...this.routeInfo
         }
