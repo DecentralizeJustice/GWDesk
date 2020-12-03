@@ -44,7 +44,7 @@ export default {
       'Announcements', 'Courses', 'Lessons', 'Feedback', 'BTC Wallet', 'Settings', 'Dev Pannel'
     ],
     prodOptions: [
-      'Announcements', 'Courses', 'Lessons', 'Feedback'
+      'Announcements', 'Courses', 'Lessons', 'Feedback', 'BTC Wallet', 'Settings'
     ],
     icons: {
       Feedback: 'comment-quote',
