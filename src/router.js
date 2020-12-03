@@ -5,6 +5,7 @@ import Courses from './views/courses.vue'
 import Feedback from './views/feedback.vue'
 import DevPannel from './views/dev.vue'
 import Settings from './views/settings.vue'
+import Annoucments from './views/announce.vue'
 import BtcSingleSig from './views/btcSingleSig.vue'
 import Dummy from './views/dummy.vue'
 
@@ -14,11 +15,18 @@ const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
-    { path: '/', redirect: '/courses' },
+    { path: '/', redirect: '/announce' },
     {
       path: '/lessons',
       name: 'lessons',
       component: Lessons,
+      props: (route) => (
+        { routeInfo: route.params })
+    },
+    {
+      path: '/announce',
+      name: 'announce',
+      component: Annoucments,
       props: (route) => (
         { routeInfo: route.params })
     },

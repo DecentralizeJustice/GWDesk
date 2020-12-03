@@ -65,6 +65,44 @@
         Continue
       </v-btn>
     </v-row>
+    <v-row
+      align="center"
+      justify="space-around"
+      class="mt-4"
+    >
+    <v-btn
+      color="purple"
+      v-on:click="toggleBootloaderHelp()"
+    >
+      {{bootloaderText}}
+    </v-btn>
+    <v-row
+      align="center"
+      justify="space-around"
+      v-if='bootloaderHelp'
+    >
+    <v-col
+          cols='6'
+        >
+        <v-alert
+            color="#C51162"
+            dark
+            type="info"
+            border="top"
+            v-if='bootloaderHelp'
+          >
+          Rub Finger Around Screen While Plugging In Trezor
+          </v-alert>
+    </v-col>
+    <v-col
+          cols='6'
+        >
+        <img
+            :src="walletPhoto"
+          >
+    </v-col>
+  </v-row>
+  </v-row>
     </v-col>
     <v-col class="text-center" v-if='firstContinue'>
       <v-row
@@ -77,7 +115,7 @@
             type="info"
             border="left"
           >
-          Press continue to install firmware.
+          This procecess might erase wallet info. Check Hardware Wallet Update lesson for more info. Press Continue to install firmware.
         </v-alert>
       </v-row>
       <v-row
@@ -85,7 +123,7 @@
         justify="space-around"
       >
         <v-btn
-          color="primary"
+          color="deep-purple darken-4"
           v-on:click="firstInstall()"
         >
           Continue
@@ -100,6 +138,7 @@ import {
   updateFirmware
 } from '@/assets/util/trezorCli/general.js'
 import hwInfo from '@/assets/constants/hwConstants.js'
+import image1 from '@/assets/photos/trezorTBootloader.gif'
 export default {
   props: ['walletInfo', 'goalInfo'],
   components: {
@@ -107,9 +146,17 @@ export default {
   data: () => ({
     channel: {},
     needsBootLoaderMode: false,
-    firstContinue: true
+    firstContinue: true,
+    bootloaderHelp: false
   }),
   methods: {
+    toggleBootloaderHelp: function () {
+      if (this.bootloaderHelp) {
+        this.bootloaderHelp = false
+      } else {
+        this.bootloaderHelp = true
+      }
+    },
     firstInstall: async function () {
       this.firstContinue = false
       await this.install()
@@ -138,6 +185,16 @@ export default {
   computed: {
     mostRecentWalletVersion: function () {
       return hwInfo.hwWalletVersions.trezorT
+    },
+    walletPhoto: function () {
+      return image1
+    },
+    bootloaderText: function () {
+      if (!this.bootloaderHelp) {
+        return 'How To Bootloader Help'
+      } else {
+        return 'Close Help'
+      }
     }
   },
   async mounted () {

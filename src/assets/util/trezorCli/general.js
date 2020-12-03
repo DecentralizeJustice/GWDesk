@@ -63,7 +63,7 @@ function getBinaryLocation () {
   const platform = os.platform()
 
   if (platform === 'darwin') {
-    return './' + path.join(app.getPath('userData'), 'binaries', 'macTrezorTool', 'macTrezorTool')
+    return path.join(app.getPath('userData'), 'binaries', 'macTrezorTool', 'macTrezorTool')
   } else {
     return path.join(app.getPath('userData'), 'binaries', 'windowsTrezorTool', 'windowsTrezorTool.exe')
   }

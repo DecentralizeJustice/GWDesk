@@ -69,7 +69,7 @@ const R = require('ramda')
 export default {
   props: ['transaction'],
   data: () => ({
-    proposedAddress: 'mv4rnyY3Su5gjcDNzbMLKBQkBicCtHUtFB',
+    proposedAddress: '',
     maxNumberAddress: 2
   }),
   methods: {

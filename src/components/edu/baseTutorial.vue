@@ -75,6 +75,9 @@ export default {
       return info
     },
     html: function () {
+      if (!this.courseInfo.comp.notes || !this.courseInfo.comp.notes[this.part]) {
+        return ''
+      }
       return this.courseInfo.comp.notes[this.part]
     },
     title: function () {

@@ -13,13 +13,13 @@ import landing from '@/components/edu/landing.vue'
 import baseLesson from '@/components/edu/baseLesson.vue'
 import baseTutorial from '@/components/edu/baseTutorial.vue'
 export default {
-  props: ['landingInfo', 'setLesson'],
+  props: ['landingInfo', 'setLesson', 'routeInfo'],
   data: () => ({
     lesson: ''
   }),
   mounted () {
-    if (typeof this.setLesson !== 'undefined') {
-      // this.changeLesson(this.setLesson)
+    if (typeof this.routeInfo.lesson !== 'undefined') {
+      this.changeLesson(this.routeInfo.lesson)
     }
   },
   computed: {

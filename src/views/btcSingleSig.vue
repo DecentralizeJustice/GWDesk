@@ -63,7 +63,7 @@
       <v-card class="text-xs-center no-gutters" style=""
       v-if='!walletError && walletReady && correctWalletExist' :key='keyInfo'>
         <v-card-title class="headline justify-center">
-          Bitcoin Single Sig
+          Bitcoin Wallet
         </v-card-title>
             <v-divider></v-divider>
             <v-tabs background-color="">
