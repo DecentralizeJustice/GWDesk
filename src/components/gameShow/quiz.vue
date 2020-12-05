@@ -1,7 +1,7 @@
 <template>
   <div>
-  Quiz
-</div>
+    Quiz
+  </div>
 </template>
 
 <script>
