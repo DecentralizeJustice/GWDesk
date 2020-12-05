@@ -1,5 +1,4 @@
 <template>
-  <v-row no-gutters align-content='center' justify='center'>
     <v-col
       cols="10"
     >
@@ -62,7 +61,6 @@
           </v-card-title>
           <v-divider/>
           <v-col  cols='12'>
-            <v-card-text style="text-center">
               <v-row justify="space-around" align="center">
                 <v-col cols='5'>
               <div class="text-center text-h6" >
@@ -114,8 +112,7 @@
                 </v-row>
               </div>
             </v-col>
-            <v-col cols='6'>
-            <div class="text-center text-h6">
+            <v-col cols='6' class="text-center text-h6">
               Player Name:
               <div class="text-center mt-5 text-h5">
                 {{userIdInfo.adjective}}
@@ -135,7 +132,6 @@
                   Generate New Name
                 </v-btn>
               </v-row>
-            </div>
             </v-col>
               </v-row>
               <div class="mt-2" style="font-size: large;">
@@ -150,11 +146,17 @@
                     </v-alert>
                  </v-col>
                  <v-col cols='12'  class="" v-if='!allInfoSet'>
-                   <v-progress-linear color='green' :value="progress"></v-progress-linear>
+                   <v-alert
+                      dense
+                      border="left"
+                      type="warning"
+                    >
+                      <div class="text-center text-h6">You need to enter your address</div>
+                    </v-alert>
+                   <!-- <v-progress-linear color='green' :value="progress"></v-progress-linear> -->
                  </v-col>
                </v-row>
               </div>
-            </v-card-text>
           </v-col>
         </v-card>
         </v-col>
@@ -239,14 +241,13 @@
       </v-row>
     </v-card>
     </v-col>
-  </v-row>
 </template>
 
 <script>
 import adjectiveList from '@/assets/gameShow/adjective.json'
 import emojiObject from '@/assets/gameShow/emoji.json'
 export default {
-  props: ['amountUSD', 'goalEpochTime', 'crypto', 'userIdInfo'],
+  props: ['amountUSD', 'goalEpochTime', 'crypto', 'userIdInfo', 'dev'],
   components: {
   },
   data: () => ({
@@ -298,7 +299,7 @@ export default {
     ready: function () {
       const timeReady = (this.difference < 0)
       const infoReady = this.allInfoSet
-      if (timeReady && infoReady) {
+      if ((timeReady && infoReady) || this.dev) {
         return true
       } else {
         return false

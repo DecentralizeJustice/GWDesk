@@ -1,0 +1,39 @@
+{
+  "startEpochTime": "1607196884",
+  "crypto": "Monero (XMR)",
+  "amountUSD": "20",
+  "numberOfQuestions": "5",
+  "timeToAnswerGenQuestion": "5",
+  "explantionTime": "5",
+  "intro": {
+    "length": "5"
+  },
+  "1": {
+    "question": "What color is your bed?",
+    "options": ["red", "pink", "black", "green"],
+    "answer": "2"
+  },
+  "2": {
+    "question": "What color is your chair?",
+    "options": ["red", "pink", "black", "green"],
+    "answer": "2"
+  },
+  "3": {
+    "question": "What color is your desk?",
+    "options": ["red", "pink", "blue", "brown"],
+    "answer": "3"
+  },
+  "4": {
+    "question": "What color is your bed?",
+    "options": ["red", "pink", "blue", "green"],
+    "answer": "0"
+  },
+  "5": {
+    "question": "What color is your bed?",
+    "options": ["red", "pink", "blue", "green"],
+    "answer": "0"
+  },
+  "outro": {
+    "length": "50"
+  }
+}

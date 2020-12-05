@@ -1,0 +1,84 @@
+<template>
+  <v-card class="" >
+    <v-card-title class="headline justify-center">
+    Crypto Trivia Questions
+    </v-card-title>
+    <v-divider/>
+    <component v-bind:is="currentComponent"
+    v-bind:genInfo='genInfo'/>
+    <v-card-actions>
+      <v-btn
+        color="red darken-1"
+        @click="exit"
+      >
+        Quit Game
+      </v-btn>
+      <v-spacer/>
+      </v-card-actions>
+  </v-card>
+</template>
+
+<script>
+import intro from '@/components/gameShow/intro.vue'
+import loading from '@/components/gameShow/loading.vue'
+import quiz from '@/components/gameShow/quiz.vue'
+import outro from '@/components/gameShow/outro.vue'
+export default {
+  props: ['genInfo'],
+  components: {
+    intro,
+    loading,
+    quiz,
+    outro
+  },
+  data: () => ({
+    currentTime: 1,
+    done: false
+  }),
+  computed: {
+    introLength: function () {
+      return parseInt(this.genInfo.intro.length) * 1000
+    },
+    allQuestionsLength: function () {
+      return (parseInt(this.genInfo.timeToAnswerGenQuestion) +
+       parseInt(this.genInfo.explantionTime)) *
+        1000 *
+        parseInt(this.genInfo.numberOfQuestions)
+    },
+    currentComponent: function () {
+      if (this.currentTime < this.startTime) {
+        return loading
+      }
+      if (this.currentTime < (this.startTime + this.introLength)) {
+        return intro
+      }
+      if (this.currentTime < (this.startTime + this.introLength + this.allQuestionsLength)) {
+        return quiz
+      }
+      return outro
+    },
+    startTime: function () {
+      return parseInt(this.genInfo.startEpochTime) * 1000
+    }
+  },
+  methods: {
+    exit: function () {
+      this.done = true
+      this.$emit('exit')
+    },
+    updateTime () {
+      if (!this.done) {
+        setTimeout(() => {
+          this.currentTime = Date.now()
+          this.updateTime()
+        }, 500)
+      }
+    }
+  },
+  watch: {
+  },
+  async mounted () {
+    this.updateTime()
+  }
+}
+</script>

@@ -1,26 +1,49 @@
 <template>
-  <home
-  v-bind:amountUSD='amountUSD'
-  v-bind:goalEpochTime='goalEpochTime'
-  v-bind:crypto='crypto'
-  v-bind:userIdInfo='userIdInfo'
-  v-on:readyToStart='readyToStart'
-  v-on:updateAddress='updateAddress'
-  v-on:updateUserIDInfo='updateUserIDInfo'
-  />
+  <div style="width:100%;">
+    <v-row no-gutters align-content='center' justify='center'>
+    <home
+    v-if='stage === 0'
+    v-bind:amountUSD='amountUSD'
+    v-bind:goalEpochTime='startEpochTime'
+    v-bind:crypto='crypto'
+    v-bind:userIdInfo='userIdInfo'
+    v-bind:dev='dev'
+    v-on:readyToStart='readyToStart'
+    v-on:updateAddress='updateAddress'
+    v-on:updateUserIDInfo='updateUserIDInfo'
+    />
+      </v-row>
+    <v-dialog
+      v-model="dialog"
+      persistent
+      overlay-opacity='1'
+      width="75%"
+    >
+    <question
+    v-bind:amountUSD='amountUSD'
+    v-bind:dev='dev'
+    v-bind:genInfo='genInfo'
+    v-on:exit="dialog = false"/>
+    </v-dialog>
+  </div>
 </template>
 
 <script>
 import home from '@/components/gameShow/home.vue'
+import question from '@/components/gameShow/question.vue'
+import genInfo from '@/assets/gameShow/gameShowGenInfo.json'
 export default {
   components: {
-    home
+    home,
+    question
   },
   data: () => ({
-    amountUSD: '30',
+    dev: false,
+    dialog: false,
+    amountUSD: '',
     stage: 0,
-    goalEpochTime: 1607652000000,
-    crypto: 'Monero (XMR)',
+    startEpochTime: 0,
+    crypto: '',
     userIdInfo: {
       address: '',
       adjective: '',
@@ -28,10 +51,13 @@ export default {
     }
   }),
   computed: {
+    genInfo: function () {
+      return genInfo
+    }
   },
   methods: {
     readyToStart: function () {
-      console.log('goooo')
+      this.dialog = true
     },
     updateAddress: function (address) {
       this.userIdInfo.address = address
@@ -42,6 +68,9 @@ export default {
     }
   },
   async mounted () {
+    this.amountUSD = genInfo.amountUSD
+    this.startEpochTime = genInfo.startEpochTime * 1000
+    this.crypto = genInfo.crypto
   }
 }
 </script>
