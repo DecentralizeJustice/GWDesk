@@ -31,7 +31,7 @@
                </v-col>
              </v-row>
              <v-btn
-               color="deep-purple lighten-1"
+               color="secondary"
                @click='goToRoute(item.routeInfo)'
                class="mt-2"
                v-if='item.routeInfo'
@@ -65,7 +65,7 @@
                </v-col>
              </v-row>
              <v-btn
-               color="deep-purple lighten-1"
+               color="secondary"
                @click='goToRoute(item.routeInfo)'
                class="mt-2"
                v-if='item.routeInfo'

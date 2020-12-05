@@ -7,6 +7,7 @@ import DevPannel from './views/dev.vue'
 import Settings from './views/settings.vue'
 import Annoucments from './views/announce.vue'
 import BtcSingleSig from './views/btcSingleSig.vue'
+import Gameshow from './views/triviaShow.vue'
 import Dummy from './views/dummy.vue'
 
 Vue.use(Router)
@@ -27,6 +28,13 @@ const router = new Router({
       path: '/announce',
       name: 'announce',
       component: Annoucments,
+      props: (route) => (
+        { routeInfo: route.params })
+    },
+    {
+      path: '/gameshow',
+      name: 'gameshow',
+      component: Gameshow,
       props: (route) => (
         { routeInfo: route.params })
     },

@@ -41,10 +41,10 @@
 export default {
   data: () => ({
     devOptions: [
-      'Announcements', 'Courses', 'Lessons', 'Feedback', 'BTC Wallet', 'Settings', 'Dev Pannel'
+      'Announcements', 'Gameshow', 'Courses', 'Lessons', 'Feedback', 'BTC Wallet', 'Settings', 'Dev Pannel'
     ],
     prodOptions: [
-      'Announcements', 'Courses', 'Lessons', 'Feedback', 'BTC Wallet', 'Settings'
+      'Announcements', 'Gameshow', 'Courses', 'Lessons', 'Feedback', 'BTC Wallet', 'Settings'
     ],
     icons: {
       Feedback: 'comment-quote',
@@ -53,7 +53,8 @@ export default {
       'BTC Wallet': 'lock',
       'Dev Pannel': 'hammer-wrench',
       Settings: 'settings',
-      Announcements: 'bullhorn'
+      Announcements: 'bullhorn',
+      Gameshow: 'gamepad-square-outline'
     },
     routerLinks: {
       Announcements: 'announce',
@@ -62,7 +63,8 @@ export default {
       Lessons: 'lessons',
       Settings: 'settings',
       'BTC Wallet': 'btcSinglesig',
-      'Dev Pannel': 'devPannel'
+      'Dev Pannel': 'devPannel',
+      Gameshow: 'gameshow'
     },
     open: false
   }),
