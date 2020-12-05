@@ -217,7 +217,7 @@
           >
             <v-row align="center">
               <v-col class="text-left">
-                Get Here Early. We start right on time.
+                Get Here Early, we start right on time.
               </v-col>
             </v-row>
           </v-alert>
