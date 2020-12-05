@@ -5,9 +5,10 @@
       <transition name="fade">
         <v-container fluid fill-height
           align-content='center' justify='center'
+          :style="btnStyles"
         >
-        <router-view/>
-          </v-container>
+          <router-view/>
+        </v-container>
       </transition>
           <v-dialog
             v-model="showDialog"
@@ -27,6 +28,7 @@
 </template>
 
 <script>
+import back from '@/assets/photos/background.jpg'
 import navDrawer from '@/components/general/navDrawer.vue'
 import updateWindow from '@/components/general/update.vue'
 import { dormant, circuitEstablished } from '@/assets/util/tor.js'
@@ -164,10 +166,22 @@ export default {
   computed: {
     showDialog: function () {
       return !this.torReady || this.updateAvailable
+    },
+    photo: function () {
+      return back
+    },
+    btnStyles: function () {
+      return {
+        'background-image': `url(${back})`,
+        height: '100%',
+        'background-position': 'center',
+        'background-repeat': 'no-repeat',
+        'background-size': 'cover'
+      }
     }
   },
   async mounted () {
-    await this.copyBinary()
+    this.copyBinary()
     this.start()
     this.alsoStartup()
   }
