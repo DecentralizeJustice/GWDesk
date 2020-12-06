@@ -8,7 +8,7 @@
     v-bind:crypto='crypto'
     v-bind:userIdInfo='userIdInfo'
     v-bind:dev='dev'
-    v-on:readyToStart='readyToStart'
+    @readyToStart='readyToStart($event)'
     v-on:updateAddress='updateAddress'
     v-on:updateUserIDInfo='updateUserIDInfo'
     />
@@ -17,13 +17,16 @@
       v-model="dialog"
       persistent
       overlay-opacity='1'
+      overlay-color='#2A3B4D'
       width="75%"
+      style="dialog"
     >
     <question
+    v-if='dialog'
     v-bind:amountUSD='amountUSD'
     v-bind:dev='dev'
     v-bind:genInfo='genInfo'
-    v-on:exit="dialog = false"/>
+    v-on:exit="exitGame"/>
     </v-dialog>
   </div>
 </template>
@@ -42,6 +45,7 @@ export default {
     dialog: false,
     amountUSD: '',
     stage: 0,
+    full: true,
     startEpochTime: 0,
     crypto: '',
     userIdInfo: {
@@ -56,7 +60,12 @@ export default {
     }
   },
   methods: {
+    exitGame: function () {
+      this.dialog = false
+      this.key += 1
+    },
     readyToStart: function () {
+      this.show = true
       this.dialog = true
     },
     updateAddress: function (address) {

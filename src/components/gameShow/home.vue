@@ -232,7 +232,7 @@
         v-if='ready'
       >
         <v-btn
-        @click='start'
+        @click.stop='start'
           color="primary"
           class="mb-5"
         >

@@ -6,7 +6,6 @@
     <v-divider/>
     <component v-bind:is="currentComponent"
     v-bind:genInfo='genInfo'/>
-    <v-divider/>
     <v-card-actions>
       <v-btn
         color="red darken-1"

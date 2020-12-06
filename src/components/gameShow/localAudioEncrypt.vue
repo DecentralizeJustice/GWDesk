@@ -6,9 +6,9 @@
         :src="imgFile"
       ></v-img>
     </v-col>
-        <audio controls ref="player" class="ma-4"
+      <audio ref="player" class="ma-4" hidden
         :src="processedUrl" type="audio/mpeg" @error='audioError'
-        controlsList="nodownload">
+        style="">
       </audio>
   </v-row>
 </template>
@@ -60,10 +60,9 @@ export default {
       return img[0]
     }
   },
-  updated () {
-  },
   async mounted () {
-    this.setup()
+    await this.setup()
+    this.player.play()
   }
 }
 </script>

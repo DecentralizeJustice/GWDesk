@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import audio1 from '@/components/general/localAudioEncrypt.vue'
+import audio1 from '@/components/gameShow/localAudioEncrypt.vue'
 export default {
   props: ['genInfo'],
   components: {
@@ -23,7 +23,6 @@ export default {
   watch: {
   },
   async mounted () {
-    // console.log(this.genInfo)
   }
 }
 </script>
