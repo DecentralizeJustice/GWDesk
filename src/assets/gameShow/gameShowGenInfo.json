@@ -1,12 +1,12 @@
 {
-  "startEpochTime": "1607196884",
+  "startEpochTime": "1607277060",
   "crypto": "Monero (XMR)",
   "amountUSD": "20",
   "numberOfQuestions": "5",
   "timeToAnswerGenQuestion": "5",
   "explantionTime": "5",
   "intro": {
-    "length": "5"
+    "length": "45"
   },
   "1": {
     "question": "What color is your bed?",
@@ -24,14 +24,14 @@
     "answer": "3"
   },
   "4": {
-    "question": "What color is your bed?",
-    "options": ["red", "pink", "blue", "green"],
-    "answer": "0"
+    "question": "What color is your door?",
+    "options": ["red", "pink", "brown", "green"],
+    "answer": "2"
   },
   "5": {
-    "question": "What color is your bed?",
-    "options": ["red", "pink", "blue", "green"],
-    "answer": "0"
+    "question": "What color is your bedframe?",
+    "options": ["red", "pink", "black", "green"],
+    "answer": "2"
   },
   "outro": {
     "length": "50"

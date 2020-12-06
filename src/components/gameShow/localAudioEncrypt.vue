@@ -1,36 +1,12 @@
 <template>
   <v-row no-gutters justify='center' align='center'>
-    <v-col cols='10' style='text-align: center'>
+    <v-col cols='8' style='text-align: center'>
       <v-img
       class="mt-4"
         :src="imgFile"
       ></v-img>
     </v-col>
-    <v-col cols='8' style='text-align: center' class="ma-5">
-      <v-btn
-        v-if='!muted'
-        large
-        @click='mute'
-        color="primary"
-      >
-      <v-icon left>
-      mdi-volume-off
-      </v-icon>
-        Mute
-      </v-btn>
-      <v-btn
-        v-if='muted'
-        large
-        @click='mute'
-        color="secondary"
-      >
-      <v-icon left>
-      mdi-volume-high
-      </v-icon>
-        UnMute
-      </v-btn>
-    </v-col>
-      <audio ref="player" class="ma-4" hidden
+      <audio ref="player" class="ma-4" hidden autoplay
         :src="processedUrl" type="audio/mpeg" @error='audioError'
         style="">
       </audio>
@@ -44,26 +20,15 @@ export default {
   name: 'videoPlayer',
   components: {
   },
-  props: {
-  },
+  props: ['audioMuted'],
   data () {
     return {
       processedUrl: '',
       player: '',
-      currentSlide: 0,
-      muted: false
+      currentSlide: 0
     }
   },
   methods: {
-    mute: function () {
-      if (this.player.muted) {
-        this.player.muted = false
-        this.muted = false
-        return
-      }
-      this.muted = true
-      this.player.muted = true
-    },
     async setup () {
       this.player = this.$refs.player
       const binary = this.convert(info[0])
@@ -87,16 +52,18 @@ export default {
       console.log(e.srcElement.error)
     }
   },
-  watch: {
-  },
   computed: {
     imgFile: function () {
       return img[0]
     }
   },
+  watch: {
+    audioMuted: function (val) {
+      this.player.muted = val
+    }
+  },
   async mounted () {
     await this.setup()
-    this.player.play()
   }
 }
 </script>

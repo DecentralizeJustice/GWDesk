@@ -2,7 +2,7 @@
   <div style="width:100%;">
     <v-row no-gutters align-content='center' justify='center'>
     <home
-    v-if='stage === 0'
+    v-if='!dialog'
     v-bind:amountUSD='amountUSD'
     v-bind:goalEpochTime='startEpochTime'
     v-bind:crypto='crypto'
@@ -44,8 +44,6 @@ export default {
     dev: false,
     dialog: false,
     amountUSD: '',
-    stage: 0,
-    full: true,
     startEpochTime: 0,
     crypto: '',
     userIdInfo: {

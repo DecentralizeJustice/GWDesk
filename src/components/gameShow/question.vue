@@ -1,11 +1,9 @@
 <template>
   <v-card class="" >
-    <v-card-title class="headline justify-center">
-    Crypto Trivia Questions
-    </v-card-title>
-    <v-divider/>
     <component v-bind:is="currentComponent"
-    v-bind:genInfo='genInfo'/>
+    v-bind:genInfo='genInfo'
+    v-bind:currentTime='currentTime'
+    v-bind:audioMuted='audioMuted'/>
     <v-divider/>
     <v-card-actions>
       <v-btn
@@ -15,6 +13,28 @@
         Quit Game
       </v-btn>
       <v-spacer/>
+      <v-btn
+        v-if='!audioMuted'
+        large
+        @click='mute'
+        color="primary"
+      >
+      <v-icon left>
+      mdi-volume-off
+      </v-icon>
+        Mute
+      </v-btn>
+      <v-btn
+        v-if='audioMuted'
+        large
+        @click='mute'
+        color="secondary"
+      >
+      <v-icon left>
+      mdi-volume-high
+      </v-icon>
+        UnMute
+      </v-btn>
       </v-card-actions>
   </v-card>
 </template>
@@ -34,7 +54,8 @@ export default {
   },
   data: () => ({
     currentTime: 1,
-    done: false
+    done: false,
+    audioMuted: false
   }),
   computed: {
     introLength: function () {
@@ -50,10 +71,10 @@ export default {
       if (this.currentTime < this.startTime) {
         return loading
       }
-      if (this.currentTime > (this.startTime + this.introLength)) {
+      if (this.currentTime < (this.startTime + this.introLength)) {
         return intro
       }
-      if (this.currentTime < (this.startTime + this.introLength + this.allQuestionsLength)) {
+      if (this.currentTime > (this.startTime + this.introLength + this.allQuestionsLength)) {
         return quiz
       }
       return outro
@@ -63,6 +84,13 @@ export default {
     }
   },
   methods: {
+    mute: function () {
+      if (this.audioMuted) {
+        this.audioMuted = false
+        return
+      }
+      this.audioMuted = true
+    },
     exit: function () {
       this.done = true
       this.$emit('exit')
