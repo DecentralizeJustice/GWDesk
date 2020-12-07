@@ -4,7 +4,9 @@
     Welcome
     </v-card-title>
     <v-divider/>
-    <component v-bind:is="audioComp"
+    <component
+    class='ma-5'
+    v-bind:is="audioComp"
     v-bind:audioMuted='audioMuted'
     v-bind:audioFiles='audioFiles'/>
     <v-row no-gutters align-content='center' justify='center' class="mt-4">

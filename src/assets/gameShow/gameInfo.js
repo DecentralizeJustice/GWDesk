@@ -1,7 +1,7 @@
 import introAudio from '@/assets/gameShow/files/intro.json'
 import introImg from '@/assets/gameShow/files/img.json'
 const info = {
-  startEpochTime: '1607322827',
+  startEpochTime: '1607359243',
   crypto: 'Monero (XMR)',
   amountUSD: '20',
   numberOfQuestions: '5',

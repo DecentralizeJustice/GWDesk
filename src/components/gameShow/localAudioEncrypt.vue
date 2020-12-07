@@ -2,14 +2,14 @@
   <v-row no-gutters justify='center' align='center'>
     <v-col cols='8' style='text-align: center'>
       <v-img
-      class="mt-4"
+      class=""
         :src="imgFile"
       ></v-img>
     </v-col>
-      <audio ref="player" hidden autoplay
-        :src="processedUrl" type="audio/mpeg" @error='audioError'
-        style="">
-      </audio>
+    <audio ref="player" hidden autoplay
+      :src="processedUrl" type="audio/mpeg" @error='audioError'
+      style="">
+    </audio>
   </v-row>
 </template>
 

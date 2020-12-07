@@ -6,6 +6,7 @@
       </v-card-title>
       <v-divider/>
       <audiopPlayer
+      class="ma-4"
       v-if='questionNumber.explantion'
       v-bind:audioMuted='audioMuted'
       v-bind:audioFiles='audioFiles'
