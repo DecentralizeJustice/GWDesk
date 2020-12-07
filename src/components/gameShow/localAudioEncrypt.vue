@@ -6,7 +6,7 @@
         :src="imgFile"
       ></v-img>
     </v-col>
-      <audio ref="player" class="ma-4" hidden autoplay
+      <audio ref="player" hidden autoplay
         :src="processedUrl" type="audio/mpeg" @error='audioError'
         style="">
       </audio>
@@ -29,6 +29,7 @@ export default {
   methods: {
     async setup () {
       this.player = this.$refs.player
+      this.player.muted = this.audioMuted
       const binary = this.convert(this.audio)
       const blob = new window.Blob([binary], { type: 'audio/mpeg' })
       const urlb = URL.createObjectURL(blob)

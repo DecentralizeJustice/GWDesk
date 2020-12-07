@@ -5,14 +5,17 @@
       Question #{{questionNumber.question}}
       </v-card-title>
       <v-divider/>
-      <v-row align-content='center' justify='center' v-if='!questionNumber.explantion'>
+      <audiopPlayer
+      v-if='questionNumber.explantion'
+      v-bind:audioMuted='audioMuted'
+      v-bind:audioFiles='audioFiles'
+      />
+      <v-row align-content='center' justify='center' v-show='!questionNumber.explantion'>
+        <gameMusic v-bind:audioMuted='audioMuted'
+        v-if='!questionNumber.explantion'/>
         <v-col class="" cols="10" >
           <v-card class="mx-auto" color='blue darken-4'
             >
-            <audio ref="player" hidden autoplay loop
-              :src="gameMusic" type="audio/mpeg" @error='audioError'
-              style="">
-            </audio>
         <v-card-text class="display-1 white--text">
         {{question}}
         </v-card-text>
@@ -36,13 +39,11 @@
             </v-list>
           </v-col>
       </v-row>
-      <!-- <component v-bind:is="audio"
-      v-bind:audioMuted='audioMuted'/> -->
       <v-row no-gutters align-content='center' justify='center' class="mt-4"
-      v-if='!(questionNumber.last && questionNumber.explantion)'>
+      v-show='!(questionNumber.last && questionNumber.explantion)'>
         <v-col cols='6' class="mb-5">
-        <div class="mb-3 text-h6" v-if='!questionNumber.explantion'>Time:</div>
-        <div class="mb-3 text-h6" v-if='questionNumber.explantion'>Time To Next Question:</div>
+        <div class="mb-3 text-h6" v-show='!questionNumber.explantion'>Time:</div>
+        <div class="mb-3 text-h6" v-show='questionNumber.explantion'>Time To Next Question:</div>
           <v-progress-linear
             color="light-blue"
             height="10"
@@ -56,18 +57,22 @@
 </template>
 
 <script>
-import gameMusic from '@/assets/gameShow/files/shortQuestionMusic.mp3'
+import gameMusic from '@/components/gameShow/gameShowMusic.vue'
+import audiopPlayer from '@/components/gameShow/localAudioEncrypt.vue'
 export default {
   props: ['genInfo', 'currentTime', 'audioMuted'],
   components: {
+    gameMusic,
+    audiopPlayer
   },
   data: () => ({
     eliminated: false,
-    selectedItem: undefined,
-    gameMusic: gameMusic,
-    player: ''
+    selectedItem: undefined
   }),
   computed: {
+    audioFiles: function () {
+      return { audio: this.genInfo.intro.audio, imgFiles: this.genInfo.intro.img }
+    },
     questionNumber: function () {
       let question = 1
       let explantion = false
@@ -135,14 +140,9 @@ export default {
   watch: {
     watchQustionNumber: function () {
       this.selectedItem = undefined
-    },
-    audioMuted: function (val) {
-      this.player.muted = val
     }
   },
   async mounted () {
-    this.player = this.$refs.player
-    this.player.muted = this.audioMuted
   }
 }
 </script>

@@ -251,7 +251,7 @@ export default {
   components: {
   },
   data: () => ({
-    difference: 3,
+    difference: 3000000,
     settingAddress: false,
     addressValue: ''
     // lessons: [
