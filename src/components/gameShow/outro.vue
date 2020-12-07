@@ -25,7 +25,7 @@ export default {
   }),
   computed: {
     audioFiles: function () {
-      return { audio: this.genInfo.intro.audio, imgFiles: this.genInfo.intro.img }
+      return { audio: this.genInfo.outro.audio, imgFiles: this.genInfo.outro.img }
     }
   },
   methods: {

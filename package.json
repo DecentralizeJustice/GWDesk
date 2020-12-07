@@ -46,6 +46,8 @@
     "ramda": "^0.27.0",
     "tar-fs": "^2.0.1",
     "tree-kill": "^1.2.2",
+    "tweetnacl": "^1.0.3",
+    "tweetnacl-util": "^0.15.1",
     "typeface-roboto": "^0.0.75",
     "vue": "^2.6.10",
     "vue-fullscreen": "^2.1.6",

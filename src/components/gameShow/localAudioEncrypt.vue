@@ -14,6 +14,11 @@
 </template>
 
 <script>
+import { secretbox } from 'tweetnacl'
+import {
+  encodeUTF8,
+  decodeBase64
+} from 'tweetnacl-util'
 export default {
   name: 'videoPlayer',
   components: {
@@ -23,14 +28,13 @@ export default {
     return {
       processedUrl: '',
       player: '',
-      currentSlide: 0
+      currentSlide: 0,
+      imgFile: ''
     }
   },
   methods: {
-    async setup () {
-      this.player = this.$refs.player
-      this.player.muted = this.audioMuted
-      const binary = this.convert(this.audio)
+    async setup (audio) {
+      const binary = this.convert(audio)
       const blob = new window.Blob([binary], { type: 'audio/mpeg' })
       const urlb = URL.createObjectURL(blob)
       this.processedUrl = urlb
@@ -49,12 +53,32 @@ export default {
     },
     audioError (e) {
       console.log(e.srcElement.error)
+    },
+    decryptFile: function (file, key) {
+      const input = file
+      const decrypted = this.decrypt(input, key)
+      return decrypted.file
+    },
+    decrypt: function (messageWithNonce, key) {
+      const keyUint8Array = decodeBase64(key)
+      const messageWithNonceAsUint8Array = decodeBase64(messageWithNonce)
+      const nonce = messageWithNonceAsUint8Array.slice(0, secretbox.nonceLength)
+      const message = messageWithNonceAsUint8Array.slice(
+        secretbox.nonceLength,
+        messageWithNonce.length
+      )
+
+      const decrypted = secretbox.open(message, nonce, keyUint8Array)
+
+      if (!decrypted) {
+        throw new Error('Could not decrypt message')
+      }
+
+      const base64DecryptedMessage = encodeUTF8(decrypted)
+      return JSON.parse(base64DecryptedMessage)
     }
   },
   computed: {
-    imgFile: function () {
-      return this.audioFiles.imgFiles[0]
-    },
     audio: function () {
       return this.audioFiles.audio
     }
@@ -65,7 +89,13 @@ export default {
     }
   },
   async mounted () {
-    await this.setup()
+    this.player = this.$refs.player
+    this.player.muted = this.audioMuted
+    const test = this.decryptFile(this.audio, 'EO0hkdqWFssaBg6k1A0Q+H690wIUq5gBLIRl6iO2KzU=')
+    this.setup(test)
+    this.imgFile = this.decryptFile(this.audioFiles.imgFiles[0], 'wVQj0U4T9B0rQ7EZR8WYABzpp0EOULQV+m3acE8XRTM=')
+  },
+  async beforeMount () {
   }
 }
 </script>
