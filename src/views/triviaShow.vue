@@ -25,7 +25,7 @@
     v-if='dialog'
     v-bind:amountUSD='amountUSD'
     v-bind:dev='dev'
-    v-bind:genInfo='genInfo'
+    v-bind:genInfo='genGameInfo'
     v-on:exit="exitGame"/>
     </v-dialog>
   </div>
@@ -34,7 +34,7 @@
 <script>
 import home from '@/components/gameShow/home.vue'
 import question from '@/components/gameShow/question.vue'
-import genInfo from '@/assets/gameShow/gameShowGenInfo.json'
+import genGameInfo from '@/assets/gameShow/gameInfo.js'
 import { mapActions, mapState } from 'vuex'
 export default {
   components: {
@@ -57,8 +57,8 @@ export default {
     ...mapState('gameInfo', [
       'gameInfo'
     ]),
-    genInfo: function () {
-      return genInfo
+    genGameInfo: function () {
+      return genGameInfo
     }
   },
   methods: {
@@ -66,9 +66,9 @@ export default {
       ['updateInfo']
     ),
     setupInfo: function () {
-      this.amountUSD = genInfo.amountUSD
-      this.startEpochTime = genInfo.startEpochTime * 1000
-      this.crypto = genInfo.crypto
+      this.amountUSD = genGameInfo.amountUSD
+      this.startEpochTime = genGameInfo.startEpochTime * 1000
+      this.crypto = genGameInfo.crypto
       this.userIdInfo.address = this.gameInfo.address
       this.userIdInfo.adjective = this.gameInfo.adjective
       this.userIdInfo.emoji = this.gameInfo.emoji

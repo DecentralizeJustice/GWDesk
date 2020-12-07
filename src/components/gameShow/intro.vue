@@ -4,8 +4,9 @@
     Welcome
     </v-card-title>
     <v-divider/>
-    <component v-bind:is="audio"
-    v-bind:audioMuted='audioMuted'/>
+    <component v-bind:is="audioComp"
+    v-bind:audioMuted='audioMuted'
+    v-bind:audioFiles='audioFiles'/>
     <v-row no-gutters align-content='center' justify='center' class="mt-4">
       <v-col cols='6' class="mb-5">
       <div class="mb-3 text-h6">First Question In:</div>
@@ -28,10 +29,11 @@ export default {
     audio1
   },
   data: () => ({
+    audioComp: audio1
   }),
   computed: {
-    audio: function () {
-      return audio1
+    audioFiles: function () {
+      return { audio: this.genInfo.intro.audio, imgFiles: this.genInfo.intro.img }
     },
     startTime: function () {
       return parseInt(this.genInfo.startEpochTime) * 1000

@@ -14,13 +14,11 @@
 </template>
 
 <script>
-import info from '@/assets/gameShow/files/intro.json'
-import img from '@/assets/gameShow/files/img.json'
 export default {
   name: 'videoPlayer',
   components: {
   },
-  props: ['audioMuted'],
+  props: ['audioMuted', 'audioFiles'],
   data () {
     return {
       processedUrl: '',
@@ -31,7 +29,7 @@ export default {
   methods: {
     async setup () {
       this.player = this.$refs.player
-      const binary = this.convert(info[0])
+      const binary = this.convert(this.audio)
       const blob = new window.Blob([binary], { type: 'audio/mpeg' })
       const urlb = URL.createObjectURL(blob)
       this.processedUrl = urlb
@@ -54,7 +52,10 @@ export default {
   },
   computed: {
     imgFile: function () {
-      return img[0]
+      return this.audioFiles.imgFiles[0]
+    },
+    audio: function () {
+      return this.audioFiles.audio
     }
   },
   watch: {

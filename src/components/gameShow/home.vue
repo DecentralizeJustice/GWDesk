@@ -57,7 +57,7 @@
         >
         <v-card class="" color='grey darken-2'>
           <v-card-title class="headline justify-center">
-            User Info
+            Your Info
           </v-card-title>
           <v-divider/>
           <v-col  cols='12'>
@@ -251,7 +251,7 @@ export default {
   components: {
   },
   data: () => ({
-    difference: 86400000,
+    difference: 3,
     settingAddress: false,
     addressValue: ''
     // lessons: [
