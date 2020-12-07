@@ -74,7 +74,7 @@ export default {
       if (this.currentTime < (this.startTime + this.introLength)) {
         return intro
       }
-      if (this.currentTime > (this.startTime + this.introLength + this.allQuestionsLength)) {
+      if (this.currentTime < (this.startTime + this.introLength + this.allQuestionsLength)) {
         return quiz
       }
       return outro

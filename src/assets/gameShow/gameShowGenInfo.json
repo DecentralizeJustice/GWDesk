@@ -1,16 +1,16 @@
 {
-  "startEpochTime": "1607277060",
+  "startEpochTime": "1607311051",
   "crypto": "Monero (XMR)",
   "amountUSD": "20",
   "numberOfQuestions": "5",
-  "timeToAnswerGenQuestion": "5",
-  "explantionTime": "5",
+  "timeToAnswerGenQuestion": "10",
+  "explantionTime": "10",
   "intro": {
-    "length": "45"
+    "length": "30"
   },
   "1": {
     "question": "What color is your bed?",
-    "options": ["red", "pink", "black", "green"],
+    "options": ["red", "pink", "black", "This is a test for long text."],
     "answer": "2"
   },
   "2": {

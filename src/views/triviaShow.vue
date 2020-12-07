@@ -35,6 +35,7 @@
 import home from '@/components/gameShow/home.vue'
 import question from '@/components/gameShow/question.vue'
 import genInfo from '@/assets/gameShow/gameShowGenInfo.json'
+import { mapActions, mapState } from 'vuex'
 export default {
   components: {
     home,
@@ -53,11 +54,25 @@ export default {
     }
   }),
   computed: {
+    ...mapState('gameInfo', [
+      'gameInfo'
+    ]),
     genInfo: function () {
       return genInfo
     }
   },
   methods: {
+    ...mapActions('gameInfo',
+      ['updateInfo']
+    ),
+    setupInfo: function () {
+      this.amountUSD = genInfo.amountUSD
+      this.startEpochTime = genInfo.startEpochTime * 1000
+      this.crypto = genInfo.crypto
+      this.userIdInfo.address = this.gameInfo.address
+      this.userIdInfo.adjective = this.gameInfo.adjective
+      this.userIdInfo.emoji = this.gameInfo.emoji
+    },
     exitGame: function () {
       this.dialog = false
       this.key += 1
@@ -68,16 +83,16 @@ export default {
     },
     updateAddress: function (address) {
       this.userIdInfo.address = address
+      this.updateInfo({ address })
     },
     updateUserIDInfo: function (infoObject) {
       this.userIdInfo.emoji = infoObject.emoji
       this.userIdInfo.adjective = infoObject.adjective
+      this.updateInfo({ emoji: infoObject.emoji, adjective: infoObject.adjective })
     }
   },
-  async mounted () {
-    this.amountUSD = genInfo.amountUSD
-    this.startEpochTime = genInfo.startEpochTime * 1000
-    this.crypto = genInfo.crypto
+  async beforeMount () {
+    await this.setupInfo()
   }
 }
 </script>

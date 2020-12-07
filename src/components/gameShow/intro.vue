@@ -1,13 +1,13 @@
 <template>
   <div>
     <v-card-title class="headline justify-center">
-    Introduction
+    Welcome
     </v-card-title>
     <v-divider/>
     <component v-bind:is="audio"
     v-bind:audioMuted='audioMuted'/>
     <v-row no-gutters align-content='center' justify='center' class="mt-4">
-      <v-col cols='10' class="mb-5">
+      <v-col cols='6' class="mb-5">
       <div class="mb-3 text-h6">First Question In:</div>
       <v-progress-linear
         color="light-blue"
@@ -43,7 +43,7 @@ export default {
       return this.startTime + this.introLength
     },
     value: function () {
-      const topFract = this.startTime - this.currentTime
+      const topFract = this.currentTime - this.startTime
       const bottomFract = this.endTime - this.startTime
       const value = (topFract / bottomFract) * 100
       return value

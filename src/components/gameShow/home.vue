@@ -359,6 +359,12 @@ export default {
       const emojiListLength = emojiList.length
       const emoji = emojiList[this.getRandomIntInclusive(0, emojiListLength - 1)]
       this.$emit('updateUserIDInfo', { adjective: adjectiveCap, emoji })
+    },
+    setupInfo: function () {
+      this.addressValue = this.userIdInfo.address
+      if (this.userIdInfo.adjective === '' || this.userIdInfo.emoji === '') {
+        this.generateNewname()
+      }
     }
   },
   watch: {
@@ -369,11 +375,11 @@ export default {
       }
     }
   },
-  async mounted () {
+  async beforeMount () {
+    await this.setupInfo()
+  },
+  mounted () {
     this.countDownTimer()
-    if (this.userIdInfo.adjective === '' || this.userIdInfo.emoji === '') {
-      this.generateNewname()
-    }
   }
 }
 </script>
