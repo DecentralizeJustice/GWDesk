@@ -60,6 +60,8 @@
 <script>
 import gameMusic from '@/components/gameShow/gameShowMusic.vue'
 import audiopPlayer from '@/components/gameShow/localAudioEncrypt.vue'
+// import qs from 'qs'
+import axios from 'axios'
 export default {
   props: ['genInfo', 'currentTime', 'audioMuted'],
   components: {
@@ -68,7 +70,8 @@ export default {
   },
   data: () => ({
     eliminated: false,
-    selectedItem: undefined
+    selectedItem: undefined,
+    questionPasswords: []
   }),
   computed: {
     audioFiles: function () {
@@ -103,9 +106,6 @@ export default {
       }
       return { question, explantion, last, progress }
     },
-    watchQustionNumber: function () {
-      return this.questionNumber.question
-    },
     questionStartTime: function () {
       return (parseInt(this.genInfo.intro.length) * 1000) +
         (parseInt(this.genInfo.startEpochTime) * 1000)
@@ -131,19 +131,41 @@ export default {
     },
     allQuestionsLength: function () {
       return (this.explantionTime + this.timetoAnswer) * this.totalquestions
+    },
+    watchQustionNumber: function () {
+      return this.questionNumber.question
+    },
+    watchQustionExplation: function () {
+      return this.questionNumber.explantion
     }
   },
   methods: {
     audioError (e) {
       console.log(e.srcElement.error)
+    },
+    getPassword: async function () {
+      const result = await axios({
+        method: 'get',
+        url: this.genInfo.getApi,
+        headers: {
+          'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
+        }
+      })
+      console.log(result.data)
+      return result.data
     }
   },
   watch: {
-    watchQustionNumber: function () {
+    watchQustionExplation: async function () {
+      await this.getPassword()
+    },
+    watchQustionNumber: async function () {
       this.selectedItem = undefined
+      await this.getPassword()
     }
   },
-  async mounted () {
+  async created () {
+    await this.getPassword()
   }
 }
 </script>

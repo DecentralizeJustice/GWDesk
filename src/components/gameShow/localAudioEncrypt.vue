@@ -3,7 +3,7 @@
     <v-col cols='8' style='text-align: center'>
       <v-img
       class=""
-        :src="imgFile"
+        :src="imgFile[0]"
       ></v-img>
     </v-col>
     <audio ref="player" hidden autoplay
@@ -29,7 +29,7 @@ export default {
       processedUrl: '',
       player: '',
       currentSlide: 0,
-      imgFile: ''
+      imgFile: []
     }
   },
   methods: {
@@ -84,16 +84,24 @@ export default {
     }
   },
   watch: {
-    audioMuted: function (val) {
+    audioMuted: async function (val) {
       this.player.muted = val
     }
   },
   async mounted () {
     this.player = this.$refs.player
     this.player.muted = this.audioMuted
-    const test = this.decryptFile(this.audio, 'EO0hkdqWFssaBg6k1A0Q+H690wIUq5gBLIRl6iO2KzU=')
-    this.setup(test)
-    this.imgFile = this.decryptFile(this.audioFiles.imgFiles[0], 'wVQj0U4T9B0rQ7EZR8WYABzpp0EOULQV+m3acE8XRTM=')
+    const audio = this.decryptFile(this.audio, 'EO0hkdqWFssaBg6k1A0Q+H690wIUq5gBLIRl6iO2KzU=')
+    this.setup(audio)
+    function sleep (ms) {
+      return new Promise(resolve => setTimeout(resolve, ms))
+    }
+    this.imgFile[0] = this.decryptFile(this.audioFiles.imgFiles[0], 'wVQj0U4T9B0rQ7EZR8WYABzpp0EOULQV+m3acE8XRTM=')
+    for (var i = 1; i < this.audioFiles.imgFiles.length; i++) {
+      console.lg('more than one')
+      await sleep(1000)
+      this.imgFile[i].push(this.decryptFile(this.audioFiles.imgFiles[i], 'wVQj0U4T9B0rQ7EZR8WYABzpp0EOULQV+m3acE8XRTM='))
+    }
   },
   async beforeMount () {
   }

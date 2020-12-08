@@ -34,7 +34,7 @@
 <script>
 import home from '@/components/gameShow/home.vue'
 import question from '@/components/gameShow/question.vue'
-import genGameInfo from '@/assets/gameShow/gameInfo.js'
+import gameInfo from '@/assets/gameShow/gameInfo.js'
 import { mapActions, mapState } from 'vuex'
 export default {
   components: {
@@ -58,7 +58,7 @@ export default {
       'gameInfo'
     ]),
     genGameInfo: function () {
-      return genGameInfo
+      return gameInfo.default
     }
   },
   methods: {
@@ -66,9 +66,9 @@ export default {
       ['updateInfo']
     ),
     setupInfo: function () {
-      this.amountUSD = genGameInfo.amountUSD
-      this.startEpochTime = genGameInfo.startEpochTime * 1000
-      this.crypto = genGameInfo.crypto
+      this.amountUSD = this.genGameInfo.amountUSD
+      this.startEpochTime = this.genGameInfo.startEpochTime * 1000
+      this.crypto = this.genGameInfo.crypto
       this.userIdInfo.address = this.gameInfo.address
       this.userIdInfo.adjective = this.gameInfo.adjective
       this.userIdInfo.emoji = this.gameInfo.emoji

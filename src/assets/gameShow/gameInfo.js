@@ -1,12 +1,14 @@
-import introAudio from '@/assets/gameShow/files/intro.json'
-import introImg from '@/assets/gameShow/files/img.json'
+const introAudio = require('./files/intro.json')
+const introImg = require('./files/img.json')
 const info = {
-  startEpochTime: '1607359243',
+  startEpochTime: '1607402641',
   crypto: 'Monero (XMR)',
   amountUSD: '20',
   numberOfQuestions: '5',
   timeToAnswerGenQuestion: '10',
   explantionTime: '10',
+  waitTime: '1',
+  getApi: 'http://localhost:8089/',
   intro: {
     length: '30',
     audio: introAudio,
@@ -53,4 +55,4 @@ const info = {
     img: [introImg]
   }
 }
-export default info
+exports.default = info
