@@ -71,7 +71,8 @@ export default {
   data: () => ({
     eliminated: false,
     selectedItem: undefined,
-    questionPasswords: []
+    questionPasswords: [],
+    passwordInfo: {}
   }),
   computed: {
     audioFiles: function () {
@@ -146,13 +147,11 @@ export default {
     getPassword: async function () {
       const result = await axios({
         method: 'get',
-        url: this.genInfo.getApi,
-        headers: {
-          'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
-        }
+        url: this.genInfo.getApi
       })
-      console.log(result.data)
-      return result.data
+      console.log(result.data.info)
+      console.log(result.data.info)
+      this.passwordInfo = result.data
     }
   },
   watch: {

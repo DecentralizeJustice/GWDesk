@@ -11,6 +11,7 @@
     @readyToStart='readyToStart($event)'
     v-on:updateAddress='updateAddress'
     v-on:updateUserIDInfo='updateUserIDInfo'
+    v-bind:genInfo='genGameInfo'
     />
       </v-row>
     <v-dialog
@@ -36,13 +37,13 @@ import home from '@/components/gameShow/home.vue'
 import question from '@/components/gameShow/question.vue'
 import gameInfo from '@/assets/gameShow/gameInfo.js'
 import { mapActions, mapState } from 'vuex'
+const isDevelopment = process.env.NODE_ENV !== 'production'
 export default {
   components: {
     home,
     question
   },
   data: () => ({
-    dev: false,
     dialog: false,
     amountUSD: '',
     startEpochTime: 0,
@@ -54,6 +55,9 @@ export default {
     }
   }),
   computed: {
+    dev: function () {
+      return isDevelopment
+    },
     ...mapState('gameInfo', [
       'gameInfo'
     ]),

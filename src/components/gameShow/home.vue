@@ -229,7 +229,7 @@
       <v-row
         align="center"
         justify="center"
-        v-if='ready'
+        v-if='ready && hideStart'
       >
         <v-btn
         @click.stop='start'
@@ -246,8 +246,9 @@
 <script>
 import adjectiveList from '@/assets/gameShow/adjective.json'
 import emojiObject from '@/assets/gameShow/emoji.json'
+import axios from 'axios'
 export default {
-  props: ['amountUSD', 'goalEpochTime', 'crypto', 'userIdInfo', 'dev'],
+  props: ['amountUSD', 'goalEpochTime', 'crypto', 'userIdInfo', 'dev', 'genInfo'],
   components: {
   },
   data: () => ({
@@ -321,6 +322,13 @@ export default {
         minutes = '0' + minutes
       }
       return hour + ':' + minutes + ' ' + ampm + ' ' + day + ', ' + month
+    },
+    hideStart: function () {
+      if (!this.dev && (this.currentTime + (12000 * 1000)) > this.goalEpochTime) {
+        return true
+      } else {
+        return false
+      }
     }
   },
   methods: {
@@ -365,6 +373,16 @@ export default {
       if (this.userIdInfo.adjective === '' || this.userIdInfo.emoji === '') {
         this.generateNewname()
       }
+    },
+    getPassword: async function () {
+      const result = await axios({
+        method: 'get',
+        url: 'https://showcase.api.linx.twenty57.net/UnixTime/tounix?date=now'
+      })
+      // console.log(result.data)
+      const beforeTime = Date.now()
+      const serverTime = (result.data * 1000)
+      console.log(beforeTime - serverTime)
     }
   },
   watch: {
@@ -379,6 +397,7 @@ export default {
     await this.setupInfo()
   },
   mounted () {
+    this.getPassword()
     this.countDownTimer()
   }
 }

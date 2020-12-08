@@ -15,13 +15,15 @@
 
 <script>
 import audio1 from '@/components/gameShow/localAudioEncrypt.vue'
+import axios from 'axios'
 export default {
   props: ['genInfo', 'currentTime', 'audioMuted'],
   components: {
     audio1
   },
   data: () => ({
-    audioComp: audio1
+    audioComp: audio1,
+    passwordInfo: {}
   }),
   computed: {
     audioFiles: function () {
@@ -29,10 +31,21 @@ export default {
     }
   },
   methods: {
+    getPassword: async function () {
+      const result = await axios({
+        method: 'get',
+        url: this.genInfo.getApi
+      })
+      console.log(result.data.info)
+      this.passwordInfo = result.data
+    }
   },
   watch: {
   },
   async mounted () {
+  },
+  async created () {
+    await this.getPassword()
   }
 }
 </script>

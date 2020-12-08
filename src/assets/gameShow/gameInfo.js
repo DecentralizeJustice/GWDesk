@@ -1,7 +1,7 @@
 const introAudio = require('./files/intro.json')
 const introImg = require('./files/img.json')
 const info = {
-  startEpochTime: '1607402641',
+  startEpochTime: '1607461312',
   crypto: 'Monero (XMR)',
   amountUSD: '20',
   numberOfQuestions: '5',
