@@ -229,7 +229,7 @@
       <v-row
         align="center"
         justify="center"
-        v-if='ready && hideStart'
+        v-if='ready && !showOver'
       >
         <v-btn
         @click.stop='start'
@@ -248,7 +248,7 @@ import adjectiveList from '@/assets/gameShow/adjective.json'
 import emojiObject from '@/assets/gameShow/emoji.json'
 import axios from 'axios'
 export default {
-  props: ['amountUSD', 'goalEpochTime', 'crypto', 'userIdInfo', 'dev', 'genInfo'],
+  props: ['userIdInfo', 'dev', 'genInfo'],
   components: {
   },
   data: () => ({
@@ -264,6 +264,33 @@ export default {
     // ]
   }),
   computed: {
+    amountUSD: function () {
+      return this.genInfo.amountUSD
+    },
+    crypto: function () {
+      return this.genInfo.crypto
+    },
+    introLength: function () {
+      return parseInt(this.genInfo.intro.length) * 1000
+    },
+    outroLength: function () {
+      return parseInt(this.genInfo.outro.length) * 1000
+    },
+    allQuestionsLength: function () {
+      return (parseInt(this.genInfo.timeToAnswerGenQuestion) +
+       parseInt(this.genInfo.explantionTime)) *
+        1000 *
+        parseInt(this.genInfo.numberOfQuestions)
+    },
+    showOver: function functionName () {
+      if (this.currentTime > (this.startTime + this.introLength + this.allQuestionsLength + this.outroLength)) {
+        return true
+      }
+      return false
+    },
+    startTime: function () {
+      return parseInt(this.genInfo.startEpochTime) * 1000
+    },
     displayAddress: function () {
       if (this.userIdInfo.address === '') {
         return 'None Yet'
@@ -307,7 +334,7 @@ export default {
       }
     },
     regularTime: function () {
-      const d = new Date(this.goalEpochTime)
+      const d = new Date(this.startTime)
       const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
       const month = months[d.getMonth()]
       const day = d.getDate()
@@ -322,13 +349,6 @@ export default {
         minutes = '0' + minutes
       }
       return hour + ':' + minutes + ' ' + ampm + ' ' + day + ', ' + month
-    },
-    hideStart: function () {
-      if (!this.dev && (this.currentTime + (12000 * 1000)) > this.goalEpochTime) {
-        return true
-      } else {
-        return false
-      }
     }
   },
   methods: {
@@ -346,7 +366,7 @@ export default {
       if (this.difference > 0) {
         setTimeout(() => {
           const current = Date.now()
-          this.difference = this.goalEpochTime - current
+          this.difference = this.startTime - current
           this.countDownTimer()
         }, 1000)
       }
@@ -382,7 +402,7 @@ export default {
       // console.log(result.data)
       const beforeTime = Date.now()
       const serverTime = (result.data * 1000)
-      console.log(beforeTime - serverTime)
+      console.log('lag:', beforeTime - serverTime)
     }
   },
   watch: {

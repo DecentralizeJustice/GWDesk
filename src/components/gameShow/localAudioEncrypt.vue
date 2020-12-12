@@ -7,7 +7,7 @@
       ></v-img>
     </v-col>
     <audio ref="player" hidden autoplay
-      :src="processedUrl" type="audio/mpeg" @error='audioError'
+      :src="audioUrl" type="audio/mpeg" @error='audioError'
       style="">
     </audio>
   </v-row>
@@ -23,10 +23,10 @@ export default {
   name: 'videoPlayer',
   components: {
   },
-  props: ['audioMuted', 'audioFiles'],
+  props: ['audioMuted', 'audioFiles', 'encrypted'],
   data () {
     return {
-      processedUrl: '',
+      audioUrl: '',
       player: '',
       currentSlide: 0,
       imgFile: []
@@ -91,17 +91,21 @@ export default {
   async mounted () {
     this.player = this.$refs.player
     this.player.muted = this.audioMuted
-    const audio = this.decryptFile(this.audio, 'EO0hkdqWFssaBg6k1A0Q+H690wIUq5gBLIRl6iO2KzU=')
-    this.setup(audio)
-    function sleep (ms) {
-      return new Promise(resolve => setTimeout(resolve, ms))
+    if (!this.encrypted) {
+      this.audioUrl = this.audioFiles.audio
+      this.imgFile = this.audioFiles.imgFiles
     }
-    this.imgFile[0] = this.decryptFile(this.audioFiles.imgFiles[0], 'wVQj0U4T9B0rQ7EZR8WYABzpp0EOULQV+m3acE8XRTM=')
-    for (var i = 1; i < this.audioFiles.imgFiles.length; i++) {
-      console.lg('more than one')
-      await sleep(1000)
-      this.imgFile[i].push(this.decryptFile(this.audioFiles.imgFiles[i], 'wVQj0U4T9B0rQ7EZR8WYABzpp0EOULQV+m3acE8XRTM='))
-    }
+    // const audio = this.decryptFile(this.audio, 'EO0hkdqWFssaBg6k1A0Q+H690wIUq5gBLIRl6iO2KzU=')
+    // this.setup(audio)
+    // function sleep (ms) {
+    //   return new Promise(resolve => setTimeout(resolve, ms))
+    // }
+    // this.imgFile[0] = this.decryptFile(this.audioFiles.imgFiles[0], 'wVQj0U4T9B0rQ7EZR8WYABzpp0EOULQV+m3acE8XRTM=')
+    // for (var i = 1; i < this.audioFiles.imgFiles.length; i++) {
+    //   console.lg('more than one')
+    //   await sleep(1000)
+    //   this.imgFile[i].push(this.decryptFile(this.audioFiles.imgFiles[i], 'wVQj0U4T9B0rQ7EZR8WYABzpp0EOULQV+m3acE8XRTM='))
+    // }
   },
   async beforeMount () {
   }

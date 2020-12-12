@@ -3,6 +3,8 @@
     <component v-bind:is="currentComponent"
     v-bind:genInfo='genInfo'
     v-bind:currentTime='currentTime'
+    v-bind:encrypted='encrypted'
+    v-bind:mediaInfo='mediaInfo'
     v-bind:audioMuted='audioMuted'/>
     <v-divider/>
     <v-card-actions>
@@ -45,7 +47,7 @@ import loading from '@/components/gameShow/loading.vue'
 import quiz from '@/components/gameShow/quiz.vue'
 import outro from '@/components/gameShow/outro.vue'
 export default {
-  props: ['genInfo'],
+  props: ['genInfo', 'mediaInfo', 'encrypted'],
   components: {
     intro,
     loading,

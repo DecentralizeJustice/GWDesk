@@ -5,11 +5,12 @@
     </v-card-title>
     <v-divider/>
 
-    <component
+    <audio1
     class="pa-5"
-    v-bind:is="audioComp"
     v-bind:audioMuted='audioMuted'
-    v-bind:audioFiles='audioFiles'/>
+    v-bind:audioFiles='audioFiles'
+    v-bind:encrypted='encrypted'
+    v-bind:mediaInfo='mediaInfo'/>
   </div>
 </template>
 
@@ -17,17 +18,17 @@
 import audio1 from '@/components/gameShow/localAudioEncrypt.vue'
 import axios from 'axios'
 export default {
-  props: ['genInfo', 'currentTime', 'audioMuted'],
+  props: ['genInfo', 'currentTime', 'audioMuted', 'mediaInfo', 'encrypted'],
   components: {
     audio1
   },
   data: () => ({
-    audioComp: audio1,
     passwordInfo: {}
   }),
   computed: {
     audioFiles: function () {
-      return { audio: this.genInfo.outro.audio, imgFiles: this.genInfo.outro.img }
+      const outro = this.mediaInfo.outro
+      return { audio: outro.audio, imgFiles: outro.img }
     }
   },
   methods: {
@@ -45,7 +46,7 @@ export default {
   async mounted () {
   },
   async created () {
-    await this.getPassword()
+    // await this.getPassword()
   }
 }
 </script>

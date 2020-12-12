@@ -3,9 +3,6 @@
     <v-row no-gutters align-content='center' justify='center'>
     <home
     v-if='!dialog'
-    v-bind:amountUSD='amountUSD'
-    v-bind:goalEpochTime='startEpochTime'
-    v-bind:crypto='crypto'
     v-bind:userIdInfo='userIdInfo'
     v-bind:dev='dev'
     @readyToStart='readyToStart($event)'
@@ -24,7 +21,8 @@
     >
     <question
     v-if='dialog'
-    v-bind:amountUSD='amountUSD'
+    v-bind:encrypted='encrypted'
+    v-bind:mediaInfo='mediaInfo'
     v-bind:dev='dev'
     v-bind:genInfo='genGameInfo'
     v-on:exit="exitGame"/>
@@ -37,17 +35,17 @@ import home from '@/components/gameShow/home.vue'
 import question from '@/components/gameShow/question.vue'
 import gameInfo from '@/assets/gameShow/gameInfo.js'
 import { mapActions, mapState } from 'vuex'
-const isDevelopment = process.env.NODE_ENV !== 'production'
 export default {
   components: {
     home,
     question
   },
   data: () => ({
+    dev: false,
+    encrypted: false,
+    questions: {},
+    mediaInfo: {},
     dialog: false,
-    amountUSD: '',
-    startEpochTime: 0,
-    crypto: '',
     userIdInfo: {
       address: '',
       adjective: '',
@@ -55,9 +53,6 @@ export default {
     }
   }),
   computed: {
-    dev: function () {
-      return isDevelopment
-    },
     ...mapState('gameInfo', [
       'gameInfo'
     ]),
@@ -69,10 +64,59 @@ export default {
     ...mapActions('gameInfo',
       ['updateInfo']
     ),
+    setQuestions: async function () {
+      if (this.encrypted) {
+      }
+      const info = await import('../assets/gameShow/files/questions.json')
+      this.questions = info.default
+    },
+    setMediaInfo: async function () {
+      if (this.encrypted) {
+        return
+      }
+      const info = await import('../assets/gameShow/files/mediaInfo.json')
+      await this.plainTextSetIntro(info)
+      await this.plainTextSetOutro(info)
+      await this.plainTextQuestions(info, parseInt(this.genGameInfo.numberOfQuestions))
+    },
+    plainTextSetIntro: async function (info) {
+      const introAudio = await import('../assets/gameShow' + info.default.intro.audio.substring(1))
+      const introImg = info.default.intro.img
+      const imgArray = []
+      for (var i = 0; i < introImg.length; i++) {
+        const audio = await import('../assets/gameShow' + info.default.intro.img[i].substring(1))
+        imgArray.push(audio.default)
+      }
+      this.mediaInfo.intro = {}
+      this.mediaInfo.intro.audio = introAudio.default
+      this.mediaInfo.intro.img = imgArray
+    },
+    plainTextQuestions: async function (info, numberOfQuestions) {
+      for (var i = 1; i < numberOfQuestions + 1; i++) {
+        const audio = await import('../assets/gameShow' + info.default[i].audio.substring(1))
+        const imgArray = []
+        for (var y = 0; y < info.default[i].img.length; y++) {
+          const img = await import('../assets/gameShow' + info.default[i].img[y].substring(1))
+          imgArray.push(img.default)
+        }
+        this.mediaInfo[i] = {}
+        this.mediaInfo[i].audio = audio.default
+        this.mediaInfo[i].imgs = imgArray
+      }
+    },
+    plainTextSetOutro: async function (info) {
+      const outroAudio = await import('../assets/gameShow' + info.default.outro.audio.substring(1))
+      const outroImg = info.default.outro.img
+      const imgArray = []
+      for (var i = 0; i < outroImg.length; i++) {
+        const audio = await import('../assets/gameShow' + info.default.outro.img[i].substring(1))
+        imgArray.push(audio.default)
+      }
+      this.mediaInfo.outro = {}
+      this.mediaInfo.outro.audio = outroAudio.default
+      this.mediaInfo.outro.img = imgArray
+    },
     setupInfo: function () {
-      this.amountUSD = this.genGameInfo.amountUSD
-      this.startEpochTime = this.genGameInfo.startEpochTime * 1000
-      this.crypto = this.genGameInfo.crypto
       this.userIdInfo.address = this.gameInfo.address
       this.userIdInfo.adjective = this.gameInfo.adjective
       this.userIdInfo.emoji = this.gameInfo.emoji
@@ -97,6 +141,8 @@ export default {
   },
   async beforeMount () {
     await this.setupInfo()
+    await this.setQuestions()
+    await this.setMediaInfo()
   }
 }
 </script>

@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import gameMusic from '@/assets/gameShow/files/shortQuestionMusic.mp3'
+import gameMusic from '@/assets/gameShow/shortQuestionMusic.mp3'
 export default {
   components: {
   },

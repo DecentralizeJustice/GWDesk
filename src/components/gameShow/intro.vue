@@ -4,11 +4,12 @@
     Welcome
     </v-card-title>
     <v-divider/>
-    <component
+    <audio1
     class='ma-5'
-    v-bind:is="audioComp"
     v-bind:audioMuted='audioMuted'
-    v-bind:audioFiles='audioFiles'/>
+    v-bind:audioFiles='audioFiles'
+    v-bind:encrypted='encrypted'
+    v-bind:mediaInfo='mediaInfo'/>
     <v-row no-gutters align-content='center' justify='center' class="mt-4">
       <v-col cols='6' class="mb-5">
       <div class="mb-3 text-h6">First Question In:</div>
@@ -27,17 +28,17 @@
 import audio1 from '@/components/gameShow/localAudioEncrypt.vue'
 import axios from 'axios'
 export default {
-  props: ['genInfo', 'currentTime', 'audioMuted'],
+  props: ['genInfo', 'currentTime', 'audioMuted', 'mediaInfo', 'encrypted'],
   components: {
     audio1
   },
   data: () => ({
-    audioComp: audio1,
     passwordInfo: {}
   }),
   computed: {
     audioFiles: function () {
-      return { audio: this.genInfo.intro.audio, imgFiles: this.genInfo.intro.img }
+      const intro = this.mediaInfo.intro
+      return { audio: intro.audio, imgFiles: intro.img }
     },
     startTime: function () {
       return parseInt(this.genInfo.startEpochTime) * 1000
@@ -70,7 +71,7 @@ export default {
   async mounted () {
   },
   async created () {
-    await this.getPassword()
+    // await this.getPassword()
   }
 }
 </script>

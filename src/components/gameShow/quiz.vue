@@ -10,6 +10,7 @@
       v-if='questionNumber.explantion'
       v-bind:audioMuted='audioMuted'
       v-bind:audioFiles='audioFiles'
+      v-bind:encrypted='encrypted'
       />
       <v-row align-content='center' justify='center' v-show='!questionNumber.explantion'>
         <gameMusic v-bind:audioMuted='audioMuted'
@@ -63,7 +64,7 @@ import audiopPlayer from '@/components/gameShow/localAudioEncrypt.vue'
 // import qs from 'qs'
 import axios from 'axios'
 export default {
-  props: ['genInfo', 'currentTime', 'audioMuted'],
+  props: ['genInfo', 'currentTime', 'audioMuted', 'mediaInfo', 'encrypted'],
   components: {
     gameMusic,
     audiopPlayer
@@ -76,7 +77,8 @@ export default {
   }),
   computed: {
     audioFiles: function () {
-      return { audio: this.genInfo.intro.audio, imgFiles: this.genInfo.intro.img }
+      const question = this.mediaInfo[this.watchQustionNumber]
+      return { audio: question.audio, imgFiles: question.imgs }
     },
     questionNumber: function () {
       let question = 1
@@ -112,11 +114,12 @@ export default {
         (parseInt(this.genInfo.startEpochTime) * 1000)
     },
     options: function () {
-      const options = this.genInfo[this.questionNumber.question].options
-      return options
+      // const options = this.genInfo[this.questionNumber.question].options
+      return []
     },
     question: function () {
-      return this.genInfo[this.questionNumber.question].question
+      // return this.genInfo[this.questionNumber.question].question
+      return 'hi'
     },
     explantionTime: function () {
       return parseInt(this.genInfo.explantionTime) * 1000
@@ -141,30 +144,25 @@ export default {
     }
   },
   methods: {
-    audioError (e) {
-      console.log(e.srcElement.error)
-    },
     getPassword: async function () {
       const result = await axios({
         method: 'get',
         url: this.genInfo.getApi
       })
       console.log(result.data.info)
-      console.log(result.data.info)
       this.passwordInfo = result.data
     }
   },
   watch: {
     watchQustionExplation: async function () {
-      await this.getPassword()
+      // await this.getPassword()
     },
     watchQustionNumber: async function () {
       this.selectedItem = undefined
-      await this.getPassword()
     }
   },
   async created () {
-    await this.getPassword()
+    // await this.getPassword()
   }
 }
 </script>
