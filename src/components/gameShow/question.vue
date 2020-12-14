@@ -5,7 +5,8 @@
     v-bind:currentTime='currentTime'
     v-bind:encrypted='encrypted'
     v-bind:mediaInfo='mediaInfo'
-    v-bind:audioMuted='audioMuted'/>
+    v-bind:audioMuted='audioMuted'
+    v-bind:questions='questions'/>
     <v-divider/>
     <v-card-actions>
       <v-btn
@@ -47,7 +48,7 @@ import loading from '@/components/gameShow/loading.vue'
 import quiz from '@/components/gameShow/quiz.vue'
 import outro from '@/components/gameShow/outro.vue'
 export default {
-  props: ['genInfo', 'mediaInfo', 'encrypted'],
+  props: ['genInfo', 'mediaInfo', 'encrypted', 'questions'],
   components: {
     intro,
     loading,
@@ -73,7 +74,7 @@ export default {
       if (this.currentTime < this.startTime) {
         return loading
       }
-      if (this.currentTime < (this.startTime + this.introLength)) {
+      if (this.currentTime > (this.startTime + this.introLength)) {
         return intro
       }
       if (this.currentTime < (this.startTime + this.introLength + this.allQuestionsLength)) {

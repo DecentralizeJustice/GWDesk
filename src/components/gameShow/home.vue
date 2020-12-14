@@ -397,12 +397,10 @@ export default {
     getPassword: async function () {
       const result = await axios({
         method: 'get',
-        url: 'https://showcase.api.linx.twenty57.net/UnixTime/tounix?date=now'
+        url: 'https://google.com'
       })
       // console.log(result.data)
-      const beforeTime = Date.now()
-      const serverTime = (result.data * 1000)
-      console.log('lag:', beforeTime - serverTime)
+      return result
     }
   },
   watch: {
@@ -419,6 +417,9 @@ export default {
   mounted () {
     this.getPassword()
     this.countDownTimer()
+  },
+  beforeDestroy () {
+    // this.socket.close()
   }
 }
 </script>

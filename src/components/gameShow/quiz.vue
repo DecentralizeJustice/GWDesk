@@ -64,7 +64,7 @@ import audiopPlayer from '@/components/gameShow/localAudioEncrypt.vue'
 // import qs from 'qs'
 import axios from 'axios'
 export default {
-  props: ['genInfo', 'currentTime', 'audioMuted', 'mediaInfo', 'encrypted'],
+  props: ['genInfo', 'currentTime', 'audioMuted', 'mediaInfo', 'encrypted', 'questions'],
   components: {
     gameMusic,
     audiopPlayer
@@ -114,12 +114,16 @@ export default {
         (parseInt(this.genInfo.startEpochTime) * 1000)
     },
     options: function () {
-      // const options = this.genInfo[this.questionNumber.question].options
-      return []
+      if (this.encrypted) {
+        return
+      }
+      return this.questions[this.watchQustionNumber].questionInfo.options
     },
     question: function () {
-      // return this.genInfo[this.questionNumber.question].question
-      return 'hi'
+      if (this.encrypted) {
+        return
+      }
+      return this.questions[this.watchQustionNumber].questionInfo.question
     },
     explantionTime: function () {
       return parseInt(this.genInfo.explantionTime) * 1000

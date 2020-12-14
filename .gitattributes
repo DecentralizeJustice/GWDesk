@@ -16,3 +16,4 @@ public/binaries/macElectrum filter=lfs diff=lfs merge=lfs -text
 public/binaries/hwiMac filter=lfs diff=lfs merge=lfs -text
 public/binaries/macElectrumGW filter=lfs diff=lfs merge=lfs -text
 src/assets/gameShow/files/** filter=lfs diff=lfs merge=lfs -text
+src/assets/gameShow/output/** filter=lfs diff=lfs merge=lfs -text

@@ -23,7 +23,7 @@ export default {
   name: 'videoPlayer',
   components: {
   },
-  props: ['audioMuted', 'audioFiles', 'encrypted'],
+  props: ['audioMuted', 'audioFiles', 'encrypted', 'password'],
   data () {
     return {
       audioUrl: '',
@@ -37,13 +37,17 @@ export default {
       const binary = this.convert(audio)
       const blob = new window.Blob([binary], { type: 'audio/mpeg' })
       const urlb = URL.createObjectURL(blob)
-      this.processedUrl = urlb
+      this.audioUrl = urlb
+    },
+    async handleImg (img, password) {
+      const imgString = this.decryptFile(img, password)
+      const binary = this.convert(imgString)
+      const blob = new window.Blob([binary], { type: 'image/jpg' })
+      const urlb = URL.createObjectURL(blob)
+      this.imgFile.push(urlb)
     },
     convert: function (dataURI) {
-      const base64String = ';base64,'
-      const base64index = dataURI.indexOf(base64String) + base64String.length
-      const base64 = dataURI.substring(base64index)
-      const raw = window.atob(base64)
+      const raw = window.atob(dataURI)
       const rawLength = raw.length
       const array = new Uint8Array(new ArrayBuffer(rawLength))
       for (let i = 0; i < rawLength; i++) {
@@ -55,8 +59,7 @@ export default {
       console.log(e.srcElement.error)
     },
     decryptFile: function (file, key) {
-      const input = file
-      const decrypted = this.decrypt(input, key)
+      const decrypted = this.decrypt(file, key)
       return decrypted.file
     },
     decrypt: function (messageWithNonce, key) {
@@ -79,9 +82,6 @@ export default {
     }
   },
   computed: {
-    audio: function () {
-      return this.audioFiles.audio
-    }
   },
   watch: {
     audioMuted: async function (val) {
@@ -94,20 +94,21 @@ export default {
     if (!this.encrypted) {
       this.audioUrl = this.audioFiles.audio
       this.imgFile = this.audioFiles.imgFiles
+      return
     }
-    // const audio = this.decryptFile(this.audio, 'EO0hkdqWFssaBg6k1A0Q+H690wIUq5gBLIRl6iO2KzU=')
-    // this.setup(audio)
-    // function sleep (ms) {
-    //   return new Promise(resolve => setTimeout(resolve, ms))
-    // }
-    // this.imgFile[0] = this.decryptFile(this.audioFiles.imgFiles[0], 'wVQj0U4T9B0rQ7EZR8WYABzpp0EOULQV+m3acE8XRTM=')
-    // for (var i = 1; i < this.audioFiles.imgFiles.length; i++) {
-    //   console.lg('more than one')
-    //   await sleep(1000)
-    //   this.imgFile[i].push(this.decryptFile(this.audioFiles.imgFiles[i], 'wVQj0U4T9B0rQ7EZR8WYABzpp0EOULQV+m3acE8XRTM='))
-    // }
+    const audio = this.decryptFile(this.audioFiles.audio, this.password)
+    this.setup(audio)
+    function sleep (ms) {
+      return new Promise(resolve => setTimeout(resolve, ms))
+    }
+    this.handleImg(this.audioFiles.imgFiles[0], this.password)
+    for (var i = 0; i < this.audioFiles.imgFiles.length; i++) {
+      console.lg('more than one')
+      await sleep(2000)
+      this.handleImg(this.audioFiles.imgFiles[i], this.password)
+    }
   },
-  async beforeMount () {
+  async created () {
   }
 }
 </script>

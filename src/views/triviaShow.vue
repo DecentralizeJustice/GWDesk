@@ -21,6 +21,7 @@
     >
     <question
     v-if='dialog'
+    v-bind:questions='questions'
     v-bind:encrypted='encrypted'
     v-bind:mediaInfo='mediaInfo'
     v-bind:dev='dev'
@@ -42,7 +43,7 @@ export default {
   },
   data: () => ({
     dev: false,
-    encrypted: false,
+    encrypted: true,
     questions: {},
     mediaInfo: {},
     dialog: false,
@@ -72,12 +73,25 @@ export default {
     },
     setMediaInfo: async function () {
       if (this.encrypted) {
-        return
+        const mediaInfoJson = await import('../assets/gameShow/output/mediaInfo.json')
+        const mediaInfo = mediaInfoJson.default
+        await this.encryptedSetIntro(mediaInfo)
       }
-      const info = await import('../assets/gameShow/files/mediaInfo.json')
-      await this.plainTextSetIntro(info)
-      await this.plainTextSetOutro(info)
-      await this.plainTextQuestions(info, parseInt(this.genGameInfo.numberOfQuestions))
+      // const info = await import('../assets/gameShow/files/mediaInfo.json')
+      // await this.plainTextSetIntro(info)
+      // await this.plainTextSetOutro(info)
+      // await this.plainTextQuestions(info, parseInt(this.genGameInfo.numberOfQuestions))
+    },
+    encryptedSetIntro: async function (mediaInfo) {
+      this.mediaInfo.intro = {}
+      const audio = await import('../assets/gameShow/output/introAudio.json')
+      this.mediaInfo.intro.audio = audio.default
+      const imgArray = []
+      for (var i = 0; i < mediaInfo.intro.img.length; i++) {
+        const img = await import(`../assets/gameShow/output/introImg${i}.json`)
+        imgArray.push(img.default)
+      }
+      this.mediaInfo.intro.img = imgArray
     },
     plainTextSetIntro: async function (info) {
       const introAudio = await import('../assets/gameShow' + info.default.intro.audio.substring(1))
@@ -141,7 +155,7 @@ export default {
   },
   async beforeMount () {
     await this.setupInfo()
-    await this.setQuestions()
+    // await this.setQuestions()
     await this.setMediaInfo()
   }
 }

@@ -9,7 +9,9 @@
     v-bind:audioMuted='audioMuted'
     v-bind:audioFiles='audioFiles'
     v-bind:encrypted='encrypted'
-    v-bind:mediaInfo='mediaInfo'/>
+    v-bind:mediaInfo='mediaInfo'
+    v-bind:password='password'
+    v-if='password'/>
     <v-row no-gutters align-content='center' justify='center' class="mt-4">
       <v-col cols='6' class="mb-5">
       <div class="mb-3 text-h6">First Question In:</div>
@@ -54,6 +56,15 @@ export default {
       const bottomFract = this.endTime - this.startTime
       const value = (topFract / bottomFract) * 100
       return value
+    },
+    password: function () {
+      if (this.passwordInfo.intro === undefined) {
+        return false
+      }
+      if (this.passwordInfo.intro.password !== undefined) {
+        return this.passwordInfo.intro.password
+      }
+      return false
     }
   },
   methods: {
@@ -62,8 +73,7 @@ export default {
         method: 'get',
         url: this.genInfo.getApi
       })
-      console.log(result.data.info)
-      this.passwordInfo = result.data
+      this.passwordInfo = result.data.info
     }
   },
   watch: {
@@ -71,7 +81,7 @@ export default {
   async mounted () {
   },
   async created () {
-    // await this.getPassword()
+    await this.getPassword()
   }
 }
 </script>

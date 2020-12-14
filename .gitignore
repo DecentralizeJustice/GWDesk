@@ -1,4 +1,5 @@
 .DS_Store
+/src/assets/gameShow/files
 node_modules
 /dist
 /build
