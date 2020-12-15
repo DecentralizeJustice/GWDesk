@@ -7,8 +7,7 @@
       ></v-img>
     </v-col>
     <audio ref="player" hidden autoplay
-      :src="audioUrl" type="audio/mpeg" @error='audioError'
-      style="">
+      :src="audioUrl" type="audio/mpeg" @error='audioError'>
     </audio>
   </v-row>
 </template>
@@ -102,8 +101,8 @@ export default {
       return new Promise(resolve => setTimeout(resolve, ms))
     }
     this.handleImg(this.audioFiles.imgFiles[0], this.password)
-    for (var i = 0; i < this.audioFiles.imgFiles.length; i++) {
-      console.lg('more than one')
+    for (var i = 1; i < this.audioFiles.imgFiles.length; i++) {
+      console.log('more than one')
       await sleep(2000)
       this.handleImg(this.audioFiles.imgFiles[i], this.password)
     }

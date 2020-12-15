@@ -67,6 +67,9 @@ export default {
     ),
     setQuestions: async function () {
       if (this.encrypted) {
+        const info = await import('../assets/gameShow/output/encryptedQuestions.json')
+        this.questions = info.questions
+        return
       }
       const info = await import('../assets/gameShow/files/questions.json')
       this.questions = info.default
@@ -75,23 +78,26 @@ export default {
       if (this.encrypted) {
         const mediaInfoJson = await import('../assets/gameShow/output/mediaInfo.json')
         const mediaInfo = mediaInfoJson.default
-        await this.encryptedSetIntro(mediaInfo)
+        await this.encryptedSetIntro(mediaInfo, 'intro')
+        await this.encryptedSetIntro(mediaInfo, 'outro')
+        await this.encryptedQuestions(mediaInfo, parseInt(this.genGameInfo.numberOfQuestions))
+        return
       }
-      // const info = await import('../assets/gameShow/files/mediaInfo.json')
-      // await this.plainTextSetIntro(info)
-      // await this.plainTextSetOutro(info)
-      // await this.plainTextQuestions(info, parseInt(this.genGameInfo.numberOfQuestions))
+      const info = await import('../assets/gameShow/files/mediaInfo.json')
+      await this.plainTextSetIntro(info)
+      await this.plainTextSetOutro(info)
+      await this.plainTextQuestions(info, parseInt(this.genGameInfo.numberOfQuestions))
     },
-    encryptedSetIntro: async function (mediaInfo) {
-      this.mediaInfo.intro = {}
-      const audio = await import('../assets/gameShow/output/introAudio.json')
-      this.mediaInfo.intro.audio = audio.default
+    encryptedSetIntro: async function (mediaInfo, type) {
+      this.mediaInfo[type] = {}
+      const audio = await import(`../assets/gameShow/output/${type}Audio.json`)
+      this.mediaInfo[type].audio = audio.default
       const imgArray = []
-      for (var i = 0; i < mediaInfo.intro.img.length; i++) {
-        const img = await import(`../assets/gameShow/output/introImg${i}.json`)
+      for (var i = 0; i < mediaInfo[type].img.length; i++) {
+        const img = await import(`../assets/gameShow/output/${type}Img${i}.json`)
         imgArray.push(img.default)
       }
-      this.mediaInfo.intro.img = imgArray
+      this.mediaInfo[type].img = imgArray
     },
     plainTextSetIntro: async function (info) {
       const introAudio = await import('../assets/gameShow' + info.default.intro.audio.substring(1))
@@ -104,6 +110,19 @@ export default {
       this.mediaInfo.intro = {}
       this.mediaInfo.intro.audio = introAudio.default
       this.mediaInfo.intro.img = imgArray
+    },
+    encryptedQuestions: async function (info, numberOfQuestions) {
+      for (var i = 1; i < numberOfQuestions + 1; i++) {
+        const audio = await import(`../assets/gameShow/output/questionMediaAudio${i}.json`)
+        const imgArray = []
+        for (var y = 0; y < info[i].img.length; y++) {
+          const img = await import(`../assets/gameShow/output/questionMediaImg${i}-${y}.json`)
+          imgArray.push(img.default)
+        }
+        this.mediaInfo[i] = {}
+        this.mediaInfo[i].audio = audio.default
+        this.mediaInfo[i].imgs = imgArray
+      }
     },
     plainTextQuestions: async function (info, numberOfQuestions) {
       for (var i = 1; i < numberOfQuestions + 1; i++) {
@@ -155,7 +174,7 @@ export default {
   },
   async beforeMount () {
     await this.setupInfo()
-    // await this.setQuestions()
+    await this.setQuestions()
     await this.setMediaInfo()
   }
 }

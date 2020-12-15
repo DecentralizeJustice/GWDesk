@@ -5,7 +5,7 @@
     </v-card-title>
     <v-divider/>
     <audio1
-    class='ma-5'
+    class='pa-5'
     v-bind:audioMuted='audioMuted'
     v-bind:audioFiles='audioFiles'
     v-bind:encrypted='encrypted'
@@ -73,6 +73,15 @@ export default {
         method: 'get',
         url: this.genInfo.getApi
       })
+      function sleep (ms) {
+        return new Promise(resolve => setTimeout(resolve, ms))
+      }
+      const waitTime = parseFloat(this.genInfo.waitTime) * 1000
+      if (result.data.info.intro.password === undefined) {
+        console.log('waiting')
+        await sleep(waitTime)
+        this.getPassword()
+      }
       this.passwordInfo = result.data.info
     }
   },

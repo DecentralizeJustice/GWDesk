@@ -1,12 +1,12 @@
 const info = {
-  startEpochTime: '1607838399',
+  startEpochTime: '1607973600',
   crypto: 'Monero (XMR)',
   amountUSD: '20',
   numberOfQuestions: '5',
   timeToAnswerGenQuestion: '10',
   explantionTime: '10',
-  waitTime: '1',
-  getApi: 'http://localhost:8086/',
+  waitTime: '0.5',
+  getApi: 'https://testwebsocket-298416.ue.r.appspot.com/',
   intro: {
     length: '30'
   },

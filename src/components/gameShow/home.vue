@@ -395,12 +395,13 @@ export default {
       }
     },
     getPassword: async function () {
+      const sendTime = Date.now()
       const result = await axios({
         method: 'get',
-        url: 'https://google.com'
+        url: this.genInfo.getApi
       })
-      // console.log(result.data)
-      return result
+      const serverTime = result.data.time
+      console.log('lag:', serverTime - sendTime, ' ms')
     }
   },
   watch: {
@@ -419,7 +420,6 @@ export default {
     this.countDownTimer()
   },
   beforeDestroy () {
-    // this.socket.close()
   }
 }
 </script>
