@@ -25,7 +25,7 @@
         </v-card>
         </v-col>
         <v-col class="" cols="8">
-          <v-list rounded>
+          <v-list rounded :disabled="choiceLocked">
             <v-list-item-group
              v-model="selectedItem"
              color="primary"
@@ -34,8 +34,9 @@
                v-for="(item, i) in options"
                :key="i"
              >
-                 <v-list-item-content>
-                   <v-list-item-title v-text="item" class="text-h5"></v-list-item-title>
+                 <v-list-item-content v-on:click="submitChoice(i)">
+                   <v-list-item-title v-text="item" class="text-h5"
+                   ></v-list-item-title>
                  </v-list-item-content>
                </v-list-item>
               </v-list-item-group>
@@ -60,6 +61,7 @@
 </template>
 
 <script>
+import qs from 'qs'
 import { secretbox } from 'tweetnacl'
 import {
   encodeUTF8,
@@ -70,12 +72,16 @@ import audiopPlayer from '@/components/gameShow/localAudioEncrypt.vue'
 // import qs from 'qs'
 import axios from 'axios'
 export default {
-  props: ['genInfo', 'currentTime', 'audioMuted', 'mediaInfo', 'encrypted', 'questions'],
+  props: [
+    'genInfo', 'currentTime', 'audioMuted', 'mediaInfo',
+    'encrypted', 'questions', 'userIdInfo'
+  ],
   components: {
     gameMusic,
     audiopPlayer
   },
   data: () => ({
+    choiceLocked: false,
     selectedItem: undefined,
     options: [],
     passwordInfo: {},
@@ -120,6 +126,22 @@ export default {
     }
   },
   methods: {
+    submitChoice: function (choice) {
+      this.submitAnswer(choice)
+      this.choiceLocked = true
+    },
+    submitAnswer: async function (choice) {
+      const result = await axios({
+        method: 'post',
+        url: this.genInfo.postApi,
+        data: qs.stringify({
+          address: this.userIdInfo.address,
+          answer: choice
+        })
+      })
+      const submittedTime = result.data.time
+      console.log(submittedTime)
+    },
     decryptFile: function (file, key) {
       const decrypted = this.decrypt(file, key)
       return decrypted.file
@@ -149,7 +171,6 @@ export default {
       }
       this.passwordInfo = result.data.info
       const info = result.data.info
-      console.log(info)
       const waitTime = parseFloat(this.genInfo.waitTime) * 1000
       const correctQuestionReady = !(info[this.questionNumber].question === undefined)
       if (correctQuestionReady) {
@@ -237,6 +258,8 @@ export default {
     },
     questionNumber: async function () {
       this.selectedItem = undefined
+      this.choiceLocked = false
+      this.finalChoice = undefined
       this.setQuestion()
     },
     passwordInfo: async function () {

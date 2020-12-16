@@ -20,6 +20,7 @@
       style="dialog"
     >
     <question
+    v-bind:userIdInfo='userIdInfo'
     v-if='dialog'
     v-bind:questions='questions'
     v-bind:encrypted='encrypted'

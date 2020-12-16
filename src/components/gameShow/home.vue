@@ -415,7 +415,7 @@ export default {
   async beforeMount () {
     await this.setupInfo()
   },
-  mounted () {
+  async mounted () {
     this.getPassword()
     this.countDownTimer()
   },
