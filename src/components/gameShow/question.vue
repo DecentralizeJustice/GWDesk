@@ -7,7 +7,9 @@
     v-bind:mediaInfo='mediaInfo'
     v-bind:audioMuted='audioMuted'
     v-bind:questions='questions'
-    v-bind:userIdInfo='userIdInfo'/>
+    v-bind:userIdInfo='userIdInfo'
+    v-bind:eliminated='eliminated'
+    v-on:eliminated='eliminated = true'/>
     <v-divider/>
     <v-card-actions>
       <v-btn
@@ -48,22 +50,28 @@ import intro from '@/components/gameShow/intro.vue'
 import loading from '@/components/gameShow/loading.vue'
 import quiz from '@/components/gameShow/quiz.vue'
 import outro from '@/components/gameShow/outro.vue'
+import humanVerif from '@/components/gameShow/humanVerification.vue'
 export default {
   props: ['genInfo', 'mediaInfo', 'encrypted', 'questions', 'userIdInfo'],
   components: {
     intro,
     loading,
     quiz,
-    outro
+    outro,
+    humanVerif
   },
   data: () => ({
     currentTime: 1,
     done: false,
-    audioMuted: false
+    audioMuted: false,
+    eliminated: false
   }),
   computed: {
     introLength: function () {
       return parseInt(this.genInfo.intro.length) * 1000
+    },
+    humanVerificationTime: function () {
+      return parseInt(this.genInfo.humanVerificationTime) * 1000
     },
     allQuestionsLength: function () {
       return (parseInt(this.genInfo.timeToAnswerGenQuestion) +
@@ -78,7 +86,10 @@ export default {
       if (this.currentTime < (this.startTime + this.introLength)) {
         return intro
       }
-      if (this.currentTime < (this.startTime + this.introLength + this.allQuestionsLength)) {
+      if (this.currentTime < (this.startTime + this.introLength + this.humanVerificationTime)) {
+        return humanVerif
+      }
+      if (this.currentTime < (this.startTime + this.humanVerificationTime + this.introLength + this.allQuestionsLength)) {
         return quiz
       }
       return outro

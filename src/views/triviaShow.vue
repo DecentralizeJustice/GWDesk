@@ -79,15 +79,28 @@ export default {
       if (this.encrypted) {
         const mediaInfoJson = await import('../assets/gameShow/output/mediaInfo.json')
         const mediaInfo = mediaInfoJson.default
+        await this.encryptedSetHv(mediaInfo)
         await this.encryptedSetIntro(mediaInfo, 'intro')
         await this.encryptedSetIntro(mediaInfo, 'outro')
         await this.encryptedQuestions(mediaInfo, parseInt(this.genGameInfo.numberOfQuestions))
         return
       }
       const info = await import('../assets/gameShow/files/mediaInfo.json')
+      await this.plainTextSetHV(info)
       await this.plainTextSetIntro(info)
       await this.plainTextSetOutro(info)
       await this.plainTextQuestions(info, parseInt(this.genGameInfo.numberOfQuestions))
+    },
+    encryptedSetHv: async function (mediaInfo) {
+      this.mediaInfo.hv = {}
+      const audio = await import('../assets/gameShow/output/hvMediaAudio.json')
+      this.mediaInfo.hv.audio = audio.default
+      const imgArray = []
+      for (var i = 0; i < mediaInfo.hv.img.length; i++) {
+        const img = await import(`../assets/gameShow/output/hvMediaImg${i}.json`)
+        imgArray.push(img.default)
+      }
+      this.mediaInfo.hv.imgs = imgArray
     },
     encryptedSetIntro: async function (mediaInfo, type) {
       this.mediaInfo[type] = {}
@@ -99,6 +112,18 @@ export default {
         imgArray.push(img.default)
       }
       this.mediaInfo[type].img = imgArray
+    },
+    plainTextSetHV: async function (info) {
+      const introAudio = await import('../assets/gameShow' + info.default.hv.audio.substring(1))
+      const hvImg = info.default.hv.img
+      const imgArray = []
+      for (var i = 0; i < hvImg.length; i++) {
+        const audio = await import('../assets/gameShow' + info.default.hv.img[i].substring(1))
+        imgArray.push(audio.default)
+      }
+      this.mediaInfo.hv = {}
+      this.mediaInfo.hv.audio = introAudio.default
+      this.mediaInfo.hv.img = imgArray
     },
     plainTextSetIntro: async function (info) {
       const introAudio = await import('../assets/gameShow' + info.default.intro.audio.substring(1))

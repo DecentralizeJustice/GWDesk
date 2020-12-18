@@ -17,7 +17,7 @@
 
 <script>
 import audio1 from '@/components/gameShow/localAudioEncrypt.vue'
-import axios from 'axios'
+import { get } from '@/assets/util/axios.js'
 export default {
   props: ['genInfo', 'currentTime', 'audioMuted', 'mediaInfo', 'encrypted'],
   components: {
@@ -43,10 +43,8 @@ export default {
   },
   methods: {
     getPassword: async function () {
-      const result = await axios({
-        method: 'get',
-        url: this.genInfo.getApi
-      })
+      const url = this.genInfo.getApi
+      const result = await get(url)
       function sleep (ms) {
         return new Promise(resolve => setTimeout(resolve, ms))
       }

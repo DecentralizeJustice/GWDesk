@@ -232,7 +232,7 @@
         v-if='ready && !showOver'
       >
         <v-btn
-        @click.stop='start'
+          @click.stop='start'
           color="primary"
           class="mb-5"
         >
@@ -244,9 +244,9 @@
 </template>
 
 <script>
+import { get } from '@/assets/util/axios.js'
 import adjectiveList from '@/assets/gameShow/adjective.json'
 import emojiObject from '@/assets/gameShow/emoji.json'
-import axios from 'axios'
 export default {
   props: ['userIdInfo', 'dev', 'genInfo'],
   components: {
@@ -360,6 +360,7 @@ export default {
       this.$emit('updateAddress', address)
     },
     start () {
+      console.log('ran')
       this.$emit('readyToStart')
     },
     countDownTimer () {
@@ -396,10 +397,8 @@ export default {
     },
     getPassword: async function () {
       const sendTime = Date.now()
-      const result = await axios({
-        method: 'get',
-        url: this.genInfo.getApi
-      })
+      const url = this.genInfo.getApi
+      const result = await get(url)
       const serverTime = result.data.time
       console.log('lag:', serverTime - sendTime, ' ms')
     }

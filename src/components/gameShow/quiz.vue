@@ -25,7 +25,7 @@
         </v-card>
         </v-col>
         <v-col class="" cols="8">
-          <v-list rounded :disabled="choiceLocked">
+          <v-list rounded :disabled="choiceLocked || eliminated">
             <v-list-item-group
              v-model="selectedItem"
              color="primary"
@@ -61,7 +61,7 @@
 </template>
 
 <script>
-import qs from 'qs'
+import { post, get } from '@/assets/util/axios.js'
 import { secretbox } from 'tweetnacl'
 import {
   encodeUTF8,
@@ -69,12 +69,10 @@ import {
 } from 'tweetnacl-util'
 import gameMusic from '@/components/gameShow/gameShowMusic.vue'
 import audiopPlayer from '@/components/gameShow/localAudioEncrypt.vue'
-// import qs from 'qs'
-import axios from 'axios'
 export default {
   props: [
     'genInfo', 'currentTime', 'audioMuted', 'mediaInfo',
-    'encrypted', 'questions', 'userIdInfo'
+    'encrypted', 'questions', 'userIdInfo', 'eliminated'
   ],
   components: {
     gameMusic,
@@ -89,16 +87,20 @@ export default {
     explanation: false,
     last: false,
     progress: 0,
-    question: ''
+    question: '',
+    submittedTime: 30000000000000000000
   }),
   computed: {
     audioFiles: function () {
       const question = this.mediaInfo[this.questionNumber]
       return { audio: question.audio, imgFiles: question.imgs }
     },
+    humanVerificationTime: function () {
+      return parseInt(this.genInfo.humanVerificationTime) * 1000
+    },
     questionStartTime: function () {
       return (parseInt(this.genInfo.intro.length) * 1000) +
-        (parseInt(this.genInfo.startEpochTime) * 1000)
+        (parseInt(this.genInfo.startEpochTime) * 1000) + this.humanVerificationTime
     },
     explanationTime: function () {
       return parseInt(this.genInfo.explantionTime) * 1000
@@ -126,21 +128,43 @@ export default {
     }
   },
   methods: {
+    checkIfCorrect: function () {
+      if (this.passwordInfo[this.questionNumber] === undefined) {
+        return
+      }
+      if (this.passwordInfo[this.questionNumber].answerValue !== undefined) {
+        if (this.passwordInfo[this.questionNumber].answerValue !== String(this.selectedItem)) {
+          console.log('wrong answer')
+          this.$emit('eliminated')
+          return
+        }
+        console.log(' your right')
+        const startTime = this.questionStartTime
+        const timetoAnswer = this.timetoAnswer
+        const questionNumber = this.questionNumber
+        const questionLength = this.questionLength
+        const submitByTime = startTime + timetoAnswer + ((questionNumber - 1) * questionLength)
+        if (this.submittedTime > submitByTime) {
+          console.log('too late')
+          this.$emit('eliminated')
+          return
+        }
+        console.log('submitted on time')
+      }
+    },
     submitChoice: function (choice) {
       this.submitAnswer(choice)
       this.choiceLocked = true
     },
     submitAnswer: async function (choice) {
-      const result = await axios({
-        method: 'post',
-        url: this.genInfo.postApi,
-        data: qs.stringify({
-          address: this.userIdInfo.address,
-          answer: choice
-        })
-      })
-      const submittedTime = result.data.time
-      console.log(submittedTime)
+      const url = this.genInfo.postApi
+      const data = {
+        address: this.userIdInfo.address,
+        answer: choice,
+        question: this.questionNumber
+      }
+      const result = await post(data, url)
+      this.submittedTime = parseInt(result.data.time)
     },
     decryptFile: function (file, key) {
       const decrypted = this.decrypt(file, key)
@@ -162,10 +186,8 @@ export default {
       return JSON.parse(base64DecryptedMessage)
     },
     getPassword: async function () {
-      const result = await axios({
-        method: 'get',
-        url: this.genInfo.getApi
-      })
+      const url = this.genInfo.getApi
+      const result = await get(url)
       function sleep (ms) {
         return new Promise(resolve => setTimeout(resolve, ms))
       }
@@ -186,6 +208,7 @@ export default {
           this.getPassword()
           return
         }
+        this.checkIfCorrect()
         return
       }
       this.setQuestion()
@@ -251,15 +274,13 @@ export default {
         this.last = last
       }
     },
-    explanation: async function () {
-      if (this.encrypted) {
-        await this.getPassword()
-      }
+    explanation: async function (val) {
+      this.getPassword()
     },
     questionNumber: async function () {
+      this.submittedTime = 30000000000000000000
       this.selectedItem = undefined
       this.choiceLocked = false
-      this.finalChoice = undefined
       this.setQuestion()
     },
     passwordInfo: async function () {
