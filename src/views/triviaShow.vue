@@ -5,7 +5,8 @@
     v-if='!dialog'
     v-bind:userIdInfo='userIdInfo'
     v-bind:dev='dev'
-    @readyToStart='readyToStart($event)'
+    @readyToStart='readyToStart()'
+    @showRules='showRulesFunc()'
     v-on:updateAddress='updateAddress'
     v-on:updateUserIDInfo='updateUserIDInfo'
     v-bind:genInfo='genGameInfo'
@@ -21,13 +22,15 @@
     >
     <question
     v-bind:userIdInfo='userIdInfo'
-    v-if='dialog'
+    v-if='dialog && showGame'
     v-bind:questions='questions'
     v-bind:encrypted='encrypted'
     v-bind:mediaInfo='mediaInfo'
     v-bind:dev='dev'
     v-bind:genInfo='genGameInfo'
     v-on:exit="exitGame"/>
+    <rules v-if='dialog && showRules'
+    v-on:exit='exitRules'/>
     </v-dialog>
   </div>
 </template>
@@ -36,18 +39,22 @@
 import home from '@/components/gameShow/home.vue'
 import question from '@/components/gameShow/question.vue'
 import gameInfo from '@/assets/gameShow/gameInfo.js'
+import rules from '@/components/gameShow/rules.vue'
 import { mapActions, mapState } from 'vuex'
 export default {
   components: {
     home,
-    question
+    question,
+    rules
   },
   data: () => ({
     dev: false,
+    showGame: false,
     encrypted: true,
     questions: {},
     mediaInfo: {},
     dialog: false,
+    showRules: false,
     userIdInfo: {
       address: '',
       adjective: '',
@@ -182,11 +189,19 @@ export default {
     },
     exitGame: function () {
       this.dialog = false
-      this.key += 1
+      this.showGame = false
     },
     readyToStart: function () {
-      this.show = true
+      this.showGame = true
       this.dialog = true
+    },
+    showRulesFunc: function () {
+      this.showRules = true
+      this.dialog = true
+    },
+    exitRules: function () {
+      this.dialog = false
+      this.showRules = false
     },
     updateAddress: function (address) {
       this.userIdInfo.address = address

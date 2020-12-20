@@ -4,7 +4,7 @@
     >
     <v-card class="" >
       <v-card-title class="headline justify-center">
-      Crypto Trivia GameShow
+      Crypto Trivia Show
       </v-card-title>
       <v-divider></v-divider>
       <v-row no-gutters align-content='center' justify='space-around' class="pa-5">
@@ -48,6 +48,18 @@
                </v-col>
              </v-row>
             </div>
+            <v-row
+              align="center"
+              justify="center"
+            >
+              <v-btn
+              @click.stop='showInfo'
+                color="orange accent-4"
+                class="mt-4"
+              >
+                Show More Info
+              </v-btn>
+            </v-row>
           </v-card-text>
           </v-col>
         </v-card>
@@ -113,11 +125,11 @@
               </div>
             </v-col>
             <v-col cols='6' class="text-center text-h6">
-              Player Name:
-              <div class="text-center mt-5 text-h5">
+              Display Name:
+              <div class="text-center mt-3 text-h5">
                 {{userIdInfo.adjective}}
               </div>
-              <div class="text-center mt-5 text-h2">
+              <div class="text-center mt-3 text-h2">
                 {{userIdInfo.emoji}}
               </div>
               <v-row
@@ -239,6 +251,16 @@
           Start!!!
         </v-btn>
       </v-row>
+      <v-divider/>
+      <v-card-actions>
+      <v-btn
+      @click.stop='showInfo'
+        color="orange"
+        text
+      >
+        <v-icon>mdi-help</v-icon>
+      </v-btn>
+    </v-card-actions>
     </v-card>
     </v-col>
 </template>
@@ -352,15 +374,18 @@ export default {
     }
   },
   methods: {
+    showInfo () {
+      this.$emit('showRules')
+    },
     setAddress () {
       this.settingAddress = true
     },
     confirmAddress (address) {
       this.settingAddress = false
-      this.$emit('updateAddress', address)
+      const cleanAddress = address.replace(/\s+/g, '')
+      this.$emit('updateAddress', cleanAddress)
     },
     start () {
-      console.log('ran')
       this.$emit('readyToStart')
     },
     countDownTimer () {
