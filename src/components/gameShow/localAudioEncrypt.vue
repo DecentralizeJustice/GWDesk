@@ -3,10 +3,10 @@
     <v-col cols='8' style='text-align: center'>
       <v-img
       class=""
-        :src="imgFile[0]"
+        :src="imgFile[currentSlide]"
       ></v-img>
     </v-col>
-    <audio ref="player" hidden autoplay
+    <audio ref="player" hidden autoplay @timeupdate="updateTime"
       :src="audioUrl" type="audio/mpeg" @error='audioError'>
     </audio>
   </v-row>
@@ -22,7 +22,7 @@ export default {
   name: 'videoPlayer',
   components: {
   },
-  props: ['audioMuted', 'audioFiles', 'encrypted', 'password'],
+  props: ['audioMuted', 'audioFiles', 'encrypted', 'password', 'mediaInfo'],
   data () {
     return {
       audioUrl: '',
@@ -78,6 +78,38 @@ export default {
 
       const base64DecryptedMessage = encodeUTF8(decrypted)
       return JSON.parse(base64DecryptedMessage)
+    },
+    updateTime () {
+      const breakpoints = this.addFirstBreakpoint(this.mediaInfo.slideTiming)
+      const time = this.player.currentTime
+      for (var i = 0; i < breakpoints.length; i++) {
+        const lowseconds = this.getSeconds(breakpoints[i])
+        const highseconds = this.getSeconds(breakpoints[i + 1])
+        const lastSlide = (highseconds === undefined)
+        const correctSlide = (time >= lowseconds && time < highseconds)
+        if (lastSlide || correctSlide) {
+          this.currentSlide = i
+          break
+        }
+      }
+    },
+    addFirstBreakpoint (breakpoints) {
+      if (breakpoints[0] !== '0:00') {
+        breakpoints.splice(0, 0, '0:00')
+      }
+      return breakpoints
+    },
+    getSeconds (timeString) {
+      if (typeof timeString === 'undefined') {
+        return undefined
+      }
+      const times = timeString.split(':')
+      times[0] = parseInt(times[0], 10)
+      times[1] = parseInt(times[1], 10)
+      let timeSeconds = 0
+      timeSeconds += (times[0] * 60)
+      timeSeconds += times[1]
+      return timeSeconds
     }
   },
   computed: {
@@ -85,6 +117,9 @@ export default {
   watch: {
     audioMuted: async function (val) {
       this.player.muted = val
+    },
+    time: function () {
+      this.player.currentTime = this.time
     }
   },
   async mounted () {
@@ -102,8 +137,7 @@ export default {
     }
     this.handleImg(this.audioFiles.imgFiles[0], this.password)
     for (var i = 1; i < this.audioFiles.imgFiles.length; i++) {
-      console.log('more than one')
-      await sleep(2000)
+      await sleep(3000)
       this.handleImg(this.audioFiles.imgFiles[i], this.password)
     }
   },

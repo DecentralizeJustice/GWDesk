@@ -22,6 +22,7 @@
       v-bind:audioFiles='audioFiles'
       v-bind:encrypted='encrypted'
       v-bind:password='password'
+      v-bind:mediaInfo='specificMediaInfo'
       />
       <v-row align-content='center' justify='center' v-show='!explanation'>
         <v-col class="" cols="10" >
@@ -97,6 +98,9 @@ export default {
     submittedTime: 30000000000000000000
   }),
   computed: {
+    specificMediaInfo: function () {
+      return this.mediaInfo.hv
+    },
     textTooMuch: function () {
       return (this.answer.length > 100)
     },
@@ -201,7 +205,7 @@ export default {
         this.question = parsed
         return
       }
-      this.question = this.questions[this.questionNumber].questionInfo.question
+      this.question = this.questions.hv.question
     }
   },
   watch: {

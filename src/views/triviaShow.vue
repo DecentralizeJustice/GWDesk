@@ -117,6 +117,7 @@ export default {
         imgArray.push(img.default)
       }
       this.mediaInfo.hv.imgs = imgArray
+      this.mediaInfo.hv.slideTiming = mediaInfo.hv.slideTiming
     },
     encryptedSetIntro: async function (mediaInfo, type) {
       this.mediaInfo[type] = {}
@@ -128,6 +129,7 @@ export default {
         imgArray.push(img.default)
       }
       this.mediaInfo[type].img = imgArray
+      this.mediaInfo[type].slideTiming = mediaInfo[type].slideTiming
     },
     plainTextSetHV: async function (info) {
       const introAudio = await import('../assets/gameShow' + info.default.hv.audio.substring(1))
@@ -139,7 +141,8 @@ export default {
       }
       this.mediaInfo.hv = {}
       this.mediaInfo.hv.audio = introAudio.default
-      this.mediaInfo.hv.img = imgArray
+      this.mediaInfo.hv.imgs = imgArray
+      this.mediaInfo.hv.slideTiming = info.hv.slideTiming
     },
     plainTextSetIntro: async function (info) {
       const introAudio = await import('../assets/gameShow' + info.default.intro.audio.substring(1))
@@ -152,6 +155,7 @@ export default {
       this.mediaInfo.intro = {}
       this.mediaInfo.intro.audio = introAudio.default
       this.mediaInfo.intro.img = imgArray
+      this.mediaInfo.intro.slideTiming = info.intro.slideTiming
     },
     encryptedQuestions: async function (info, numberOfQuestions) {
       for (var i = 1; i < numberOfQuestions + 1; i++) {
@@ -164,6 +168,7 @@ export default {
         this.mediaInfo[i] = {}
         this.mediaInfo[i].audio = audio.default
         this.mediaInfo[i].imgs = imgArray
+        this.mediaInfo[i].slideTiming = info[i].slideTiming
       }
     },
     plainTextQuestions: async function (info, numberOfQuestions) {
@@ -177,6 +182,7 @@ export default {
         this.mediaInfo[i] = {}
         this.mediaInfo[i].audio = audio.default
         this.mediaInfo[i].imgs = imgArray
+        this.mediaInfo[i].slideTiming = info[i].slideTiming
       }
     },
     plainTextSetOutro: async function (info) {
@@ -190,6 +196,7 @@ export default {
       this.mediaInfo.outro = {}
       this.mediaInfo.outro.audio = outroAudio.default
       this.mediaInfo.outro.img = imgArray
+      this.mediaInfo.outro.slideTiming = info.outro.slideTiming
     },
     setupInfo: function () {
       this.userIdInfo.address = this.gameInfo.address

@@ -21,6 +21,7 @@
       v-bind:audioFiles='audioFiles'
       v-bind:encrypted='encrypted'
       v-bind:password='password'
+      v-bind:mediaInfo='specificMediaInfo'
       />
       <v-row align-content='center' justify='center' v-show='!explanation'>
         <gameMusic v-bind:audioMuted='audioMuted'
@@ -101,6 +102,9 @@ export default {
     submittedTime: 30000000000000000000
   }),
   computed: {
+    specificMediaInfo: function () {
+      return this.mediaInfo[this.questionNumber]
+    },
     audioFiles: function () {
       const question = this.mediaInfo[this.questionNumber]
       return { audio: question.audio, imgFiles: question.imgs }

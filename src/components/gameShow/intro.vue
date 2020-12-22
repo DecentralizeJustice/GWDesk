@@ -9,7 +9,7 @@
     v-bind:audioMuted='audioMuted'
     v-bind:audioFiles='audioFiles'
     v-bind:encrypted='encrypted'
-    v-bind:mediaInfo='mediaInfo'
+    v-bind:mediaInfo='specificMediaInfo'
     v-bind:password='password'
     v-if='password'/>
     <v-row no-gutters align-content='center' justify='center' class="mt-4">
@@ -38,6 +38,9 @@ export default {
     passwordInfo: {}
   }),
   computed: {
+    specificMediaInfo: function () {
+      return this.mediaInfo.intro
+    },
     audioFiles: function () {
       const intro = this.mediaInfo.intro
       return { audio: intro.audio, imgFiles: intro.img }

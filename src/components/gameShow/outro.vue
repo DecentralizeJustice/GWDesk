@@ -9,7 +9,7 @@
     v-bind:audioMuted='audioMuted'
     v-bind:audioFiles='audioFiles'
     v-bind:encrypted='encrypted'
-    v-bind:mediaInfo='mediaInfo'
+    v-bind:mediaInfo='specificMediaInfo'
     v-bind:password='password'
     v-if='password'/>
   </div>
@@ -27,6 +27,9 @@ export default {
     passwordInfo: {}
   }),
   computed: {
+    specificMediaInfo: function () {
+      return this.mediaInfo.outro
+    },
     audioFiles: function () {
       const outro = this.mediaInfo.outro
       return { audio: outro.audio, imgFiles: outro.img }
