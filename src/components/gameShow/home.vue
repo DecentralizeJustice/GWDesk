@@ -39,6 +39,16 @@
              </v-row>
             </div>
             <div class="mt-2" style="font-size: large;">
+              Trivia Subject: {{subject}}
+              <v-row no-gutters justify-content='center' >
+               <v-col cols='2' offset='5' class="justify-center text-center">
+                 <v-icon x-large color="blue lighten-1">
+                   mdi-library-books
+                 </v-icon>
+               </v-col>
+             </v-row>
+            </div>
+            <div class="mt-2" style="font-size: large;">
               Payment Crypto: {{crypto}}
               <v-row no-gutters justify-content='center' >
                <v-col cols='2' offset='5' class="justify-center text-center">
@@ -286,6 +296,9 @@ export default {
     // ]
   }),
   computed: {
+    subject: function () {
+      return this.genInfo.subject
+    },
     amountUSD: function () {
       return this.genInfo.amountUSD
     },
