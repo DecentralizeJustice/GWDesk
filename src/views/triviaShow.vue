@@ -10,6 +10,7 @@
     v-on:updateAddress='updateAddress'
     v-on:updateUserIDInfo='updateUserIDInfo'
     v-bind:genInfo='genGameInfo'
+    v-bind:privateId='privateId'
     />
       </v-row>
     <v-dialog
@@ -20,6 +21,7 @@
       width="75%"
       style="dialog"
     >
+
     <question
     v-bind:userIdInfo='userIdInfo'
     v-if='dialog && showGame'
@@ -27,10 +29,13 @@
     v-bind:encrypted='encrypted'
     v-bind:mediaInfo='mediaInfo'
     v-bind:dev='dev'
+    v-bind:privateId='privateId'
     v-bind:genInfo='genGameInfo'
     v-on:exit="exitGame"/>
+
     <rules v-if='dialog && showRules'
     v-on:exit='exitRules'/>
+
     </v-dialog>
   </div>
 </template>
@@ -40,6 +45,10 @@ import home from '@/components/gameShow/home.vue'
 import question from '@/components/gameShow/question.vue'
 import gameInfo from '@/assets/gameShow/gameInfo.js'
 import rules from '@/components/gameShow/rules.vue'
+import { secretbox, randomBytes } from 'tweetnacl'
+import {
+  encodeBase64
+} from 'tweetnacl-util'
 import { mapActions, mapState } from 'vuex'
 export default {
   components: {
@@ -63,7 +72,7 @@ export default {
   }),
   computed: {
     ...mapState('gameInfo', [
-      'gameInfo'
+      'gameInfo', 'privateId'
     ]),
     genGameInfo: function () {
       return gameInfo.default
@@ -71,7 +80,7 @@ export default {
   },
   methods: {
     ...mapActions('gameInfo',
-      ['updateInfo']
+      ['updateInfo', 'updatePrivateId']
     ),
     setQuestions: async function () {
       if (this.encrypted) {
@@ -211,9 +220,17 @@ export default {
       this.userIdInfo.emoji = infoObject.emoji
       this.userIdInfo.adjective = infoObject.adjective
       this.updateInfo({ emoji: infoObject.emoji, adjective: infoObject.adjective })
+    },
+    handlePrivateId: function () {
+      if (this.privateId === '') {
+        const generateKey = () => encodeBase64(randomBytes(secretbox.keyLength))
+        const key = generateKey()
+        this.updatePrivateId(key)
+      }
     }
   },
   async beforeMount () {
+    this.handlePrivateId()
     await this.setupInfo()
     await this.setQuestions()
     await this.setMediaInfo()

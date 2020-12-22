@@ -1,7 +1,8 @@
 export const gameInfo = {
   namespaced: true,
   state: {
-    gameInfo: ''
+    gameInfo: '',
+    privateId: ''
   },
   mutations: {
     updateInfo (state, info) {
@@ -14,11 +15,17 @@ export const gameInfo = {
       if (info.address) {
         state.gameInfo.address = info.address
       }
+    },
+    updatePrivateId (state, privateId) {
+      state.privateId = privateId
     }
   },
   actions: {
     updateInfo (context, payload) {
       context.commit('updateInfo', payload)
+    },
+    updatePrivateId (context, payload) {
+      context.commit('updatePrivateId', payload)
     }
   }
 }

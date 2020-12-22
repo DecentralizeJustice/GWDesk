@@ -5,6 +5,15 @@
       Question #{{questionNumber}}
       </v-card-title>
       <v-divider/>
+      <v-row align-content='center' justify='center'>
+        <v-col class="" cols="6" >
+      <div>
+      <v-alert type="error" v-if='toolate'>
+        Answered Too Late
+      </v-alert>
+      </div>
+    </v-col>
+      </v-row>
       <audiopPlayer
       class="ma-4"
       v-if='explanation && (!encrypted || password )'
@@ -79,6 +88,7 @@ export default {
     audiopPlayer
   },
   data: () => ({
+    toolate: false,
     choiceLocked: false,
     selectedItem: undefined,
     options: [],
@@ -138,7 +148,7 @@ export default {
           this.$emit('eliminated')
           return
         }
-        console.log(' your right')
+        console.log('your right')
         const startTime = this.questionStartTime
         const timetoAnswer = this.timetoAnswer
         const questionNumber = this.questionNumber
@@ -146,6 +156,7 @@ export default {
         const submitByTime = startTime + timetoAnswer + ((questionNumber - 1) * questionLength)
         if (this.submittedTime > submitByTime) {
           console.log('too late')
+          this.toolate = true
           this.$emit('eliminated')
           return
         }
@@ -278,6 +289,7 @@ export default {
       this.getPassword()
     },
     questionNumber: async function () {
+      this.toolate = false
       this.submittedTime = 30000000000000000000
       this.selectedItem = undefined
       this.choiceLocked = false

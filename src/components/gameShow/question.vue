@@ -9,6 +9,7 @@
     v-bind:questions='questions'
     v-bind:userIdInfo='userIdInfo'
     v-bind:eliminated='eliminated'
+    v-bind:privateId='privateId'
     v-on:eliminated='eliminated = true'/>
     <v-divider/>
     <v-card-actions>
@@ -52,7 +53,7 @@ import quiz from '@/components/gameShow/quiz.vue'
 import outro from '@/components/gameShow/outro.vue'
 import humanVerif from '@/components/gameShow/humanVerification.vue'
 export default {
-  props: ['genInfo', 'mediaInfo', 'encrypted', 'questions', 'userIdInfo'],
+  props: ['genInfo', 'mediaInfo', 'encrypted', 'questions', 'userIdInfo', 'privateId'],
   components: {
     intro,
     loading,

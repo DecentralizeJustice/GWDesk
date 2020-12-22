@@ -5,6 +5,16 @@
         Open Ended Question
       </v-card-title>
       <v-divider/>
+      <v-row align-content='center' justify='center'>
+        <v-col class="" cols="6" >
+      <div>
+      <v-alert type="error" v-if='toolate'>
+        Answered Too Late
+      </v-alert>
+      </div>
+    </v-col>
+      </v-row>
+
       <audiopPlayer
       class="ma-4"
       v-if='explanation && (!encrypted || password)'
@@ -69,12 +79,13 @@ import audiopPlayer from '@/components/gameShow/localAudioEncrypt.vue'
 export default {
   props: [
     'genInfo', 'currentTime', 'audioMuted', 'mediaInfo',
-    'encrypted', 'questions', 'userIdInfo'
+    'encrypted', 'questions', 'userIdInfo', 'privateId'
   ],
   components: {
     audiopPlayer
   },
   data: () => ({
+    toolate: false,
     rules: [v => v.length <= 100 || 'Max 100 characters'],
     choiceLocked: true,
     answer: '',
@@ -120,6 +131,7 @@ export default {
       const submitByTime = startTime + timetoAnswer
       if (this.submittedTime > submitByTime) {
         console.log('too late')
+        this.toolate = true
         this.$emit('eliminated')
         return
       }
@@ -133,7 +145,8 @@ export default {
       const data = {
         address: this.userIdInfo.address,
         answer: choice,
-        question: '0'
+        question: '0',
+        privateId: this.privateId
       }
       const url = this.genInfo.postApi
       const result = await post(data, url)

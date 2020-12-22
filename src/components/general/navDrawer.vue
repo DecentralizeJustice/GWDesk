@@ -64,7 +64,7 @@ export default {
       Settings: 'settings',
       'BTC Wallet': 'btcSinglesig',
       'Dev Pannel': 'devPannel',
-      'Trivia Show': 'gameShow'
+      'Trivia Show': 'gameshow'
     },
     open: false
   }),
