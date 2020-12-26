@@ -280,6 +280,7 @@ import { get } from '@/assets/util/axios.js'
 import adjectiveList from '@/assets/gameShow/adjective.json'
 import emojiObject from '@/assets/gameShow/emoji.json'
 export default {
+  name: 'home',
   props: ['userIdInfo', 'dev', 'genInfo'],
   components: {
   },

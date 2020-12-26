@@ -30,6 +30,7 @@
 import audio1 from '@/components/gameShow/localAudioEncrypt.vue'
 import { get } from '@/assets/util/axios.js'
 export default {
+  name: 'intro',
   props: ['genInfo', 'currentTime', 'audioMuted', 'mediaInfo', 'encrypted'],
   components: {
     audio1

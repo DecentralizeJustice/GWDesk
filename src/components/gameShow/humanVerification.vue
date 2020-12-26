@@ -78,6 +78,7 @@ import {
 } from 'tweetnacl-util'
 import audiopPlayer from '@/components/gameShow/localAudioEncrypt.vue'
 export default {
+  name: 'hv',
   props: [
     'genInfo', 'currentTime', 'audioMuted', 'mediaInfo',
     'encrypted', 'questions', 'userIdInfo', 'privateId'

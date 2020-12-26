@@ -1,6 +1,6 @@
 .DS_Store
 /src/assets/gameShow/files/
-/src/assets/gameShow/files/questions.json
+/src/assets/gameShow/files/
 node_modules
 /dist
 /build

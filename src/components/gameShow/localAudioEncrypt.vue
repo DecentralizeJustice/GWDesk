@@ -19,7 +19,7 @@ import {
   decodeBase64
 } from 'tweetnacl-util'
 export default {
-  name: 'videoPlayer',
+  name: 'encryptedvideoPlayer',
   components: {
   },
   props: ['audioMuted', 'audioFiles', 'encrypted', 'password', 'mediaInfo'],

@@ -53,6 +53,7 @@ import quiz from '@/components/gameShow/quiz.vue'
 import outro from '@/components/gameShow/outro.vue'
 import humanVerif from '@/components/gameShow/humanVerification.vue'
 export default {
+  name: 'question',
   props: ['genInfo', 'mediaInfo', 'encrypted', 'questions', 'userIdInfo', 'privateId'],
   components: {
     intro,

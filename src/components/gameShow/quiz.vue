@@ -80,6 +80,7 @@ import {
 import gameMusic from '@/components/gameShow/gameShowMusic.vue'
 import audiopPlayer from '@/components/gameShow/localAudioEncrypt.vue'
 export default {
+  name: 'quiz',
   props: [
     'genInfo', 'currentTime', 'audioMuted', 'mediaInfo',
     'encrypted', 'questions', 'userIdInfo', 'eliminated'
@@ -263,7 +264,7 @@ export default {
           if (this.currentTime > proposedTime - explanationTime) {
             explanation = true
             const topFract = proposedTime - this.currentTime
-            const bottomFract = this.timetoAnswer
+            const bottomFract = explanationTime
             progress = 100 - ((topFract / bottomFract) * 100)
             if (this.totalquestions === i) {
               last = true

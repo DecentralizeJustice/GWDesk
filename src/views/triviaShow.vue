@@ -51,6 +51,7 @@ import {
 } from 'tweetnacl-util'
 import { mapActions, mapState } from 'vuex'
 export default {
+  name: 'triviaShow',
   components: {
     home,
     question,
@@ -149,8 +150,8 @@ export default {
       const introImg = info.default.intro.img
       const imgArray = []
       for (var i = 0; i < introImg.length; i++) {
-        const audio = await import('../assets/gameShow' + info.default.intro.img[i].substring(1))
-        imgArray.push(audio.default)
+        const img = await import('../assets/gameShow' + info.default.intro.img[i].substring(1))
+        imgArray.push(img.default)
       }
       this.mediaInfo.intro = {}
       this.mediaInfo.intro.audio = introAudio.default
