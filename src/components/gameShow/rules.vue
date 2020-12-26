@@ -5,12 +5,12 @@
     </v-card-title>
     <v-divider/>
     <v-tabs vertical>
-      <v-tab>
+      <!-- <v-tab>
         <v-icon left>
           mdi-video
         </v-icon>
         Video
-      </v-tab>
+      </v-tab> -->
       <v-tab>
         <v-icon left>
           mdi-file-outline
@@ -46,7 +46,7 @@
           </v-card-text>
         </v-card>
       </v-tab-item>
-      <v-tab-item>
+      <!-- <v-tab-item>
         <v-card flat>
           <v-card-text>
             <p>
@@ -62,7 +62,7 @@
             </p>
           </v-card-text>
         </v-card>
-      </v-tab-item>
+      </v-tab-item> -->
       <v-tab-item>
         <v-card flat>
           <v-card-text>
