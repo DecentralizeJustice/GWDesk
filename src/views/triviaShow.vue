@@ -58,8 +58,8 @@ export default {
   },
   data: () => ({
     dev: false,
+    encrypted: false,
     showGame: false,
-    encrypted: true,
     questions: {},
     mediaInfo: {},
     dialog: false,

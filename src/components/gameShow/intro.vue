@@ -14,7 +14,7 @@
     v-if='password'/>
     <v-row no-gutters align-content='center' justify='center' class="mt-4">
       <v-col cols='6' class="mb-5">
-      <div class="mb-3 text-h6">First Question In:</div>
+      <div class="mb-3 text-h6">Human Verfication In:</div>
       <v-progress-linear
         color="light-blue"
         height="10"
