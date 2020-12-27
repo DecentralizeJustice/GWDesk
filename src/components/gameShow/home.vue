@@ -108,7 +108,7 @@
                   justify="center"
                 >
                   <v-btn
-                  v-if='!settingAddress && addressValue.length ===0'
+                  v-if='!settingAddress && (addressValue !== undefined && addressValue.length === 0)'
                   @click='setAddress'
                     color="warning"
                     class="ma-2"
@@ -116,7 +116,7 @@
                     Set Address
                   </v-btn>
                   <v-btn
-                  v-if='!settingAddress && addressValue.length !==0'
+                  v-if='!settingAddress && (addressValue !== undefined && addressValue.length !== 0)'
                   @click='setAddress'
                     color="red"
                     class="ma-2"
@@ -353,7 +353,10 @@ export default {
     allInfoSet: function () {
       const infoReady =
       (this.userIdInfo.adjective !== '' && this.userIdInfo.emoji !== '' && this.userIdInfo.address !== '')
-      if (infoReady) {
+      const infoNotUndefined =
+      (this.userIdInfo.adjective !== undefined && this.userIdInfo.emoji !== undefined && this.userIdInfo.address !== undefined)
+
+      if (infoReady && infoNotUndefined) {
         return true
       }
       return false
@@ -437,8 +440,11 @@ export default {
       this.$emit('updateUserIDInfo', { adjective: adjectiveCap, emoji })
     },
     setupInfo: function () {
-      this.addressValue = this.userIdInfo.address
-      if (this.userIdInfo.adjective === '' || this.userIdInfo.emoji === '') {
+      if (this.userIdInfo !== undefined && this.userIdInfo.address !== undefined) {
+        this.addressValue = this.userIdInfo.address
+      }
+      if (this.userIdInfo === undefined || this.userIdInfo.adjective === undefined ||
+        this.userIdInfo.adjective === '') {
         this.generateNewname()
       }
     },
@@ -458,10 +464,8 @@ export default {
       }
     }
   },
-  async beforeMount () {
-    await this.setupInfo()
-  },
   async mounted () {
+    await this.setupInfo()
     this.getPassword()
     this.countDownTimer()
   },

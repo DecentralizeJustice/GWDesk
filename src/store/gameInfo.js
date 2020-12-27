@@ -1,7 +1,7 @@
 export const gameInfo = {
   namespaced: true,
   state: {
-    gameInfo: '',
+    gameInfo: {},
     privateId: ''
   },
   mutations: {
