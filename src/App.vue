@@ -120,6 +120,7 @@ export default {
         this.circuitEstablishedb()
         await this.sleep(this.waitTime * 1000)
         await this.loop()
+        console.log('lopping')
       }
     },
     dormantb: function () {
