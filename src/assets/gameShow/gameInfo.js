@@ -1,6 +1,6 @@
 const info = {
   subject: 'Bitcoin',
-  startEpochTime: '1609088951',
+  startEpochTime: '1609088713',
   crypto: 'Monero (XMR)',
   amountUSD: '20',
   numberOfQuestions: '10',
@@ -9,7 +9,7 @@ const info = {
   waitTime: '0.5',
   humanVerificationTime: '77',
   humanVerificationTimeToAnswer: '45',
-  getApi: 'http://localhost:8086/',
+  getApi: 'https://help-935e0cci.uc.gateway.dev/',
   postApi: 'https://postanswer-935e0cci.uc.gateway.dev/',
   intro: {
     length: '120'
