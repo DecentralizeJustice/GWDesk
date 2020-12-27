@@ -37,7 +37,7 @@
     </v-col>
     <v-col
       cols="10"
-      v-if='!disclaimerRead'
+      v-if='!disclaimerRead && !loading'
     >
     <v-card class="grey darken-3" >
       <v-card-title class="display-2 justify-center">
@@ -79,17 +79,30 @@
       <v-divider/>
     </v-card>
     </v-col>
+    <v-col v-if='!disclaimerRead && loading'>Loading</v-col>
   </v-row>
 </template>
 
 <script>
 import hardwareWallet from '@/components/settings/main.vue'
 import { mapGetters } from 'vuex'
+import {
+  hardStopDeamon, permissionElectrum, unpackElectrum
+} from '@/assets/util/btc/electrum/general.js'
+import {
+  unpackBinary
+} from '@/assets/util/hwi/general.js'
+import {
+  unpackMainBinary
+} from '@/assets/util/trezorCli/general.js'
+const timeout = ms => new Promise(resolve => setTimeout(resolve, ms))
 export default {
   components: {
     hardwareWallet
   },
   data: () => ({
+    alreadyCopied: false,
+    loading: false,
     keyInfo: 1,
     disclaimerRead: false,
     lessonInfo: { name: 'lessons', params: { lessonCategory: 'Wallet', lesson: 0 } }
@@ -103,11 +116,25 @@ export default {
     takeLesson: function () {
       this.$router.push(this.lessonInfo)
     },
-    readDiscaimer: function () {
+    readDiscaimer: async function () {
+      this.loading = true
+      await this.copyBinary()
+      this.loading = false
       this.disclaimerRead = true
     },
     refresh: function () {
       this.keyInfo = this.keyInfo * -1
+    },
+    copyBinary: async function () {
+      if (this.singleSigHardwareWalletInfo.vpub !== '') {
+        await unpackElectrum()
+        await timeout(1000)
+        await unpackBinary()
+        await timeout(1000)
+        await unpackMainBinary()
+        await permissionElectrum()
+        await hardStopDeamon()
+      }
     }
   },
   async mounted () {

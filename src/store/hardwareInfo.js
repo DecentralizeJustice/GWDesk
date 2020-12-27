@@ -31,7 +31,6 @@ export const hardwareInfo = {
     updateHardwareWalletInfo (context, payload) {
       context.commit('updateHardwareWalletInfo', payload)
     }
-
   },
   getters: {
     singleSigHardwareWalletInfo: state => {
