@@ -18,7 +18,7 @@
       persistent
       overlay-opacity='1'
       overlay-color='#2A3B4D'
-      width="90%"
+      width="80%"
       style="dialog"
     >
 
@@ -31,7 +31,8 @@
     v-bind:dev='dev'
     v-bind:privateId='privateId'
     v-bind:genInfo='genGameInfo'
-    v-on:exit="exitGame"/>
+    v-on:exit="exitGame"
+    style='overflow:hidden;'/>
 
     <rules v-if='dialog && showRules'
     v-on:exit='exitRules'/>
