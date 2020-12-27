@@ -1,11 +1,10 @@
 <template>
-  <v-row no-gutters align-content='center' justify='center'>
     <v-col
       cols="10"
     >
     <v-card class="" >
       <v-card-title class="headline justify-center">
-      Crypto Trivia GameShow
+      Crypto Trivia Show
       </v-card-title>
       <v-divider></v-divider>
       <v-row no-gutters align-content='center' justify='space-around' class="pa-5">
@@ -40,6 +39,16 @@
              </v-row>
             </div>
             <div class="mt-2" style="font-size: large;">
+              Trivia Subject: {{subject}}
+              <v-row no-gutters justify-content='center' >
+               <v-col cols='2' offset='5' class="justify-center text-center">
+                 <v-icon x-large color="blue lighten-1">
+                   mdi-library-books
+                 </v-icon>
+               </v-col>
+             </v-row>
+            </div>
+            <div class="mt-2" style="font-size: large;">
               Payment Crypto: {{crypto}}
               <v-row no-gutters justify-content='center' >
                <v-col cols='2' offset='5' class="justify-center text-center">
@@ -49,6 +58,18 @@
                </v-col>
              </v-row>
             </div>
+            <v-row
+              align="center"
+              justify="center"
+            >
+              <v-btn
+              @click.stop='showInfo'
+                color="orange accent-4"
+                class="mt-4"
+              >
+                Show More Info
+              </v-btn>
+            </v-row>
           </v-card-text>
           </v-col>
         </v-card>
@@ -58,11 +79,10 @@
         >
         <v-card class="" color='grey darken-2'>
           <v-card-title class="headline justify-center">
-            User Info
+            Your Info
           </v-card-title>
           <v-divider/>
           <v-col  cols='12'>
-            <v-card-text style="text-center">
               <v-row justify="space-around" align="center">
                 <v-col cols='5'>
               <div class="text-center text-h6" >
@@ -88,7 +108,7 @@
                   justify="center"
                 >
                   <v-btn
-                  v-if='!settingAddress && addressValue.length ===0'
+                  v-if='!settingAddress && addressReady'
                   @click='setAddress'
                     color="warning"
                     class="ma-2"
@@ -96,7 +116,7 @@
                     Set Address
                   </v-btn>
                   <v-btn
-                  v-if='!settingAddress && addressValue.length !==0'
+                  v-if='!settingAddress && !addressReady'
                   @click='setAddress'
                     color="red"
                     class="ma-2"
@@ -114,13 +134,12 @@
                 </v-row>
               </div>
             </v-col>
-            <v-col cols='6'>
-            <div class="text-center text-h6">
-              Player Name:
-              <div class="text-center mt-5 text-h5">
+            <v-col cols='6' class="text-center text-h6">
+              Display Name:
+              <div class="text-center mt-3 text-h5">
                 {{userIdInfo.adjective}}
               </div>
-              <div class="text-center mt-5 text-h2">
+              <div class="text-center mt-3 text-h2">
                 {{userIdInfo.emoji}}
               </div>
               <v-row
@@ -135,7 +154,6 @@
                   Generate New Name
                 </v-btn>
               </v-row>
-            </div>
             </v-col>
               </v-row>
               <div class="mt-2" style="font-size: large;">
@@ -150,11 +168,25 @@
                     </v-alert>
                  </v-col>
                  <v-col cols='12'  class="" v-if='!allInfoSet'>
-                   <v-progress-linear color='green' :value="progress"></v-progress-linear>
+                   <v-alert
+                      dense
+                      border="left"
+                      type="warning"
+                      class="text-center"
+                    >
+                      <div class="text-center text-h6">You need to enter your address</div>
+                      <v-btn
+                      @click='goToRoute'
+                        color="primary"
+                        class="mt-4"
+                      >
+                        How To Get Monero Address
+                      </v-btn>
+                    </v-alert>
+                   <!-- <v-progress-linear color='green' :value="progress"></v-progress-linear> -->
                  </v-col>
                </v-row>
               </div>
-            </v-card-text>
           </v-col>
         </v-card>
         </v-col>
@@ -217,7 +249,7 @@
           >
             <v-row align="center">
               <v-col class="text-left">
-                Get Here Early. We start right on time.
+                Get Here Early, we start right on time.
               </v-col>
             </v-row>
           </v-alert>
@@ -227,30 +259,41 @@
       <v-row
         align="center"
         justify="center"
-        v-if='ready'
+        v-if='ready && !showOver'
       >
         <v-btn
-        @click='start'
+          @click.stop='start'
           color="primary"
           class="mb-5"
         >
           Start!!!
         </v-btn>
       </v-row>
+      <v-divider/>
+      <v-card-actions>
+      <v-btn
+      @click.stop='showInfo'
+        color="orange"
+        text
+      >
+        <v-icon>mdi-help</v-icon>
+      </v-btn>
+    </v-card-actions>
     </v-card>
     </v-col>
-  </v-row>
 </template>
 
 <script>
+import { get } from '@/assets/util/axios.js'
 import adjectiveList from '@/assets/gameShow/adjective.json'
 import emojiObject from '@/assets/gameShow/emoji.json'
 export default {
-  props: ['amountUSD', 'goalEpochTime', 'crypto', 'userIdInfo'],
+  name: 'home',
+  props: ['userIdInfo', 'dev', 'genInfo'],
   components: {
   },
   data: () => ({
-    difference: 86400000,
+    difference: 3000000,
     settingAddress: false,
     addressValue: ''
     // lessons: [
@@ -262,6 +305,40 @@ export default {
     // ]
   }),
   computed: {
+    addressReady: function () {
+      console.log(this.addressValue)
+      return this.addressValue.length === 0
+    },
+    subject: function () {
+      return this.genInfo.subject
+    },
+    amountUSD: function () {
+      return this.genInfo.amountUSD
+    },
+    crypto: function () {
+      return this.genInfo.crypto
+    },
+    introLength: function () {
+      return parseInt(this.genInfo.intro.length) * 1000
+    },
+    outroLength: function () {
+      return parseInt(this.genInfo.outro.length) * 1000
+    },
+    allQuestionsLength: function () {
+      return (parseInt(this.genInfo.timeToAnswerGenQuestion) +
+       parseInt(this.genInfo.explantionTime)) *
+        1000 *
+        parseInt(this.genInfo.numberOfQuestions)
+    },
+    showOver: function functionName () {
+      if (this.currentTime > (this.startTime + this.introLength + this.allQuestionsLength + this.outroLength)) {
+        return true
+      }
+      return false
+    },
+    startTime: function () {
+      return parseInt(this.genInfo.startEpochTime) * 1000
+    },
     displayAddress: function () {
       if (this.userIdInfo.address === '') {
         return 'None Yet'
@@ -280,7 +357,10 @@ export default {
     allInfoSet: function () {
       const infoReady =
       (this.userIdInfo.adjective !== '' && this.userIdInfo.emoji !== '' && this.userIdInfo.address !== '')
-      if (infoReady) {
+      const infoNotUndefined =
+      (this.userIdInfo.adjective !== undefined && this.userIdInfo.emoji !== undefined && this.userIdInfo.address !== undefined)
+
+      if (infoReady && infoNotUndefined) {
         return true
       }
       return false
@@ -298,14 +378,14 @@ export default {
     ready: function () {
       const timeReady = (this.difference < 0)
       const infoReady = this.allInfoSet
-      if (timeReady && infoReady) {
+      if ((timeReady && infoReady) || this.dev) {
         return true
       } else {
         return false
       }
     },
     regularTime: function () {
-      const d = new Date(this.goalEpochTime)
+      const d = new Date(this.startTime)
       const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
       const month = months[d.getMonth()]
       const day = d.getDate()
@@ -323,12 +403,16 @@ export default {
     }
   },
   methods: {
+    showInfo () {
+      this.$emit('showRules')
+    },
     setAddress () {
       this.settingAddress = true
     },
     confirmAddress (address) {
       this.settingAddress = false
-      this.$emit('updateAddress', address)
+      const cleanAddress = address.replace(/\s+/g, '')
+      this.$emit('updateAddress', cleanAddress)
     },
     start () {
       this.$emit('readyToStart')
@@ -337,13 +421,13 @@ export default {
       if (this.difference > 0) {
         setTimeout(() => {
           const current = Date.now()
-          this.difference = this.goalEpochTime - current
+          this.difference = this.startTime - current
           this.countDownTimer()
         }, 1000)
       }
     },
-    goToRoute: function (routeInfo) {
-      this.$router.push(routeInfo)
+    goToRoute: function () {
+      this.$router.push({ name: 'lessons', params: { lessonCategory: 'Monero', lesson: 0 } })
     },
     getRandomIntInclusive: function (min, max) {
       min = Math.ceil(min)
@@ -358,21 +442,40 @@ export default {
       const emojiListLength = emojiList.length
       const emoji = emojiList[this.getRandomIntInclusive(0, emojiListLength - 1)]
       this.$emit('updateUserIDInfo', { adjective: adjectiveCap, emoji })
+    },
+    setupInfo: function () {
+      if (this.userIdInfo !== undefined && this.userIdInfo.address !== undefined) {
+        this.addressValue = this.userIdInfo.address
+      }
+      if (this.userIdInfo === undefined || this.userIdInfo.adjective === undefined ||
+        this.userIdInfo.adjective === '') {
+        this.generateNewname()
+      }
+    },
+    getPassword: async function () {
+      const sendTime = Date.now()
+      const url = this.genInfo.getApi
+      const result = await get(url)
+      const serverTime = result.data.time
+      console.log('lag:', serverTime - sendTime, ' ms')
     }
   },
   watch: {
     userIdInfo: {
       deep: true,
       handler: function () {
-        this.addressValue = this.userIdInfo.address
+        if (this.userIdInfo.address !== undefined) {
+          this.addressValue = this.userIdInfo.address
+        }
       }
     }
   },
   async mounted () {
+    await this.setupInfo()
+    this.getPassword()
     this.countDownTimer()
-    if (this.userIdInfo.adjective === '' || this.userIdInfo.emoji === '') {
-      this.generateNewname()
-    }
+  },
+  beforeDestroy () {
   }
 }
 </script>

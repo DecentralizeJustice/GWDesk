@@ -11,7 +11,7 @@ const questions = [
       ans: 3
     },
     {
-      q: 'A cryptocurrency should be specilzied.',
+      q: 'A cryptocurrency should be specialized.',
       opt: [
         'True',
         'False'

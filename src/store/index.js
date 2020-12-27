@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 import VuexPersistence from 'vuex-persist'
 import { bitcoinInfo } from '@/store/bitcoinInfo.js'
 import { hardwareInfo } from '@/store/hardwareInfo.js'
-// import { userConstants } from './userConstants.js'
+import { gameInfo } from './gameInfo.js'
 // import { stageInfo } from './stageInfo.js'
 // import { unlockedLessons } from './unlockedParts.js'
 const FileStore = require('electron-store')
@@ -25,7 +25,8 @@ function getState (key, storage) {
 export default new Vuex.Store({
   modules: {
     bitcoinInfo,
-    hardwareInfo
+    hardwareInfo,
+    gameInfo
   },
   plugins: [vuexLocal.plugin]
 })
