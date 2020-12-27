@@ -87,10 +87,10 @@ export default {
       if (this.encrypted) {
         const info = await import('../assets/gameShow/output/encryptedQuestions.json')
         this.questions = info.questions
-        return
+        // return
       }
-      const info = await import('../assets/gameShow/files/questions.json')
-      this.questions = info.default
+      // const info = await import('../assets/gameShow/files/questions.json')
+      // this.questions = info.default
     },
     setMediaInfo: async function () {
       if (this.encrypted) {
@@ -100,13 +100,13 @@ export default {
         await this.encryptedSetIntro(mediaInfo, 'intro')
         await this.encryptedSetIntro(mediaInfo, 'outro')
         await this.encryptedQuestions(mediaInfo, parseInt(this.genGameInfo.numberOfQuestions))
-        return
+        // return
       }
-      const info = await import('../assets/gameShow/files/mediaInfo.json')
-      await this.plainTextSetHV(info)
-      await this.plainTextSetIntro(info)
-      await this.plainTextSetOutro(info)
-      await this.plainTextQuestions(info, parseInt(this.genGameInfo.numberOfQuestions))
+      // const info = await import('../assets/gameShow/files/mediaInfo.json')
+      // await this.plainTextSetHV(info)
+      // await this.plainTextSetIntro(info)
+      // await this.plainTextSetOutro(info)
+      // await this.plainTextQuestions(info, parseInt(this.genGameInfo.numberOfQuestions))
     },
     encryptedSetHv: async function (mediaInfo) {
       this.mediaInfo.hv = {}
@@ -132,32 +132,32 @@ export default {
       this.mediaInfo[type].img = imgArray
       this.mediaInfo[type].slideTiming = mediaInfo[type].slideTiming
     },
-    plainTextSetHV: async function (info) {
-      const introAudio = await import('../assets/gameShow' + info.default.hv.audio.substring(1))
-      const hvImg = info.default.hv.img
-      const imgArray = []
-      for (var i = 0; i < hvImg.length; i++) {
-        const audio = await import('../assets/gameShow' + info.default.hv.img[i].substring(1))
-        imgArray.push(audio.default)
-      }
-      this.mediaInfo.hv = {}
-      this.mediaInfo.hv.audio = introAudio.default
-      this.mediaInfo.hv.imgs = imgArray
-      this.mediaInfo.hv.slideTiming = info.hv.slideTiming
-    },
-    plainTextSetIntro: async function (info) {
-      const introAudio = await import('../assets/gameShow' + info.default.intro.audio.substring(1))
-      const introImg = info.default.intro.img
-      const imgArray = []
-      for (var i = 0; i < introImg.length; i++) {
-        const img = await import('../assets/gameShow' + info.default.intro.img[i].substring(1))
-        imgArray.push(img.default)
-      }
-      this.mediaInfo.intro = {}
-      this.mediaInfo.intro.audio = introAudio.default
-      this.mediaInfo.intro.img = imgArray
-      this.mediaInfo.intro.slideTiming = info.intro.slideTiming
-    },
+    // plainTextSetHV: async function (info) {
+    //   const introAudio = await import('../assets/gameShow' + info.default.hv.audio.substring(1))
+    //   const hvImg = info.default.hv.img
+    //   const imgArray = []
+    //   for (var i = 0; i < hvImg.length; i++) {
+    //     const audio = await import('../assets/gameShow' + info.default.hv.img[i].substring(1))
+    //     imgArray.push(audio.default)
+    //   }
+    //   this.mediaInfo.hv = {}
+    //   this.mediaInfo.hv.audio = introAudio.default
+    //   this.mediaInfo.hv.imgs = imgArray
+    //   this.mediaInfo.hv.slideTiming = info.hv.slideTiming
+    // },
+    // plainTextSetIntro: async function (info) {
+    //   const introAudio = await import('../assets/gameShow' + info.default.intro.audio.substring(1))
+    //   const introImg = info.default.intro.img
+    //   const imgArray = []
+    //   for (var i = 0; i < introImg.length; i++) {
+    //     const img = await import('../assets/gameShow' + info.default.intro.img[i].substring(1))
+    //     imgArray.push(img.default)
+    //   }
+    //   this.mediaInfo.intro = {}
+    //   this.mediaInfo.intro.audio = introAudio.default
+    //   this.mediaInfo.intro.img = imgArray
+    //   this.mediaInfo.intro.slideTiming = info.intro.slideTiming
+    // },
     encryptedQuestions: async function (info, numberOfQuestions) {
       for (var i = 1; i < numberOfQuestions + 1; i++) {
         const audio = await import(`../assets/gameShow/output/questionMediaAudio${i}.json`)
@@ -172,33 +172,33 @@ export default {
         this.mediaInfo[i].slideTiming = info[i].slideTiming
       }
     },
-    plainTextQuestions: async function (info, numberOfQuestions) {
-      for (var i = 1; i < numberOfQuestions + 1; i++) {
-        const audio = await import('../assets/gameShow' + info.default[i].audio.substring(1))
-        const imgArray = []
-        for (var y = 0; y < info.default[i].img.length; y++) {
-          const img = await import('../assets/gameShow' + info.default[i].img[y].substring(1))
-          imgArray.push(img.default)
-        }
-        this.mediaInfo[i] = {}
-        this.mediaInfo[i].audio = audio.default
-        this.mediaInfo[i].imgs = imgArray
-        this.mediaInfo[i].slideTiming = info[i].slideTiming
-      }
-    },
-    plainTextSetOutro: async function (info) {
-      const outroAudio = await import('../assets/gameShow' + info.default.outro.audio.substring(1))
-      const outroImg = info.default.outro.img
-      const imgArray = []
-      for (var i = 0; i < outroImg.length; i++) {
-        const audio = await import('../assets/gameShow' + info.default.outro.img[i].substring(1))
-        imgArray.push(audio.default)
-      }
-      this.mediaInfo.outro = {}
-      this.mediaInfo.outro.audio = outroAudio.default
-      this.mediaInfo.outro.img = imgArray
-      this.mediaInfo.outro.slideTiming = info.outro.slideTiming
-    },
+    // plainTextQuestions: async function (info, numberOfQuestions) {
+    //   for (var i = 1; i < numberOfQuestions + 1; i++) {
+    //     const audio = await import('../assets/gameShow' + info.default[i].audio.substring(1))
+    //     const imgArray = []
+    //     for (var y = 0; y < info.default[i].img.length; y++) {
+    //       const img = await import('../assets/gameShow' + info.default[i].img[y].substring(1))
+    //       imgArray.push(img.default)
+    //     }
+    //     this.mediaInfo[i] = {}
+    //     this.mediaInfo[i].audio = audio.default
+    //     this.mediaInfo[i].imgs = imgArray
+    //     this.mediaInfo[i].slideTiming = info[i].slideTiming
+    //   }
+    // },
+    // plainTextSetOutro: async function (info) {
+    //   const outroAudio = await import('../assets/gameShow' + info.default.outro.audio.substring(1))
+    //   const outroImg = info.default.outro.img
+    //   const imgArray = []
+    //   for (var i = 0; i < outroImg.length; i++) {
+    //     const audio = await import('../assets/gameShow' + info.default.outro.img[i].substring(1))
+    //     imgArray.push(audio.default)
+    //   }
+    //   this.mediaInfo.outro = {}
+    //   this.mediaInfo.outro.audio = outroAudio.default
+    //   this.mediaInfo.outro.img = imgArray
+    //   this.mediaInfo.outro.slideTiming = info.outro.slideTiming
+    // },
     setupInfo: function () {
       this.userIdInfo.address = this.gameInfo.address
       this.userIdInfo.adjective = this.gameInfo.adjective
