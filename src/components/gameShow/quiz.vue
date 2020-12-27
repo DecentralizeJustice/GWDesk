@@ -1,6 +1,5 @@
 <template>
   <div>
-    <div>
       <v-card-title class="headline justify-center">
       Question #{{questionNumber}}
       </v-card-title>
@@ -67,7 +66,6 @@
         </v-col>
       </v-row>
     </div>
-  </div>
 </template>
 
 <script>

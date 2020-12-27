@@ -18,7 +18,7 @@
       persistent
       overlay-opacity='1'
       overlay-color='#2A3B4D'
-      width="75%"
+      width="90%"
       style="dialog"
     >
 
@@ -59,7 +59,7 @@ export default {
   },
   data: () => ({
     dev: false,
-    encrypted: false,
+    encrypted: true,
     showGame: false,
     questions: {},
     mediaInfo: {},

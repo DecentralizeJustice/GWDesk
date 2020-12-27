@@ -172,8 +172,16 @@
                       dense
                       border="left"
                       type="warning"
+                      class="text-center"
                     >
                       <div class="text-center text-h6">You need to enter your address</div>
+                      <v-btn
+                      @click='goToRoute'
+                        color="primary"
+                        class="mt-4"
+                      >
+                        How To Get Monero Address
+                      </v-btn>
                     </v-alert>
                    <!-- <v-progress-linear color='green' :value="progress"></v-progress-linear> -->
                  </v-col>
@@ -411,8 +419,8 @@ export default {
         }, 1000)
       }
     },
-    goToRoute: function (routeInfo) {
-      this.$router.push(routeInfo)
+    goToRoute: function () {
+      this.$router.push({ name: 'lessons', params: { lessonCategory: 'Monero', lesson: 0 } })
     },
     getRandomIntInclusive: function (min, max) {
       min = Math.ceil(min)
