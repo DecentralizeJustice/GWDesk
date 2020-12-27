@@ -108,7 +108,7 @@
                   justify="center"
                 >
                   <v-btn
-                  v-if='!settingAddress && (addressValue !== undefined && addressValue.length === 0)'
+                  v-if='!settingAddress && addressReady'
                   @click='setAddress'
                     color="warning"
                     class="ma-2"
@@ -116,7 +116,7 @@
                     Set Address
                   </v-btn>
                   <v-btn
-                  v-if='!settingAddress && (addressValue !== undefined && addressValue.length !== 0)'
+                  v-if='!settingAddress && !addressReady'
                   @click='setAddress'
                     color="red"
                     class="ma-2"
@@ -305,6 +305,10 @@ export default {
     // ]
   }),
   computed: {
+    addressReady: function () {
+      console.log(this.addressValue)
+      return this.addressValue.length === 0
+    },
     subject: function () {
       return this.genInfo.subject
     },
@@ -460,7 +464,9 @@ export default {
     userIdInfo: {
       deep: true,
       handler: function () {
-        this.addressValue = this.userIdInfo.address
+        if (this.userIdInfo.address !== undefined) {
+          this.addressValue = this.userIdInfo.address
+        }
       }
     }
   },
