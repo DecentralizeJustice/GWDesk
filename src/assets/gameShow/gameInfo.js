@@ -1,6 +1,6 @@
 const info = {
   subject: 'Bitcoin',
-  startEpochTime: '1609088713',
+  startEpochTime: '1609203600',
   crypto: 'Monero (XMR)',
   amountUSD: '20',
   numberOfQuestions: '10',
