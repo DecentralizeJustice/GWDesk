@@ -1,3 +1,67 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:ed88a1119cd092f7e02f8dde163a0e1be710e0b60da5ad1f8d9ec7cd8f8c38ca
-size 2266
+{
+  "hv": {
+    "audio": "./files/hv/masterdHV.mp3",
+    "img": ["./files/hv/question.jpg"],
+    "slideTiming": ["0:00"]
+  },
+  "intro": {
+    "audio": "./files/intro/compressedIntro.mp3",
+    "img": ["./files/intro/intro1.jpg", "./files/intro/intro2.jpg"],
+    "slideTiming": ["1:05"]
+  },
+  "1": {
+    "audio": "./files/questionAudio/question1Mastered.mp3",
+    "img": ["./files/questionSlides/slide4.jpg", "./files/questionSlides/slide5.jpg"],
+    "slideTiming": ["0:19"]
+  },
+  "2": {
+    "audio": "./files/questionAudio/question2Mastered.mp3",
+    "img": ["./files/questionSlides/slide6.jpg", "./files/questionSlides/slide7.jpg"],
+    "slideTiming": ["0:15"]
+  },
+  "3": {
+    "audio": "./files/questionAudio/threeMastered.mp3",
+    "img": ["./files/questionSlides/slide8.jpg", "./files/questionSlides/slide9.jpg"],
+    "slideTiming": ["0:07"]
+  },
+  "4": {
+    "audio": "./files/questionAudio/question4Mastered.mp3",
+    "img": ["./files/questionSlides/slide10.jpg", "./files/questionSlides/slide11.jpg"],
+    "slideTiming": ["0:13"]
+  },
+  "5": {
+    "audio": "./files/questionAudio/5master.mp3",
+    "img": ["./files/questionSlides/slide12.jpg", "./files/questionSlides/slide13.jpg"],
+    "slideTiming": ["0:14"]
+  },
+  "6": {
+    "audio": "./files/questionAudio/6master.mp3",
+    "img": ["./files/questionSlides/slide14.jpg", "./files/questionSlides/slide15.jpg"],
+    "slideTiming": ["0:10"]
+  },
+  "7": {
+    "audio": "./files/questionAudio/7master.mp3",
+    "img": ["./files/questionSlides/slide16.jpg", "./files/questionSlides/slide17.jpg"],
+    "slideTiming": ["0:06"]
+  },
+  "8": {
+    "audio": "./files/questionAudio/8master.mp3",
+    "img": ["./files/questionSlides/slide18.jpg", "./files/questionSlides/slide19.jpg"],
+    "slideTiming": ["0:07"]
+  },
+  "9": {
+    "audio": "./files/questionAudio/9master.mp3",
+    "img": ["./files/questionSlides/slide20.jpg", "./files/questionSlides/slide21.jpg"],
+    "slideTiming": ["0:09"]
+  },
+  "10": {
+    "audio": "./files/questionAudio/10master.mp3",
+    "img": ["./files/questionSlides/slide22.jpg", "./files/questionSlides/slide23.jpg"],
+    "slideTiming": ["0:07"]
+  },
+  "outro": {
+    "audio": "./files/outro/outroMaster.mp3",
+    "img": ["./files/outro/outro.jpg"],
+    "slideTiming": ["0:00"]
+  }
+}
