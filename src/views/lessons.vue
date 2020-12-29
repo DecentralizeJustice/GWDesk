@@ -64,6 +64,7 @@ import introLandingInfo from '@/assets/landingInfo/intro.js'
 import btcLandingInfo from '@/assets/landingInfo/btc.js'
 import coinbaseInfo from '@/assets/landingInfo/coinbase.js'
 import exodusInfo from '@/assets/landingInfo/exodus.js'
+import moneroInfo from '@/assets/landingInfo/monero.js'
 import walletInfo from '@/assets/landingInfo/wallet.js'
 export default {
   mounted () {
@@ -83,7 +84,8 @@ export default {
       Bitcoin: btcLandingInfo,
       Coinbase: coinbaseInfo,
       Exodus: exodusInfo,
-      Wallet: walletInfo
+      Wallet: walletInfo,
+      Monero: moneroInfo
     },
     lessons: [
       { title: 'Introduction', icon: 'atom-variant', unlocked: true },
@@ -91,8 +93,8 @@ export default {
       { title: 'Coinbase', icon: 'book-information-variant', unlocked: true },
       { title: 'Exodus', icon: 'book-information-variant', unlocked: true },
       { title: 'Wallet', icon: 'lock', unlocked: true },
+      { title: 'Monero', icon: 'eye-off', unlocked: true },
       { title: 'General', icon: 'atom-variant', unlocked: false },
-      { title: 'Monero', icon: 'eye-off', unlocked: false },
       // { title: 'Dai', icon: 'lock', unlocked: 'false' },
       // { title: 'Pool Together', icon: 'lock', unlocked: 'false' },
       // { title: 'Ethereum', icon: 'lock', unlocked: 'false' },

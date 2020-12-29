@@ -1,9 +1,9 @@
 <template>
   <v-card>
-    <v-card-title class="headline justify-center">{{actualLessons.title}}</v-card-title>
+    <v-card-title class="headline justify-center">{{actualLessons.updatedLessons.title}}</v-card-title>
     <v-divider/>
     <v-row no-gutters>
-       <v-col :key="item.title" v-for="(item, index) in actualLessons.lessons" cols='4'>
+       <v-col :key="item.title" v-for="(item, index) in actualLessons.updatedLessons.lessons" cols='4'>
          <v-card
            class="ma-3" :color="cardColor(item.unlocked)"
          >
@@ -22,7 +22,7 @@
            <v-btn
              :color="iconColor(true)"
              :disabled='!item.unlocked'
-             @click="startLesson (index)"
+             @click="startLesson(index)"
            >
              {{buttonText(item.first)}}
            </v-btn>
@@ -60,22 +60,25 @@ export default {
   },
   computed: {
     actualLessons: function () {
+      const correctLessonIndexArray = []
       const updatedLessons = R.clone(this.landingInfo)
       updatedLessons.lessons = []
       for (var i = 0; i < this.landingInfo.lessons.length; i++) {
         if (this.landingInfo.lessons[i].comp.os) {
           if (this.landingInfo.lessons[i].comp.os === 'mac' && platform === 'darwin') {
             updatedLessons.lessons.push(this.landingInfo.lessons[i])
+            correctLessonIndexArray.push(i)
           }
           if (this.landingInfo.lessons[i].comp.os === 'windows' && platform === 'win32') {
             updatedLessons.lessons.push(this.landingInfo.lessons[i])
+            correctLessonIndexArray.push(i)
           }
         } else {
           updatedLessons.lessons.push(this.landingInfo.lessons[i])
+          correctLessonIndexArray.push(i)
         }
       }
-
-      return updatedLessons
+      return { updatedLessons, correctLessonIndexArray }
     }
   },
   mounted () {
@@ -106,7 +109,7 @@ export default {
       this.$emit('exit')
     },
     startLesson (index) {
-      this.$emit('changeLesson', index)
+      this.$emit('changeLesson', this.actualLessons.correctLessonIndexArray[index])
     }
   }
 }

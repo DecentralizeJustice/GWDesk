@@ -14,7 +14,7 @@ const questions = [
       q: "Cryptocurrencies don't help you avoid:",
       opt: [
         'unjust and inconsistent laws.',
-        'personnel responsibility.',
+        'personal responsibility.',
         'discrimination.',
         'unfair political influence and power.'
       ],

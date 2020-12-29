@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import back from '@/assets/photos/background.jpg'
 import navDrawer from '@/components/general/navDrawer.vue'
 import updateWindow from '@/components/general/update.vue'
@@ -64,15 +65,17 @@ export default {
   }),
   methods: {
     copyBinary: async function () {
-      await unpackElectrum()
-      await timeout(1000)
-      await unpackBinary()
-      await timeout(1000)
-      await unpackMainBinary()
-      await permissionElectrum()
+      if (this.singleSigHardwareWalletInfo.vpub !== '') {
+        await unpackElectrum()
+        await timeout(1000)
+        await unpackBinary()
+        await timeout(1000)
+        await unpackMainBinary()
+        await permissionElectrum()
+        await hardStopDeamon()
+      }
     },
     alsoStartup: async function () {
-      await hardStopDeamon()
       this.loop()
       if (process.env.NODE_ENV !== 'development') {
         ipcRenderer.send('CHECK_FOR_UPDATE_PENDING')
@@ -117,6 +120,7 @@ export default {
         this.circuitEstablishedb()
         await this.sleep(this.waitTime * 1000)
         await this.loop()
+        console.log('lopping')
       }
     },
     dormantb: function () {
@@ -178,7 +182,10 @@ export default {
         'background-repeat': 'no-repeat',
         'background-size': 'cover'
       }
-    }
+    },
+    ...mapGetters('hardwareInfo', [
+      'singleSigHardwareWalletInfo'
+    ])
   },
   async mounted () {
     this.copyBinary()
