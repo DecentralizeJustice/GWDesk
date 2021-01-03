@@ -48,7 +48,7 @@
 
 <script>
 import intro from '@/components/gameShow/intro.vue'
-import loading from '@/components/gameShow/loading.vue'
+import preGame from '@/components/gameShow/preGame.vue'
 import quiz from '@/components/gameShow/quiz.vue'
 import outro from '@/components/gameShow/outro.vue'
 import humanVerif from '@/components/gameShow/humanVerification.vue'
@@ -57,7 +57,7 @@ export default {
   props: ['genInfo', 'mediaInfo', 'encrypted', 'questions', 'userIdInfo', 'privateId'],
   components: {
     intro,
-    loading,
+    preGame,
     quiz,
     outro,
     humanVerif
@@ -83,7 +83,7 @@ export default {
     },
     currentComponent: function () {
       if (this.currentTime < this.startTime) {
-        return loading
+        return preGame
       }
       if (this.currentTime < (this.startTime + this.introLength)) {
         return intro
