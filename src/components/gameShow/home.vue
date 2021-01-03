@@ -287,6 +287,7 @@
 import { get } from '@/assets/util/axios.js'
 import adjectiveList from '@/assets/gameShow/adjective.json'
 import emojiObject from '@/assets/gameShow/emoji.json'
+import extraInfo from '@/assets/gameShow/gameInfo.js'
 export default {
   name: 'home',
   props: ['userIdInfo', 'dev', 'genInfo'],
@@ -295,7 +296,8 @@ export default {
   data: () => ({
     difference: 3000000,
     settingAddress: false,
-    addressValue: ''
+    addressValue: '',
+    oneHour: (3600 * 1000)
     // lessons: [
     //   {
     //     title: 'Why You Need A Hardware Wallet',
@@ -306,7 +308,6 @@ export default {
   }),
   computed: {
     addressReady: function () {
-      console.log(this.addressValue)
       return this.addressValue.length === 0
     },
     subject: function () {
@@ -331,7 +332,7 @@ export default {
         parseInt(this.genInfo.numberOfQuestions)
     },
     showOver: function functionName () {
-      if (this.currentTime > (this.startTime + this.introLength + this.allQuestionsLength + this.outroLength)) {
+      if (this.currentTime > (this.startTime + this.oneHour)) {
         return true
       }
       return false
@@ -367,6 +368,9 @@ export default {
     },
     tillShowTime: function () {
       const distance = this.difference
+      if (this.difference < 0) {
+
+      }
       const days = Math.floor(distance / (1000 * 60 * 60 * 24))
       const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
       const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
@@ -376,7 +380,8 @@ export default {
       }
     },
     ready: function () {
-      const timeReady = (this.difference < 0)
+      const pregameTime = 120000
+      const timeReady = (this.difference - pregameTime < 0) && (Date.now() < this.startTime + this.oneHour)
       const infoReady = this.allInfoSet
       if ((timeReady && infoReady) || this.dev) {
         return true
@@ -418,9 +423,15 @@ export default {
       this.$emit('readyToStart')
     },
     countDownTimer () {
-      if (this.difference > 0) {
+      const current = Date.now()
+      if (current > this.startTime + this.oneHour) {
         setTimeout(() => {
-          const current = Date.now()
+          const next = extraInfo.default.nextShow * 1000
+          this.difference = next - current
+          this.countDownTimer()
+        }, 1000)
+      } else {
+        setTimeout(() => {
           this.difference = this.startTime - current
           this.countDownTimer()
         }, 1000)
