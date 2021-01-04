@@ -3,7 +3,7 @@ const info = {
   startEpochTime: '1610672400',
   nextShow: '1611882000',
   crypto: 'Monero (XMR)',
-  amountUSD: '50',
+  amountUSD: '100',
   numberOfQuestions: '10',
   timeToAnswerGenQuestion: '10',
   explantionTime: '45',
