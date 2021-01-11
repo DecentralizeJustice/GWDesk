@@ -1,9 +1,10 @@
 const info = {
-  subject: 'Bitcoin',
+  subject: 'Bitcoin Security',
   startEpochTime: '1610672400',
   nextShow: '1611882000',
-  crypto: 'Monero (XMR)',
-  amountUSD: '40',
+  crypto: 'Bitcoin (BTC)',
+  amountUSD: '100',
+  maxAmountWin: '30',
   numberOfQuestions: '10',
   timeToAnswerGenQuestion: '10',
   explantionTime: '45',

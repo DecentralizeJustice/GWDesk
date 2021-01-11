@@ -81,7 +81,7 @@ export default {
   name: 'quiz',
   props: [
     'genInfo', 'currentTime', 'audioMuted', 'mediaInfo',
-    'encrypted', 'questions', 'userIdInfo', 'eliminated'
+    'encrypted', 'questions', 'userIdInfo', 'eliminated', 'type'
   ],
   components: {
     gameMusic,
@@ -173,7 +173,7 @@ export default {
     submitAnswer: async function (choice) {
       const url = this.genInfo.postApi
       const data = {
-        address: this.userIdInfo.address,
+        address: this.userIdInfo[this.type],
         answer: choice,
         question: this.questionNumber
       }

@@ -81,7 +81,7 @@ export default {
   name: 'hv',
   props: [
     'genInfo', 'currentTime', 'audioMuted', 'mediaInfo',
-    'encrypted', 'questions', 'userIdInfo', 'privateId'
+    'encrypted', 'questions', 'userIdInfo', 'privateId', 'type'
   ],
   components: {
     audiopPlayer
@@ -148,7 +148,9 @@ export default {
     },
     submitAnswer: async function (choice) {
       const data = {
-        address: this.userIdInfo.address,
+        address: this.userIdInfo[this.type],
+        emoji: this.userIdInfo.emoji,
+        adjective: this.userIdInfo.adjective,
         answer: choice,
         question: '0',
         privateId: this.privateId

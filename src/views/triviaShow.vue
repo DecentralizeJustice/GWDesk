@@ -3,7 +3,7 @@
     <v-row no-gutters align-content='center' justify='center'>
     <home
     v-if='!dialog'
-    v-bind:userIdInfo='userIdInfo'
+    v-bind:userIdInfo='gameInfo'
     v-bind:dev='dev'
     @readyToStart='readyToStart()'
     @showRules='showRulesFunc()'
@@ -11,6 +11,7 @@
     v-on:updateUserIDInfo='updateUserIDInfo'
     v-bind:genInfo='genGameInfo'
     v-bind:privateId='privateId'
+    v-bind:type='type'
     />
       </v-row>
     <v-dialog
@@ -23,7 +24,8 @@
     >
 
     <question
-    v-bind:userIdInfo='userIdInfo'
+    v-bind:type='type'
+    v-bind:userIdInfo='gameInfo'
     v-if='dialog && showGame'
     v-bind:questions='questions'
     v-bind:encrypted='encrypted'
@@ -65,12 +67,7 @@ export default {
     questions: {},
     mediaInfo: {},
     dialog: false,
-    showRules: false,
-    userIdInfo: {
-      address: '',
-      adjective: '',
-      emoji: ''
-    }
+    showRules: false
   }),
   computed: {
     ...mapState('gameInfo', [
@@ -78,6 +75,13 @@ export default {
     ]),
     genGameInfo: function () {
       return gameInfo.default
+    },
+    type: function () {
+      if (this.genGameInfo.crypto === 'Bitcoin (BTC)') {
+        return 'btcAddress'
+      }
+      // should not be hit
+      return 'btcAddress'
     }
   },
   methods: {
@@ -200,11 +204,6 @@ export default {
     //   this.mediaInfo.outro.img = imgArray
     //   this.mediaInfo.outro.slideTiming = info.outro.slideTiming
     // },
-    setupInfo: function () {
-      this.userIdInfo.address = this.gameInfo.address
-      this.userIdInfo.adjective = this.gameInfo.adjective
-      this.userIdInfo.emoji = this.gameInfo.emoji
-    },
     exitGame: function () {
       this.dialog = false
       this.showGame = false
@@ -222,12 +221,10 @@ export default {
       this.showRules = false
     },
     updateAddress: function (address) {
-      this.userIdInfo.address = address
-      this.updateInfo({ address })
+      this.gameInfo[this.type] = address
+      this.updateInfo({ type: address })
     },
     updateUserIDInfo: function (infoObject) {
-      this.userIdInfo.emoji = infoObject.emoji
-      this.userIdInfo.adjective = infoObject.adjective
       this.updateInfo({ emoji: infoObject.emoji, adjective: infoObject.adjective })
     },
     handlePrivateId: function () {
@@ -240,7 +237,6 @@ export default {
   },
   async beforeMount () {
     this.handlePrivateId()
-    await this.setupInfo()
     await this.setQuestions()
     await this.setMediaInfo()
   }
