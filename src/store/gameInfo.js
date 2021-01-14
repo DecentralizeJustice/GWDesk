@@ -1,7 +1,12 @@
 export const gameInfo = {
   namespaced: true,
   state: {
-    gameInfo: {},
+    gameInfo: {
+      adjective: '',
+      emoji: '',
+      moneroAddress: '',
+      btcAddress: ''
+    },
     privateId: ''
   },
   mutations: {
@@ -13,7 +18,10 @@ export const gameInfo = {
         state.gameInfo.emoji = info.emoji
       }
       if (info.address) {
-        state.gameInfo.address = info.address
+        state.gameInfo.moneroAddress = info.moneroAddress
+      }
+      if (info.address) {
+        state.gameInfo.btcAddress = info.btcAddress
       }
     },
     updatePrivateId (state, privateId) {

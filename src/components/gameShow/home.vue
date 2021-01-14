@@ -28,6 +28,16 @@
                </v-col>
              </v-row>
             </div>
+            <div class="" style="font-size: large;">
+              Max Win Amount: {{maxWinUSD}} USD
+              <v-row no-gutters justify-content='center' >
+               <v-col cols='2' offset='5' class="justify-center text-center">
+                 <v-icon x-large color="blue lighten-1">
+                   mdi-currency-usd-off
+                 </v-icon>
+               </v-col>
+             </v-row>
+            </div>
             <div class="mt-2" style="font-size: large;">
               Next Gameshow: {{regularTime}}
               <v-row no-gutters justify-content='center' >
@@ -86,7 +96,7 @@
               <v-row justify="space-around" align="center">
                 <v-col cols='5'>
               <div class="text-center text-h6" >
-                Monero Address:
+                {{addressText}} Address:
                 <div v-if='!settingAddress' class="text-left mt-1 text-body-1"
                 >
                   {{displayAddress}}
@@ -97,7 +107,7 @@
                   >
                     <v-textarea
                       v-model="addressValue"
-                      label="Monero Address"
+                      label="Bitcoin Address"
                       color="black"
                       auto-grow
                     ></v-textarea>
@@ -175,13 +185,13 @@
                       class="text-center"
                     >
                       <div class="text-center text-h6">You need to enter your address</div>
-                      <v-btn
+                      <!-- <v-btn
                       @click='goToRoute'
                         color="primary"
                         class="mt-4"
                       >
                         How To Get Monero Address
-                      </v-btn>
+                      </v-btn> -->
                     </v-alert>
                    <!-- <v-progress-linear color='green' :value="progress"></v-progress-linear> -->
                  </v-col>
@@ -290,7 +300,7 @@ import emojiObject from '@/assets/gameShow/emoji.json'
 import extraInfo from '@/assets/gameShow/gameInfo.js'
 export default {
   name: 'home',
-  props: ['userIdInfo', 'dev', 'genInfo'],
+  props: ['userIdInfo', 'dev', 'genInfo', 'type'],
   components: {
   },
   data: () => ({
@@ -307,6 +317,12 @@ export default {
     // ]
   }),
   computed: {
+    addressText: function () {
+      if (this.genInfo.crypto === 'Bitcoin (BTC)') {
+        return 'Bitcoin'
+      }
+      return 'NaN'
+    },
     addressReady: function () {
       return this.addressValue.length === 0
     },
@@ -315,6 +331,9 @@ export default {
     },
     amountUSD: function () {
       return this.genInfo.amountUSD
+    },
+    maxWinUSD: function () {
+      return this.genInfo.maxAmountWin
     },
     crypto: function () {
       return this.genInfo.crypto
@@ -341,27 +360,16 @@ export default {
       return parseInt(this.genInfo.startEpochTime) * 1000
     },
     displayAddress: function () {
-      if (this.userIdInfo.address === '') {
+      if (this.userIdInfo[this.type] === '') {
         return 'None Yet'
       } else {
-        return this.userIdInfo.address
+        return this.userIdInfo[this.type]
       }
-    },
-    progress: function () {
-      // const addressReady = this.userIdInfo.address !== ''
-      // const userInfoReady = (this.userIdInfo.adjective !== '' && this.userIdInfo.emoji !== '')
-      // if (!addressReady && !userInfoReady) {
-      //   return 0
-      // }
-      return 50
     },
     allInfoSet: function () {
       const infoReady =
-      (this.userIdInfo.adjective !== '' && this.userIdInfo.emoji !== '' && this.userIdInfo.address !== '')
-      const infoNotUndefined =
-      (this.userIdInfo.adjective !== undefined && this.userIdInfo.emoji !== undefined && this.userIdInfo.address !== undefined)
-
-      if (infoReady && infoNotUndefined) {
+      (this.userIdInfo.adjective !== '' && this.userIdInfo.emoji !== '' && this.userIdInfo[this.type] !== '')
+      if (infoReady) {
         return true
       }
       return false
@@ -454,16 +462,7 @@ export default {
       const emoji = emojiList[this.getRandomIntInclusive(0, emojiListLength - 1)]
       this.$emit('updateUserIDInfo', { adjective: adjectiveCap, emoji })
     },
-    setupInfo: function () {
-      if (this.userIdInfo !== undefined && this.userIdInfo.address !== undefined) {
-        this.addressValue = this.userIdInfo.address
-      }
-      if (this.userIdInfo === undefined || this.userIdInfo.adjective === undefined ||
-        this.userIdInfo.adjective === '') {
-        this.generateNewname()
-      }
-    },
-    getPassword: async function () {
+    testSpeed: async function () {
       const sendTime = Date.now()
       const url = this.genInfo.getApi
       const result = await get(url)
@@ -472,21 +471,21 @@ export default {
     }
   },
   watch: {
-    userIdInfo: {
-      deep: true,
-      handler: function () {
-        if (this.userIdInfo.address !== undefined) {
-          this.addressValue = this.userIdInfo.address
-        }
-      }
-    }
+    // userIdInfo: {
+    //   deep: true,
+    //   handler: function () {
+    //     if (this.userIdInfo.address !== undefined) {
+    //       this.addressValue = this.userIdInfo.address
+    //     }
+    //   }
+    // }
   },
   async mounted () {
-    await this.setupInfo()
-    this.getPassword()
+    if (this.userIdInfo.adjective === '' || this.userIdInfo.adjective.emoji === '') {
+      this.generateNewname()
+    }
+    this.testSpeed()
     this.countDownTimer()
-  },
-  beforeDestroy () {
   }
 }
 </script>
