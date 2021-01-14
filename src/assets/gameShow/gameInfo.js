@@ -11,7 +11,7 @@ const info = {
   waitTime: '0.5',
   humanVerificationTime: '90',
   humanVerificationTimeToAnswer: '45',
-  getApi: 'http://localhost:8086/',
+  getApi: 'https://help-935e0cci.uc.gateway.dev/',
   postApi: 'https://postanswer-935e0cci.uc.gateway.dev/',
   intro: {
     length: '215'
