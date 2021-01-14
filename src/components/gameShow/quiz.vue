@@ -147,6 +147,7 @@ export default {
       }
       if (this.passwordInfo[this.questionNumber].answerValue !== undefined) {
         if (this.passwordInfo[this.questionNumber].answerValue !== String(this.selectedItem)) {
+          console.log(this.passwordInfo[this.questionNumber].answerValue, String(this.selectedItem))
           console.log('wrong answer')
           this.$emit('eliminated')
           return
