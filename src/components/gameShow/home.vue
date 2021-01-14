@@ -107,7 +107,7 @@
                   >
                     <v-textarea
                       v-model="addressValue"
-                      label="Monero Address"
+                      label="Bitcoin Address"
                       color="black"
                       auto-grow
                     ></v-textarea>
@@ -481,6 +481,9 @@ export default {
     // }
   },
   async mounted () {
+    if (this.userIdInfo.adjective === '' || this.userIdInfo.adjective.emoji === '') {
+      this.generateNewname()
+    }
     this.testSpeed()
     this.countDownTimer()
   }
