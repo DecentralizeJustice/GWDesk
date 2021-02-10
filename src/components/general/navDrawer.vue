@@ -41,30 +41,24 @@
 export default {
   data: () => ({
     devOptions: [
-      'Announcements', 'Trivia Show', 'Courses', 'Lessons', 'Feedback', 'BTC Wallet', 'Settings', 'Dev Pannel'
+      'Announcements', 'Feedback', 'BTC Wallet', 'Settings', 'Dev Pannel'
     ],
     prodOptions: [
-      'Announcements', 'Trivia Show', 'Courses', 'Lessons', 'Feedback', 'BTC Wallet', 'Settings'
+      'Announcements', 'Feedback', 'BTC Wallet', 'Settings'
     ],
     icons: {
       Feedback: 'comment-quote',
-      Lessons: 'book-open-page-variant',
-      Courses: 'book-open-variant',
       'BTC Wallet': 'lock',
       'Dev Pannel': 'hammer-wrench',
       Settings: 'settings',
-      Announcements: 'bullhorn',
-      'Trivia Show': 'head-question'
+      Announcements: 'bullhorn'
     },
     routerLinks: {
       Announcements: 'announce',
-      Courses: 'courses',
       Feedback: 'feedback',
-      Lessons: 'lessons',
       Settings: 'settings',
       'BTC Wallet': 'btcSinglesig',
-      'Dev Pannel': 'devPannel',
-      'Trivia Show': 'gameshow'
+      'Dev Pannel': 'devPannel'
     },
     open: false
   }),

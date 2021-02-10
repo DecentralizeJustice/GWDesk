@@ -12,7 +12,7 @@
         <v-col
           cols="4"
         >
-        <v-card class="" color='grey darken-2'>
+        <!-- <v-card class="" color='grey darken-2'>
           <v-card-title class="headline justify-center">
             New Education
           </v-card-title>
@@ -41,7 +41,7 @@
             </p>
             </v-card>
           </v-col>
-        </v-card>
+        </v-card> -->
         </v-col>
         <v-col
           cols="4"
@@ -64,14 +64,14 @@
                  </v-icon>
                </v-col>
              </v-row>
-             <v-btn
+             <!-- <v-btn
                color="secondary"
                @click='goToRoute(item.routeInfo)'
                class="mt-2"
                v-if='item.routeInfo'
              >
                Take Lesson
-             </v-btn>
+             </v-btn> -->
             </p>
             </v-card>
           </v-col>
