@@ -1,13 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Lessons from './views/lessons.vue'
-import Courses from './views/courses.vue'
 import Feedback from './views/feedback.vue'
 import DevPannel from './views/dev.vue'
 import Settings from './views/settings.vue'
 import Annoucments from './views/announce.vue'
 import BtcSingleSig from './views/btcSingleSig.vue'
-import Gameshow from './views/triviaShow.vue'
 import Dummy from './views/dummy.vue'
 
 Vue.use(Router)
@@ -18,30 +15,9 @@ const router = new Router({
   routes: [
     { path: '/', redirect: '/announce' },
     {
-      path: '/lessons',
-      name: 'lessons',
-      component: Lessons,
-      props: (route) => (
-        { routeInfo: route.params })
-    },
-    {
       path: '/announce',
       name: 'announce',
       component: Annoucments,
-      props: (route) => (
-        { routeInfo: route.params })
-    },
-    {
-      path: '/gameshow',
-      name: 'gameshow',
-      component: Gameshow,
-      props: (route) => (
-        { routeInfo: route.params })
-    },
-    {
-      path: '/courses',
-      name: 'courses',
-      component: Courses,
       props: (route) => (
         { routeInfo: route.params })
     },

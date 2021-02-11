@@ -49,14 +49,11 @@
         align="center"
       >
         <div class="white--text title font-weight-regular">
-          1. You Have taken the "Testnet Wallet Course" and understand everything within that course.
-        </div>
-        <div class="white--text title font-weight-regular">
-          2. This Testnet Wallet is realsed under the MIT License and by using it you
+          1. This Testnet Wallet is realsed under the MIT License and by using it you
           agree to that license which can be found here: https://opensource.org/licenses/MIT
         </div>
         <div class="white--text display-1 mt-2">
-          By clicking continue you understand and agree to the previous two points.
+          By clicking continue you understand and agree to the previous point.
         </div>
       </v-row>
       <v-row
@@ -64,9 +61,9 @@
           justify="space-around"
           class="mt-3"
         >
-          <v-btn color='green' @click='takeLesson'>
+          <!-- <v-btn color='green' @click='takeLesson'>
             Take Lesson
-          </v-btn>
+          </v-btn> -->
           <v-btn
             depressed
             color="primary"
